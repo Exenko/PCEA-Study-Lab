@@ -13,11 +13,11 @@ Out of scope: animation-only explainers, new chart library, changes to flashcard
 New block directive in section bodies:
 
 ```
-:::challenge lc-explorer t1=100 lcs=0.95 n=16 lock=theory,log,t1,n
-Q: Drag the LCS slider until unit 16 costs **$52**.
-goal: unitN ~ 52 +- 1%
-show: lcs=0.80
-> An 80% curve cuts unit cost 20% per doubling: 100, 80, 64, 51.2 ...
+:::challenge lc-explorer t1=100 lcs=0.95 n=8 lock=theory,log,t1,n
+Q: Drag the LCS slider until unit 8 costs **\$51.20**.
+goal: unitN ~ 51.2 +- 0.5%
+show: lcs=0.8
+> An 80% curve cuts unit cost 20% per doubling: 100, 80, 64, 51.2.
 :::
 ```
 
@@ -45,7 +45,7 @@ Type is inferred: `goal:` -> target, `predict:` -> predict, options -> choose. E
 
 ## Progress integration
 
-A challenge renders as an element with class `check challenge` and `data-check-id = ctx.key + '#' + index`, sharing the check counter in `Render.section`. It writes `Store.data.checks[id] = { first, done: true }` (predict also stores `guess`). Consequences, with no changes needed elsewhere:
+A challenge renders as an element with class `check challenge` and `data-check-id = ctx.key + '#c' + index`, using its own counter in `Render.section`. It must not share the check counter: existing checks without an explicit id are keyed by position, so a challenge inserted before them would re-key them and orphan saved progress. It writes `Store.data.checks[id] = { first, done: true }` (predict also stores `guess`). Consequences, with no changes needed elsewhere:
 
 - XP: `js/game.js` already scores `checks` (20 first try / 10 otherwise).
 - Step gating: `js/learn.js:136` counts `.check` elements not `.done`.
@@ -73,6 +73,7 @@ All 16 existing widgets are migrated to call `publish()`; this is the bulk of th
 
 ## Code layout
 
+- `js/wmath.js` - pure widget math (seeded RNG, t/z quantiles, bisection, PV, EVM scenarios, lock-in curves, normalization data, CI and Monte Carlo simulation), no DOM, unit-tested. Existing widgets move their shared math here.
 - `js/challenge.js` - pure parsing and goal evaluation (`parse(lines)`, `evalGoals(goals, out)`, `withinTol(x, target, tol)`), no DOM. Exported for Node like `js/game.js`.
 - `js/render.js` - `buildStep` gains a `challenge` branch calling `buildChallenge(d, ctx, idx)` (DOM glue: prompt, feedback, overlay, Show me, persistence). Parse of widget args moves into a shared helper used by both widget and challenge blocks.
 - `js/widget-meta.js` - manifest above; replaces the hard-coded widget list in `tools/validate.js`.
@@ -84,11 +85,13 @@ New (all using `Plot` and `controls()`):
 
 - **normalize** (M4): 8 historical data points recorded in mixed years, lot quantities and units. Toggles: inflation to BY, quantity/learning adjustment, unit conversion. Scatter of cost vs. driver with live OLS R². Outputs: `r2`, `nAdjust`, `byValue` (normalized cost of a highlighted point).
 - **method-phase** (M2): stacked area of method suitability (analogy / parametric / build-up / actuals) across life-cycle phases, with a phase slider. Outputs: `phase`, `dominant` (index of top method).
-- **correlation** (M9): three WBS elements (triangular), correlation slider rho, Monte Carlo total with S-curve and P50/P80 markers. Outputs: `rho`, `p50`, `p80`, `sd`. Uses a seeded RNG so results are stable for a given setting.
 - **ci-sim** (M10): draw k samples of size n from a known population; plot each 90/95/99% interval against mu; count coverage. Outputs: `n`, `level`, `coverage`, `halfWidth`. Seeded RNG.
 - **lockin** (M16): committed vs. expended cumulative cost curves across the life cycle with a phase scrubber. Outputs: `phase`, `committed`, `spent`.
 
 Upgrades:
+
+- **montecarlo** (M9): seeded RNG, re-runs on every change (no Run button), dashed rho = 0 S-curve for comparison; outputs `pe`, `pePct`, `mean`, `sd`, `p50`, `p70`, `p80`, `p80ind`, `p80gap`. (Replaces the separate correlation widget originally planned; montecarlo already has a rho control.)
+- **transform** (M6/M8): seeded noise so outputs are reproducible.
 
 - **regression** (M3/M8): "Fit by hand" mode with a draggable line (two handles) and drawn squared residuals; outputs `sseHand`, `sseOls`, `ratio` (= sseHand/sseOls), `r2`, plus existing stats.
 - **npv** (M13): second alternative and a break-even marker; outputs `npvA`, `npvB`, `diff`, `rate`.
@@ -108,7 +111,7 @@ Placed for the first time: `analogy` (M2), `escalation` (M5), `sw-effort` (M12),
 | M6 | target on `stats-lab`: move mean but not median; predict: CV |
 | M7 | target on `lc-explorer`: unit-16 cost; predict: unit vs. cum-average total; target on `lmp` |
 | M8 | target on `regression` fit-by-hand: `ratio < 1.05`; choose on `transform` |
-| M9 | predict on `correlation`: P80 at rho 0.6; target on `montecarlo`: read 70% confidence |
+| M9 | target on `montecarlo`: raise rho until P80 is 10 above the uncorrelated P80; choose: confidence level of the point estimate |
 | M10 | predict on `ci-sim`: coverage; choose on `dist` |
 | M11 | target on `burden`: hit a quoted price |
 | M12 | predict on `sw-effort`: effort when size doubles (exponent > 1) |
