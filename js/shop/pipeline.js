@@ -113,6 +113,7 @@
     return out;
   }
   const record = (d, id) => ((d && d.shop) || {})['pipe-' + id];
+  const draft = (d, id) => ((d && d.shop) || {})['draft-' + id];
   function status(d, id) {
     const r = record(d, id);
     if (r && r.passed) return 'running';
@@ -124,6 +125,6 @@
     return N.DOMAIN.filter(n => n.earnedFrom.includes(id) && !have.has(n.id)).map(n => n.id);
   }
 
-  const ShopPipe = { run, check, removeStep, moveStep, primitivesOnly, pctWarning, validate, VALIDATE_N, GATE, handSolves, earned, allowed, record, status, unlocksFor };
+  const ShopPipe = { run, check, removeStep, moveStep, primitivesOnly, pctWarning, validate, VALIDATE_N, GATE, handSolves, earned, allowed, record, draft, status, unlocksFor };
   if (typeof module !== 'undefined' && module.exports) module.exports = ShopPipe; else root.ShopPipe = ShopPipe;
 })(this);
