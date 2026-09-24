@@ -102,6 +102,28 @@
     return { rows, problems, passed: problems.length === 0 && rows.every(r => r.each.every(x => x === 1)) };
   }
 
-  const ShopPipe = { run, check, removeStep, moveStep, primitivesOnly, pctWarning, validate, VALIDATE_N };
+  const GATE = 3;
+  const recs = d => Object.values((d && d.shop) || {}).filter(r => r && typeof r === 'object');
+  const handSolves = (d, id) => recs(d).filter(r => r.tpl === id && r.score === 1 && !r.camp).length;
+  const earned = d => new Set(recs(d).filter(r => typeof r.node === 'string').map(r => r.node));
+  function allowed(d) {
+    const st = C.state(d), out = earned(d);
+    N.PRIMITIVE.forEach(n => out.add(n.id));
+    N.TOOL.forEach(n => { if (st.has(n.tool)) out.add(n.id); });
+    return out;
+  }
+  const record = (d, id) => ((d && d.shop) || {})['pipe-' + id];
+  function status(d, id) {
+    const r = record(d, id);
+    if (r && r.passed) return 'running';
+    return handSolves(d, id) >= GATE ? 'ready' : 'locked';
+  }
+  function unlocksFor(pipe, id, d) {
+    if (!primitivesOnly(pipe)) return [];
+    const have = earned(d);
+    return N.DOMAIN.filter(n => n.earnedFrom.includes(id) && !have.has(n.id)).map(n => n.id);
+  }
+
+  const ShopPipe = { run, check, removeStep, moveStep, primitivesOnly, pctWarning, validate, VALIDATE_N, GATE, handSolves, earned, allowed, record, status, unlocksFor };
   if (typeof module !== 'undefined' && module.exports) module.exports = ShopPipe; else root.ShopPipe = ShopPipe;
 })(this);

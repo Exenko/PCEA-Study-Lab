@@ -105,5 +105,49 @@ module.exports = [
     assert.strictEqual(v.passed, false);
     assert.ok(v.problems.length > 0);
     assert.ok(v.rows.every(r => r.each.length === 2));
+  }],
+  ['gate counts only exact hand solves of that template', () => {
+    const d = { shop: {
+      a: { tpl: 'lc-unit', score: 1, t: 1 }, b: { tpl: 'lc-unit', score: 0.6, t: 2 }, c: { tpl: 'lc-unit', score: 1, t: 3 },
+      e: { tpl: 'npv', score: 1, t: 4 }, f: { camp: 'alpha', score: 1, t: 5 } } };
+    assert.strictEqual(P.handSolves(d, 'lc-unit'), 2);
+    assert.strictEqual(P.status(d, 'lc-unit'), 'locked');
+    d.shop.g = { tpl: 'lc-unit', score: 1, t: 6 };
+    assert.strictEqual(P.status(d, 'lc-unit'), 'ready');
+    d.shop['pipe-lc-unit'] = { pipe: 'lc-unit', passed: true, t: 7 };
+    assert.strictEqual(P.status(d, 'lc-unit'), 'running');
+    assert.strictEqual(P.status({ shop: { 'pipe-npv': { pipe: 'npv', passed: true } } }, 'npv'), 'running');
+  }],
+  ['allowed nodes: primitives, owned tool nodes, earned domain nodes', () => {
+    const base = P.allowed({ shop: {} });
+    assert.ok(base.has('add') && base.has('range') && !base.has('normalCDF') && !base.has('escalate'));
+    const d = { shop: { x: { tool: 'tables', cost: 150, t: 1 }, y: { node: 'escalate', t: 2 } } };
+    const a = P.allowed(d);
+    assert.ok(a.has('normalCDF') && a.has('escalate') && !a.has('npv'));
+    assert.deepStrictEqual([...P.earned(d)], ['escalate']);
+  }],
+  ['unlocksFor: only primitives-only pipelines earn, never twice', () => {
+    assert.deepStrictEqual(P.unlocksFor(REF['evm-eac'].prim, 'evm-eac', { shop: {} }).sort(), ['cpi', 'eacCPI', 'eacComposite', 'spi']);
+    assert.deepStrictEqual(P.unlocksFor(REF['evm-eac'].domain, 'evm-eac', { shop: {} }), []);
+    assert.deepStrictEqual(P.unlocksFor(REF['evm-eac'].prim, 'evm-eac', { shop: { n: { node: 'cpi' } } }).sort(), ['eacCPI', 'eacComposite', 'spi']);
+    assert.deepStrictEqual(P.unlocksFor(REF['mfg-labor'].prim, 'mfg-labor', { shop: {} }), []);
+  }],
+  ['pipe and node records do not count as jobs or change cash', () => {
+    const d = { shop: { a: { tpl: 'x', pay: 60, rep: 1, score: 1, t: 1 }, 'pipe-x': { pipe: 'x', passed: true, steps: [], outs: [], t: 2 }, 'node-escalate': { node: 'escalate', t: 3 } } };
+    const st = Core.state(d);
+    assert.strictEqual(st.completed, 1);
+    assert.strictEqual(st.cash, 60);
+  }],
+  ['pipe records merge newest-wins; node records union across devices', () => {
+    const fs = require('fs'), path = require('path'), vm = require('vm');
+    const ctx = { console, Date, Math, JSON, Object, Set, Array, Promise, setTimeout, clearTimeout,
+      localStorage: { getItem: () => null, setItem() {}, removeItem() {} }, location: { protocol: 'file:' }, document: { addEventListener() {} } };
+    ctx.window = ctx; vm.createContext(ctx);
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js/storage.js'), 'utf8') + '\nthis.Store = Store;', ctx);
+    const a = { shop: { 'pipe-npv': { pipe: 'npv', passed: false, mod: 5 }, 'node-cpi': { node: 'cpi', mod: 1 } } };
+    const b = { shop: { 'pipe-npv': { pipe: 'npv', passed: true, mod: 9 }, 'node-npv': { node: 'npv', mod: 2 } } };
+    const m = ctx.Store.merge(a, b);
+    assert.strictEqual(m.shop['pipe-npv'].passed, true);
+    assert.deepStrictEqual([...P.earned(m)].sort(), ['cpi', 'npv']);
   }]
 ];
