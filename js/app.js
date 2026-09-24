@@ -19,6 +19,7 @@ const App = (() => {
     root.innerHTML = '';
     if (tab === 'profiles') Profiles.route(root);
     else if (tab === 'cards') Cards.route(root, parts.slice(1), query);
+    else if (tab === 'shop') Shop.route(root, parts.slice(1));
     else if (tab === 'progress') Progress.route(root);
     else if (tab === 'leaderboard' && Store.mode === 'server') Leaderboard.route(root);
     else Learn.route(root, parts.slice(1));
