@@ -38,5 +38,12 @@ module.exports = [
     assert.ok(Math.abs(lc.answers[0].value - 800 * Math.pow(10, b)) < 1e-6);
     const npv = job('npv').gen(stub, 1);
     assert.ok(Number.isFinite(npv.answers[0].value));
+  }],
+  ['gen output matches the pre-pipeline snapshot', () => {
+    const snap = require('./fixtures/gen-snapshot.json');
+    for (const t of T) for (let tier = 1; tier <= 3; tier++) for (let seed = 1; seed <= 3; seed++) {
+      const j = t.gen(C.helpers(C.rng(seed * 7919 + tier)), tier);
+      assert.deepStrictEqual({ brief: j.brief, answers: j.answers, explain: j.explain }, snap[t.id + '|' + tier + '|' + seed], t.id + ' tier ' + tier + ' seed ' + seed);
+    }
   }]
 ];

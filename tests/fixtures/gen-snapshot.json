@@ -1,0 +1,2819 @@
+{
+ "esc-compound|1|1": {
+  "brief": "A subsystem is estimated at \\$5M in constant BY2023 dollars. It will be bought in FY2026. Assume inflation of 2% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 5.306040000000001
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 3 years:\n\n$$TY = BY \\times (1+r)^n = 5 \\times 1.02^{3} = 5.306$$"
+ },
+ "esc-compound|1|2": {
+  "brief": "A subsystem is estimated at \\$8M in constant BY2021 dollars. It will be bought in FY2027. Assume inflation of 3% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 9.552418372232001
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 6 years:\n\n$$TY = BY \\times (1+r)^n = 8 \\times 1.03^{6} = 9.552$$"
+ },
+ "esc-compound|1|3": {
+  "brief": "A subsystem is estimated at \\$9M in constant BY2022 dollars. It will be bought in FY2029. Assume inflation of 4% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 11.843386013122561
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 7 years:\n\n$$TY = BY \\times (1+r)^n = 9 \\times 1.04^{7} = 11.843$$"
+ },
+ "esc-compound|2|1": {
+  "brief": "A subsystem is estimated at \\$10.5M in constant BY2020 dollars. It will be bought in FY2026. Assume inflation of 3.5% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 12.907180926617407
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 6 years:\n\n$$TY = BY \\times (1+r)^n = 10.5 \\times 1.035^{6} = 12.907$$"
+ },
+ "esc-compound|2|2": {
+  "brief": "A subsystem is estimated at \\$46.5M in constant BY2018 dollars. It will be bought in FY2026. Assume inflation of 4% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 63.638460843845245
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 8 years:\n\n$$TY = BY \\times (1+r)^n = 46.5 \\times 1.04^{8} = 63.638$$"
+ },
+ "esc-compound|2|3": {
+  "brief": "A subsystem is estimated at \\$28.5M in constant BY2018 dollars. It will be bought in FY2020. Assume inflation of 2.5% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 29.9428125
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 2 years:\n\n$$TY = BY \\times (1+r)^n = 28.5 \\times 1.025^{2} = 29.943$$"
+ },
+ "esc-compound|3|1": {
+  "brief": "A subsystem is estimated at \\$110M in constant BY2024 dollars. It will be bought in FY2030. Assume inflation of 2.5% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 127.5662760034179
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 6 years:\n\n$$TY = BY \\times (1+r)^n = 110 \\times 1.025^{6} = 127.566$$"
+ },
+ "esc-compound|3|2": {
+  "brief": "A subsystem is estimated at \\$75M in constant BY2022 dollars. It will be bought in FY2027. Assume inflation of 2.5% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 84.85561596679683
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 5 years:\n\n$$TY = BY \\times (1+r)^n = 75 \\times 1.025^{5} = 84.856$$"
+ },
+ "esc-compound|3|3": {
+  "brief": "A subsystem is estimated at \\$190M in constant BY2024 dollars. It will be bought in FY2028. Assume inflation of 2% per year throughout. What is the then-year cost?",
+  "answers": [
+   {
+    "label": "Then-year cost",
+    "unit": "$M",
+    "value": 205.6621104
+   }
+  ],
+  "explain": "Compound the constant-dollar cost forward 4 years:\n\n$$TY = BY \\times (1+r)^n = 190 \\times 1.02^{4} = 205.662$$"
+ },
+ "esc-index|1|1": {
+  "brief": "A contractor reports \\$12.5M spent in FY2024 (then-year dollars). The cost index is 1.065 for FY2016 and 1.182 for FY2024. Express the cost in constant FY2016 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2016 dollars",
+    "unit": "$M",
+    "value": 11.26269035532995
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2016}}{I_{2024}} = 12.5 \\times \\frac{1.065}{1.182} = 11.263$$"
+ },
+ "esc-index|1|2": {
+  "brief": "A contractor reports \\$20.5M spent in FY2025 (then-year dollars). The cost index is 1.005 for FY2019 and 1.236 for FY2025. Express the cost in constant FY2019 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2019 dollars",
+    "unit": "$M",
+    "value": 16.66868932038835
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2019}}{I_{2025}} = 20.5 \\times \\frac{1.005}{1.236} = 16.669$$"
+ },
+ "esc-index|1|3": {
+  "brief": "A contractor reports \\$23M spent in FY2028 (then-year dollars). The cost index is 1.035 for FY2022 and 1.325 for FY2028. Express the cost in constant FY2022 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2022 dollars",
+    "unit": "$M",
+    "value": 17.966037735849056
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2022}}{I_{2028}} = 23 \\times \\frac{1.035}{1.325} = 17.966$$"
+ },
+ "esc-index|2|1": {
+  "brief": "A contractor reports \\$27M spent in FY2029 (then-year dollars). The cost index is 0.965 for FY2020 and 1.187 for FY2029. Express the cost in constant FY2020 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2020 dollars",
+    "unit": "$M",
+    "value": 21.950294860994102
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2020}}{I_{2029}} = 27 \\times \\frac{0.965}{1.187} = 21.95$$"
+ },
+ "esc-index|2|2": {
+  "brief": "A contractor reports \\$114M spent in FY2027 (then-year dollars). The cost index is 0.92 for FY2022 and 1.224 for FY2027. Express the cost in constant FY2022 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2022 dollars",
+    "unit": "$M",
+    "value": 85.68627450980394
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2022}}{I_{2027}} = 114 \\times \\frac{0.92}{1.224} = 85.686$$"
+ },
+ "esc-index|2|3": {
+  "brief": "A contractor reports \\$70.5M spent in FY2026 (then-year dollars). The cost index is 0.9 for FY2017 and 0.945 for FY2026. Express the cost in constant FY2017 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2017 dollars",
+    "unit": "$M",
+    "value": 67.14285714285715
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2017}}{I_{2026}} = 70.5 \\times \\frac{0.9}{0.945} = 67.143$$"
+ },
+ "esc-index|3|1": {
+  "brief": "A contractor reports \\$275M spent in FY2024 (then-year dollars). The cost index is 1.095 for FY2017 and 1.369 for FY2024. Express the cost in constant FY2017 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2017 dollars",
+    "unit": "$M",
+    "value": 219.9598246895544
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2017}}{I_{2024}} = 275 \\times \\frac{1.095}{1.369} = 219.96$$"
+ },
+ "esc-index|3|2": {
+  "brief": "A contractor reports \\$185M spent in FY2022 (then-year dollars). The cost index is 1.04 for FY2018 and 1.258 for FY2022. Express the cost in constant FY2018 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2018 dollars",
+    "unit": "$M",
+    "value": 152.94117647058823
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2018}}{I_{2022}} = 185 \\times \\frac{1.04}{1.258} = 152.941$$"
+ },
+ "esc-index|3|3": {
+  "brief": "A contractor reports \\$465M spent in FY2022 (then-year dollars). The cost index is 1.085 for FY2015 and 1.28 for FY2022. Express the cost in constant FY2015 dollars.",
+  "answers": [
+   {
+    "label": "Cost in FY2015 dollars",
+    "unit": "$M",
+    "value": 394.16015625
+   }
+  ],
+  "explain": "Divide by the ratio of index values:\n\n$$BY = TY \\times \\frac{I_{2015}}{I_{2022}} = 465 \\times \\frac{1.085}{1.28} = 394.16$$"
+ },
+ "analogy-scale|1|1": {
+  "brief": "The analogous system cost \\$23M (same base year) and weighed 780 lb. The new system is expected to weigh 663 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.1. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 22.579471326277304
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 23 \\times \\left(\\frac{663}{780}\\right)^{0.7} \\times 1.1 = 22.579$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "analogy-scale|1|2": {
+  "brief": "The analogous system cost \\$37M (same base year) and weighed 560 lb. The new system is expected to weigh 672 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.2. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 50.444037787630656
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 37 \\times \\left(\\frac{672}{560}\\right)^{0.7} \\times 1.2 = 50.444$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "analogy-scale|1|3": {
+  "brief": "The analogous system cost \\$42M (same base year) and weighed 670 lb. The new system is expected to weigh 871 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.3. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 65.6074244985952
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 42 \\times \\left(\\frac{871}{670}\\right)^{0.7} \\times 1.3 = 65.607$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "analogy-scale|2|1": {
+  "brief": "The analogous system cost \\$51M (same base year) and weighed 430 lb. The new system is expected to weigh 516 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.25. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 72.42809479642915
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 51 \\times \\left(\\frac{516}{430}\\right)^{0.7} \\times 1.25 = 72.428$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "analogy-scale|2|2": {
+  "brief": "The analogous system cost \\$207M (same base year) and weighed 270 lb. The new system is expected to weigh 391.5 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.3. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 349.0368650834803
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 207 \\times \\left(\\frac{391.5}{270}\\right)^{0.7} \\times 1.3 = 349.037$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "analogy-scale|2|3": {
+  "brief": "The analogous system cost \\$129M (same base year) and weighed 200 lb. The new system is expected to weigh 140 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.1. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 110.54803400793672
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 129 \\times \\left(\\frac{140}{200}\\right)^{0.7} \\times 1.1 = 110.548$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "analogy-scale|3|1": {
+  "brief": "The analogous system cost \\$500M (same base year) and weighed 880 lb. The new system is expected to weigh 1100 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.15. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 672.209821872509
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 500 \\times \\left(\\frac{1100}{880}\\right)^{0.7} \\times 1.15 = 672.21$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "analogy-scale|3|2": {
+  "brief": "The analogous system cost \\$340M (same base year) and weighed 690 lb. The new system is expected to weigh 759 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.15. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 417.97628056228615
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 340 \\times \\left(\\frac{759}{690}\\right)^{0.7} \\times 1.15 = 417.976$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "analogy-scale|3|3": {
+  "brief": "The analogous system cost \\$840M (same base year) and weighed 850 lb. The new system is expected to weigh 892.5 lb. Scale cost by weight with an exponent of 0.7, then apply a complexity factor of 1.05. What is the analogy estimate?",
+  "answers": [
+   {
+    "label": "Analogy estimate",
+    "unit": "$M",
+    "value": 912.6433517491754
+   }
+  ],
+  "explain": "$$\\text{Cost}_{new} = 840 \\times \\left(\\frac{892.5}{850}\\right)^{0.7} \\times 1.05 = 912.643$$\n\nAn analogy is only as good as the adjustments; document why each factor applies."
+ },
+ "cer-power|1|1": {
+  "brief": "Your CER is $\\text{Cost} = 2.2 \\times W^{0.87}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 220 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 240.06586560014443
+   }
+  ],
+  "explain": "$$2.2 \\times 220^{0.87} = 240.07$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.87} = 1.828$."
+ },
+ "cer-power|1|2": {
+  "brief": "Your CER is $\\text{Cost} = 3 \\times W^{0.73}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 550 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 300.32121898191355
+   }
+  ],
+  "explain": "$$3 \\times 550^{0.73} = 300.32$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.73} = 1.659$."
+ },
+ "cer-power|1|3": {
+  "brief": "Your CER is $\\text{Cost} = 3.3 \\times W^{0.8}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 690 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 616.0177305905355
+   }
+  ],
+  "explain": "$$3.3 \\times 690^{0.8} = 616.02$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.8} = 1.741$."
+ },
+ "cer-power|2|1": {
+  "brief": "Your CER is $\\text{Cost} = 1.9 \\times W^{0.65}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 1,680 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 237.24913302854276
+   }
+  ],
+  "explain": "$$1.9 \\times 1680^{0.65} = 237.25$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.65} = 1.569$."
+ },
+ "cer-power|2|2": {
+  "brief": "Your CER is $\\text{Cost} = 4.8 \\times W^{0.55}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 2,550 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 358.7883530792854
+   }
+  ],
+  "explain": "$$4.8 \\times 2550^{0.55} = 358.79$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.55} = 1.464$."
+ },
+ "cer-power|2|3": {
+  "brief": "Your CER is $\\text{Cost} = 3.3 \\times W^{0.5}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 180 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 44.274145954495836
+   }
+  ],
+  "explain": "$$3.3 \\times 180^{0.5} = 44.27$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.5} = 1.414$."
+ },
+ "cer-power|3|1": {
+  "brief": "Your CER is $\\text{Cost} = 3.8 \\times W^{0.94}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 6,200 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 13951.849561344825
+   }
+  ],
+  "explain": "$$3.8 \\times 6200^{0.94} = 13,951.85$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.94} = 1.919$."
+ },
+ "cer-power|3|2": {
+  "brief": "Your CER is $\\text{Cost} = 2.8 \\times W^{0.82}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 4,900 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 2972.479149701263
+   }
+  ],
+  "explain": "$$2.8 \\times 4900^{0.82} = 2,972.48$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.82} = 1.765$."
+ },
+ "cer-power|3|3": {
+  "brief": "Your CER is $\\text{Cost} = 5.7 \\times W^{0.92}$ (cost in \\$K, weight $W$ in lb). The new unit weighs 4,100 lb. What does the CER predict?",
+  "answers": [
+   {
+    "label": "Predicted cost",
+    "unit": "$K",
+    "value": 12012.572003608851
+   }
+  ],
+  "explain": "$$5.7 \\times 4100^{0.92} = 12,012.57$$\n\nWith $b < 1$ there are economies of scale: doubling weight multiplies cost by $2^{0.92} = 1.892$."
+ },
+ "stats-cv|1|1": {
+  "brief": "Historical costs (\\$K) for 5 similar items: 38, 23, 22, 38, 40. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 32.2
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 27.63800678420744
+   }
+  ],
+  "explain": "$$\\bar{x} = 32.2, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 8.899, \\quad CV = \\frac{s}{\\bar{x}} = 27.64\\%$$"
+ },
+ "stats-cv|1|2": {
+  "brief": "Historical costs (\\$K) for 5 similar items: 41, 43, 42, 38, 29. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 38.6
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 14.723598174489972
+   }
+  ],
+  "explain": "$$\\bar{x} = 38.6, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 5.683, \\quad CV = \\frac{s}{\\bar{x}} = 14.72\\%$$"
+ },
+ "stats-cv|1|3": {
+  "brief": "Historical costs (\\$K) for 5 similar items: 50, 53, 61, 42, 49. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 51
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 13.513773286362962
+   }
+  ],
+  "explain": "$$\\bar{x} = 51, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 6.892, \\quad CV = \\frac{s}{\\bar{x}} = 13.51\\%$$"
+ },
+ "stats-cv|2|1": {
+  "brief": "Historical costs (\\$K) for 6 similar items: 65, 81, 87, 98, 69, 87. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 81.16666666666667
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 15.197846464035592
+   }
+  ],
+  "explain": "$$\\bar{x} = 81.167, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 12.336, \\quad CV = \\frac{s}{\\bar{x}} = 15.2\\%$$"
+ },
+ "stats-cv|2|2": {
+  "brief": "Historical costs (\\$K) for 6 similar items: 131, 259, 261, 165, 190, 187. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 198.83333333333334
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 26.083634761244166
+   }
+  ],
+  "explain": "$$\\bar{x} = 198.833, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 51.863, \\quad CV = \\frac{s}{\\bar{x}} = 26.08\\%$$"
+ },
+ "stats-cv|2|3": {
+  "brief": "Historical costs (\\$K) for 6 similar items: 79, 81, 112, 179, 139, 119. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 118.16666666666667
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 31.86452111051662
+   }
+  ],
+  "explain": "$$\\bar{x} = 118.167, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 37.653, \\quad CV = \\frac{s}{\\bar{x}} = 31.86\\%$$"
+ },
+ "stats-cv|3|1": {
+  "brief": "Historical costs (\\$K) for 7 similar items: 688, 566, 448, 541, 314, 475, 638. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 524.2857142857143
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 23.901832185769265
+   }
+  ],
+  "explain": "$$\\bar{x} = 524.286, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 125.314, \\quad CV = \\frac{s}{\\bar{x}} = 23.9\\%$$"
+ },
+ "stats-cv|3|2": {
+  "brief": "Historical costs (\\$K) for 7 similar items: 441, 387, 342, 293, 279, 519, 282. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 363.2857142857143
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 25.11647601927467
+   }
+  ],
+  "explain": "$$\\bar{x} = 363.286, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 91.245, \\quad CV = \\frac{s}{\\bar{x}} = 25.12\\%$$"
+ },
+ "stats-cv|3|3": {
+  "brief": "Historical costs (\\$K) for 7 similar items: 1013, 714, 519, 822, 819, 687, 475. Find the mean and the coefficient of variation (use the sample standard deviation).",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$K",
+    "value": 721.2857142857143
+   },
+   {
+    "label": "CV",
+    "unit": "%",
+    "value": 25.78836716876452
+   }
+  ],
+  "explain": "$$\\bar{x} = 721.286, \\quad s = \\sqrt{\\frac{\\sum (x-\\bar{x})^2}{n-1}} = 186.008, \\quad CV = \\frac{s}{\\bar{x}} = 25.79\\%$$"
+ },
+ "lc-unit|1|1": {
+  "brief": "Unit 1 took 1,150 hours. Assume unit theory with a 92% learning curve. How many hours will unit 49 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 49",
+    "unit": "hours",
+    "value": 720.0737813297153
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.92}{\\ln 2} = -0.1203, \\quad Y_{49} = 1150 \\times 49^{-0.1203} = 720.1$$"
+ },
+ "lc-unit|1|2": {
+  "brief": "Unit 1 took 1,550 hours. Assume unit theory with a 88% learning curve. How many hours will unit 122 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 122",
+    "unit": "hours",
+    "value": 639.0806690172952
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.88}{\\ln 2} = -0.1844, \\quad Y_{122} = 1550 \\times 122^{-0.1844} = 639.1$$"
+ },
+ "lc-unit|1|3": {
+  "brief": "Unit 1 took 1,700 hours. Assume unit theory with a 90% learning curve. How many hours will unit 153 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 153",
+    "unit": "hours",
+    "value": 791.3508363229241
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.9}{\\ln 2} = -0.152, \\quad Y_{153} = 1700 \\times 153^{-0.152} = 791.4$$"
+ },
+ "lc-unit|2|1": {
+  "brief": "Unit 1 took 3,000 hours. Assume unit theory with a 85% learning curve. How many hours will unit 123 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 123",
+    "unit": "hours",
+    "value": 970.7583228656079
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.85}{\\ln 2} = -0.2345, \\quad Y_{123} = 3000 \\times 123^{-0.2345} = 970.8$$"
+ },
+ "lc-unit|2|2": {
+  "brief": "Unit 1 took 7,350 hours. Assume unit theory with a 80% learning curve. How many hours will unit 188 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 188",
+    "unit": "hours",
+    "value": 1361.9840924985886
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.8}{\\ln 2} = -0.3219, \\quad Y_{188} = 7350 \\times 188^{-0.3219} = 1,362$$"
+ },
+ "lc-unit|2|3": {
+  "brief": "Unit 1 took 5,100 hours. Assume unit theory with a 80% learning curve. How many hours will unit 13 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 13",
+    "unit": "hours",
+    "value": 2233.369160466632
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.8}{\\ln 2} = -0.3219, \\quad Y_{13} = 5100 \\times 13^{-0.3219} = 2,233.4$$"
+ },
+ "lc-unit|3|1": {
+  "brief": "Unit 1 took 19,000 hours. Assume unit theory with a 95% learning curve. How many hours will unit 137 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 137",
+    "unit": "hours",
+    "value": 13201.857375554806
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.95}{\\ln 2} = -0.074, \\quad Y_{137} = 19000 \\times 137^{-0.074} = 13,201.9$$"
+ },
+ "lc-unit|3|2": {
+  "brief": "Unit 1 took 14,500 hours. Assume unit theory with a 90% learning curve. How many hours will unit 109 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 109",
+    "unit": "hours",
+    "value": 7106.7800066183545
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.9}{\\ln 2} = -0.152, \\quad Y_{109} = 14500 \\times 109^{-0.152} = 7,106.8$$"
+ },
+ "lc-unit|3|3": {
+  "brief": "Unit 1 took 28,500 hours. Assume unit theory with a 95% learning curve. How many hours will unit 91 take?",
+  "answers": [
+   {
+    "label": "Hours for unit 91",
+    "unit": "hours",
+    "value": 20411.487619904983
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln 0.95}{\\ln 2} = -0.074, \\quad Y_{91} = 28500 \\times 91^{-0.074} = 20,411.5$$"
+ },
+ "lc-lot|1|1": {
+  "brief": "First-unit cost is \\$310K, unit theory, 92% slope. Price the lot of units 21 through 35: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 3119.4737100146035
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 207.96491400097358
+   }
+  ],
+  "explain": "$b = -0.1203$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 3,119.5$$\n\nThe exact sum of units 21–35 is 3,119.5, so the average unit cost is 207.96."
+ },
+ "lc-lot|1|2": {
+  "brief": "First-unit cost is \\$440K, unit theory, 88% slope. Price the lot of units 40 through 66: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 5726.174850216886
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 212.08055000803282
+   }
+  ],
+  "explain": "$b = -0.1844$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 5,726.2$$\n\nThe exact sum of units 40–66 is 5,726.2, so the average unit cost is 212.08."
+ },
+ "lc-lot|1|3": {
+  "brief": "First-unit cost is \\$480K, unit theory, 90% slope. Price the lot of units 48 through 86: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 9904.681853595046
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 253.96620137423196
+   }
+  ],
+  "explain": "$b = -0.152$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 9,904.7$$\n\nThe exact sum of units 48–86 is 9,904.7, so the average unit cost is 253.97."
+ },
+ "lc-lot|2|1": {
+  "brief": "First-unit cost is \\$780K, unit theory, 85% slope. Price the lot of units 40 through 70: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 9486.591616460437
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 306.01908440194956
+   }
+  ],
+  "explain": "$b = -0.2345$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 9,486.6$$\n\nThe exact sum of units 40–70 is 9,486.6, so the average unit cost is 306.02."
+ },
+ "lc-lot|2|2": {
+  "brief": "First-unit cost is \\$2,160K, unit theory, 80% slope. Price the lot of units 57 through 95: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 20994.54683992512
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 538.3217138442338
+   }
+  ],
+  "explain": "$b = -0.3219$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 20,994.6$$\n\nThe exact sum of units 57–95 is 20,994.5, so the average unit cost is 538.32."
+ },
+ "lc-lot|2|3": {
+  "brief": "First-unit cost is \\$1,470K, unit theory, 80% slope. Price the lot of units 11 through 29: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 10833.842830684178
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 570.2022542465356
+   }
+  ],
+  "explain": "$b = -0.3219$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 10,834.5$$\n\nThe exact sum of units 11–29 is 10,833.8, so the average unit cost is 570.2."
+ },
+ "lc-lot|3|1": {
+  "brief": "First-unit cost is \\$5,500K, unit theory, 92% slope. Price the lot of units 44 through 64: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 71541.40796922035
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 3406.733712820017
+   }
+  ],
+  "explain": "$b = -0.1203$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 71,541.6$$\n\nThe exact sum of units 44–64 is 71,541.4, so the average unit cost is 3,406.73."
+ },
+ "lc-lot|3|2": {
+  "brief": "First-unit cost is \\$4,100K, unit theory, 90% slope. Price the lot of units 37 through 57: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 48026.472448643304
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 2286.974878506824
+   }
+  ],
+  "explain": "$b = -0.152$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 48,026.6$$\n\nThe exact sum of units 37–57 is 48,026.5, so the average unit cost is 2,286.97."
+ },
+ "lc-lot|3|3": {
+  "brief": "First-unit cost is \\$8,500K, unit theory, 92% slope. Price the lot of units 32 through 44: total lot cost and average unit cost.",
+  "answers": [
+   {
+    "label": "Lot cost",
+    "unit": "$K",
+    "value": 71385.46544918582
+   },
+   {
+    "label": "Average unit cost",
+    "unit": "$K",
+    "value": 5491.189649937371
+   }
+  ],
+  "explain": "$b = -0.1203$. The midpoint approximation gives\n\n$$\\frac{T_1}{b+1}\\left[(L+\\tfrac12)^{b+1} - (F-\\tfrac12)^{b+1}\\right] = 71,385.8$$\n\nThe exact sum of units 32–44 is 71,385.5, so the average unit cost is 5,491.19."
+ },
+ "lc-slope|1|1": {
+  "brief": "Under unit theory, unit 7 took 810 hours and unit 35 took 510.9 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 81.99747281920786
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(510.9/810)}{\\ln(35/7)} = -0.2863, \\quad \\text{slope} = 2^{b} = 82\\%$$"
+ },
+ "lc-slope|1|2": {
+  "brief": "Under unit theory, unit 10 took 1,380 hours and unit 40 took 1,068.7 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 88.00115282512341
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(1068.7/1380)}{\\ln(40/10)} = -0.1844, \\quad \\text{slope} = 2^{b} = 88\\%$$"
+ },
+ "lc-slope|1|3": {
+  "brief": "Under unit theory, unit 11 took 1,630 hours and unit 44 took 1,440.3 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 94.00104424429765
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(1440.3/1630)}{\\ln(44/11)} = -0.0893, \\quad \\text{slope} = 2^{b} = 94\\%$$"
+ },
+ "lc-slope|2|1": {
+  "brief": "Under unit theory, unit 6 took 4,170 hours and unit 18 took 3,591 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 90.99963081406761
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(3591/4170)}{\\ln(18/6)} = -0.1361, \\quad \\text{slope} = 2^{b} = 91\\%$$"
+ },
+ "lc-slope|2|2": {
+  "brief": "Under unit theory, unit 16 took 5,730 hours and unit 32 took 5,386.2 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 94
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(5386.2/5730)}{\\ln(32/16)} = -0.0893, \\quad \\text{slope} = 2^{b} = 94\\%$$"
+ },
+ "lc-slope|2|3": {
+  "brief": "Under unit theory, unit 11 took 1,560 hours and unit 22 took 1,279.2 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 82
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(1279.2/1560)}{\\ln(22/11)} = -0.2863, \\quad \\text{slope} = 2^{b} = 82\\%$$"
+ },
+ "lc-slope|3|1": {
+  "brief": "Under unit theory, unit 13 took 15,000 hours and unit 65 took 10,285.1 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 85.00012128825475
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(10285.1/15000)}{\\ln(65/13)} = -0.2345, \\quad \\text{slope} = 2^{b} = 85\\%$$"
+ },
+ "lc-slope|3|2": {
+  "brief": "Under unit theory, unit 9 took 12,800 hours and unit 36 took 9,248 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 85.00000000000001
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(9248/12800)}{\\ln(36/9)} = -0.2345, \\quad \\text{slope} = 2^{b} = 85\\%$$"
+ },
+ "lc-slope|3|3": {
+  "brief": "Under unit theory, unit 19 took 11,400 hours and unit 95 took 6,402.6 hours. What learning curve slope (%) does that imply?",
+  "answers": [
+   {
+    "label": "Slope",
+    "unit": "%",
+    "value": 78.0000071591936
+   }
+  ],
+  "explain": "$$b = \\frac{\\ln(6402.6/11400)}{\\ln(95/19)} = -0.3585, \\quad \\text{slope} = 2^{b} = 78\\%$$"
+ },
+ "reg-fit|1|1": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 21$.\n\n| X | 1 | 5 | 9 | 13 | 17 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 21 | 33.5 | 40 | 58 | 64 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 2.7625
+   },
+   {
+    "label": "Prediction at X = 21",
+    "unit": "$K",
+    "value": 76.45
+   }
+  ],
+  "explain": "$$\\bar X = 9,\\ \\bar Y = 43.3,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{442}{160} = 2.7625$$\n\n$$a = \\bar Y - b\\bar X = 18.437, \\quad \\hat Y(21) = 76.45$$"
+ },
+ "reg-fit|1|2": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 17$.\n\n| X | 2 | 5 | 8 | 11 | 14 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 39.5 | 56 | 73 | 95.5 | 115 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 6.35
+   },
+   {
+    "label": "Prediction at X = 17",
+    "unit": "$K",
+    "value": 132.95
+   }
+  ],
+  "explain": "$$\\bar X = 8,\\ \\bar Y = 75.8,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{571.5}{90} = 6.35$$\n\n$$a = \\bar Y - b\\bar X = 25, \\quad \\hat Y(17) = 132.95$$"
+ },
+ "reg-fit|1|3": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 18$.\n\n| X | 3 | 6 | 9 | 12 | 15 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 59.5 | 88 | 114 | 138 | 168 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 8.9
+   },
+   {
+    "label": "Prediction at X = 18",
+    "unit": "$K",
+    "value": 193.60000000000002
+   }
+  ],
+  "explain": "$$\\bar X = 9,\\ \\bar Y = 113.5,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{801}{90} = 8.9$$\n\n$$a = \\bar Y - b\\bar X = 33.4, \\quad \\hat Y(18) = 193.6$$"
+ },
+ "reg-fit|2|1": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 11$.\n\n| X | 1 | 3 | 5 | 7 | 9 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 112.5 | 145.5 | 193.5 | 234 | 277.5 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 20.925
+   },
+   {
+    "label": "Prediction at X = 11",
+    "unit": "$K",
+    "value": 318.15
+   }
+  ],
+  "explain": "$$\\bar X = 5,\\ \\bar Y = 192.6,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{837}{40} = 20.925$$\n\n$$a = \\bar Y - b\\bar X = 87.975, \\quad \\hat Y(11) = 318.15$$"
+ },
+ "reg-fit|2|2": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 9$.\n\n| X | 4 | 5 | 6 | 7 | 8 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 219 | 249 | 276 | 310.5 | 337.5 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 29.85
+   },
+   {
+    "label": "Prediction at X = 9",
+    "unit": "$K",
+    "value": 367.95
+   }
+  ],
+  "explain": "$$\\bar X = 6,\\ \\bar Y = 278.4,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{298.5}{10} = 29.85$$\n\n$$a = \\bar Y - b\\bar X = 99.3, \\quad \\hat Y(9) = 367.95$$"
+ },
+ "reg-fit|2|3": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 8$.\n\n| X | 3 | 4 | 5 | 6 | 7 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 75 | 79.5 | 87 | 94.5 | 114 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 9.3
+   },
+   {
+    "label": "Prediction at X = 8",
+    "unit": "$K",
+    "value": 117.9
+   }
+  ],
+  "explain": "$$\\bar X = 5,\\ \\bar Y = 90,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{93}{10} = 9.3$$\n\n$$a = \\bar Y - b\\bar X = 43.5, \\quad \\hat Y(8) = 117.9$$"
+ },
+ "reg-fit|3|1": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 23$.\n\n| X | 3 | 7 | 11 | 15 | 19 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 440 | 585 | 790 | 995 | 1170 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 46.75
+   },
+   {
+    "label": "Prediction at X = 23",
+    "unit": "$K",
+    "value": 1357
+   }
+  ],
+  "explain": "$$\\bar X = 11,\\ \\bar Y = 796,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{7,480}{160} = 46.75$$\n\n$$a = \\bar Y - b\\bar X = 281.75, \\quad \\hat Y(23) = 1,357$$"
+ },
+ "reg-fit|3|2": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 17$.\n\n| X | 2 | 5 | 8 | 11 | 14 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 330 | 465 | 650 | 735 | 920 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 48.333333333333336
+   },
+   {
+    "label": "Prediction at X = 17",
+    "unit": "$K",
+    "value": 1055
+   }
+  ],
+  "explain": "$$\\bar X = 8,\\ \\bar Y = 620,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{4,350}{90} = 48.3333$$\n\n$$a = \\bar Y - b\\bar X = 233.333, \\quad \\hat Y(17) = 1,055$$"
+ },
+ "reg-fit|3|3": {
+  "brief": "Fit $Y = a + bX$ by least squares to these points and predict $Y$ at $X = 25$.\n\n| X | 5 | 9 | 13 | 17 | 21 |\n|---|---|---|---|---|---|\n| Y (\\$K) | 360 | 460 | 545 | 625 | 765 |",
+  "answers": [
+   {
+    "label": "Slope b",
+    "unit": "$K per X",
+    "value": 24.375
+   },
+   {
+    "label": "Prediction at X = 25",
+    "unit": "$K",
+    "value": 843.5
+   }
+  ],
+  "explain": "$$\\bar X = 13,\\ \\bar Y = 551,\\ b = \\frac{\\sum(X-\\bar X)(Y-\\bar Y)}{\\sum (X-\\bar X)^2} = \\frac{3,900}{160} = 24.375$$\n\n$$a = \\bar Y - b\\bar X = 234.125, \\quad \\hat Y(25) = 843.5$$"
+ },
+ "tri-stats|1|1": {
+  "brief": "An element's cost is triangular with low \\$7.5M, most likely \\$16M and high \\$22.5M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 15.333333333333334
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 3.0709209621147133
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 15.333, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 3.071$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "tri-stats|1|2": {
+  "brief": "An element's cost is triangular with low \\$10M, most likely \\$15.5M and high \\$31M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 18.833333333333332
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 4.44565955611638
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 18.833, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 4.446$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "tri-stats|1|3": {
+  "brief": "An element's cost is triangular with low \\$11M, most likely \\$18M and high \\$37.5M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 22.166666666666668
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 5.606296063851387
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 22.167, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 5.606$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "tri-stats|2|1": {
+  "brief": "An element's cost is triangular with low \\$18M, most likely \\$30M and high \\$76.5M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 41.5
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 12.614475811542864
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 41.5, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 12.614$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "tri-stats|2|2": {
+  "brief": "An element's cost is triangular with low \\$48M, most likely \\$54M and high \\$124.5M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 75.5
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 17.367354432958408
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 75.5, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 17.367$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "tri-stats|2|3": {
+  "brief": "An element's cost is triangular with low \\$33M, most likely \\$36M and high \\$42M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 37
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 1.8708286933869707
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 37, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 1.871$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "tri-stats|3|1": {
+  "brief": "An element's cost is triangular with low \\$125M, most likely \\$225M and high \\$400M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 250
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 56.8257570707744
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 250, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 56.826$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "tri-stats|3|2": {
+  "brief": "An element's cost is triangular with low \\$95M, most likely \\$170M and high \\$310M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 191.66666666666666
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 44.55022134874553
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 191.667, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 44.55$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "tri-stats|3|3": {
+  "brief": "An element's cost is triangular with low \\$190M, most likely \\$285M and high \\$400M. Find the mean and standard deviation.",
+  "answers": [
+   {
+    "label": "Mean",
+    "unit": "$M",
+    "value": 291.6666666666667
+   },
+   {
+    "label": "Standard deviation",
+    "unit": "$M",
+    "value": 42.930822907970864
+   }
+  ],
+  "explain": "$$\\mu = \\frac{L+M+H}{3} = 291.667, \\quad \\sigma = \\sqrt{\\frac{L^2+M^2+H^2-LM-LH-MH}{18}} = 42.931$$\n\nThe mean sits above the mode because the high tail is longer."
+ },
+ "risk-sum|1|1": {
+  "brief": "Three WBS elements have means \\$18M, \\$52M, \\$20M and standard deviations \\$2.7M, \\$15.6M, \\$7M. Treat them as **independent**. Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 90
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 17.31040149736568
+   }
+  ],
+  "explain": "Means add: 90. Independent variances add: $\\sigma = \\sqrt{2.7^2 + 15.6^2 + 7^2} = 17.31$. Ignoring positive correlation like this understates risk."
+ },
+ "risk-sum|1|2": {
+  "brief": "Three WBS elements have means \\$27M, \\$36M, \\$40M and standard deviations \\$6.8M, \\$7.2M, \\$6M. Treat them as **independent**. Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 103
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 11.579291860904101
+   }
+  ],
+  "explain": "Means add: 103. Independent variances add: $\\sigma = \\sqrt{6.8^2 + 7.2^2 + 6^2} = 11.579$. Ignoring positive correlation like this understates risk."
+ },
+ "risk-sum|1|3": {
+  "brief": "Three WBS elements have means \\$30M, \\$44M, \\$48M and standard deviations \\$10.5M, \\$8.8M, \\$12M. Treat them as **independent**. Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 122
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 18.21235844145398
+   }
+  ],
+  "explain": "Means add: 122. Independent variances add: $\\sigma = \\sqrt{10.5^2 + 8.8^2 + 12^2} = 18.212$. Ignoring positive correlation like this understates risk."
+ },
+ "risk-sum|2|1": {
+  "brief": "Three WBS elements have means \\$42M, \\$81M, \\$120M and standard deviations \\$12.6M, \\$28.4M, \\$24M. Treat them as **perfectly correlated** (ρ = 1). Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 243
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 65
+   }
+  ],
+  "explain": "Means always add: 243. With $\\rho = 1$ standard deviations add too: $\\sigma = 12.6 + 28.4 + 24 = 65$."
+ },
+ "risk-sum|2|2": {
+  "brief": "Three WBS elements have means \\$141M, \\$45M, \\$171M and standard deviations \\$49.3M, \\$6.8M, \\$34.2M. Treat them as **perfectly correlated** (ρ = 1). Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 357
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 90.3
+   }
+  ],
+  "explain": "Means always add: 357. With $\\rho = 1$ standard deviations add too: $\\sigma = 49.3 + 6.8 + 34.2 = 90.3$."
+ },
+ "risk-sum|2|3": {
+  "brief": "Three WBS elements have means \\$90M, \\$30M, \\$30M and standard deviations \\$13.5M, \\$10.5M, \\$7.5M. Treat them as **perfectly correlated** (ρ = 1). Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 150
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 31.5
+   }
+  ],
+  "explain": "Means always add: 150. With $\\rho = 1$ standard deviations add too: $\\sigma = 13.5 + 10.5 + 7.5 = 31.5$."
+ },
+ "risk-sum|3|1": {
+  "brief": "Three WBS elements have means \\$350M, \\$590M, \\$430M and standard deviations \\$70M, \\$147.5M, \\$43M. Treat them as **perfectly correlated** (ρ = 1). Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 1370
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 260.5
+   }
+  ],
+  "explain": "Means always add: 1,370. With $\\rho = 1$ standard deviations add too: $\\sigma = 70 + 147.5 + 43 = 260.5$."
+ },
+ "risk-sum|3|2": {
+  "brief": "Three WBS elements have means \\$250M, \\$450M, \\$360M and standard deviations \\$50M, \\$67.5M, \\$54M. Treat them as **perfectly correlated** (ρ = 1). Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 1060
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 171.5
+   }
+  ],
+  "explain": "Means always add: 1,060. With $\\rho = 1$ standard deviations add too: $\\sigma = 50 + 67.5 + 54 = 171.5$."
+ },
+ "risk-sum|3|3": {
+  "brief": "Three WBS elements have means \\$570M, \\$560M, \\$310M and standard deviations \\$57M, \\$140M, \\$77.5M. Treat them as **perfectly correlated** (ρ = 1). Find the total mean and total standard deviation.",
+  "answers": [
+   {
+    "label": "Total mean",
+    "unit": "$M",
+    "value": 1440
+   },
+   {
+    "label": "Total standard deviation",
+    "unit": "$M",
+    "value": 274.5
+   }
+  ],
+  "explain": "Means always add: 1,440. With $\\rho = 1$ standard deviations add too: $\\sigma = 57 + 140 + 77.5 = 274.5$."
+ },
+ "normal-prob|1|1": {
+  "brief": "Total cost is normally distributed with mean \\$75M and standard deviation \\$16.5M. The budget is \\$66.8M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 30.960521053668426
+   }
+  ],
+  "explain": "$$z = \\frac{66.8 - 75}{16.5} = -0.497, \\quad P(C \\le B) = \\Phi(z) = 30.96\\%$$"
+ },
+ "normal-prob|1|2": {
+  "brief": "Total cost is normally distributed with mean \\$101M and standard deviation \\$17.2M. The budget is \\$118.2M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 84.13447361676363
+   }
+  ],
+  "explain": "$$z = \\frac{118.2 - 101}{17.2} = 1, \\quad P(C \\le B) = \\Phi(z) = 84.13\\%$$"
+ },
+ "normal-prob|1|3": {
+  "brief": "Total cost is normally distributed with mean \\$111M and standard deviation \\$22.2M. The budget is \\$144.3M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 93.31927690234978
+   }
+  ],
+  "explain": "$$z = \\frac{144.3 - 111}{22.2} = 1.5, \\quad P(C \\le B) = \\Phi(z) = 93.32\\%$$"
+ },
+ "normal-prob|2|1": {
+  "brief": "Total cost is normally distributed with mean \\$189M and standard deviation \\$26.5M. The budget is \\$215.5M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 84.13447361676363
+   }
+  ],
+  "explain": "$$z = \\frac{215.5 - 189}{26.5} = 1, \\quad P(C \\le B) = \\Phi(z) = 84.13\\%$$"
+ },
+ "normal-prob|2|2": {
+  "brief": "Total cost is normally distributed with mean \\$480M and standard deviation \\$43.2M. The budget is \\$566.4M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 97.72499371127435
+   }
+  ],
+  "explain": "$$z = \\frac{566.4 - 480}{43.2} = 2, \\quad P(C \\le B) = \\Phi(z) = 97.72\\%$$"
+ },
+ "normal-prob|2|3": {
+  "brief": "Total cost is normally distributed with mean \\$333M and standard deviation \\$26.6M. The budget is \\$306.4M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 15.86552638323635
+   }
+  ],
+  "explain": "$$z = \\frac{306.4 - 333}{26.6} = -1, \\quad P(C \\le B) = \\Phi(z) = 15.87\\%$$"
+ },
+ "normal-prob|3|1": {
+  "brief": "Total cost is normally distributed with mean \\$1,260M and standard deviation \\$315M. The budget is \\$1,575M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 84.13447361676363
+   }
+  ],
+  "explain": "$$z = \\frac{1575 - 1260}{315} = 1, \\quad P(C \\le B) = \\Phi(z) = 84.13\\%$$"
+ },
+ "normal-prob|3|2": {
+  "brief": "Total cost is normally distributed with mean \\$950M and standard deviation \\$190M. The budget is \\$1,140M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 84.13447361676363
+   }
+  ],
+  "explain": "$$z = \\frac{1140 - 950}{190} = 1, \\quad P(C \\le B) = \\Phi(z) = 84.13\\%$$"
+ },
+ "normal-prob|3|3": {
+  "brief": "Total cost is normally distributed with mean \\$1,890M and standard deviation \\$453.6M. The budget is \\$2,116.8M. What is the probability (%) that cost comes in at or under budget?",
+  "answers": [
+   {
+    "label": "Probability",
+    "unit": "%",
+    "value": 69.14624627239941
+   }
+  ],
+  "explain": "$$z = \\frac{2116.8 - 1890}{453.6} = 0.5, \\quad P(C \\le B) = \\Phi(z) = 69.15\\%$$"
+ },
+ "expected-value|1|1": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.1, cost \\$14M), one retest (p = 0.5, cost \\$35M), or redesign (p = 0.4, cost \\$109M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 62.5
+   }
+  ],
+  "explain": "$$E[C] = 0.1(14) + 0.5(35) + 0.4(109) = 62.5$$"
+ },
+ "expected-value|1|2": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.2, cost \\$22M), one retest (p = 0.4, cost \\$47M), or redesign (p = 0.4, cost \\$86M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 57.6
+   }
+  ],
+  "explain": "$$E[C] = 0.2(22) + 0.4(47) + 0.4(86) = 57.6$$"
+ },
+ "expected-value|1|3": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.2, cost \\$25M), one retest (p = 0.5, cost \\$59M), or redesign (p = 0.3, cost \\$87M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 60.599999999999994
+   }
+  ],
+  "explain": "$$E[C] = 0.2(25) + 0.5(59) + 0.3(87) = 60.6$$"
+ },
+ "expected-value|2|1": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.1, cost \\$66M), one retest (p = 0.4, cost \\$153M), or redesign (p = 0.5, cost \\$339M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 237.3
+   }
+  ],
+  "explain": "$$E[C] = 0.1(66) + 0.4(153) + 0.5(339) = 237.3$$"
+ },
+ "expected-value|2|2": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.25, cost \\$87M), one retest (p = 0.3, cost \\$177M), or redesign (p = 0.45, cost \\$240M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 182.85
+   }
+  ],
+  "explain": "$$E[C] = 0.25(87) + 0.3(177) + 0.45(240) = 182.85$$"
+ },
+ "expected-value|2|3": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.2, cost \\$30M), one retest (p = 0.3, cost \\$117M), or redesign (p = 0.5, cost \\$351M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 216.6
+   }
+  ],
+  "explain": "$$E[C] = 0.2(30) + 0.3(117) + 0.5(351) = 216.6$$"
+ },
+ "expected-value|3|1": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.25, cost \\$230M), one retest (p = 0.5, cost \\$410M), or redesign (p = 0.25, cost \\$960M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 502.5
+   }
+  ],
+  "explain": "$$E[C] = 0.25(230) + 0.5(410) + 0.25(960) = 502.5$$"
+ },
+ "expected-value|3|2": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.2, cost \\$200M), one retest (p = 0.5, cost \\$410M), or redesign (p = 0.3, cost \\$730M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 464
+   }
+  ],
+  "explain": "$$E[C] = 0.2(200) + 0.5(410) + 0.3(730) = 464$$"
+ },
+ "expected-value|3|3": {
+  "brief": "A test program has three outcomes: pass first time (p = 0.3, cost \\$180M), one retest (p = 0.5, cost \\$330M), or redesign (p = 0.2, cost \\$960M). What is the expected cost?",
+  "answers": [
+   {
+    "label": "Expected cost",
+    "unit": "$M",
+    "value": 411
+   }
+  ],
+  "explain": "$$E[C] = 0.3(180) + 0.5(330) + 0.2(960) = 411$$"
+ },
+ "mfg-labor|1|1": {
+  "brief": "Each unit has 36 standard hours. You are building 68 units with a realization factor of 1.25. The fully burdened (wrap) rate is \\$105/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 3060
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 321.3
+   }
+  ],
+  "explain": "$$\\text{Hours} = 36 \\times 68 \\times 1.25 = 3,060, \\quad \\text{Cost} = 3,060 \\times 105 / 1000 = 321.3\\ \\text{\\$K}$$"
+ },
+ "mfg-labor|1|2": {
+  "brief": "Each unit has 54 standard hours. You are building 46 units with a realization factor of 1.5. The fully burdened (wrap) rate is \\$142/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 3726
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 529.092
+   }
+  ],
+  "explain": "$$\\text{Hours} = 54 \\times 46 \\times 1.5 = 3,726, \\quad \\text{Cost} = 3,726 \\times 142 / 1000 = 529.09\\ \\text{\\$K}$$"
+ },
+ "mfg-labor|1|3": {
+  "brief": "Each unit has 60 standard hours. You are building 57 units with a realization factor of 1.65. The fully burdened (wrap) rate is \\$177/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 5643
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 998.811
+   }
+  ],
+  "explain": "$$\\text{Hours} = 60 \\times 57 \\times 1.65 = 5,643, \\quad \\text{Cost} = 5,643 \\times 177 / 1000 = 998.81\\ \\text{\\$K}$$"
+ },
+ "mfg-labor|2|1": {
+  "brief": "Each unit has 28 standard hours. You are building 99 units with a realization factor of 1.5. The fully burdened (wrap) rate is \\$153/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 4158
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 636.174
+   }
+  ],
+  "explain": "$$\\text{Hours} = 28 \\times 99 \\times 1.5 = 4,158, \\quad \\text{Cost} = 4,158 \\times 153 / 1000 = 636.17\\ \\text{\\$K}$$"
+ },
+ "mfg-labor|2|2": {
+  "brief": "Each unit has 94 standard hours. You are building 51 units with a realization factor of 1.8. The fully burdened (wrap) rate is \\$175/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 8629.2
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 1510.1100000000001
+   }
+  ],
+  "explain": "$$\\text{Hours} = 94 \\times 51 \\times 1.8 = 8,629.2, \\quad \\text{Cost} = 8,629.2 \\times 175 / 1000 = 1,510.11\\ \\text{\\$K}$$"
+ },
+ "mfg-labor|2|3": {
+  "brief": "Each unit has 61 standard hours. You are building 30 units with a realization factor of 1.1. The fully burdened (wrap) rate is \\$118/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 2013.0000000000002
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 237.53400000000002
+   }
+  ],
+  "explain": "$$\\text{Hours} = 61 \\times 30 \\times 1.1 = 2,013, \\quad \\text{Cost} = 2,013 \\times 118 / 1000 = 237.53\\ \\text{\\$K}$$"
+ },
+ "mfg-labor|3|1": {
+  "brief": "Each unit has 70 standard hours. You are building 780 units with a realization factor of 1.55. The fully burdened (wrap) rate is \\$123/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 84630
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 10409.49
+   }
+  ],
+  "explain": "$$\\text{Hours} = 70 \\times 780 \\times 1.55 = 84,630, \\quad \\text{Cost} = 84,630 \\times 123 / 1000 = 10,409.49\\ \\text{\\$K}$$"
+ },
+ "mfg-labor|3|2": {
+  "brief": "Each unit has 50 standard hours. You are building 590 units with a realization factor of 1.45. The fully burdened (wrap) rate is \\$124/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 42775
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 5304.1
+   }
+  ],
+  "explain": "$$\\text{Hours} = 50 \\times 590 \\times 1.45 = 42,775, \\quad \\text{Cost} = 42,775 \\times 124 / 1000 = 5,304.1\\ \\text{\\$K}$$"
+ },
+ "mfg-labor|3|3": {
+  "brief": "Each unit has 113 standard hours. You are building 750 units with a realization factor of 1.4. The fully burdened (wrap) rate is \\$99/hour. Find the expected hours and labor cost.",
+  "answers": [
+   {
+    "label": "Expected hours",
+    "unit": "hours",
+    "value": 118649.99999999999
+   },
+   {
+    "label": "Labor cost",
+    "unit": "$K",
+    "value": 11746.349999999999
+   }
+  ],
+  "explain": "$$\\text{Hours} = 113 \\times 750 \\times 1.4 = 118,650, \\quad \\text{Cost} = 118,650 \\times 99 / 1000 = 11,746.35\\ \\text{\\$K}$$"
+ },
+ "make-buy|1|1": {
+  "brief": "Making a part in house needs \\$110K of tooling plus \\$103 per unit. A supplier charges \\$127 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 4583.333333333333
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{110000}{127 - 103} = 4,583.3$$\n\nAbove this quantity, making is cheaper."
+ },
+ "make-buy|1|2": {
+  "brief": "Making a part in house needs \\$170K of tooling plus \\$72 per unit. A supplier charges \\$123 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 3333.3333333333335
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{170000}{123 - 72} = 3,333.3$$\n\nAbove this quantity, making is cheaper."
+ },
+ "make-buy|1|3": {
+  "brief": "Making a part in house needs \\$190K of tooling plus \\$87 per unit. A supplier charges \\$150 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 3015.873015873016
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{190000}{150 - 87} = 3,015.9$$\n\nAbove this quantity, making is cheaper."
+ },
+ "make-buy|2|1": {
+  "brief": "Making a part in house needs \\$240K of tooling plus \\$53 per unit. A supplier charges \\$105 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 4615.384615384615
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{240000}{105 - 53} = 4,615.4$$\n\nAbove this quantity, making is cheaper."
+ },
+ "make-buy|2|2": {
+  "brief": "Making a part in house needs \\$930K of tooling plus \\$31 per unit. A supplier charges \\$107 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 12236.842105263158
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{930000}{107 - 31} = 12,236.8$$\n\nAbove this quantity, making is cheaper."
+ },
+ "make-buy|2|3": {
+  "brief": "Making a part in house needs \\$570K of tooling plus \\$20 per unit. A supplier charges \\$31 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 51818.181818181816
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{570000}{31 - 20} = 51,818.2$$\n\nAbove this quantity, making is cheaper."
+ },
+ "make-buy|3|1": {
+  "brief": "Making a part in house needs \\$2,300K of tooling plus \\$117 per unit. A supplier charges \\$174 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 40350.87719298246
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{2300000}{174 - 117} = 40,350.9$$\n\nAbove this quantity, making is cheaper."
+ },
+ "make-buy|3|2": {
+  "brief": "Making a part in house needs \\$1,500K of tooling plus \\$90 per unit. A supplier charges \\$137 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 31914.893617021276
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{1500000}{137 - 90} = 31,914.9$$\n\nAbove this quantity, making is cheaper."
+ },
+ "make-buy|3|3": {
+  "brief": "Making a part in house needs \\$3,800K of tooling plus \\$112 per unit. A supplier charges \\$152 per unit. At what quantity do the two options cost the same?",
+  "answers": [
+   {
+    "label": "Break-even quantity",
+    "unit": "units",
+    "value": 95000
+   }
+  ],
+  "explain": "$$Q^* = \\frac{\\text{Fixed}}{p_{buy} - v_{make}} = \\frac{3800000}{152 - 112} = 95,000$$\n\nAbove this quantity, making is cheaper."
+ },
+ "sw-effort|1|1": {
+  "brief": "Use the effort model $E = 2.4 \\times \\text{KSLOC}^{1.15}$ (person-months). The program is 33 KSLOC and labor costs \\$16.5K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 133.81422173509236
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 2.207934658629024
+   }
+  ],
+  "explain": "$$E = 2.4 \\times 33^{1.15} = 133.8\\ \\text{PM}, \\quad \\text{Cost} = 133.8 \\times 16.5 / 1000 = 2.208$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "sw-effort|1|2": {
+  "brief": "Use the effort model $E = 2.94 \\times \\text{KSLOC}^{1.1}$ (person-months). The program is 75 KSLOC and labor costs \\$21K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 339.55858891746897
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 7.130730367266849
+   }
+  ],
+  "explain": "$$E = 2.94 \\times 75^{1.1} = 339.6\\ \\text{PM}, \\quad \\text{Cost} = 339.6 \\times 21 / 1000 = 7.131$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "sw-effort|1|3": {
+  "brief": "Use the effort model $E = 2.94 \\times \\text{KSLOC}^{1.12}$ (person-months). The program is 93 KSLOC and labor costs \\$25K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 471.0296360949378
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 11.775740902373446
+   }
+  ],
+  "explain": "$$E = 2.94 \\times 93^{1.12} = 471\\ \\text{PM}, \\quad \\text{Cost} = 471 \\times 25 / 1000 = 11.776$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "sw-effort|2|1": {
+  "brief": "Use the effort model $E = 2.4 \\times \\text{KSLOC}^{1.08}$ (person-months). The program is 228 KSLOC and labor costs \\$22K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 844.8524668118704
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 18.586754269861146
+   }
+  ],
+  "explain": "$$E = 2.4 \\times 228^{1.08} = 844.9\\ \\text{PM}, \\quad \\text{Cost} = 844.9 \\times 22 / 1000 = 18.587$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "sw-effort|2|2": {
+  "brief": "Use the effort model $E = 3 \\times \\text{KSLOC}^{1.05}$ (person-months). The program is 339 KSLOC and labor costs \\$24.5K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 1360.9148023874504
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 33.342412658492535
+   }
+  ],
+  "explain": "$$E = 3 \\times 339^{1.05} = 1,360.9\\ \\text{PM}, \\quad \\text{Cost} = 1,360.9 \\times 24.5 / 1000 = 33.342$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "sw-effort|2|3": {
+  "brief": "Use the effort model $E = 2.94 \\times \\text{KSLOC}^{1.05}$ (person-months). The program is 36 KSLOC and labor costs \\$18K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 126.60911008642326
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 2.2789639815556186
+   }
+  ],
+  "explain": "$$E = 2.94 \\times 36^{1.05} = 126.6\\ \\text{PM}, \\quad \\text{Cost} = 126.6 \\times 18 / 1000 = 2.279$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "sw-effort|3|1": {
+  "brief": "Use the effort model $E = 3 \\times \\text{KSLOC}^{1.15}$ (person-months). The program is 830 KSLOC and labor costs \\$18.5K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 6824.346363679253
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 126.2504077280662
+   }
+  ],
+  "explain": "$$E = 3 \\times 830^{1.15} = 6,824.3\\ \\text{PM}, \\quad \\text{Cost} = 6,824.3 \\times 18.5 / 1000 = 126.25$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "sw-effort|3|2": {
+  "brief": "Use the effort model $E = 2.94 \\times \\text{KSLOC}^{1.12}$ (person-months). The program is 670 KSLOC and labor costs \\$18.5K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 4300.818443302233
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 79.56514120109132
+   }
+  ],
+  "explain": "$$E = 2.94 \\times 670^{1.12} = 4,300.8\\ \\text{PM}, \\quad \\text{Cost} = 4,300.8 \\times 18.5 / 1000 = 79.565$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "sw-effort|3|3": {
+  "brief": "Use the effort model $E = 3.2 \\times \\text{KSLOC}^{1.15}$ (person-months). The program is 570 KSLOC and labor costs \\$16K per person-month. Find effort and cost.",
+  "answers": [
+   {
+    "label": "Effort",
+    "unit": "PM",
+    "value": 4725.046233551358
+   },
+   {
+    "label": "Cost",
+    "unit": "$M",
+    "value": 75.60073973682172
+   }
+  ],
+  "explain": "$$E = 3.2 \\times 570^{1.15} = 4,725\\ \\text{PM}, \\quad \\text{Cost} = 4,725 \\times 16 / 1000 = 75.601$$\n\nAn exponent above 1 is a diseconomy of scale: bigger programs cost more per line."
+ },
+ "npv|1|1": {
+  "brief": "An upgrade costs \\$160K now and saves \\$45K, \\$40K, \\$125K, \\$140K, \\$20K at the end of years 1–5. At a 10% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": 115.92160247375051
+   }
+  ],
+  "explain": "$$NPV = -160 + \\frac{45}{1.1^{1}} + \\frac{40}{1.1^{2}} + \\frac{125}{1.1^{3}} + \\frac{140}{1.1^{4}} + \\frac{20}{1.1^{5}} = 115.92$$\n\nPositive: the upgrade pays for itself."
+ },
+ "npv|1|2": {
+  "brief": "An upgrade costs \\$230K now and saves \\$95K, \\$95K, \\$75K, \\$40K, \\$30K at the end of years 1–5. At a 7% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": 54.88946054815199
+   }
+  ],
+  "explain": "$$NPV = -230 + \\frac{95}{1.07^{1}} + \\frac{95}{1.07^{2}} + \\frac{75}{1.07^{3}} + \\frac{40}{1.07^{4}} + \\frac{30}{1.07^{5}} = 54.89$$\n\nPositive: the upgrade pays for itself."
+ },
+ "npv|1|3": {
+  "brief": "An upgrade costs \\$260K now and saves \\$120K, \\$145K, \\$80K, \\$100K, \\$90K at the end of years 1–5. At a 7% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": 184.56025581944687
+   }
+  ],
+  "explain": "$$NPV = -260 + \\frac{120}{1.07^{1}} + \\frac{145}{1.07^{2}} + \\frac{80}{1.07^{3}} + \\frac{100}{1.07^{4}} + \\frac{90}{1.07^{5}} = 184.56$$\n\nPositive: the upgrade pays for itself."
+ },
+ "npv|2|1": {
+  "brief": "An upgrade costs \\$390K now and saves \\$300K, \\$330K, \\$405K, \\$210K, \\$330K at the end of years 1–5. At a 5% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": 976.2193956515766
+   }
+  ],
+  "explain": "$$NPV = -390 + \\frac{300}{1.05^{1}} + \\frac{330}{1.05^{2}} + \\frac{405}{1.05^{3}} + \\frac{210}{1.05^{4}} + \\frac{330}{1.05^{5}} = 976.22$$\n\nPositive: the upgrade pays for itself."
+ },
+ "npv|2|2": {
+  "brief": "An upgrade costs \\$1,200K now and saves \\$435K, \\$435K, \\$180K, \\$255K, \\$240K at the end of years 1–5. At a 3% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": 230.6751217148303
+   }
+  ],
+  "explain": "$$NPV = -1200 + \\frac{435}{1.03^{1}} + \\frac{435}{1.03^{2}} + \\frac{180}{1.03^{3}} + \\frac{255}{1.03^{4}} + \\frac{240}{1.03^{5}} = 230.68$$\n\nPositive: the upgrade pays for itself."
+ },
+ "npv|2|3": {
+  "brief": "An upgrade costs \\$780K now and saves \\$60K, \\$180K, \\$435K, \\$285K, \\$210K at the end of years 1–5. At a 3% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": 280.37296602381184
+   }
+  ],
+  "explain": "$$NPV = -780 + \\frac{60}{1.03^{1}} + \\frac{180}{1.03^{2}} + \\frac{435}{1.03^{3}} + \\frac{285}{1.03^{4}} + \\frac{210}{1.03^{5}} = 280.37$$\n\nPositive: the upgrade pays for itself."
+ },
+ "npv|3|1": {
+  "brief": "An upgrade costs \\$1,800K now and saves \\$1,250K, \\$1,400K, \\$200K, \\$800K, \\$1,150K at the end of years 1–5. At a 7% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": 2184.5483700703253
+   }
+  ],
+  "explain": "$$NPV = -1800 + \\frac{1250}{1.07^{1}} + \\frac{1400}{1.07^{2}} + \\frac{200}{1.07^{3}} + \\frac{800}{1.07^{4}} + \\frac{1150}{1.07^{5}} = 2,184.55$$\n\nPositive: the upgrade pays for itself."
+ },
+ "npv|3|2": {
+  "brief": "An upgrade costs \\$2,200K now and saves \\$900K, \\$700K, \\$450K, \\$400K, \\$1,450K at the end of years 1–5. At a 7% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": 958.850694789563
+   }
+  ],
+  "explain": "$$NPV = -2200 + \\frac{900}{1.07^{1}} + \\frac{700}{1.07^{2}} + \\frac{450}{1.07^{3}} + \\frac{400}{1.07^{4}} + \\frac{1450}{1.07^{5}} = 958.85$$\n\nPositive: the upgrade pays for itself."
+ },
+ "npv|3|3": {
+  "brief": "An upgrade costs \\$4,700K now and saves \\$750K, \\$300K, \\$1,000K, \\$1,000K, \\$700K at the end of years 1–5. At a 10% discount rate, what is the NPV?",
+  "answers": [
+   {
+    "label": "NPV",
+    "unit": "$K",
+    "value": -1901.274751476241
+   }
+  ],
+  "explain": "$$NPV = -4700 + \\frac{750}{1.1^{1}} + \\frac{300}{1.1^{2}} + \\frac{1000}{1.1^{3}} + \\frac{1000}{1.1^{4}} + \\frac{700}{1.1^{5}} = -1,901.27$$\n\nNegative: the savings do not justify the cost at this rate."
+ },
+ "pv-annuity|1|1": {
+  "brief": "Operating and support costs are \\$50K per year for 18 years, paid at year end. Discount at 2%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 749.6015625859426
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 50 \\times \\frac{1-1.02^{-18}}{0.02} = 749.6$$"
+ },
+ "pv-annuity|1|2": {
+  "brief": "Operating and support costs are \\$80K per year for 13 years, paid at year end. Discount at 5%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 751.4858389675288
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 80 \\times \\frac{1-1.05^{-13}}{0.05} = 751.49$$"
+ },
+ "pv-annuity|1|3": {
+  "brief": "Operating and support costs are \\$90K per year for 15 years, paid at year end. Discount at 7%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 819.7122604598235
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 90 \\times \\frac{1-1.07^{-15}}{0.07} = 819.71$$"
+ },
+ "pv-annuity|2|1": {
+  "brief": "Operating and support costs are \\$105K per year for 10 years, paid at year end. Discount at 5%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 810.7821675644059
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 105 \\times \\frac{1-1.05^{-10}}{0.05} = 810.78$$"
+ },
+ "pv-annuity|2|2": {
+  "brief": "Operating and support costs are \\$465K per year for 6 years, paid at year end. Discount at 7%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 2216.4409417903107
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 465 \\times \\frac{1-1.07^{-6}}{0.07} = 2,216.44$$"
+ },
+ "pv-annuity|2|3": {
+  "brief": "Operating and support costs are \\$285K per year for 5 years, paid at year end. Discount at 2%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 1343.3359599236994
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 285 \\times \\frac{1-1.02^{-5}}{0.02} = 1,343.34$$"
+ },
+ "pv-annuity|3|1": {
+  "brief": "Operating and support costs are \\$1,100K per year for 20 years, paid at year end. Discount at 5%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 13708.431376793991
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 1100 \\times \\frac{1-1.05^{-20}}{0.05} = 13,708.43$$"
+ },
+ "pv-annuity|3|2": {
+  "brief": "Operating and support costs are \\$750K per year for 16 years, paid at year end. Discount at 5%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 8128.327170128999
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 750 \\times \\frac{1-1.05^{-16}}{0.05} = 8,128.33$$"
+ },
+ "pv-annuity|3|3": {
+  "brief": "Operating and support costs are \\$1,900K per year for 19 years, paid at year end. Discount at 3%. What is their present value?",
+  "answers": [
+   {
+    "label": "Present value",
+    "unit": "$K",
+    "value": 27215.21830191145
+   }
+  ],
+  "explain": "$$PV = A \\cdot \\frac{1-(1+r)^{-n}}{r} = 1900 \\times \\frac{1-1.03^{-19}}{0.03} = 27,215.22$$"
+ },
+ "cpif-fee|1|1": {
+  "brief": "CPIF contract: target cost \\$75M, target fee \\$6M, share ratio 80/20 (Govt/Contractor), minimum fee \\$1.5M, maximum fee \\$9M. Actual cost is \\$90.75M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 2.8499999999999996
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 93.6
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.2\\,(TC - AC) = 6 + 0.2(75 - 90.75) = 2.85$$\n\nWithin the fee limits. Total $= AC + \\text{Fee} = 93.6$."
+ },
+ "cpif-fee|1|2": {
+  "brief": "CPIF contract: target cost \\$101M, target fee \\$7.07M, share ratio 75/25 (Govt/Contractor), minimum fee \\$3.03M, maximum fee \\$10.1M. Actual cost is \\$84.84M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 10.1
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 94.94
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.25\\,(TC - AC) = 7.07 + 0.25(101 - 84.84) = 11.11$$\n\nCapped at the maximum fee, 10.1. Total $= AC + \\text{Fee} = 94.94$."
+ },
+ "cpif-fee|1|3": {
+  "brief": "CPIF contract: target cost \\$111M, target fee \\$8.88M, share ratio 85/15 (Govt/Contractor), minimum fee \\$3.33M, maximum fee \\$11.1M. Actual cost is \\$117.66M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 7.881000000000001
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 125.541
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.15\\,(TC - AC) = 8.88 + 0.15(111 - 117.66) = 7.881$$\n\nWithin the fee limits. Total $= AC + \\text{Fee} = 125.541$."
+ },
+ "cpif-fee|2|1": {
+  "brief": "CPIF contract: target cost \\$189M, target fee \\$13.23M, share ratio 75/25 (Govt/Contractor), minimum fee \\$5.67M, maximum fee \\$22.68M. Actual cost is \\$179.55M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 15.592499999999998
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 195.1425
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.25\\,(TC - AC) = 13.23 + 0.25(189 - 179.55) = 15.592$$\n\nWithin the fee limits. Total $= AC + \\text{Fee} = 195.143$."
+ },
+ "cpif-fee|2|2": {
+  "brief": "CPIF contract: target cost \\$480M, target fee \\$28.8M, share ratio 85/15 (Govt/Contractor), minimum fee \\$14.4M, maximum fee \\$48M. Actual cost is \\$475.2M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 29.520000000000003
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 504.71999999999997
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.15\\,(TC - AC) = 28.8 + 0.15(480 - 475.2) = 29.52$$\n\nWithin the fee limits. Total $= AC + \\text{Fee} = 504.72$."
+ },
+ "cpif-fee|2|3": {
+  "brief": "CPIF contract: target cost \\$333M, target fee \\$19.98M, share ratio 80/20 (Govt/Contractor), minimum fee \\$6.66M, maximum fee \\$39.96M. Actual cost is \\$342.99M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 17.982
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 360.972
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.2\\,(TC - AC) = 19.98 + 0.2(333 - 342.99) = 17.982$$\n\nWithin the fee limits. Total $= AC + \\text{Fee} = 360.972$."
+ },
+ "cpif-fee|3|1": {
+  "brief": "CPIF contract: target cost \\$1,260M, target fee \\$100.8M, share ratio 75/25 (Govt/Contractor), minimum fee \\$25.2M, maximum fee \\$151.2M. Actual cost is \\$957.6M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 151.2
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 1108.8
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.25\\,(TC - AC) = 100.8 + 0.25(1260 - 957.6) = 176.4$$\n\nCapped at the maximum fee, 151.2. Total $= AC + \\text{Fee} = 1,108.8$."
+ },
+ "cpif-fee|3|2": {
+  "brief": "CPIF contract: target cost \\$950M, target fee \\$76M, share ratio 75/25 (Govt/Contractor), minimum fee \\$19M, maximum fee \\$95M. Actual cost is \\$788.5M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 95
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 883.5
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.25\\,(TC - AC) = 76 + 0.25(950 - 788.5) = 116.375$$\n\nCapped at the maximum fee, 95. Total $= AC + \\text{Fee} = 883.5$."
+ },
+ "cpif-fee|3|3": {
+  "brief": "CPIF contract: target cost \\$1,890M, target fee \\$151.2M, share ratio 70/30 (Govt/Contractor), minimum fee \\$37.8M, maximum fee \\$226.8M. Actual cost is \\$1,984.5M. Find the fee earned and the total the government pays.",
+  "answers": [
+   {
+    "label": "Fee",
+    "unit": "$M",
+    "value": 122.85
+   },
+   {
+    "label": "Total price",
+    "unit": "$M",
+    "value": 2107.35
+   }
+  ],
+  "explain": "$$\\text{Fee} = TF + 0.3\\,(TC - AC) = 151.2 + 0.3(1890 - 1984.5) = 122.85$$\n\nWithin the fee limits. Total $= AC + \\text{Fee} = 2,107.35$."
+ },
+ "fpif-pta|1|1": {
+  "brief": "FPIF contract: target cost \\$75M, target profit \\$9M, ceiling price \\$92.4M, share 80/20 (Govt/Contractor). Actual cost is \\$91.5M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 85.5
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 92.4
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 75 + \\frac{92.4 - 84}{0.8} = 85.5$$\n\n$$\\text{Profit} = 9 + 0.2(75 - 91.5) = 5.7, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 92.4$$"
+ },
+ "fpif-pta|1|2": {
+  "brief": "FPIF contract: target cost \\$101M, target profit \\$10.1M, ceiling price \\$133.32M, share 75/25 (Govt/Contractor). Actual cost is \\$106.05M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 130.62666666666667
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 114.8875
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 101 + \\frac{133.32 - 111.1}{0.75} = 130.627$$\n\n$$\\text{Profit} = 10.1 + 0.25(101 - 106.05) = 8.838, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 114.888$$"
+ },
+ "fpif-pta|1|3": {
+  "brief": "FPIF contract: target cost \\$111M, target profit \\$13.32M, ceiling price \\$155.4M, share 85/15 (Govt/Contractor). Actual cost is \\$116.55M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 147.56470588235294
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 129.0375
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 111 + \\frac{155.4 - 124.32}{0.85} = 147.565$$\n\n$$\\text{Profit} = 13.32 + 0.15(111 - 116.55) = 12.488, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 129.038$$"
+ },
+ "fpif-pta|2|1": {
+  "brief": "FPIF contract: target cost \\$189M, target profit \\$18.9M, ceiling price \\$249.48M, share 75/25 (Govt/Contractor). Actual cost is \\$236.25M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 244.43999999999997
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 243.3375
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 189 + \\frac{249.48 - 207.9}{0.75} = 244.44$$\n\n$$\\text{Profit} = 18.9 + 0.25(189 - 236.25) = 7.087, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 243.338$$"
+ },
+ "fpif-pta|2|2": {
+  "brief": "FPIF contract: target cost \\$480M, target profit \\$38.4M, ceiling price \\$648M, share 85/15 (Govt/Contractor). Actual cost is \\$480M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 632.4705882352941
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 518.4
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 480 + \\frac{648 - 518.4}{0.85} = 632.471$$\n\n$$\\text{Profit} = 38.4 + 0.15(480 - 480) = 38.4, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 518.4$$"
+ },
+ "fpif-pta|2|3": {
+  "brief": "FPIF contract: target cost \\$333M, target profit \\$26.64M, ceiling price \\$395.6M, share 70/30 (Govt/Contractor). Actual cost is \\$426.24M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 384.3714285714286
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 395.6
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 333 + \\frac{395.6 - 359.64}{0.7} = 384.371$$\n\n$$\\text{Profit} = 26.64 + 0.3(333 - 426.24) = -1.332, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 395.6$$"
+ },
+ "fpif-pta|3|1": {
+  "brief": "FPIF contract: target cost \\$1,260M, target profit \\$151.2M, ceiling price \\$1,693.44M, share 70/30 (Govt/Contractor). Actual cost is \\$1,411.2M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 1663.2
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 1517.04
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 1260 + \\frac{1693.44 - 1,411.2}{0.7} = 1,663.2$$\n\n$$\\text{Profit} = 151.2 + 0.3(1260 - 1411.2) = 105.84, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 1,517.04$$"
+ },
+ "fpif-pta|3|2": {
+  "brief": "FPIF contract: target cost \\$950M, target profit \\$114M, ceiling price \\$1,276.8M, share 70/30 (Govt/Contractor). Actual cost is \\$893M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 1254
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 1024.1
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 950 + \\frac{1276.8 - 1,064}{0.7} = 1,254$$\n\n$$\\text{Profit} = 114 + 0.3(950 - 893) = 131.1, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 1,024.1$$"
+ },
+ "fpif-pta|3|3": {
+  "brief": "FPIF contract: target cost \\$1,890M, target profit \\$226.8M, ceiling price \\$2,434.32M, share 80/20 (Govt/Contractor). Actual cost is \\$2,116.8M. Find the point of total assumption and the final price.",
+  "answers": [
+   {
+    "label": "PTA",
+    "unit": "$M",
+    "value": 2286.9
+   },
+   {
+    "label": "Final price",
+    "unit": "$M",
+    "value": 2298.2400000000002
+   }
+  ],
+  "explain": "$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = 1890 + \\frac{2434.32 - 2,116.8}{0.8} = 2,286.9$$\n\n$$\\text{Profit} = 226.8 + 0.2(1890 - 2116.8) = 181.44, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = 2,298.24$$"
+ },
+ "evm-eac|1|1": {
+  "brief": "BAC \\$50M. To date: PV \\$28.21M, EV \\$31M, AC \\$29.76M. Find the CPI and the **CPI-based** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 1.0416666666666665
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 48.00000000000001
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 1.0417$$\n\n$$EAC = \\frac{BAC}{CPI} = 48$$"
+ },
+ "evm-eac|1|2": {
+  "brief": "BAC \\$81M. To date: PV \\$38.38M, EV \\$37.26M, AC \\$42.1M. Find the CPI and the **CPI-based** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 0.8850356294536816
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 91.5217391304348
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 0.885$$\n\n$$EAC = \\frac{BAC}{CPI} = 91.522$$"
+ },
+ "evm-eac|1|3": {
+  "brief": "BAC \\$93M. To date: PV \\$54.24M, EV \\$50.22M, AC \\$64.78M. Find the CPI and the **CPI-based** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 0.7752392713800556
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 119.96296296296296
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 0.7752$$\n\n$$EAC = \\frac{BAC}{CPI} = 119.963$$"
+ },
+ "evm-eac|2|1": {
+  "brief": "BAC \\$108M. To date: PV \\$41.16M, EV \\$39.96M, AC \\$47.15M. Find the CPI and the **composite (CPI × SPI)** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 0.847507953340403
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 129.84331628926222
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 0.8475,\\ SPI = \\frac{EV}{PV} = 0.9708$$\n\n$$EAC = AC + \\frac{BAC - EV}{CPI \\times SPI} = 129.843$$"
+ },
+ "evm-eac|2|2": {
+  "brief": "BAC \\$459M. To date: PV \\$129.67M, EV \\$114.75M, AC \\$146.88M. Find the CPI and the **composite (CPI × SPI)** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 0.78125
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 644.8127999999999
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 0.7813,\\ SPI = \\frac{EV}{PV} = 0.8849$$\n\n$$EAC = AC + \\frac{BAC - EV}{CPI \\times SPI} = 644.813$$"
+ },
+ "evm-eac|2|3": {
+  "brief": "BAC \\$282M. To date: PV \\$47.94M, EV \\$56.4M, AC \\$57.53M. Find the CPI and the **composite (CPI × SPI)** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 0.9803580740483225
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 253.132
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 0.9804,\\ SPI = \\frac{EV}{PV} = 1.1765$$\n\n$$EAC = AC + \\frac{BAC - EV}{CPI \\times SPI} = 253.132$$"
+ },
+ "evm-eac|3|1": {
+  "brief": "BAC \\$1,110M. To date: PV \\$804.2M, EV \\$765.9M, AC \\$804.2M. Find the CPI and the **composite (CPI × SPI)** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 0.9523750310867942
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 1183.5749674059693
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 0.9524,\\ SPI = \\frac{EV}{PV} = 0.9524$$\n\n$$EAC = AC + \\frac{BAC - EV}{CPI \\times SPI} = 1,183.575$$"
+ },
+ "evm-eac|3|2": {
+  "brief": "BAC \\$740M. To date: PV \\$411.07M, EV \\$407M, AC \\$427.35M. Find the CPI and the **composite (CPI × SPI)** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 0.9523809523809523
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 780.4965
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 0.9524,\\ SPI = \\frac{EV}{PV} = 0.9901$$\n\n$$EAC = AC + \\frac{BAC - EV}{CPI \\times SPI} = 780.497$$"
+ },
+ "evm-eac|3|3": {
+  "brief": "BAC \\$1,860M. To date: PV \\$1,203.05M, EV \\$1,227.6M, AC \\$1,153.94M. Find the CPI and the **composite (CPI × SPI)** EAC.",
+  "answers": [
+   {
+    "label": "CPI",
+    "unit": "",
+    "value": 1.0638334748773766
+   },
+   {
+    "label": "EAC",
+    "unit": "$M",
+    "value": 1736.5058290875522
+   }
+  ],
+  "explain": "$$CPI = \\frac{EV}{AC} = 1.0638,\\ SPI = \\frac{EV}{PV} = 1.0204$$\n\n$$EAC = AC + \\frac{BAC - EV}{CPI \\times SPI} = 1,736.506$$"
+ },
+ "evm-tcpi|1|1": {
+  "brief": "BAC \\$50M, EV \\$31M, AC \\$29.76M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 0.9387351778656127
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 18.240000000000006
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{19}{20.24} = 0.9387$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 48 - 29.76 = 18.24$$\n\n"
+ },
+ "evm-tcpi|1|2": {
+  "brief": "BAC \\$81M, EV \\$37.26M, AC \\$42.1M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 1.1244215938303344
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 49.421739130434794
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{43.74}{38.9} = 1.1244$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 91.522 - 42.1 = 49.422$$\n\nA TCPI well above the current CPI is rarely achieved."
+ },
+ "evm-tcpi|1|3": {
+  "brief": "BAC \\$93M, EV \\$50.22M, AC \\$64.78M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 1.5159461374911412
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 55.18296296296296
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{42.78}{28.22} = 1.5159$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 119.963 - 64.78 = 55.183$$\n\nA TCPI well above the current CPI is rarely achieved."
+ },
+ "evm-tcpi|2|1": {
+  "brief": "BAC \\$108M, EV \\$39.96M, AC \\$47.15M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 1.1181594083812652
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 80.28243243243244
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{68.04}{60.85} = 1.1182$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 127.432 - 47.15 = 80.282$$\n\nA TCPI well above the current CPI is rarely achieved."
+ },
+ "evm-tcpi|2|2": {
+  "brief": "BAC \\$459M, EV \\$114.75M, AC \\$146.88M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 1.1029411764705883
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 440.64
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{344.25}{312.12} = 1.1029$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 587.52 - 146.88 = 440.64$$\n\nA TCPI well above the current CPI is rarely achieved."
+ },
+ "evm-tcpi|2|3": {
+  "brief": "BAC \\$282M, EV \\$56.4M, AC \\$57.53M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 1.0050340802779882
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 230.12000000000003
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{225.6}{224.47} = 1.005$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 287.65 - 57.53 = 230.12$$\n\n"
+ },
+ "evm-tcpi|3|1": {
+  "brief": "BAC \\$1,110M, EV \\$765.9M, AC \\$804.2M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 1.1252452583387837
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 361.3072463768117
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{344.1}{305.8} = 1.1252$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 1,165.507 - 804.2 = 361.307$$\n\nA TCPI well above the current CPI is rarely achieved."
+ },
+ "evm-tcpi|3|2": {
+  "brief": "BAC \\$740M, EV \\$407M, AC \\$427.35M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 1.0650887573964498
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 349.65
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{333}{312.65} = 1.0651$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 777 - 427.35 = 349.65$$\n\n"
+ },
+ "evm-tcpi|3|3": {
+  "brief": "BAC \\$1,860M, EV \\$1,227.6M, AC \\$1,153.94M. Find the TCPI needed to finish at BAC, and the estimate to complete (ETC) if the current CPI continues.",
+  "answers": [
+   {
+    "label": "TCPI (BAC)",
+    "unit": "",
+    "value": 0.8956745885618788
+   },
+   {
+    "label": "ETC",
+    "unit": "$M",
+    "value": 594.4539393939394
+   }
+  ],
+  "explain": "$$TCPI = \\frac{BAC - EV}{BAC - AC} = \\frac{632.4}{706.06} = 0.8957$$\n\n$$ETC = \\frac{BAC}{CPI} - AC = 1,748.394 - 1153.94 = 594.454$$\n\n"
+ },
+ "abc-cost|1|1": {
+  "brief": "Machine setups cost \\$180K per year across 1700 setups. Inspections cost \\$120K across 250 inspections. Product A uses 345 setups and 60 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 0.10588235294117647
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 65.32941176470588
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{180}{1700} = 0.1059,\\ \\frac{120}{250} = 0.48 \\quad\\Rightarrow\\quad 345(0.1059) + 60(0.48) = 65.329$$"
+ },
+ "abc-cost|1|2": {
+  "brief": "Machine setups cost \\$270K per year across 1150 setups. Inspections cost \\$260K across 625 inspections. Product A uses 135 setups and 30 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 0.23478260869565218
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 44.17565217391304
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{270}{1150} = 0.2348,\\ \\frac{260}{625} = 0.416 \\quad\\Rightarrow\\quad 135(0.2348) + 30(0.416) = 44.176$$"
+ },
+ "abc-cost|1|3": {
+  "brief": "Machine setups cost \\$300K per year across 1400 setups. Inspections cost \\$320K across 975 inspections. Product A uses 165 setups and 155 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 0.21428571428571427
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 86.22893772893772
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{300}{1400} = 0.2143,\\ \\frac{320}{975} = 0.3282 \\quad\\Rightarrow\\quad 165(0.2143) + 155(0.3282) = 86.229$$"
+ },
+ "abc-cost|2|1": {
+  "brief": "Machine setups cost \\$420K per year across 800 setups. Inspections cost \\$780K across 725 inspections. Product A uses 175 setups and 75 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 0.525
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 172.56465517241378
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{420}{800} = 0.525,\\ \\frac{780}{725} = 1.0759 \\quad\\Rightarrow\\quad 175(0.525) + 75(1.0759) = 172.565$$"
+ },
+ "abc-cost|2|2": {
+  "brief": "Machine setups cost \\$1,410K per year across 400 setups. Inspections cost \\$1,140K across 950 inspections. Product A uses 40 setups and 120 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 3.525
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 285
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{1410}{400} = 3.525,\\ \\frac{1140}{950} = 1.2 \\quad\\Rightarrow\\quad 40(3.525) + 120(1.2) = 285$$"
+ },
+ "abc-cost|2|3": {
+  "brief": "Machine setups cost \\$900K per year across 200 setups. Inspections cost \\$150K across 375 inspections. Product A uses 50 setups and 55 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 4.5
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 247
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{900}{200} = 4.5,\\ \\frac{150}{375} = 0.4 \\quad\\Rightarrow\\quad 50(4.5) + 55(0.4) = 247$$"
+ },
+ "abc-cost|3|1": {
+  "brief": "Machine setups cost \\$3,500K per year across 1950 setups. Inspections cost \\$2,800K across 425 inspections. Product A uses 300 setups and 5 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 1.794871794871795
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 571.4027149321266
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{3500}{1950} = 1.7949,\\ \\frac{2800}{425} = 6.5882 \\quad\\Rightarrow\\quad 300(1.7949) + 5(6.5882) = 571.403$$"
+ },
+ "abc-cost|3|2": {
+  "brief": "Machine setups cost \\$2,500K per year across 1450 setups. Inspections cost \\$2,300K across 425 inspections. Product A uses 85 setups and 20 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 1.7241379310344827
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 254.7870182555781
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{2500}{1450} = 1.7241,\\ \\frac{2300}{425} = 5.4118 \\quad\\Rightarrow\\quad 85(1.7241) + 20(5.4118) = 254.787$$"
+ },
+ "abc-cost|3|3": {
+  "brief": "Machine setups cost \\$5,700K per year across 1850 setups. Inspections cost \\$2,000K across 175 inspections. Product A uses 285 setups and 30 inspections. Find the setup rate and the overhead assigned to Product A.",
+  "answers": [
+   {
+    "label": "Setup rate",
+    "unit": "$K per setup",
+    "value": 3.081081081081081
+   },
+   {
+    "label": "Overhead for A",
+    "unit": "$K",
+    "value": 1220.965250965251
+   }
+  ],
+  "explain": "$$\\text{Rates: } \\frac{5700}{1850} = 3.0811,\\ \\frac{2000}{175} = 11.4286 \\quad\\Rightarrow\\quad 285(3.0811) + 30(11.4286) = 1,220.965$$"
+ }
+}
