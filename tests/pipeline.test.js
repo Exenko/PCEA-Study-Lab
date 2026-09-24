@@ -37,6 +37,12 @@ module.exports = [
     assert.ok(msgs.includes('Node not unlocked'));
     assert.deepStrictEqual(P.check(p, ins, 1, new Set(['escalate'])), []);
   }],
+  ['check tolerates malformed refs (non-string, non-object values)', () => {
+    const p = { steps: [S('add', { a: 5, b: true })], outs: ['s0'] };
+    const msgs = P.check(p, ins, 1, null).map(x => `${x.step}:${x.port}:${x.msg}`);
+    assert.ok(msgs.includes('0:a:Not connected'));
+    assert.ok(msgs.includes('0:b:Not connected'));
+  }],
   ['removeStep empties refs to the removed step and renumbers later ones', () => {
     const p = P.removeStep(esc, 1);
     assert.strictEqual(p.steps.length, 2);

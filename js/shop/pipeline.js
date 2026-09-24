@@ -35,6 +35,7 @@
     const refProblem = (r, i) => {
       if (r === undefined || r === '' || r === null) return 'Not connected';
       if (typeof r === 'object') return Number.isFinite(r.c) ? null : 'Constant is not a number';
+      if (typeof r !== 'string') return 'Not connected';
       if (r.startsWith('in.')) return r.slice(3) in ins ? null : 'Unknown input';
       if (isStep(r)) return stepIdx(r) < i ? null : 'Must use an earlier step';
       return 'Not connected';
