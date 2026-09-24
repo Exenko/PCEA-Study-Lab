@@ -24,6 +24,8 @@
     { id: 'calc', name: 'Scientific calculator', desc: 'Work out expressions with ^, ln, exp and sqrt inside a contract.', cost: 100 },
     { id: 'tables', name: 'Reference tables', desc: 'Discount factors, learning-curve exponents and z-scores.', cost: 150 },
     { id: 'opinion', name: 'Second opinion', desc: 'Before you submit, find out which answers are within 5%. One use per purchase.', cost: 40, consumable: true },
+    { id: 'hint', name: 'Hint', desc: 'Reveal the first move on a contract. One use per purchase.', cost: 60, consumable: true },
+    { id: 'reroll', name: 'Board reroll', desc: 'Redraw the contract board. One use per purchase.', cost: 50, consumable: true },
     { id: 'board', name: 'Bigger contract board', desc: 'Four contract offers instead of three.', cost: 400 }
   ];
 
@@ -44,7 +46,7 @@
       .sort(([ka, a], [kb, b]) => (a.t || 0) - (b.t || 0) || (ka < kb ? -1 : ka > kb ? 1 : 0))
       .map(([, r]) => r);
     let cash = 0, rep = 0, completed = 0;
-    const owned = {}, used = {}, campaign = [];
+    const owned = {}, used = {}, campaign = [], upgrades = { desk: 0, cap: 0, analyst: 0 };
     for (const r of recs) {
       if (r.tpl || r.camp) {
         cash += r.pay || 0; rep = Math.max(0, rep + (r.rep || 0)); completed++;
@@ -52,10 +54,12 @@
       }
       if (r.tool) { cash -= r.cost || 0; owned[r.tool] = (owned[r.tool] || 0) + 1; }
       if (r.use) used[r.use] = (used[r.use] || 0) + 1;
+      if (r.collect) cash += r.amount || 0;
+      if (r.upg) { cash -= r.cost || 0; if (r.upg in upgrades) upgrades[r.upg]++; }
     }
     const repLevel = Math.floor(Math.sqrt(rep));
     return {
-      cash: Math.round(cash * 10) / 10, rep, repLevel, nextRep: (repLevel + 1) * (repLevel + 1), completed, owned, used, campaign,
+      cash: Math.round(cash * 10) / 10, rep, repLevel, nextRep: (repLevel + 1) * (repLevel + 1), completed, owned, used, campaign, upgrades,
       maxTier: repLevel >= 4 ? 3 : repLevel >= 2 ? 2 : 1,
       has: id => (owned[id] || 0) > 0,
       left: id => (owned[id] || 0) - (used[id] || 0)
@@ -76,7 +80,8 @@
     const pool = templates.filter(t => open.has(t.module));
     const out = [];
     for (let slot = 0; slot < (st.has('board') ? 4 : 3) && pool.length; slot++) {
-      const seed = hash(profile.toLowerCase() + '|' + st.completed + '|' + slot);
+      const rerolls = st.used.reroll || 0;
+      const seed = hash(profile.toLowerCase() + '|' + st.completed + '|' + slot + (rerolls ? '|' + rerolls : ''));
       const r = rng(seed);
       const tpl = pool[Math.floor(r() * pool.length)];
       const tier = 1 + Math.floor(r() * st.maxTier);

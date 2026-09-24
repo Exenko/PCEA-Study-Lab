@@ -60,5 +60,25 @@ module.exports = [
     assert.strictEqual(C.calc('sqrt(16) + abs(-2) + exp(0)'), 7);
     assert.throws(() => C.calc('2+'));
     assert.throws(() => C.calc('alert(1)'));
+  }],
+  ['state banks collects, charges upgrades, leaves jobs and rep alone', () => {
+    const d = { shop: {
+      a: { tpl: 'x', pay: 60, rep: 1, score: 1, t: 1 }, b: { collect: 'x', from: 0, to: 5, amount: 42.5, t: 2 },
+      c: { upg: 'desk', cost: 300, t: 3 }, e: { upg: 'analyst', cost: 400, t: 4 }, f: { upg: 'desk', cost: 600, t: 5 }, s: { shift: {}, off: [], t: 6 } } };
+    const s = C.state(d);
+    assert.strictEqual(s.cash, 60 + 42.5 - 300 - 400 - 600);
+    assert.strictEqual(s.completed, 1);
+    assert.strictEqual(s.rep, 1);
+    assert.deepStrictEqual(s.upgrades, { desk: 2, cap: 0, analyst: 1 });
+  }],
+  ['hint and reroll are consumable tools', () => {
+    ['hint', 'reroll'].forEach(id => { const t = C.TOOLS.find(x => x.id === id); assert.ok(t && t.consumable && t.cost > 0, id); });
+    assert.strictEqual(C.TOOLS.find(x => x.id === 'hint').cost, 60);
+    assert.strictEqual(C.TOOLS.find(x => x.id === 'reroll').cost, 50);
+  }],
+  ['no rerolls keeps the old offer seed; a reroll changes it', () => {
+    assert.strictEqual(C.offers('Ann', {}, cat, T)[0].seed, C.hash('ann|0|0'));
+    const d = { shop: { b: { tool: 'reroll', cost: 50, t: 1 }, u: { use: 'reroll', t: 2 } } };
+    assert.strictEqual(C.offers('Ann', d, cat, T)[0].seed, C.hash('ann|0|0|1'));
   }]
 ];

@@ -57,5 +57,10 @@ module.exports = [
   }],
   ['streak ignores junk keys', () => {
     assert.strictEqual(Game.streak({ nope: {}, '2026-03-01': {} }, day('2026-03-01')).current, 1);
+  }],
+  ['idle collects and firm upgrades give no XP', () => {
+    const base = { shop: { c1: { tpl: 'lc-unit', pay: 60 } } };
+    const idle = { shop: Object.assign({}, base.shop, { k: { collect: 'lc-unit', from: 0, to: 1, amount: 500, t: 1 }, u: { upg: 'desk', cost: 300, t: 2 } }) };
+    assert.deepStrictEqual(Game.xpBreakdown(idle), Game.xpBreakdown(base));
   }]
 ];
