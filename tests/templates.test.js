@@ -45,5 +45,19 @@ module.exports = [
       const j = t.gen(C.helpers(C.rng(seed * 7919 + tier)), tier);
       assert.deepStrictEqual({ brief: j.brief, answers: j.answers, explain: j.explain }, snap[t.id + '|' + tier + '|' + seed], t.id + ' tier ' + tier + ' seed ' + seed);
     }
+  }],
+  ['every template exposes inputs matching its ins metadata', () => {
+    for (const t of T) {
+      assert.ok(t.ins && typeof t.ins === 'object', t.id + ' ins');
+      for (let tier = 1; tier <= 3; tier++) for (let seed = 1; seed <= 50; seed++) {
+        const j = t.gen(C.helpers(C.rng(seed * 7919 + tier)), tier);
+        assert.deepStrictEqual(Object.keys(j.inputs).sort(), Object.keys(t.ins).sort(), t.id);
+        for (const [k, v] of Object.entries(j.inputs)) {
+          const ok = Array.isArray(v) ? v.length > 0 && v.every(Number.isFinite) : Number.isFinite(v);
+          assert.ok(ok, `${t.id} input ${k} = ${v}`);
+          assert.ok(t.ins[k].label && typeof t.ins[k].unit === 'string', `${t.id} ins ${k}`);
+        }
+      }
+    }
   }]
 ];
