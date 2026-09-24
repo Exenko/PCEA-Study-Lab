@@ -7,8 +7,8 @@ const os = require('os');
 const { exec } = require('child_process');
 
 const ROOT = __dirname;
-const PROFILES = path.join(ROOT, 'profiles');
-const PARTS = ['cards', 'checks', 'sections'], SINGLES = ['settings', 'deck', 'lastSection'];
+const PROFILES = process.env.PCEA_PROFILES ? path.resolve(process.env.PCEA_PROFILES) : path.join(ROOT, 'profiles');
+const PARTS = ['cards', 'checks', 'sections', 'days', 'shop'], SINGLES = ['settings', 'deck', 'lastSection'];
 const NAME_RE = /^[A-Za-z0-9](?:[A-Za-z0-9 _-]{0,38}[A-Za-z0-9])?$/;
 const RESERVED = /^(con|prn|aux|nul|com\d|lpt\d)$/i;
 const MAX_BODY = 20 * 1024 * 1024;

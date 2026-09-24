@@ -1,11 +1,11 @@
 // Progress storage, one record per profile.
-// Server mode (app opened through server.py): each profile is profiles/<name>.json on the host,
+// Server mode (app opened through server.js): each profile is profiles/<name>.json on the host,
 //   shared by every device that connects. A copy is cached in the browser until the server confirms the save.
 // Local mode (index.html opened directly): profiles live in this browser's localStorage.
 // Records carry a "mod" timestamp so edits from several devices merge (newest record wins).
 const Store = (() => {
   const LEGACY = 'pcea-study-lab.v1', CUR = 'pcea.currentProfile', LOCAL = 'pcea.profile:', CACHE = 'pcea.cache:';
-  const PARTS = ['cards', 'checks', 'sections'], SINGLES = ['settings', 'deck', 'lastSection'];
+  const PARTS = ['cards', 'checks', 'sections', 'days', 'shop'], SINGLES = ['settings', 'deck', 'lastSection'];
   const NAME_RE = /^[A-Za-z0-9](?:[A-Za-z0-9 _-]{0,38}[A-Za-z0-9])?$/;
   const RESERVED = /^(con|prn|aux|nul|com\d|lpt\d)$/i;
 
@@ -18,18 +18,18 @@ const Store = (() => {
 
   function defaults() {
     return {
-      v: 2, cards: {}, checks: {}, sections: {},
-      settings: { hitsToLevel: 2, newPerSession: 20, stepMode: true, theme: null },
+      v: 2, cards: {}, checks: {}, sections: {}, days: {}, shop: {},
+      settings: { hitsToLevel: 2, newPerSession: 20, stepMode: true, theme: null, leaderboard: false, firmName: null, seenAch: null },
       deck: null, lastSection: null, meta: {}, resets: {}
     };
   }
   function normalize(d) {
     d = Object.assign(defaults(), d || {});
     d.settings = Object.assign(defaults().settings, d.settings || {});
-    ['meta', 'resets', 'cards', 'checks', 'sections'].forEach(k => { if (!d[k] || typeof d[k] !== 'object') d[k] = {}; });
-    return d;
+    ['meta', 'resets', ...PARTS].forEach(k => { if (!d[k] || typeof d[k] !== 'object') d[k] = {}; });
+    return JSON.parse(JSON.stringify(d));
   }
-  // Same rules as merge() in server.py. On ties b wins.
+  // Same rules as merge() in server.js. On ties b wins.
   function merge(a, b) {
     a = normalize(a); b = normalize(b);
     const o = defaults();
@@ -51,11 +51,13 @@ const Store = (() => {
     return o;
   }
   const withoutMod = r => { const c = Object.assign({}, r); delete c.mod; return JSON.stringify(c); };
+  const pad = n => String(n).padStart(2, '0');
+  const dayKey = t => { const d = new Date(t); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
   const studied = d => Object.values((d && d.cards) || {}).filter(c => c && c.seen).length;
   const lastUsed = d => Math.max(0, ...Object.values((d && d.meta) || {}), ...PARTS.flatMap(p => Object.values((d && d[p]) || {}).map(r => (r && r.mod) || 0)));
 
   const S = {
-    data: defaults(), profile: null, mode: 'local', status: '', onStatus: null,
+    data: defaults(), profile: null, mode: 'local', status: '', onStatus: null, onSave: null,
     snap: {}, timer: null, retry: null, busy: false, again: false,
     merge, normalize,
     get settings() { return this.data.settings; },
@@ -153,6 +155,7 @@ const Store = (() => {
       if (!this.profile) return;
       this.stamp();
       this.persist();
+      if (this.onSave) this.onSave();
     },
     persist() {
       const j = JSON.stringify(this.data);
@@ -205,6 +208,8 @@ const Store = (() => {
       this.snapshotAll();
       this.persist();
     },
+    // Marks today as a study day (streaks). Idempotent, so devices merge cleanly.
+    markActive() { const k = dayKey(Date.now()); if (!this.data.days[k]) this.data.days[k] = { a: 1 }; },
     reset(part) {
       this.data[part] = {};
       this.data.resets[part] = Date.now();
