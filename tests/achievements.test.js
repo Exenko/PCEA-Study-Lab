@@ -26,5 +26,9 @@ module.exports = [
     const e = ids(d);
     ['first-contract', 'first-campaign'].forEach(x => assert.ok(e.includes(x), x));
     assert.ok(!e.includes('campaign-done'));
+  }],
+  ['certified requires both strong modules and Chief XP', () => {
+    const d = { cards: { a: { lvl: 5, right: 0 }, b: { lvl: 5, right: 0 } } };
+    assert.ok(!ids(d).includes('certified'));
   }]
 ];

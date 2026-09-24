@@ -55,8 +55,9 @@
   function compute(d, catalog, now) {
     d = d || {};
     const xp = xpBreakdown(d), lv = moduleLevels(d, catalog), ids = Object.keys(lv);
-    const certified = ids.length > 0 && ids.every(k => lv[k] >= 3);
-    return { xp, rank: rank(xp.total, certified), streak: streak(d.days, now || Date.now()), moduleLevels: lv, certified };
+    const allStrong = ids.length > 0 && ids.every(k => lv[k] >= 3);
+    const certified = allStrong && xp.total >= RANKS[RANKS.length - 1][1];
+    return { xp, rank: rank(xp.total, certified), streak: streak(d.days, now || Date.now()), moduleLevels: lv, allStrong, certified };
   }
   const Game = { RANKS, CERTIFIED, dayKey, cardXP, xpBreakdown, moduleLevels, rank, streak, compute };
   if (typeof module !== 'undefined' && module.exports) module.exports = Game; else root.Game = Game;

@@ -24,12 +24,20 @@ module.exports = [
     assert.strictEqual(Game.rank(18000, true).name, 'PCEA Certified');
     assert.strictEqual(Game.rank(9000, true).name, 'Lead Estimator');
   }],
-  ['certified needs every module at level 3', () => {
+  ['certified needs Chief XP and every module at level 3', () => {
     const cat = { modules: [{ id: 'm1', cards: ['a', 'b'], sections: [] }, { id: 'm2', cards: ['c'], sections: [] }] };
     const d = { cards: { a: { lvl: 3, right: 0 }, b: { lvl: 3, right: 0 }, c: { lvl: 2, right: 0 } } };
-    assert.strictEqual(Game.compute(d, cat).certified, false);
+    let comp = Game.compute(d, cat);
+    assert.strictEqual(comp.allStrong, false);
+    assert.strictEqual(comp.certified, false);
     d.cards.c.lvl = 4;
-    assert.strictEqual(Game.compute(d, cat).certified, true);
+    comp = Game.compute(d, cat);
+    assert.strictEqual(comp.allStrong, true);
+    assert.strictEqual(comp.certified, false);
+    d.cards.a.right = 1800;
+    comp = Game.compute(d, cat);
+    assert.strictEqual(comp.certified, true);
+    assert.strictEqual(comp.rank.name, 'PCEA Certified');
   }],
   ['streak: consecutive days, today pending does not break', () => {
     const s = Game.streak(days('2026-03-01', '2026-03-02', '2026-03-03'), day('2026-03-04'));
