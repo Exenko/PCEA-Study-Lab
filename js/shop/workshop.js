@@ -18,7 +18,7 @@ const ShopWorkshop = (() => {
         const s = P.status(d, t.id), n = P.handSolves(d, t.id);
         const note = s === 'locked' ? `${Math.min(n, P.GATE)}/${P.GATE} exact solves` : STATUS[s];
         return s === 'locked' ? `<div class="wk-item locked"><b>${esc(t.title)}</b><span class="muted small">${note}</span></div>`
-          : `<a class="wk-item ${s}" href="#/shop/pipe/${t.id}"><b>${esc(t.title)}</b><span class="chip ${s}">${note}</span></a>`;
+          : `<a class="wk-item ${s}" href="#/shop/pipe/${t.id}"><b>${esc(t.title)}</b><span class="wk-chip ${s}">${note}</span></a>`;
       }).join('')}</div>`;
   }
 

@@ -454,8 +454,8 @@ a.offer:hover, a.camp:hover { border-color: var(--accent); box-shadow: var(--sha
 .wk-item { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); color: var(--ink); text-decoration: none; }
 .wk-item.locked { opacity: .6; }
 .wk-item.running { border-color: var(--good); }
-.chip { align-self: flex-start; font-size: .78rem; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
-.chip.running { background: var(--good-soft); color: var(--good); }
+.wk-chip { align-self: flex-start; font-size: .78rem; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.wk-chip.running { background: var(--good-soft); color: var(--good); }
 .wk-inputs dl { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; margin: 0 0 8px; }
 .wk-inputs dt { font-size: .8rem; color: var(--muted); }
 .wk-inputs dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
