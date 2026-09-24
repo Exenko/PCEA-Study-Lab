@@ -138,6 +138,22 @@ module.exports = [
     assert.strictEqual(st.completed, 1);
     assert.strictEqual(st.cash, 60);
   }],
+  ['ShopPipe.draft returns the draft record', () => {
+    const d = { shop: { 'draft-npv': { draftOf: 'npv', draft: { steps: [], outs: [] }, tries: 2, t: 5 } } };
+    assert.deepStrictEqual(P.draft(d, 'npv'), d.shop['draft-npv']);
+    assert.strictEqual(P.draft(d, 'nope'), undefined);
+    assert.strictEqual(P.draft({ shop: {} }, 'npv'), undefined);
+  }],
+  ['state() ignores a draftOf record', () => {
+    const d = { shop: { 'draft-npv': { draftOf: 'npv', draft: {}, tries: 3, t: 99999 } } };
+    const st = Core.state(d);
+    assert.strictEqual(st.completed, 0);
+    assert.strictEqual(st.cash, 0);
+  }],
+  ["status stays 'running' when a newer draft record exists", () => {
+    const d = { shop: { 'pipe-npv': { pipe: 'npv', passed: true, t: 1 }, 'draft-npv': { draftOf: 'npv', draft: {}, tries: 5, t: 999999 } } };
+    assert.strictEqual(P.status(d, 'npv'), 'running');
+  }],
   ['pipe records merge newest-wins; node records union across devices', () => {
     const fs = require('fs'), path = require('path'), vm = require('vm');
     const ctx = { console, Date, Math, JSON, Object, Set, Array, Promise, setTimeout, clearTimeout,
