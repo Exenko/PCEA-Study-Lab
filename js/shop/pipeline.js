@@ -1,6 +1,8 @@
 // Pipeline engine: run, check and edit pipelines of nodes, plus the progress rules for the workshop. Pure functions.
 (function (root) {
   const N = typeof module !== 'undefined' && module.exports ? require('./nodes.js') : root.ShopNodes;
+  const C = typeof module !== 'undefined' && module.exports ? require('./core.js') : root.ShopCore;
+  const VALIDATE_N = 5;
   const isStep = r => typeof r === 'string' && /^s\d+$/.test(r);
   const stepIdx = r => +r.slice(1);
   const finite = v => Array.isArray(v) ? v.every(Number.isFinite) : Number.isFinite(v);
@@ -84,6 +86,22 @@
     return p.pct ? 'This port expects a rate or share' : 'This port does not expect a rate or share';
   }
 
-  const ShopPipe = { run, check, removeStep, moveStep, primitivesOnly, pctWarning };
+  // Runs the pipeline on VALIDATE_N fresh contracts spread across tiers 1..maxTier. Pass means every answer within 1%.
+  function validate(pipe, tpl, seedKey, maxTier) {
+    const rows = [];
+    let problems = null;
+    for (let k = 0; k < VALIDATE_N; k++) {
+      const tier = 1 + (k % Math.max(1, maxTier));
+      const job = tpl.gen(C.helpers(C.rng(C.hash(seedKey + '|' + k))), tier);
+      if (!problems) problems = check(pipe, tpl.ins, job.answers.length, null);
+      const res = run(pipe, job.inputs);
+      const each = job.answers.map((a, i) => res.outs[i] == null ? -0.3 : C.answerScore(res.outs[i], a.value));
+      const off = job.answers.map((a, i) => res.outs[i] == null ? null : Math.abs(res.outs[i] - a.value) / Math.abs(a.value) * 100);
+      rows.push({ tier, labels: job.answers.map(a => a.label), each, off });
+    }
+    return { rows, problems, passed: problems.length === 0 && rows.every(r => r.each.every(x => x === 1)) };
+  }
+
+  const ShopPipe = { run, check, removeStep, moveStep, primitivesOnly, pctWarning, validate, VALIDATE_N };
   if (typeof module !== 'undefined' && module.exports) module.exports = ShopPipe; else root.ShopPipe = ShopPipe;
 })(this);

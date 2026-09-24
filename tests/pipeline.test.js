@@ -1,5 +1,9 @@
 const assert = require('assert');
 const P = require('../js/shop/pipeline.js');
+const T = require('../js/shop/templates.js');
+const N = require('../js/shop/nodes.js');
+const REF = require('./fixtures/pipes.js');
+const Core = require('../js/shop/core.js');
 const S = (node, args) => ({ node, args });
 const ins = { cost: { label: 'c', unit: '$M' }, rate: { label: 'r', unit: '%' }, years: { label: 'y', unit: 'yr' } };
 const esc = { steps: [S('add', { a: { c: 1 }, b: 'in.rate' }), S('pow', { base: 's0', exp: 'in.years' }), S('mul', { a: 'in.cost', b: 's1' })], outs: ['s2'] };
@@ -69,5 +73,37 @@ module.exports = [
     assert.ok(P.pctWarning(d, 0, 'cost', ins));
     assert.strictEqual(P.pctWarning(d, 0, 'years', ins), null);
     assert.strictEqual(P.pctWarning(esc, 0, 'b', ins), null);
+  }],
+  ['every template has reference pipelines; prim ones use no domain nodes', () => {
+    assert.deepStrictEqual(Object.keys(REF).sort(), T.map(t => t.id).sort());
+    for (const t of T) {
+      assert.strictEqual(P.primitivesOnly(REF[t.id].prim), true, t.id);
+      assert.ok(REF[t.id].prim.steps.every(s => N.byId(s.node).kind !== 'domain'), t.id);
+    }
+  }],
+  ['every template is solvable from primitives and from domain nodes, across seeds and tiers', () => {
+    for (const t of T) for (const kind of ['prim', 'domain']) for (let s = 0; s < 40; s++) {
+      const v = P.validate(REF[t.id][kind], t, 'ref|' + t.id + '|' + s, 3);
+      assert.deepStrictEqual(v.problems, [], `${t.id} ${kind}`);
+      assert.ok(v.passed, `${t.id} ${kind} seed ${s}: ${JSON.stringify(v.rows.map(r => r.off))}`);
+    }
+  }],
+  ['validation spreads tiers and rejects hard-coded answers', () => {
+    const t = T.find(x => x.id === 'esc-compound');
+    const v = P.validate(REF['esc-compound'].prim, t, 'x', 3);
+    assert.deepStrictEqual(v.rows.map(r => r.tier), [1, 2, 3, 1, 2]);
+    assert.strictEqual(v.rows.length, P.VALIDATE_N);
+    const first = t.gen(Core.helpers(Core.rng(Core.hash('x|0'))), 1).answers[0].value;
+    const cheat = { steps: [S('add', { a: { c: first }, b: { c: 0 } })], outs: ['s0'] };
+    const cv = P.validate(cheat, t, 'x', 3);
+    assert.strictEqual(cv.rows[0].each[0], 1);
+    assert.strictEqual(cv.passed, false);
+  }],
+  ['validation of a pipeline with the wrong answer count fails without throwing', () => {
+    const t = T.find(x => x.id === 'tri-stats');
+    const v = P.validate(REF['esc-compound'].prim, t, 'x', 1);
+    assert.strictEqual(v.passed, false);
+    assert.ok(v.problems.length > 0);
+    assert.ok(v.rows.every(r => r.each.length === 2));
   }]
 ];
