@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { exec } = require('child_process');
+const vm = require('vm');
+const Game = require('./js/game.js');
 
 const ROOT = __dirname;
 const PROFILES = process.env.PCEA_PROFILES ? path.resolve(process.env.PCEA_PROFILES) : path.join(ROOT, 'profiles');
@@ -92,6 +94,30 @@ function listProfiles() {
   });
 }
 
+// ---- leaderboard ----
+let catalog = null;
+function loadCatalog() {
+  if (catalog) return catalog;
+  const ctx = { console };
+  ctx.window = ctx;
+  vm.createContext(ctx);
+  const files = ['js/registry.js'].concat(fs.readdirSync(path.join(ROOT, 'content')).filter(f => /^m\d+\.js$/.test(f)).sort().map(f => 'content/' + f));
+  files.forEach(f => vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f }));
+  catalog = { modules: ctx.PCEA.modules.map(m => ({ id: m.id, cards: m.cardList.map(c => c.id), sections: m.sections.map(s => m.id + '/' + s.id) })) };
+  return catalog;
+}
+function leaderboard() {
+  if (!fs.existsSync(PROFILES)) return [];
+  const rows = [];
+  for (const f of fs.readdirSync(PROFILES).filter(f => f.endsWith('.json') && !f.startsWith('.'))) {
+    let d; try { d = JSON.parse(fs.readFileSync(path.join(PROFILES, f), 'utf8')); } catch (e) { continue; }
+    if (!d || !d.settings || d.settings.leaderboard !== true) continue;
+    const g = Game.compute(d, loadCatalog());
+    rows.push({ name: f.slice(0, -5), rank: g.rank.name, xp: g.xp.total, streak: g.streak.current });
+  }
+  return rows.sort((a, b) => b.xp - a.xp || a.name.localeCompare(b.name));
+}
+
 // ---- http ----
 function sendJSON(res, code, body) {
   const s = JSON.stringify(body);
@@ -110,6 +136,7 @@ function readBody(req) {
 async function api(req, res, parts) {
   const [what, rawName] = parts;
   if (what === 'ping' && req.method === 'GET') return sendJSON(res, 200, { app: 'pcea-study-lab', ok: true });
+  if (what === 'leaderboard' && req.method === 'GET') return sendJSON(res, 200, leaderboard());
   if (what !== 'profiles') return sendJSON(res, 404, { error: 'Unknown endpoint' });
   if (!rawName) {
     if (req.method === 'GET') return sendJSON(res, 200, listProfiles());
@@ -201,4 +228,4 @@ function listen(port, triesLeft) {
 }
 
 if (require.main === module) listen(START_PORT, 10);
-module.exports = { merge };
+module.exports = { merge, loadCatalog };

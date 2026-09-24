@@ -411,3 +411,5 @@ svg.plot { width: 100%; height: auto; display: block; background: var(--paper); 
 .ach span { font-size: .82rem; color: var(--ink-2); }
 .ach.got { opacity: 1; border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
 @media (max-width: 640px) { .hud-rank { min-width: 0; } .hud-rank b { display: none; } .hud-rank .hud-bar { width: 40px; } }
+.lb-opt { display: flex; gap: 8px; align-items: center; margin: 12px 0 18px; }
+.ptable.lb tr.me td { background: var(--accent-soft); font-weight: 600; }

@@ -20,6 +20,7 @@ const App = (() => {
     if (tab === 'profiles') Profiles.route(root);
     else if (tab === 'cards') Cards.route(root, parts.slice(1), query);
     else if (tab === 'progress') Progress.route(root);
+    else if (tab === 'leaderboard' && Store.mode === 'server') Leaderboard.route(root);
     else Learn.route(root, parts.slice(1));
   }
 
@@ -43,7 +44,7 @@ const App = (() => {
   }
   Store.onStatus = paintProfile;
   Store.onSave = () => Hud.update();
-  function profileChanged() { applyTheme(); paintProfile(); Hud.reset(); }
+  function profileChanged() { applyTheme(); paintProfile(); Hud.reset(); document.getElementById('lbTab').hidden = Store.mode !== 'server'; }
 
   window.addEventListener('hashchange', render);
   window.addEventListener('beforeunload', e => { if (Store.status === 'saving' || Store.status === 'offline') { e.preventDefault(); e.returnValue = ''; } });
