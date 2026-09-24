@@ -17,13 +17,13 @@ Two layers: a rewards layer (XP, ranks, streaks, achievements, opt-in leaderboar
 | card: level reached | 5 x lvl (sum over levels 1..lvl) |
 | check done | 10, or 20 if `first` |
 | section done | 50 |
-| contract finished | its `pay / 100` (rounded) |
+| contract finished | round(max(0, pay) / 2), pay in $K |
 
 Relearn-recovery bonus is not derivable from totals; skipped (YAGNI).
 
 **Ranks** by XP: Intern 0, Analyst I 500, Analyst II 1500, Senior Estimator 4000, Lead Estimator 9000, Chief Estimator 18000. "PCEA Certified" = Chief + every module's average card level >= 3 (Strong).
 
-**Active day**: a date is recorded in `days` when the user grades a card, completes a check/section, or finishes a contract. A day counts toward the streak if it has an entry (the threshold of 10 cards is dropped: needs per-day counts, which do not merge cleanly).
+**Active day**: `Store.markActive()` records the date in `days` when the user grades a card, completes a check/section, or finishes a contract. A day counts toward the streak if it has an entry (the threshold of 10 cards is dropped: needs per-day counts, which do not merge cleanly).
 
 **Streak** (computed from sorted days): walk back from today (today may be not-yet-active without breaking). Leave days: earned 1 per 7 consecutive counted days, max 2 held; a single-day gap consumes one if held, otherwise the streak ends. Output: `{ current, best, leave }`.
 
@@ -41,13 +41,13 @@ Relearn-recovery bonus is not derivable from totals; skipped (YAGNI).
 
 **Offers**: deterministic from `hash(profile + completedCount + slot)` so they need no sync. Only templates whose module is unlocked are offered.
 
-**Unlock**: a template's module unlocks when the average level of its seen cards >= 1 and >= 30% of its cards have been seen (≈ "Familiar"). The first two modules' templates (M1-M2 equivalent: whichever have templates) are always unlocked so the shop is playable from the start.
+**Unlock**: a template's module unlocks when the average level of its seen cards >= 1 and >= 30% of its cards have been seen (≈ "Familiar"). M05 and M06 templates are always unlocked so the shop is playable from the start.
 
-**Scoring** per answer: relative error e. e <= 1%: 100%; <= 5%: 60%; <= 10%: 20%; else -30% and -1 rep. Contract score = mean. Pay = base(tier) x score. Rep +1 for score >= 0.6.
+**Scoring** per answer: relative error e. e <= 1%: 100%; <= 5%: 60%; <= 10%: 20%; else -30%. Contract score = mean. Pay ($K) = base(tier) x score with bases 60/120/250 (campaign 300). Rep +1 for score >= 0.6, -1 if any answer is off by more than 10% and the score is below 0.6, running total clamped at 0.
 
 **Reputation level** = floor(sqrt(rep)) clamped at >= 0; tier access: tier 2 at rep level 2, tier 3 at level 4.
 
-**Tools** (bought with cash, stored `shop['buy-<tool>']`): log/exp calculator, discount-factor table, "second opinion" (consumable, each purchase = 1 use; uses counted from records with `opinion: true`), larger contract board (4 offers).
+**Tools** (bought with cash, stored `shop['buy-<tool>-<t>']`): calculator $100K, reference tables $150K, "second opinion" $40K (consumable; uses stored as `shop['use-opinion-<t>']`), bigger contract board $400K (4 offers).
 
 **Campaign** (js/shop/campaign.js): 8 handwritten multi-step contracts, each several steps where later inputs may use earlier correct answers. Unlock by rep level (0,1,2,3,4,5,6,7). Each awards an achievement. All 8 = endgame.
 
