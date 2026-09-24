@@ -42,7 +42,8 @@ const App = (() => {
     profileBtn.title = Store.profile ? `Switch profile${STATUS[Store.status] ? ' · ' + STATUS[Store.status] : ''}` : '';
   }
   Store.onStatus = paintProfile;
-  function profileChanged() { applyTheme(); paintProfile(); }
+  Store.onSave = () => Hud.update();
+  function profileChanged() { applyTheme(); paintProfile(); Hud.reset(); }
 
   window.addEventListener('hashchange', render);
   window.addEventListener('beforeunload', e => { if (Store.status === 'saving' || Store.status === 'offline') { e.preventDefault(); e.returnValue = ''; } });

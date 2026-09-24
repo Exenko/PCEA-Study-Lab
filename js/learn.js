@@ -137,7 +137,7 @@ const Learn = (() => {
     }
     function markDone() {
       const st = Store.data.sections[key] = Store.data.sections[key] || {};
-      if (!st.done) { st.done = true; st.at = Date.now(); Store.save(); refreshSide(); }
+      if (!st.done) { st.done = true; st.at = Date.now(); Store.markActive(); Store.save(); refreshSide(); }
     }
     function refreshSide() {
       const old = layout.querySelector('.side');

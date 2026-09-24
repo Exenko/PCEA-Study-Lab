@@ -107,6 +107,7 @@ const Render = (() => {
     const finish = (right, revealed) => {
       if (!Store.data.checks[id]) Store.data.checks[id] = { first: right && attempts === 1 };
       Store.data.checks[id].done = true;
+      Store.markActive();
       Store.save();
       box.classList.add('done');
       exp.hidden = false;

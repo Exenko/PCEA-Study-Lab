@@ -34,6 +34,7 @@ const Scheduler = (() => {
       s.lvl = Math.max(0, s.lvl - 1);
       s.due = now;
     }
+    Store.markActive();
     Store.save();
     return s;
   }
