@@ -37,7 +37,7 @@ module.exports = [
     assert.strictEqual(fn('if')(0, 'a', 'b'), 'b');
   }],
   ['domain nodes against hand-checked values', () => {
-    near(fn('escalate')(100, 0.03, 5), 115.927407);
+    near(fn('escalate')(100, 0.03, 5), 115.92740743);
     near(fn('indexConvert')(50, 1.2, 1.0), 41.6666667, 1e-7);
     near(fn('powerCER')(2, 100, 0.5), 20);
     near(fn('lcUnit')(1000, 0.8, 4), 640);
