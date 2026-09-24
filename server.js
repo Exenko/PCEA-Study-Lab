@@ -10,7 +10,7 @@ const Game = require('./js/game.js');
 
 const ROOT = __dirname;
 const PROFILES = process.env.PCEA_PROFILES ? path.resolve(process.env.PCEA_PROFILES) : path.join(ROOT, 'profiles');
-const PARTS = ['cards', 'checks', 'sections', 'days', 'shop'], SINGLES = ['settings', 'deck', 'lastSection'];
+const PARTS = ['cards', 'checks', 'sections', 'days', 'shop'], SINGLES = ['settings', 'deck', 'lastSection', 'seenAch'];
 const NAME_RE = /^[A-Za-z0-9](?:[A-Za-z0-9 _-]{0,38}[A-Za-z0-9])?$/;
 const RESERVED = /^(con|prn|aux|nul|com\d|lpt\d)$/i;
 const MAX_BODY = 20 * 1024 * 1024;
@@ -46,6 +46,12 @@ function merge(a, b) {
     const ta = obj(a.meta)[k] || 0, tb = obj(b.meta)[k] || 0;
     o[k] = tb >= ta ? (b[k] === undefined ? null : b[k]) : (a[k] === undefined ? null : a[k]);
     o.meta[k] = Math.max(ta, tb);
+  }
+  {
+    const ta = obj(a.meta).seenAch || 0, tb = obj(b.meta).seenAch || 0;
+    o.seenAch = (!Array.isArray(a.seenAch) && !Array.isArray(b.seenAch)) ? null
+      : [...new Set([...(Array.isArray(a.seenAch) ? a.seenAch : []), ...(Array.isArray(b.seenAch) ? b.seenAch : [])])].sort();
+    o.meta.seenAch = Math.max(ta, tb);
   }
   return o;
 }

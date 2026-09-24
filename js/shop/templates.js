@@ -235,7 +235,7 @@
     return {
       brief: `FPIF contract: target cost ${M(TC, 2)}, target profit ${M(TP)}, ceiling price ${M(CP)}, share ${g}/${c} (Govt/Contractor). Actual cost is ${M(AC)}. Find the point of total assumption and the final price.`,
       answers: [{ label: 'PTA', unit: '$M', value: pta }, { label: 'Final price', unit: '$M', value: price }],
-      explain: `$$PTA = TC + \\frac{CP - TP_{rice}}{\\text{Govt share}} = ${TC} + \\frac{${CP} - ${f(TC + TP, 2)}}{${g / 100}} = ${f(pta, 3)}$$\n\n$$\\text{Profit} = ${TP} + ${c / 100}(${TC} - ${AC}) = ${f(profit, 3)}, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = ${f(price, 3)}$$`
+      explain: `$$PTA = TC + \\frac{CP - \\text{Target price}}{\\text{Govt share}} = ${TC} + \\frac{${CP} - ${f(TC + TP, 2)}}{${g / 100}} = ${f(pta, 3)}$$\n\n$$\\text{Profit} = ${TP} + ${c / 100}(${TC} - ${AC}) = ${f(profit, 3)}, \\quad \\text{Price} = \\min(CP,\\ AC + \\text{Profit}) = ${f(price, 3)}$$`
     };
   } });
 

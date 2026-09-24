@@ -39,7 +39,7 @@ const Shop = (() => {
       <h2>Campaign</h2>
       <div class="camps">${ShopCampaign.map(c => {
         const done = st.campaign.includes(c.id), avail = st.repLevel >= c.rep;
-        return avail ? `<a class="camp ${done ? 'done' : ''}" href="#/shop/campaign/${c.id}"><b>${esc(c.title)}</b><span class="muted small">${done ? 'Completed' : c.steps.length + ' steps · up to ' + money(C.CAMPAIGN_BASE)}</span></a>`
+        return avail ? `<a class="camp ${done ? 'done' : ''}" href="#/shop/campaign/${c.id}"><b>${esc(c.title)}</b><span class="muted small">${done ? 'Completed · replay for practice' : c.steps.length + ' steps · up to ' + money(C.CAMPAIGN_BASE)}</span></a>`
           : `<div class="camp locked"><b>${esc(c.title)}</b><span class="muted small">Needs reputation level ${c.rep}</span></div>`;
       }).join('')}</div>
       <h2>Tool shop</h2>
@@ -141,6 +141,7 @@ const Shop = (() => {
   function campaign(root, id) {
     const c = ShopCampaign.find(x => x.id === id), st = C.state(Store.data);
     if (!c || st.repLevel < c.rep) { location.hash = '#/shop'; return; }
+    const alreadyDone = st.campaign.includes(c.id);
     const all = c.steps.flatMap(s => s.answers);
     let step = 0; const given = [];
     root.innerHTML = `<div class="shop job"><a href="#/shop" class="muted small">&larr; Contract board</a>
@@ -167,14 +168,16 @@ const Shop = (() => {
       };
     }
     function finish() {
-      const g = C.grade(given, all, C.CAMPAIGN_BASE), rep = g.score >= 0.6 ? 2 : 0;
-      record('k-' + c.id + '-' + Date.now(), { camp: c.id, given, score: g.score, pay: g.pay, rep });
+      const g = C.grade(given, all, C.CAMPAIGN_BASE);
+      const rep = alreadyDone ? 0 : (g.score >= 0.6 ? 2 : 0);
+      const pay = alreadyDone ? 0 : g.pay;
+      record('k-' + c.id + '-' + Date.now(), alreadyDone ? { camp: c.id, given, score: g.score, pay: 0, rep: 0, practice: true } : { camp: c.id, given, score: g.score, pay: g.pay, rep });
       Store.markActive();
       Store.save();
       const res = document.createElement('div');
       res.className = 'result';
-      res.innerHTML = `<div class="result-head ${g.score >= 0.6 ? 'good' : 'bad'}"><b>${g.score >= 0.6 ? 'Campaign complete' : 'Not good enough yet'}: ${money(g.pay)}</b><span>Reputation +${rep}</span></div>
-        <p class="muted">${g.score >= 0.6 ? 'The customer signed.' : 'Score at least 60% to complete this campaign. You can try again.'}</p>
+      res.innerHTML = `<div class="result-head ${g.score >= 0.6 ? 'good' : 'bad'}"><b>${g.score >= 0.6 ? 'Campaign complete' : 'Not good enough yet'}: ${money(pay)}</b><span>Reputation +${rep}</span></div>
+        <p class="muted">${alreadyDone ? 'Practice run: no pay for a completed campaign.' : (g.score >= 0.6 ? 'The customer signed.' : 'Score at least 60% to complete this campaign. You can try again.')}</p>
         <div class="row-btns"><a class="btn" href="#/shop">Back to the board</a></div>`;
       host.appendChild(res);
     }

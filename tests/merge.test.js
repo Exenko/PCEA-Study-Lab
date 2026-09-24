@@ -45,6 +45,35 @@ module.exports = [
       assert.strictEqual(partsOnly(Store.merge(a, b)), partsOnly(server.merge(a, b)), 'case ' + i);
     }
   }],
+  ['client and server merge agree on seenAch', () => {
+    const r = rand(11);
+    const seenAchVariant = () => {
+      const v = r();
+      if (v < 0.3) return undefined;
+      if (v < 0.5) return null;
+      const n = Math.floor(r() * 4), arr = [];
+      for (let i = 0; i < n; i++) arr.push('a' + Math.floor(r() * 5));
+      return arr;
+    };
+    for (let i = 0; i < 300; i++) {
+      const a = profile(r), b = profile(r);
+      a.seenAch = seenAchVariant(); b.seenAch = seenAchVariant();
+      a.meta.seenAch = Math.floor(r() * 10); b.meta.seenAch = Math.floor(r() * 10);
+      const ca = Store.merge(a, b), cb = server.merge(a, b);
+      assert.strictEqual(JSON.stringify(ca.seenAch), JSON.stringify(cb.seenAch), 'case ' + i);
+      assert.strictEqual(ca.meta.seenAch, cb.meta.seenAch, 'case ' + i);
+    }
+  }],
+  ['seenAch merges as sorted union', () => {
+    const a = { meta: { seenAch: 3 }, seenAch: ['b', 'a'] }, b = { meta: { seenAch: 5 }, seenAch: ['c', 'a'] };
+    assert.strictEqual(JSON.stringify(Store.merge(a, b).seenAch), JSON.stringify(['a', 'b', 'c']));
+    assert.strictEqual(JSON.stringify(server.merge(a, b).seenAch), JSON.stringify(['a', 'b', 'c']));
+  }],
+  ['seenAch null plus null stays null', () => {
+    const a = { meta: { seenAch: 1 }, seenAch: null }, b = { meta: { seenAch: 2 }, seenAch: null };
+    assert.strictEqual(Store.merge(a, b).seenAch, null);
+    assert.strictEqual(server.merge(a, b).seenAch, null);
+  }],
   ['shop records survive merge from either side', () => {
     const a = { shop: { x: { tpl: 'lc-unit', pay: 10, mod: 5 } } }, b = { shop: { y: { tool: 'calc', cost: 100, mod: 6 } } };
     const m = Store.merge(a, b);

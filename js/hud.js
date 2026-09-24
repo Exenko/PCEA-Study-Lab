@@ -45,14 +45,14 @@ const Hud = (() => {
     try {
       const g = current();
       box.hidden = false; paint(g);
-      const seen = Store.settings.seenAch;
+      const seen = Store.data.seenAch;
       if (!Array.isArray(seen)) {
         // First run for this profile: remember what is already earned without announcing it.
-        Store.settings.seenAch = g.earned.map(a => a.id); Store.save();
+        Store.data.seenAch = g.earned.map(a => a.id); Store.save();
       } else {
         const fresh = g.earned.filter(a => !seen.includes(a.id));
         if (fresh.length) {
-          Store.settings.seenAch = seen.concat(fresh.map(a => a.id)); Store.save();
+          Store.data.seenAch = seen.concat(fresh.map(a => a.id)); Store.save();
           if (!silent) fresh.forEach(a => toast('Achievement: ' + a.name, a.desc));
         }
       }

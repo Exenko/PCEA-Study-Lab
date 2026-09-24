@@ -40,7 +40,9 @@
     return { each, score, pay: Math.round(base * score * 10) / 10, rep };
   }
   function state(d) {
-    const recs = Object.values((d && d.shop) || {}).filter(r => r && typeof r === 'object').sort((a, b) => (a.t || 0) - (b.t || 0));
+    const recs = Object.entries((d && d.shop) || {}).filter(([, r]) => r && typeof r === 'object')
+      .sort(([ka, a], [kb, b]) => (a.t || 0) - (b.t || 0) || (ka < kb ? -1 : ka > kb ? 1 : 0))
+      .map(([, r]) => r);
     let cash = 0, rep = 0, completed = 0;
     const owned = {}, used = {}, campaign = [];
     for (const r of recs) {

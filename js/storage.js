@@ -5,7 +5,7 @@
 // Records carry a "mod" timestamp so edits from several devices merge (newest record wins).
 const Store = (() => {
   const LEGACY = 'pcea-study-lab.v1', CUR = 'pcea.currentProfile', LOCAL = 'pcea.profile:', CACHE = 'pcea.cache:';
-  const PARTS = ['cards', 'checks', 'sections', 'days', 'shop'], SINGLES = ['settings', 'deck', 'lastSection'];
+  const PARTS = ['cards', 'checks', 'sections', 'days', 'shop'], SINGLES = ['settings', 'deck', 'lastSection', 'seenAch'];
   const NAME_RE = /^[A-Za-z0-9](?:[A-Za-z0-9 _-]{0,38}[A-Za-z0-9])?$/;
   const RESERVED = /^(con|prn|aux|nul|com\d|lpt\d)$/i;
 
@@ -19,8 +19,8 @@ const Store = (() => {
   function defaults() {
     return {
       v: 2, cards: {}, checks: {}, sections: {}, days: {}, shop: {},
-      settings: { hitsToLevel: 2, newPerSession: 20, stepMode: true, theme: null, leaderboard: false, firmName: null, seenAch: null },
-      deck: null, lastSection: null, meta: {}, resets: {}
+      settings: { hitsToLevel: 2, newPerSession: 20, stepMode: true, theme: null, leaderboard: false, firmName: null },
+      deck: null, lastSection: null, seenAch: null, meta: {}, resets: {}
     };
   }
   function normalize(d) {
@@ -46,6 +46,12 @@ const Store = (() => {
       const ta = a.meta[k] || 0, tb = b.meta[k] || 0;
       o[k] = tb >= ta ? b[k] : a[k];
       o.meta[k] = Math.max(ta, tb);
+    }
+    {
+      const ta = a.meta.seenAch || 0, tb = b.meta.seenAch || 0;
+      o.seenAch = (!Array.isArray(a.seenAch) && !Array.isArray(b.seenAch)) ? null
+        : [...new Set([...(Array.isArray(a.seenAch) ? a.seenAch : []), ...(Array.isArray(b.seenAch) ? b.seenAch : [])])].sort();
+      o.meta.seenAch = Math.max(ta, tb);
     }
     o.settings = Object.assign(defaults().settings, o.settings || {});
     return o;
