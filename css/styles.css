@@ -449,3 +449,38 @@ a.offer:hover, a.camp:hover { border-color: var(--accent); box-shadow: var(--sha
 .result-head.good { background: var(--good-soft); color: var(--good); } .result-head.bad { background: var(--bad-soft); color: var(--bad); }
 .camp-step { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
 @media (max-width: 640px) { .shop { padding: 16px; } .ans { grid-template-columns: 1fr auto; } .ans span { grid-column: 1 / -1; } }
+/* ---------- shop workshop ---------- */
+.wk-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-bottom: 24px; }
+.wk-item { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); color: var(--ink); text-decoration: none; }
+.wk-item.locked { opacity: .6; }
+.wk-item.running { border-color: var(--good); }
+.chip { align-self: flex-start; font-size: .78rem; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.chip.running { background: var(--good-soft); color: var(--good); }
+.wk-inputs dl { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; margin: 0 0 8px; }
+.wk-inputs dt { font-size: .8rem; color: var(--muted); }
+.wk-inputs dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.wk-chain { display: flex; flex-direction: column; gap: 22px; margin: 16px 0; }
+.wk-step { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 12px; border: 1px solid var(--line-2); border-left: 4px solid var(--accent); border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); transition: transform .6s, opacity .6s; }
+.wk-step:not(:last-of-type)::after { content: '\2193'; position: absolute; left: 50%; bottom: -21px; color: var(--muted); }
+.wk-step.err { border-left-color: var(--bad); }
+.wk-step-head { display: flex; justify-content: space-between; align-items: center; }
+.wk-ctl button { border: 0; background: none; color: var(--muted); font-size: 1rem; cursor: pointer; padding: 2px 6px; }
+.wk-port { display: grid; grid-template-columns: 80px 1fr; gap: 4px 8px; align-items: center; font-size: .9rem; }
+.wk-port select, .wk-port input, .wk-node { min-width: 0; max-width: 100%; }
+.wk-port input { grid-column: 2; }
+.wk-port .wk-msg, .wk-port .wk-warn { grid-column: 2; }
+.wk-port.err select { border-color: var(--bad); }
+.wk-msg { color: var(--bad); font-size: .85rem; font-style: normal; }
+.wk-warn { color: var(--mid); font-size: .85rem; font-style: normal; }
+.wk-val { font-variant-numeric: tabular-nums; font-weight: 600; overflow-wrap: anywhere; }
+.wk-add { align-self: flex-start; }
+.wk-outs .wk-port { grid-template-columns: minmax(120px, 1fr) 1fr; margin-bottom: 6px; }
+.wk-table td.good { color: var(--good); } .wk-table td.mid { color: var(--mid); } .wk-table td.bad { color: var(--bad); }
+.wk-result { overflow-x: auto; }
+.wk-earned { padding: 10px 14px; border-radius: var(--radius); background: var(--good-soft); color: var(--good); }
+.wk-chain.collapsing .wk-step { transform: scale(.2); opacity: 0; }
+@media (min-width: 900px) {
+  .wk-chain { flex-direction: row; align-items: flex-start; overflow-x: auto; padding-bottom: 8px; }
+  .wk-step { flex: 0 0 240px; }
+  .wk-step:not(:last-of-type)::after { content: '\2192'; left: auto; right: -17px; top: 40%; bottom: auto; }
+}

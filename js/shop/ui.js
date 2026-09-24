@@ -9,6 +9,7 @@ const Shop = (() => {
   const record = (key, rec) => { Store.data.shop[key] = Object.assign(rec, { t: Date.now() }); };
 
   function route(root, parts) {
+    if (parts[0] === 'pipe') return ShopWorkshop.route(root, parts[1]);
     if (parts[0] === 'job') return job(root, +parts[1]);
     if (parts[0] === 'campaign') return campaign(root, parts[1]);
     board(root);
@@ -36,6 +37,7 @@ const Shop = (() => {
         <div class="offer-top"><span class="muted small">${esc(modName(o.tpl.module))}</span>${stars(o.tier)}</div>
         <b>${esc(o.tpl.title)}</b><span class="muted small">Up to ${money(C.BASE[o.tier])} · ${o.job.answers.length} answer${o.job.answers.length > 1 ? 's' : ''}</span></a>`).join('')}</div>
       ${locked.length ? `<p class="muted small">Locked contract types: ${locked.map(m => `<a href="#/cards?m=${m}">${esc(modName(m))}</a>`).join(', ')}. Study about a third of a module's flashcards to Familiar to open its contracts.</p>` : ''}
+      ${ShopWorkshop.panel(Store.data, open)}
       <h2>Campaign</h2>
       <div class="camps">${ShopCampaign.map(c => {
         const done = st.campaign.includes(c.id), avail = st.repLevel >= c.rep;
