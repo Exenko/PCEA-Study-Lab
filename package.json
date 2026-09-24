@@ -1,0 +1,11 @@
+{
+  "name": "pcea-study-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive PCEA study guide and adaptive flashcards with per-profile progress files",
+  "scripts": {
+    "start": "node server.js",
+    "validate": "node tools/validate.js content/m01.js content/m02.js content/m03.js content/m04.js content/m05.js content/m06.js content/m07.js content/m08.js content/m09.js content/m10.js content/m11.js content/m12.js content/m13.js content/m14.js content/m15.js content/m16.js"
+  },
+  "engines": { "node": ">=16" }
+}

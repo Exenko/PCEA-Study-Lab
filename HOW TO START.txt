@@ -1,0 +1,23 @@
+PCEA Study Lab
+==============
+
+1. Unzip this folder first (don't run it from inside the zip).
+
+2. Start it:
+   - Windows:  double-click "Start PCEA Study Lab.bat"
+   - Mac:      double-click "Start PCEA Study Lab.command"
+               (first time: right-click it > Open, then Open again)
+   - Linux:    run ./start.sh
+   - Or, in a terminal in this folder:  npm start
+
+   These need Node.js (free): https://nodejs.org/
+   Your browser opens the app. Keep the black window open while studying.
+
+3. Pick or create your profile. Your progress is saved in the "profiles"
+   folder here, so it is only lost if that folder is deleted.
+
+Other devices (phone, tablet, another laptop) on the same Wi-Fi can use the
+"Other devices" address shown in the window, with the same profiles.
+
+No Node.js? Open index.html directly. Everything works, but progress is then
+saved in that browser only (use Progress > Export to back it up).
