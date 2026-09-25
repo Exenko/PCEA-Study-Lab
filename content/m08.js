@@ -54,6 +54,13 @@ Play with the points. Drag one far from the others and watch the slope, $R^2$ an
 
 :::widget regression:::
 
+:::challenge regression data=seeker mode=hand lock=mode
+Q: Fit the Seeker data **by hand**. Drag the two orange handles until your line's total squared error is within 5% of the best possible.
+goal: ratio < 1.05
+show: hand=ols
+> The shaded squares are the squared residuals, and OLS picks the one line with the smallest total area. For these data that's $\hat{Y} = 2.50 + 0.585X$, with SSE about 18.17. Every other line leaves more area.
+:::
+
 +++
 
 ### Slope
@@ -256,6 +263,15 @@ Try it: load **Curved** and then **Funnel** in the playground and read the resid
 
 :::widget regression:::
 
+:::challenge regression data=funnel mode=ols lock=mode
+Q: Look at the residual plot below the fit. What problem does it show?
+* The spread of the residuals grows with X (heteroscedasticity)
+- The residuals follow a curve, so the relationship is nonlinear
+- One outlier dominates the fit
+- Nothing is wrong, since the residuals average zero
+> A funnel shape means the error variance isn't constant, which breaks an OLS assumption and makes the SEE and t-tests unreliable. A log transformation or weighted regression usually helps.
+:::
+
 :::check
 Q: The residual plot shows a smile (arch) shape. What does it suggest?
 * The true relationship is non-linear
@@ -320,6 +336,14 @@ Don't extrapolate beyond the data range. Intervals widen quickly and the relatio
 **Logarithmic:** just use $\ln X$ as the predictor. No back-transform is needed.
 
 :::widget transform:::
+
+:::challenge transform f=power
+Q: These data follow a power function $y = a x^b$. In which space do they plot as a straight line?
+* Log-log (ln y against ln x)
+- Semi-log (ln y against x)
+- Unit space (y against x)
+> Taking logs gives $\ln y = \ln a + b \ln x$, which is linear in $\ln x$. Semi-log straightens exponentials. The learning curve is a power function, which is why it plots straight on log-log paper.
+:::
 
 +++
 

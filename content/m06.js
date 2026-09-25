@@ -109,7 +109,15 @@ Q: Which measure would you report for a data set with one huge outlier?
 
 Now try it. Load the **With outlier** preset and watch how far the mean moves compared to the median.
 
-:::widget stats-lab:::`
+:::widget stats-lab:::
+
+:::challenge stats-lab data=12,15,18,15,22,15,19
+Q: Edit the data so the **mean rises above 20** while the **median stays at 15**. Change only one number.
+goal: mean > 20
+goal: median ~ 15 +- 0
+show: data=12,15,18,15,22,15,48
+> The median depends only on the middle value, so changing an extreme value leaves it alone. The mean uses every value, so one large number pulls it up. That's why the median is the more robust center for skewed cost data.
+:::`
     },
     {
       id: 'dispersion', title: 'Dispersion and CV', summary: 'Variance, standard deviation, coefficient of variation',
@@ -164,6 +172,12 @@ Q: Your CV is 32%. What does that suggest?
 Q: For the practice data {12, 15, 18, 15, 22, 15, 19}, the mean is 16.57. What is the sample standard deviation? (Use the stats lab above or calculate by hand.)
 = 3.31 ±0.02
 > $\sum x_i^2 = 1988$ and $n\bar{x}^2 = 116^2/7 = 1922.29$, so the sum of squared deviations is 65.71. Divide by $n-1 = 6$ → $s^2 ≈ 10.95$ → $s ≈ 3.31$. CV ≈ 20.0%, which is above the 15% threshold.
+:::
+
+:::challenge stats-lab data=229.70,221.58,244.94,250.66
+Q: For the four freight costs (229.70, 221.58, 244.94, 250.66), predict the coefficient of variation. Type it with a % sign, e.g. 7%.
+predict: cv +- 5%
+> $CV = s / \bar{x} \approx 13.42 / 236.72 \approx 5.67\%$. A CV this small means the spread is tight relative to the mean.
 :::`
     },
     {

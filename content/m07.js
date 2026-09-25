@@ -62,6 +62,13 @@ In log-log space the curve is a **straight line** with slope $b$ and intercept $
 
 :::widget lc-explorer:::
 
+:::challenge lc-explorer theory=ulc t1=100 lcs=0.95 n=8 log=unit lock=theory,t1,n,log
+Q: T1 is \$100. Drag the LCS slider until unit 8 costs **\$51.20**.
+goal: unitN ~ 51.2 +- 0.5%
+show: lcs=0.8
+> Unit 8 is three doublings from unit 1, so $Y_8 = 100 \times LCS^3$. Setting $LCS^3 = 0.512$ gives $LCS = 0.80$: 100, 80, 64, 51.2.
+:::
+
 :::tip
 Lower LCS (70–80%) = **steeper** learning: lots of touch labor, complex manual work. Higher LCS (90–95%) = **flatter**: automated, simple, mature processes.
 :::`
@@ -102,6 +109,12 @@ Q: Which reduces cost more: an 85% CUMAV curve or an 85% unit curve (same T1)?
 Switch **Theory** in the explorer and watch the two lines swap roles. Under CUMAV the average follows the clean power curve and the unit cost falls *below* it.
 
 :::widget lc-explorer:::
+
+:::challenge lc-explorer theory=cum t1=100 lcs=0.9 n=4 lock=theory,t1,lcs,n
+Q: Under **cumulative average** theory, with T1 = \$100 and a 90% slope, predict the cumulative average cost through unit 4.
+predict: cavN +- 1%
+> Under Wright's theory the curve gives the cumulative average directly: $\bar{Y}_4 = 100 \times 0.9^2 = 81$. Unit 4 by itself costs less than 81, because the average still carries the more expensive early units.
+:::
 
 :::warn
 85% CUMAV ≠ 85% ULC. Always state which theory an LCS belongs to. Published industry averages rarely say which one they used.
@@ -238,6 +251,12 @@ Your guide writes the refined formula with $(F-1)$ and $L$ instead of $(F-\tfrac
 :::
 
 :::widget lmp:::
+
+:::challenge lmp F=4 L=8 lcs=0.85 lock=F,L,lcs
+Q: For a lot of units 4 through 8 on an 85% curve, predict the true lot midpoint. Use the heuristic: the average of the arithmetic and geometric means.
+predict: exact +- 2%
+> Arithmetic mean 6, geometric mean $\sqrt{32} = 5.657$, heuristic 5.83. The exact LMP is 5.79, so the heuristic lands within 1%.
+:::
 
 +++
 
