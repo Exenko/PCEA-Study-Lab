@@ -33,7 +33,7 @@ const ShopWorkshop = (() => {
       const id = b.dataset.shift, cur = ShopIdle.onShift(Store.data).map(o => o.id);
       const ids = cur.includes(id) ? cur.filter(x => x !== id) : [...cur, id];
       let res;
-      try { res = ShopIdle.setShift(Store.data, ids, Date.now()); } catch (e) { return; }
+      try { res = ShopIdle.setShift(Store.data, ids, Date.now()); } catch (e) { rerender(); return; }
       res.writes.forEach(w => { Store.data.shop[w.key] = w.rec; });
       Store.save();
       rerender();
@@ -140,7 +140,7 @@ const ShopWorkshop = (() => {
       Store.data.shop['draft-' + id] = { draftOf: id, draft: pipe, tries, t: Date.now() };
       if (v.passed) {
         const now = Date.now();
-        if (ShopIdle.onShift(Store.data).some(o => o.id === id)) { const c = ShopIdle.collect(Store.data, id, now); if (c) Store.data.shop[c.key] = c.rec; }
+        ShopIdle.repass(Store.data, id, now).writes.forEach(w => { Store.data.shop[w.key] = w.rec; });
         Store.data.shop['pipe-' + id] = { pipe: id, steps: JSON.parse(JSON.stringify(pipe.steps)), outs: JSON.parse(JSON.stringify(pipe.outs)), stepCount: pipe.steps.length, primitivesOnly: P.primitivesOnly(pipe), passed: true, tier: st.maxTier, passedAt: now, t: now };
       }
       unlocks.forEach(n => { Store.data.shop['node-' + n] = { node: n, t: Date.now() }; });
