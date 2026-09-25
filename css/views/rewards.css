@@ -1,0 +1,136 @@
+/* Quests, chests and cosmetics. Colors come from tokens; the flame tokens below are the only new ones. */
+:root {
+  --flame-blue: oklch(0.45 0.14 250);
+  --flame-green: oklch(0.44 0.12 150);
+  --flame-purple: oklch(0.42 0.17 305);
+  --flame-gold: oklch(0.50 0.12 80);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --flame-blue: oklch(0.76 0.12 250);
+    --flame-green: oklch(0.78 0.13 150);
+    --flame-purple: oklch(0.76 0.14 305);
+    --flame-gold: oklch(0.82 0.13 85);
+  }
+}
+:root[data-theme="dark"] {
+  --flame-blue: oklch(0.76 0.12 250);
+  --flame-green: oklch(0.78 0.13 150);
+  --flame-purple: oklch(0.76 0.14 305);
+  --flame-gold: oklch(0.82 0.13 85);
+}
+
+/* HUD */
+.hud-quests {
+  display: inline-flex; align-items: center; font-weight: 600; font-size: .8rem; text-decoration: none;
+  color: var(--muted); background: var(--paper-2); border: 1px solid var(--line); padding: 4px 9px; border-radius: 999px;
+}
+.hud-quests.ready { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); box-shadow: var(--glow); }
+.hud-title { font-size: .68rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+.hud-streak.flame-blue { color: var(--flame-blue); }
+.hud-streak.flame-green { color: var(--flame-green); }
+.hud-streak.flame-purple { color: var(--flame-purple); }
+.hud-streak.flame-gold { color: var(--flame-gold); }
+
+/* Quest panel */
+.quests { margin: 0 0 24px; }
+.quests .q-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.quests .q-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.quests .qst {
+  display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 14px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+.quests .qst b { font-weight: 600; overflow-wrap: anywhere; }
+.quests .qst.done { border-color: var(--good); }
+.quests .qst.done .hud-bar i { background: var(--good); }
+.quests .qst.claimed { opacity: .7; }
+.quests .qst.big { margin-top: 4px; }
+.quests .qst-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 30px; }
+.quests .q-bonus {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 12px; padding: 10px 14px;
+  background: var(--paper-2); border: 1px dashed var(--line-2); border-radius: var(--radius);
+}
+.quests .q-bonus.ready { border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
+
+/* Chest modal */
+.chest-modal {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px;
+  background: color-mix(in srgb, var(--bg-deep) 72%, transparent);
+}
+.chest-box {
+  width: min(420px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; text-align: center; padding: 22px 18px;
+  background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-lg);
+}
+.chest-box h3 { margin: 10px 0 14px; }
+.chest {
+  position: relative; width: 84px; height: 64px; margin: 0 auto; border-radius: 10px 10px 8px 8px;
+  background: var(--grad-accent); box-shadow: var(--glow);
+  animation: chest-shake .7s ease-in-out, chest-pop .25s ease-out .7s both;
+}
+.chest i { position: absolute; left: 0; right: 0; top: 24px; height: 6px; background: var(--accent-soft); }
+.chest.chest-bonus { background: linear-gradient(135deg, var(--flame-green), var(--accent)); }
+.chest.chest-big { background: linear-gradient(135deg, var(--flame-gold), var(--accent-strong)); width: 100px; height: 74px; }
+.chest-rolls { display: grid; gap: 8px; }
+.chest-roll {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 12px; text-align: left;
+  background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius); animation: roll-in .35s ease-out both;
+}
+.chest-roll.k-cash { border-left: 4px solid var(--good); }
+.chest-roll.k-consumable { border-left: 4px solid var(--info); }
+.chest-roll.k-leave { border-left: 4px solid var(--mid); }
+.chest-roll.k-cosmetic { border-left: 4px solid var(--accent); }
+.chest-box .row-btns { justify-content: center; margin-top: 16px; }
+@keyframes chest-shake {
+  0%, 100% { transform: rotate(0); } 20% { transform: rotate(-8deg); } 40% { transform: rotate(7deg); }
+  60% { transform: rotate(-5deg); } 80% { transform: rotate(3deg); }
+}
+@keyframes chest-pop { from { transform: scale(1); } 50% { transform: scale(1.18); } to { transform: scale(1); } }
+@keyframes roll-in { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .chest, .chest-roll { animation: none !important; }
+}
+
+/* Cosmetics grid */
+.cosmetics { margin-top: 24px; }
+.cosmetics .cos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.cosmetics .cos {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px; min-width: 0; padding: 12px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+}
+.cosmetics .cos b { overflow-wrap: anywhere; }
+.cosmetics .cos.locked { background: var(--paper-2); color: var(--muted); }
+.cosmetics .cos.locked .cos-swatch { filter: grayscale(1); opacity: .35; }
+.cosmetics .cos.on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.cosmetics .cos-swatch { width: 28px; height: 28px; border-radius: 8px; background: var(--silver-soft); border: 1px solid var(--line-2); }
+.cosmetics .cos-title .cos-swatch { border-radius: 99px; background: var(--grad-accent); }
+.cosmetics .flame-blue .cos-swatch { background: var(--flame-blue); }
+.cosmetics .flame-green .cos-swatch { background: var(--flame-green); }
+.cosmetics .flame-purple .cos-swatch { background: var(--flame-purple); }
+.cosmetics .flame-gold .cos-swatch { background: var(--flame-gold); }
+.cosmetics .desk-blueprint .cos-swatch, .firm.desk-blueprint .idle-desk {
+  background-color: color-mix(in srgb, var(--flame-blue) 12%, var(--paper));
+  background-image: linear-gradient(color-mix(in srgb, var(--flame-blue) 18%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--flame-blue) 18%, transparent) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+.cosmetics .desk-ledger .cos-swatch, .firm.desk-ledger .idle-desk {
+  background-color: color-mix(in srgb, var(--flame-green) 8%, var(--paper));
+  background-image: repeating-linear-gradient(180deg, transparent 0 17px, color-mix(in srgb, var(--flame-green) 22%, transparent) 17px 18px);
+}
+.cosmetics .desk-terminal .cos-swatch, .firm.desk-terminal .idle-desk {
+  background-color: color-mix(in srgb, var(--ink) 88%, var(--flame-green));
+  color: color-mix(in srgb, var(--flame-green) 40%, var(--paper));
+}
+.firm.desk-terminal .idle-desk { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+.firm.desk-terminal .idle-desk .muted { color: color-mix(in srgb, var(--flame-green) 30%, var(--paper)); }
+.cosmetics .desk-brass .cos-swatch, .firm.desk-brass .idle-desk {
+  background-color: color-mix(in srgb, var(--flame-gold) 14%, var(--paper));
+  border-color: var(--flame-gold);
+}
+
+@media (max-width: 640px) {
+  .quests .q-grid { grid-template-columns: 1fr; }
+  .cosmetics .cos-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  .hud-title { display: none; }
+  .hud-quests { padding: 3px 7px; }
+}
