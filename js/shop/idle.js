@@ -85,6 +85,16 @@
     writes.push({ key: 'shift', rec: { shift, off, t: now } });
     return { writes };
   }
+  // Re-pass while on shift must re-pin every current desk (incl. the re-passed id), else a stale
+  // pipeline could back-fill the freed desk with its old passedAt and pay out unearned cash.
+  function repass(d, id, now) {
+    const o = onShift(d).find(x => x.id === id);
+    if (!o) return { writes: [] };
+    const c = collect(d, id, now);
+    const d2 = { shop: Object.assign({}, d.shop, c ? { [c.key]: c.rec } : {}) };
+    const ids = onShift(d).map(x => x.id);
+    return { writes: (c ? [c] : []).concat(setShift(d2, ids, now).writes) };
+  }
   // A desk purchase first pins the current desks, so the new upgrade time never moves their start.
   function buyUpgrade(d, id, now) {
     const cost = firm(d).next[id];
@@ -94,6 +104,6 @@
     return { writes };
   }
 
-  const ShopIdle = { HOUR, CAPS, UPGRADES, firm, running, onShift, rate, start, outbox, collect, collectAll, setShift, buyUpgrade };
+  const ShopIdle = { HOUR, CAPS, UPGRADES, firm, running, onShift, rate, start, outbox, collect, collectAll, setShift, repass, buyUpgrade };
   if (typeof module !== 'undefined' && module.exports) module.exports = ShopIdle; else root.ShopIdle = ShopIdle;
 })(this);

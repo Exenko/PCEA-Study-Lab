@@ -100,6 +100,28 @@ module.exports = [
     assert.deepStrictEqual(I.buyUpgrade(rich, 'analyst', 10).writes, [{ key: 'upg-analyst-10', rec: { upg: 'analyst', cost: 400, t: 10 } }]);
     assert.strictEqual(I.buyUpgrade(rich, 'nope', 10), null);
   }],
+  ['repass on shift re-pins every current desk so a stale pipeline cannot back-fill it', () => {
+    const d = D(pipe('a', 1000), pipe('b', 2000), pipe('c', 3000)), now = 1000 + 20 * H;
+    const res = I.repass(d, 'a', now);
+    assert.deepStrictEqual(res.writes.map(w => w.key), ['collect-a-1000', 'shift']);
+    apply(d, res);
+    Object.assign(d.shop, pipe('a', now, { stepCount: 2 }));
+    assert.deepStrictEqual(I.onShift(d).map(o => o.id), ['a', 'b']);
+    assert.strictEqual(I.outbox(d, 'c', now + H).amount, 0);
+    assert.strictEqual(I.outbox(d, 'a', now + H).amount, 14);
+  }],
+  ['repass on an off-shift pipeline is a no-op', () => {
+    const d = D(pipe('a', 1000), pipe('b', 2000), pipe('c', 3000));
+    assert.deepStrictEqual(I.repass(d, 'c', 1000 + 20 * H).writes, []);
+  }],
+  ['merge credits overlapping device collects on the same pipeline only once', () => {
+    const base = D(pipe('x', 0, { stepCount: 2 }));
+    const dA = JSON.parse(JSON.stringify(base)), dB = JSON.parse(JSON.stringify(base));
+    const c1 = I.collect(dA, 'x', H); dA.shop[c1.key] = Object.assign(c1.rec, { mod: 1 });
+    const c2 = I.collect(dB, 'x', 2 * H); dB.shop[c2.key] = Object.assign(c2.rec, { mod: 2 });
+    const c3 = I.collect(dA, 'x', 3 * H); dA.shop[c3.key] = Object.assign(c3.rec, { mod: 1 });
+    assert.strictEqual(C.state(Store.merge(dA, dB)).cash, 42);
+  }],
   ['freed desk fills at now; late-synced pipeline keeps its pass time', () => {
     const d = D(pipe('a', 1000), pipe('b', 2000), pipe('c', 3000)), now = 1000 + 5 * H;
     const res = I.setShift(d, ['a'], now);
