@@ -338,6 +338,21 @@ Q: Raising correlation from 0 to 0.8 changes the total standard deviation from 2
 
 :::widget montecarlo:::
 
+:::challenge montecarlo rho=0 n=20000 lock=n
+Q: The dashed S-curve assumes no correlation between the elements. Raise $\rho$ until the 80th percentile is at least **10** above the uncorrelated P80.
+goal: p80gap >= 10
+show: rho=0.6
+> Positive correlation makes elements overrun together. That widens the spread of the total and pushes up the high percentiles, while the mean stays put. Leaving correlation out understates the risk reserve.
+:::
+
+:::challenge montecarlo rho=0.2 n=20000 lock=n
+Q: The point estimate is the sum of each element's most likely value. Where does it fall on the S-curve?
+* Well below 50%, because right-skewed elements make overruns more likely than underruns
+- About 50%, because it's built from the most likely values
+- Above 80%
+> Each most-likely value sits left of its skewed distribution's mean, so their sum falls below the total's mean and median. Here it lands near the 10th percentile. That's why a point estimate alone carries little confidence.
+:::
+
 Notice:
 1. The point estimate (sum of most-likelies) typically sits **well below the 50th percentile** because right-skewed elements have means above their modes
 2. Raising correlation widens the total distribution, raising all percentiles

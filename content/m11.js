@@ -83,7 +83,14 @@ Prototypes are hand-built with engineering-driven changes, rework, and different
 
 **Best practice**: Exclude prototype/engineering build hours from the production curve. Estimate prototype cost separately (analogy or engineering buildup), then fit the curve to production units only.
 
-:::widget burden:::`
+:::widget burden:::
+
+:::challenge burden dl=40 oh=1.1 ga=0.12 fee=0.08 hrs=1000 lock=dl,oh,hrs
+Q: The customer's independent estimate uses a wrap rate of **\$110/hr**. Direct labor and overhead are fixed. Adjust G&A and fee to match it within \$1.
+goal: wrap ~ 110 +- 1
+show: ga=0.2 fee=0.09
+> Wrap rate $= DL (1 + OH)(1 + G\&A)(1 + fee) = 84 (1 + G\&A)(1 + fee)$. You need $(1 + G\&A)(1 + fee) \approx 1.31$, for example 20% G&A with a 9% fee. Each rate compounds on the ones before it.
+:::`
     },
     {
       id: 'labor', title: 'Labor rates and burdening', summary: 'Fully burdened rate buildup: direct labor, fringe, overhead, G&A, fee',
