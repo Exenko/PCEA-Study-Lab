@@ -59,14 +59,14 @@ const ShopWorkshop = (() => {
       root.innerHTML = `<div class="shop wk"><a href="#/shop" class="muted small">&larr; Contract board</a>
         <h1>${esc(tpl.title)}</h1>
         <p class="muted">Wire blocks so the outputs answer any contract of this type. <a href="#/learn/${m}/${s}">Review the lesson</a></p>
-        <section class="wk-inputs"><h3>Sample contract inputs &middot; tier ${'I'.repeat(tier)}</h3>
-          <dl>${Object.entries(tpl.ins).map(([k, meta]) => `<div><dt>${esc(meta.label)}</dt><dd>${esc(fmtIn(job.inputs[k], meta.unit))} <span class="muted small">${esc(meta.unit === 'flag' ? '' : meta.unit)}</span></dd></div>`).join('')}</dl>
-          <button class="btn ghost small" id="reroll">New sample</button></section>
+        <section class="wk-inputs"><h3>Sample inputs · tier ${'I'.repeat(tier)}</h3>
+          <dl>${Object.entries(tpl.ins).map(([k, meta]) => `<dt>${esc(meta.label)}</dt><dd>${esc(fmtIn(job.inputs[k], meta.unit))} ${meta.unit && meta.unit !== 'flag' ? `<span class="muted small">${esc(meta.unit)}</span>` : ''}</dd>`).join('')}</dl>
+          <button class="btn ghost small" id="reroll">Reroll sample</button></section>
         <section class="wk-chain">${pipe.steps.map((st, i) => {
           const node = N.byId(st.node), err = run.errs[i], nodeBad = bad(i, null);
           return `<div class="wk-step ${err || nodeBad ? 'err' : ''}" data-i="${i}">
-            <div class="wk-step-head"><span class="muted small">Step ${i + 1}</span>
-              <span class="wk-ctl"><button data-mv="-1" aria-label="Move up">&uarr;</button><button data-mv="1" aria-label="Move down">&darr;</button><button data-del aria-label="Delete">&times;</button></span></div>
+            <div class="wk-step-head"><span class="muted small">Block ${i + 1}</span>
+              <div class="wk-ctl"><button data-mv="-1" aria-label="Move up">&uarr;</button><button data-mv="1" aria-label="Move down">&darr;</button><button data-del aria-label="Delete">&times;</button></div></div>
             <select class="wk-node">${nodeOptions(st.node, allowed)}</select>
             ${node ? `<span class="muted small">${esc(node.hint)}</span>` : ''}
             ${nodeBad ? `<span class="wk-msg">${esc(nodeBad.msg)}</span>` : ''}

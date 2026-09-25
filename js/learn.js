@@ -27,6 +27,14 @@ const Learn = (() => {
     const last = Store.data.lastSection;
     const lm = last && PCEA.module(last.m);
     const ls = lm && lm.sections.find(s => s.id === last.s);
+
+    // Calculate stats for stat strip
+    let secsDone = 0, secsTotal = 0;
+    PCEA.modules.forEach(m => {
+      secsTotal += m.sections.length;
+      secsDone += m.sections.filter(s => secState(m, s).done).length;
+    });
+
     root.innerHTML = `
       <section class="hero">
         <div>
@@ -35,6 +43,20 @@ const Learn = (() => {
           <div class="hero-actions">
             ${ls ? `<a class="btn" href="#/learn/${lm.id}/${ls.id}">Continue: ${lm.short || lm.title} &rsaquo; ${ls.title}</a>` : `<a class="btn" href="#/learn/${PCEA.modules[0].id}">Start with Module 1</a>`}
             <a class="btn ghost" href="#/cards">${due ? due + ' cards due' : 'Flashcards'}</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-tile">
+              <b>${PCEA.modules.length}</b>
+              <span>Modules</span>
+            </div>
+            <div class="stat-tile">
+              <b>${secsDone}/${secsTotal}</b>
+              <span>Sections Done</span>
+            </div>
+            <div class="stat-tile">
+              <b>${due}</b>
+              <span>Cards Due</span>
+            </div>
           </div>
         </div>
       </section>

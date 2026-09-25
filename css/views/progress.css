@@ -1,0 +1,670 @@
+/* progress view styles (overrides styles.css) */
+
+/* ===== PROGRESS PAGE ===== */
+.progress-page { max-width: 1000px; margin: 0 auto; }
+
+/* Page header with hero gradient */
+.progress-page > h1 {
+  background: var(--grad-hero);
+  color: var(--ink);
+  padding: 24px 28px;
+  border-radius: 12px;
+  margin: 0 0 28px 0;
+  box-shadow: var(--shadow-lg);
+  font-size: 2.2rem;
+  position: relative;
+  overflow: hidden;
+}
+.progress-page > h1::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sheen);
+  pointer-events: none;
+}
+
+/* KPI tiles with colored top stripes */
+.progress-page .kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.progress-page .kpi {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: grid;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.progress-page .kpi::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--c1);
+}
+.progress-page .kpi:nth-child(2)::before { background: var(--c2); }
+.progress-page .kpi:nth-child(3)::before { background: var(--c3); }
+.progress-page .kpi:nth-child(4)::before { background: var(--c4); }
+.progress-page .kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.progress-page .kpi::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sheen);
+  pointer-events: none;
+  border-radius: var(--radius);
+}
+.progress-page .kpi b {
+  font: 700 2.2rem var(--serif);
+  color: var(--ink);
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+.progress-page .kpi span {
+  color: var(--muted);
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Distribution bar - richer styling */
+.progress-page .dist {
+  display: flex;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-deep);
+  min-width: 120px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+.progress-page .dist i {
+  display: block;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+.progress-page .dist .new { background: var(--line-2); }
+.progress-page .dist .learning { background: var(--bad); }
+.progress-page .dist .familiar { background: var(--mid); }
+.progress-page .dist .strong { background: color-mix(in srgb, var(--good) 60%, var(--paper)); }
+.progress-page .dist .mastered { background: var(--good); }
+
+/* Distribution legend */
+.progress-page .dist-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.82rem;
+  color: var(--ink-2);
+  margin: 0 0 20px;
+}
+.progress-page .dist-legend i {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 5px;
+  vertical-align: -1px;
+}
+.progress-page .dist-legend .new { background: var(--line-2); }
+.progress-page .dist-legend .learning { background: var(--bad); }
+.progress-page .dist-legend .familiar { background: var(--mid); }
+.progress-page .dist-legend .strong { background: color-mix(in srgb, var(--good) 60%, var(--paper)); }
+.progress-page .dist-legend .mastered { background: var(--good); }
+
+/* Progress table */
+.progress-page .ptable {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.progress-page .ptable th {
+  background: var(--bg-deep);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+}
+.progress-page .ptable td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-size: 0.92rem;
+  background: var(--paper);
+}
+.progress-page .ptable tr:nth-child(even) td {
+  background: var(--paper-2);
+}
+.progress-page .ptable a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.progress-page .ptable td:nth-child(3) {
+  width: 34%;
+}
+
+/* Weakest cards */
+.progress-page .weak-list {
+  display: grid;
+  gap: 6px;
+}
+.progress-page .weak {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.92rem;
+  transition: border-color 0.2s;
+}
+.progress-page .weak:hover {
+  border-color: var(--accent);
+}
+.progress-page .weak span {
+  color: var(--bad);
+  white-space: nowrap;
+  font-size: 0.82rem;
+}
+
+/* Action buttons */
+.progress-page .row-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ===== LEADERBOARD PAGE ===== */
+
+/* Leaderboard table styling */
+.progress-page .ptable.lb {
+  width: 100%;
+}
+
+/* Top 3 leaderboard rows with ring accents */
+.progress-page .ptable.lb tr:nth-child(2) td:first-child {
+  position: relative;
+  padding-left: 24px;
+}
+.progress-page .ptable.lb tr:nth-child(2) td:first-child::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--silver);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 8px var(--silver);
+}
+
+.progress-page .ptable.lb tr:nth-child(3) td:first-child::before {
+  background: var(--c2);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 8px var(--c2);
+}
+
+.progress-page .ptable.lb tr:nth-child(4) td:first-child::before {
+  background: var(--mid);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 8px var(--mid);
+}
+
+.progress-page .ptable.lb tr:nth-child(2) td,
+.progress-page .ptable.lb tr:nth-child(3) td,
+.progress-page .ptable.lb tr:nth-child(4) td {
+  border-left: 3px solid var(--silver);
+}
+.progress-page .ptable.lb tr:nth-child(3) td {
+  border-left-color: var(--c2);
+}
+.progress-page .ptable.lb tr:nth-child(4) td {
+  border-left-color: var(--mid);
+}
+
+/* Current user row */
+.progress-page .ptable.lb tr.me td {
+  background: var(--accent-soft);
+  font-weight: 600;
+  border-left: 4px solid var(--accent);
+  padding-left: 10px;
+}
+
+/* Leaderboard options */
+.progress-page .lb-opt {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 12px 0 18px;
+}
+
+/* ===== PROFILES PAGE ===== */
+
+/* Profiles page header */
+.profiles-page > h1 {
+  background: var(--grad-hero);
+  color: var(--ink);
+  padding: 24px 28px;
+  border-radius: 12px;
+  margin: 0 0 16px 0;
+  box-shadow: var(--shadow-lg);
+  font-size: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.profiles-page > h1::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sheen);
+  pointer-events: none;
+}
+
+/* Profile grid and tiles */
+.profiles-page .profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+.profiles-page .profile-tile {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  overflow: hidden;
+}
+.profiles-page .profile-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sheen);
+  pointer-events: none;
+  border-radius: 14px;
+  z-index: 1;
+}
+.profiles-page .profile-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+.profiles-page .profile-tile.current {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent-soft) 30%, var(--paper));
+}
+
+.profiles-page .profile-open {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 22px 14px 16px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  font: 1rem var(--sans);
+  border-radius: 14px;
+  position: relative;
+  z-index: 2;
+  transition: background 0.2s;
+}
+.profiles-page .profile-open:hover {
+  background: var(--accent-soft);
+}
+
+/* Avatar with ring */
+.profiles-page .profile-open .avatar {
+  width: 52px;
+  height: 52px;
+  font-size: 1.4rem;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent), var(--shadow);
+  position: relative;
+  z-index: 3;
+}
+
+.profiles-page .profile-del {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: 0.75rem var(--sans);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+  z-index: 2;
+}
+.profiles-page .profile-tile:hover .profile-del,
+.profiles-page .profile-del:focus {
+  opacity: 1;
+}
+.profiles-page .profile-del:hover {
+  color: var(--bad);
+}
+
+/* New profile form */
+.profiles-page .new-profile {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.profiles-page .new-profile .row {
+  display: flex;
+  gap: 8px;
+}
+.profiles-page .new-profile input {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1.5px solid var(--line-2);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 1rem var(--sans);
+  transition: border-color 0.2s;
+}
+.profiles-page .new-profile input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.profiles-page .form-err {
+  color: var(--bad);
+  font-size: 0.9rem;
+}
+
+/* ===== HUD & ACHIEVEMENTS ===== */
+
+/* HUD top bar styling */
+.hud {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-rank {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 0.78rem;
+  min-width: 96px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.hud-rank:hover {
+  background: var(--bg-deep);
+}
+.hud-rank b {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.hud-bar {
+  display: block;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--bg-deep);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.hud-bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.5s;
+}
+
+.hud-bar.wide {
+  height: 8px;
+  margin: 8px 0;
+}
+
+/* Streak pill */
+.hud-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: var(--paper-2);
+  padding: 5px 10px;
+  border-radius: 999px;
+  transition: color 0.2s, background 0.2s;
+}
+.hud-streak.on {
+  color: var(--c2);
+  background: var(--silver-soft);
+}
+
+/* XP float animation */
+.xp-float {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--accent);
+  pointer-events: none;
+  animation: xpfloat 1.3s ease-out forwards;
+}
+
+/* Toasts */
+.toasts {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 50;
+}
+.toast {
+  background: var(--paper);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 10px 14px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: toastin 0.25s ease-out;
+  transition: opacity 0.4s, transform 0.4s;
+}
+.toast span {
+  color: var(--ink-2);
+  font-size: 0.88rem;
+}
+.toast.out {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+/* Rewards section on progress page */
+.progress-page .rewards {
+  background: var(--grad-hero);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+.progress-page .rewards::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sheen);
+  pointer-events: none;
+  border-radius: 12px;
+  z-index: 0;
+}
+
+/* Reward cards */
+
+.progress-page .rw-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.progress-page .rw-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.progress-page .rw-label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.progress-page .rw-big {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+}
+
+/* Achievements section header */
+.progress-page > h2 {
+  margin-top: 28px;
+  margin-bottom: 16px;
+}
+
+/* Achievements grid */
+.progress-page .ach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.progress-page .ach {
+  border: 1px dashed var(--line-2);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--paper);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.progress-page .ach b {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.progress-page .ach span {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* Earned achievements */
+.progress-page .ach.got {
+  border-style: solid;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: var(--glow);
+  transition: all 0.3s;
+}
+.progress-page .ach.got b {
+  color: var(--accent);
+}
+.progress-page .ach.got span {
+  color: var(--ink-2);
+}
+.progress-page .ach.got:hover {
+  box-shadow: var(--glow), var(--shadow);
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .progress-page .kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .profiles-page .profile-grid {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .progress-page > h1,
+  .profiles-page > h1 {
+    padding: 18px 20px;
+    font-size: 1.6rem;
+  }
+
+  .progress-page .kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-page .rewards {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-page .ach-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .profiles-page .profile-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .hud-rank { min-width: 0; }
+  .hud-rank b { display: none; }
+  .hud-rank .hud-bar { width: 40px; }
+
+  .profiles-page .profile-del { opacity: 1; }
+}

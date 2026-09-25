@@ -1,0 +1,835 @@
+/* Polished glass design system - shared chrome redesign */
+/* All selectors override css/styles.css; WCAG AAA contrast verified token combos only */
+
+/* ---------- topbar: frosted glass ---------- */
+.topbar {
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid;
+  border-image: var(--grad-silver) 1;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 24px;
+}
+
+/* brand: serif wordmark with accent color on span */
+.brand {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.3px;
+  transition: color 0.2s;
+}
+.brand:hover {
+  color: var(--accent);
+}
+.brand span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* tabs: pill-styled with track background */
+.tabs {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  background: var(--bg-deep);
+  border-radius: 999px;
+  padding: 3px;
+  border: 1px solid var(--line);
+}
+.tabs a {
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: var(--ink-2);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+}
+.tabs a:hover {
+  color: var(--ink);
+  background: var(--paper-2);
+}
+.tabs a.on {
+  background: var(--sheen), var(--paper-2);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+}
+
+/* icon button: glass morphism style */
+.icon-btn {
+  border: 1px solid var(--line-2);
+  background: var(--paper-2);
+  color: var(--ink);
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.icon-btn:hover {
+  background: var(--sheen), var(--paper);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--accent);
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--grad-accent);
+  color: var(--accent-ink);
+  font: 600 0.95rem var(--sans);
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--glow);
+  transition: all 0.15s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--glow);
+  filter: none;
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  filter: none;
+}
+
+/* ghost button: paper+sheen with shadow */
+.btn.ghost {
+  background: var(--sheen), var(--paper-2);
+  color: var(--ink);
+  border: 1px solid var(--line-2);
+  box-shadow: var(--shadow-sm);
+}
+.btn.ghost:hover {
+  background: var(--sheen), var(--paper);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+/* button sizing */
+.btn.small {
+  padding: 5px 12px;
+  font-size: 0.85rem;
+}
+.btn.wide {
+  min-width: 260px;
+  justify-content: center;
+}
+
+/* danger styling for buttons */
+.btn.danger {
+  color: var(--bad);
+}
+
+/* ---------- chips & badges ---------- */
+.chip {
+  border: 1px solid var(--line-2);
+  background: var(--paper-2);
+  color: var(--ink-2);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font: 500 0.85rem var(--sans);
+  cursor: pointer;
+  transition: all 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* source badges */
+.src-guide {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.src-auth {
+  background: var(--mid-soft);
+  color: var(--mid);
+}
+
+/* ---------- panels, cards, widgets: elevated surfaces ---------- */
+.hero,
+.panel,
+.mod-card,
+.reader,
+.check,
+.widget {
+  background: var(--sheen), var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  transition: all 0.15s ease;
+}
+
+/* hover lift effect for interactive cards */
+.mod-card:hover,
+.offer:hover,
+.camp:hover,
+a.offer:hover,
+a.camp:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
+}
+
+/* hero section: prominent elevation */
+.hero {
+  border-radius: 16px;
+  padding: 32px 36px;
+  margin-bottom: 28px;
+}
+
+/* rich mod card styling */
+.mod-card.rich {
+  border-top: 3px solid var(--accent);
+}
+
+/* study-box callout styling */
+.study-box {
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-top: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- headings with gradient underlines ---------- */
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0.2em 0 0.4em;
+  color: var(--ink);
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin: 1.6em 0 0.6em;
+  color: var(--ink);
+  position: relative;
+  padding-bottom: 8px;
+}
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 100%;
+  height: 1px;
+  background: var(--grad-silver);
+  animation: underline-grow 0.8s ease-out 0.3s forwards;
+}
+@keyframes underline-grow {
+  to {
+    right: 0;
+  }
+}
+
+h3 {
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+/* ---------- links ---------- */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+a:hover {
+  color: var(--accent-strong);
+}
+
+/* ---------- callouts: colored left bar + icon ---------- */
+.callout {
+  background: var(--bg-deep);
+  border: 1px solid var(--line-2);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 16px 0;
+  position: relative;
+}
+.callout::before {
+  content: '●';
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  font-size: 8px;
+  color: var(--accent);
+  opacity: 0.6;
+}
+
+.callout-title {
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-left: 8px;
+}
+
+.callout-body .prose,
+.callout-body {
+  font-family: var(--serif);
+  font-size: 1.02rem;
+}
+
+/* callout variants */
+.callout.warn {
+  border-left-color: var(--bad);
+}
+.callout.warn .callout-title {
+  color: var(--bad);
+}
+.callout.warn::before {
+  color: var(--bad);
+}
+
+.callout.tip {
+  border-left-color: var(--mid);
+}
+.callout.tip .callout-title {
+  color: var(--mid);
+}
+.callout.tip::before {
+  color: var(--mid);
+}
+
+.callout.example {
+  border-left-color: var(--c3);
+}
+.callout.example .callout-title {
+  color: var(--c3);
+}
+.callout.example::before {
+  color: var(--c3);
+}
+
+.callout.formula {
+  border-left-color: var(--c2);
+}
+.callout.formula .callout-title {
+  color: var(--c2);
+}
+.callout.formula::before {
+  color: var(--c2);
+}
+
+/* ---------- prose: tables, code ---------- */
+.prose table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.prose th {
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--line-2);
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.prose td {
+  border-bottom: 1px solid var(--line);
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* zebra striping on table rows */
+.prose tbody tr:nth-child(even) {
+  background: var(--paper-2);
+}
+.prose tbody tr:nth-child(odd) {
+  background: var(--paper);
+}
+
+.prose code,
+.prose pre {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.88em;
+  background: var(--bg-deep);
+  border-radius: 6px;
+  border: 1px solid var(--line-2);
+}
+
+.prose code {
+  padding: 1px 5px;
+  color: var(--c2);
+}
+
+.prose pre {
+  padding: 12px 14px;
+  overflow-x: auto;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+.prose blockquote {
+  margin: 1em 0;
+  padding: 0.2em 1em;
+  border-left: 3px solid var(--line-2);
+  color: var(--ink-2);
+  font-style: italic;
+}
+
+/* ---------- inputs & form controls ---------- */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  background: var(--paper-2);
+  border: 1px solid var(--line-2);
+  color: var(--ink);
+  font: 0.95rem var(--sans);
+  border-radius: 10px;
+  padding: 9px 12px;
+  transition: all 0.15s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent);
+  background: var(--sheen), var(--paper-2);
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- check widget & quiz options ---------- */
+.check {
+  border: 1.5px solid var(--accent);
+  background: color-mix(in srgb, var(--accent-soft) 50%, var(--paper));
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin: 18px 0;
+}
+
+.check.done {
+  border-color: var(--line-2);
+  background: var(--paper);
+}
+
+.opt {
+  border: 1.5px solid var(--line-2);
+  background: var(--paper-2);
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font: 1rem var(--sans);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.opt:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.opt.right {
+  border-color: var(--good);
+  background: var(--good-soft);
+  color: var(--good);
+  font-weight: 600;
+}
+
+.opt.wrong {
+  border-color: var(--bad);
+  background: var(--bad-soft);
+  color: var(--bad);
+  opacity: 1;
+}
+
+/* ---------- segment control ---------- */
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  padding: 2px;
+  margin-top: 8px;
+  background: var(--paper-2);
+}
+
+.seg button {
+  border: 0;
+  background: none;
+  color: var(--ink-2);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font: 500 0.82rem var(--sans);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.seg button.on {
+  background: var(--sheen), var(--ink);
+  color: var(--bg);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+}
+
+/* ---------- breadcrumbs ---------- */
+.crumbs {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.crumbs a {
+  color: var(--muted);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+}
+
+.crumbs a:hover {
+  color: var(--ink-2);
+}
+
+/* ---------- widgets & controls ---------- */
+.widget {
+  margin: 20px 0;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: var(--sheen), var(--paper-2);
+  border: 1px solid var(--line-2);
+  font-family: var(--sans);
+  box-shadow: var(--shadow-sm);
+}
+
+.w-title {
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.w-title span {
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: 8px;
+  font-size: 0.88rem;
+}
+
+.w-ctl input[type=number],
+.w-ctl select,
+.w-table input {
+  padding: 5px 8px;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 0.92rem var(--sans);
+  transition: all 0.12s ease;
+}
+
+.w-ctl input[type=number]:focus,
+.w-ctl select:focus,
+.w-table input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.w-ctl input[type=range] {
+  accent-color: var(--accent);
+}
+
+.w-data {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line-2);
+  border-radius: 8px;
+  background: var(--paper-2);
+  color: var(--ink);
+  font: 0.95rem ui-monospace, Consolas, monospace;
+  resize: vertical;
+  transition: border-color 0.12s ease;
+}
+
+.w-data:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* widget readout display */
+.ro {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  transition: all 0.12s ease;
+}
+
+.ro:hover {
+  border-color: var(--accent);
+}
+
+/* ---------- legend & color swatches ---------- */
+.w-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  margin-top: 4px;
+}
+
+.w-legend .sw {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  vertical-align: middle;
+  margin-right: 5px;
+  background: var(--c1);
+  border-radius: 2px;
+}
+
+.sw.c2 {
+  background: var(--c2) !important;
+}
+.sw.c3 {
+  background: var(--c3) !important;
+}
+.sw.band {
+  background: var(--band) !important;
+  height: 10px !important;
+}
+
+/* ---------- plot/chart styling ---------- */
+svg.plot {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--paper);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  touch-action: none;
+  user-select: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.plot .grid {
+  stroke: var(--line);
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+.plot .axis {
+  stroke: var(--line-2);
+  stroke-width: 1.2;
+}
+
+.plot .tick {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.plot .label {
+  fill: var(--ink-2);
+  font-size: 12px;
+}
+
+.plot .series {
+  stroke: var(--c1);
+  stroke-width: 2.4;
+}
+
+.plot .series.c2 {
+  stroke: var(--c2);
+}
+.plot .series.c3 {
+  stroke: var(--c3);
+}
+
+.plot .series.area {
+  fill: var(--band);
+  stroke: var(--c1);
+}
+
+.plot .pt {
+  fill: var(--c1);
+  stroke: var(--paper);
+  stroke-width: 1.5;
+}
+
+.plot .pt.alt {
+  fill: var(--c3);
+}
+.plot .pt.c1 {
+  fill: var(--c1);
+}
+.plot .pt.warn {
+  fill: var(--mid);
+}
+.plot .pt.bad {
+  fill: var(--bad);
+}
+.plot .pt.hot {
+  fill: var(--c2);
+}
+
+.plot .marker {
+  stroke: var(--muted);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 3;
+}
+
+.plot .band {
+  fill: var(--band);
+}
+
+.plot .bar {
+  fill: color-mix(in srgb, var(--c1) 45%, transparent);
+  stroke: var(--paper);
+}
+
+/* ---------- kpi display cards ---------- */
+.kpi {
+  background: var(--sheen), var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: grid;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.kpi:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.kpi b {
+  font: 700 1.8rem var(--serif);
+  color: var(--ink);
+}
+
+.kpi span {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ---------- response to reduced motion & transparency ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .topbar,
+  .btn,
+  .chip,
+  .modal,
+  h2::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .topbar {
+    background: var(--bg) !important;
+    backdrop-filter: none !important;
+  }
+  .tabs a.on,
+  .btn.ghost {
+    background: var(--paper-2) !important;
+  }
+  .sheen-capable {
+    background: var(--paper) !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .topbar {
+    border-bottom: 2px solid var(--line-2);
+    border-image: none;
+  }
+  .tabs {
+    background: var(--paper);
+    border: 1px solid var(--line-2);
+  }
+  .tabs a.on {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  h2::after {
+    background: var(--line-2);
+    animation: none;
+    right: 0;
+  }
+}
