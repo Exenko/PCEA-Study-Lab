@@ -57,7 +57,10 @@ Q: A program with EV=\$80K, PV=\$90K, and AC=\$85K. Is it ahead or behind schedu
 * Behind
 - On schedule
 > SV = EV − PV = 80 − 90 = −10 (negative = behind). The earned work is less than planned.
-:::`
+:::
+
+:::widget evm:::
+`
     },
     {
       id: 'structure', title: 'Budget structure and control accounts', summary: 'PMB, CBB, MR, UB, CAMs, work packages',
@@ -105,10 +108,7 @@ Q: Why is too much Level-of-Effort (LOE) a problem?
 - LOE always results in overruns
 - LOE is never allowed
 > With LOE, CV and SV are zero by definition. Keep LOE to genuine support activities (program management, administration).
-:::
-
-:::widget evm:::
-`
+:::`
     },
     {
       id: 'variances', title: 'Variances and performance indices', summary: 'CV, SV, CPI, SPI — diagnosis of cost and schedule health',

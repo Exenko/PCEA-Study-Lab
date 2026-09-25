@@ -332,16 +332,16 @@ Q: n = 25, $\bar x = 52$, s = 10. What is the standard error of $\bar x$?
 :::
 
 :::challenge ci-sim n=5 level=0.95 method=z lock=n,level,method
-Q: Each of 1,000 samples of size 5 gets a "95%" interval built with $z = 1.96$ and the sample $s$. Predict what share of them actually contain $mu$. Type it with a % sign.
+Q: Each of 1,000 samples of size 5 gets a "95%" interval built with $z = 1.96$ and the sample $s$. Predict what share of them actually contain $\mu$. Type it with a % sign.
 predict: coverage +- 0.04
 > Only about 88% do. With small $n$, $s$ is itself uncertain, and $z$ ignores that. The $t$ distribution with $n - 1$ df has fatter tails ($t = 2.78$ for 4 df), which restores 95% coverage.
 :::
 
 :::challenge ci-sim n=5 level=0.95 method=z lock=n,level
-Q: Keep $n = 5$. Change one setting so the intervals really do cover $mu$ about 95% of the time (at least 94%).
+Q: Keep $n = 5$. Change one setting so the intervals really do cover $\mu$ about 95% of the time (at least 94%).
 goal: coverage >= 0.94
 show: method=t
-> Switching to $t$ widens every interval by $2.78 / 1.96$ at 4 df. That's enough to account for estimating $sigma$ with $s$. As $n$ grows, $t$ approaches $z$ and the difference fades.
+> Switching to $t$ widens every interval by $2.78 / 1.96$ at 4 df. That's enough to account for estimating $\sigma$ with $s$. As $n$ grows, $t$ approaches $z$ and the difference fades.
 :::
 `
     },
