@@ -45,7 +45,13 @@
 
   function auditProgress(d, evt, sched) {
     const cards = (evt && evt.cards) || [];
-    const done = cards.filter(id => { const s = sched.get(id); return !!(s && Number.isFinite(s.last) && s.last >= evt.at); }).length;
+    // A card deleted or renamed out of its module (no longer in sched.cards(module)) can never be
+    // reviewed again, so it can't block the audit forever: count it as done.
+    const live = new Set(((sched.cards && sched.cards(evt && evt.module)) || []));
+    const done = cards.filter(id => {
+      if (!live.has(id)) return true;
+      const s = sched.get(id); return !!(s && Number.isFinite(s.last) && s.last >= evt.at);
+    }).length;
     return { done, total: cards.length };
   }
   const bonus = (d, id) => r1(2 * I.rate(d, id).net);

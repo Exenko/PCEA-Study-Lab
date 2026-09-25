@@ -103,6 +103,24 @@ module.exports = [
     assert.strictEqual(C.state(m).cash, 28);
     assert.strictEqual(I.start(m, 'esc-compound', 0), 41 * H);
   }],
+  ['a later event resolved before an earlier one syncs pays the bonus once after merge', () => {
+    const at1 = 10 * H, at2 = 22 * H;
+    const dA = D(pipe('esc-compound', 0), evt('esc-compound', at2));
+    const dB = D(pipe('esc-compound', 0), evt('esc-compound', at1), evt('esc-compound', at2));
+    const b = E.bonus(dA, 'esc-compound');
+    E.resolveShock(dA, 'esc-compound', at2 + H).writes.forEach(w => { dA.shop[w.key] = Object.assign(w.rec, { mod: 1 }); });
+    E.resolveShock(dB, 'esc-compound', at2 + 2 * H).writes.forEach(w => { dB.shop[w.key] = Object.assign(w.rec, { mod: 2 }); });
+    const m = Store.merge(dA, dB);
+    assert.strictEqual(C.state(m).cash, b);
+  }],
+  ['audit progress treats a card no longer in the module as done, so it never stalls the audit', () => {
+    const A = 40 * H, d = D(pipe('esc-compound', 0), evt('esc-compound', A, { kind: 'audit', cards: ['c1', 'c2', 'gone'] }));
+    const rec = d.shop['evt-esc-compound-' + A];
+    const s = sched([], { c1: A, c2: A }, ['c1', 'c2']); // 'gone' no longer in the module's card list
+    assert.deepStrictEqual(E.auditProgress(d, rec, s), { done: 3, total: 3 });
+    const r = E.resolveAudit(d, 'esc-compound', A + H, s);
+    assert.ok(r);
+  }],
   ['a stalled pipeline collects nothing more and does not roll again', () => {
     const d = D(pipe('esc-compound', 0), { 'collect-esc-compound-0': { collect: 'esc-compound', from: 0, to: 30 * H, amount: 0, t: 30 * H } }, evt('esc-compound', 30 * H));
     assert.deepStrictEqual(E.collect(d, 'esc-compound', 60 * H, sched()), []);

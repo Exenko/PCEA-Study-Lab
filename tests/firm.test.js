@@ -3,7 +3,7 @@ const F = require('../js/shop/firm.js');
 const H = 3600000;
 const pipe = (id, at) => ({ ['pipe-' + id]: { pipe: id, steps: [], outs: [], stepCount: 2, primitivesOnly: false, passed: true, tier: 1, passedAt: at, t: at } });
 const D = (...parts) => ({ shop: Object.assign({}, ...parts) });
-const sched = last => ({ profile: 'Ann', isDue: () => false, get: id => (id in last ? { last: last[id] } : null), cards: () => [] });
+const sched = last => ({ profile: 'Ann', isDue: () => false, get: id => (id in last ? { last: last[id] } : null), cards: () => ['c1', 'c2'] });
 const audit = at => ({ ['evt-esc-compound-' + at]: { evt: 'esc-compound', kind: 'audit', module: 'm05', at, cards: ['c1', 'c2'], seed: 1, t: at } });
 
 module.exports = [

@@ -59,11 +59,37 @@
     });
     return credit;
   }
+  // Mirrors ShopEvents.COOLDOWN (20h) without requiring events.js, to avoid a circular dependency
+  // (events.js already requires core.js). Keep this number in sync with events.js's COOLDOWN.
+  const EVT_COOLDOWN_MS = 20 * 60 * 60 * 1000;
+  function splitEvtKey(key) {
+    const rest = key.slice(4), idx = rest.lastIndexOf('-');
+    return { tpl: rest.slice(0, idx), at: parseFloat(rest.slice(idx + 1)) };
+  }
   function state(d) {
-    const recs = Object.entries((d && d.shop) || {}).filter(([, r]) => r && typeof r === 'object')
+    const shopMap = (d && d.shop) || {};
+    const recs = Object.entries(shopMap).filter(([, r]) => r && typeof r === 'object')
       .sort(([ka, a], [kb, b]) => (a.t || 0) - (b.t || 0) || (ka < kb ? -1 : ka > kb ? 1 : 0))
       .map(([, r]) => r);
     const credit = collectCredit(recs);
+    // An evt is "primary" for its tpl when no other evt for that tpl fired within the cooldown window
+    // just before it. Two such events can only exist via a cross-device race (the cooldown otherwise
+    // forbids it), and each can get resolved independently on a different device; only the earliest
+    // one's bonus should ever count, so a non-primary evt's evtdone bonus is ignored after merge.
+    const evtAtsByTpl = {};
+    Object.keys(shopMap).forEach(k => {
+      const r = shopMap[k];
+      if (r && typeof r.evt === 'string' && k.slice(0, 4) === 'evt-') {
+        const { tpl, at } = splitEvtKey(k);
+        if (Number.isFinite(at)) (evtAtsByTpl[tpl] = evtAtsByTpl[tpl] || []).push(at);
+      }
+    });
+    const evtdonePrimary = evtKey => {
+      if (typeof evtKey !== 'string' || evtKey.slice(0, 4) !== 'evt-') return true;
+      const { tpl, at } = splitEvtKey(evtKey);
+      if (!Number.isFinite(at)) return true;
+      return !(evtAtsByTpl[tpl] || []).some(a => a < at && at - a < EVT_COOLDOWN_MS);
+    };
     let cash = 0, rep = 0, completed = 0;
     const owned = {}, used = {}, campaign = [], upgrades = { desk: 0, cap: 0, analyst: 0 };
     for (const r of recs) {
@@ -74,7 +100,7 @@
       if (r.tool) { cash -= r.cost || 0; owned[r.tool] = (owned[r.tool] || 0) + 1; }
       if (r.use) used[r.use] = (used[r.use] || 0) + 1;
       if (r.collect) cash += credit.get(r) || 0;
-      if (r.evtdone) cash += r.bonus || 0;
+      if (r.evtdone && evtdonePrimary(r.evtdone)) cash += r.bonus || 0;
       if (r.upg) { cash -= r.cost || 0; if (r.upg in upgrades) upgrades[r.upg]++; }
     }
     const repLevel = Math.floor(Math.sqrt(rep));
