@@ -182,6 +182,12 @@ main { max-width: 1280px; margin: 0 auto; padding: 24px; }
 .check-fb.good { color: var(--good); } .check-fb.bad { color: var(--bad); }
 .check-explain { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-family: var(--serif); color: var(--ink-2); }
 .check-explain p { margin: .3em 0; }
+.challenge .check-label { color: var(--c2); }
+.challenge .widget { margin: 12px 0 8px; background: var(--paper); }
+.ch-tools { margin-top: 8px; }
+.w-frozen { position: relative; }
+.w-frozen > * { filter: blur(5px); opacity: .55; user-select: none; }
+.w-frozen::after { content: 'Make your prediction first'; position: absolute; inset: 0; display: grid; place-items: center; font: 600 1rem var(--sans); color: var(--ink); }
 
 /* ---------- widgets ---------- */
 .widget { margin: 20px 0; padding: 16px 18px; border: 1px solid var(--line-2); border-radius: 12px; background: var(--bg); font-family: var(--sans); }
