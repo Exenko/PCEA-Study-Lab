@@ -62,6 +62,8 @@
   // Mirrors ShopEvents.COOLDOWN (20h) without requiring events.js, to avoid a circular dependency
   // (events.js already requires core.js). Keep this number in sync with events.js's COOLDOWN.
   const EVT_COOLDOWN_MS = 20 * 60 * 60 * 1000;
+  // Resolved at call time: chests.js requires this file, so a load-time require would be circular.
+  const chestsMod = () => (typeof module !== 'undefined' && module.exports ? require('../chests.js') : root.Chests);
   function splitEvtKey(key) {
     const rest = key.slice(4), idx = rest.lastIndexOf('-');
     return { tpl: rest.slice(0, idx), at: parseFloat(rest.slice(idx + 1)) };
@@ -102,6 +104,12 @@
       if (r.collect) cash += credit.get(r) || 0;
       if (r.evtdone && evtdonePrimary(r.evtdone)) cash += r.bonus || 0;
       if (r.upg) { cash -= r.cost || 0; if (r.upg in upgrades) upgrades[r.upg]++; }
+    }
+    const X = chestsMod();
+    if (X) {
+      cash += X.cash(d);
+      const g = X.toolGrants(d);
+      for (const k in g) owned[k] = (owned[k] || 0) + g[k];
     }
     const repLevel = Math.floor(Math.sqrt(rep));
     return {

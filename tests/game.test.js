@@ -62,5 +62,22 @@ module.exports = [
     const base = { shop: { c1: { tpl: 'lc-unit', pay: 60 } } };
     const idle = { shop: Object.assign({}, base.shop, { k: { collect: 'lc-unit', from: 0, to: 1, amount: 500, t: 1 }, u: { upg: 'desk', cost: 300, t: 2 } }) };
     assert.deepStrictEqual(Game.xpBreakdown(idle), Game.xpBreakdown(base));
+  }],
+  ['streak: a chest leave grant covers a missed day', () => {
+    const ks = days('2026-03-01', '2026-03-02', '2026-03-03', '2026-03-05');
+    assert.strictEqual(Game.streak(ks, day('2026-03-05')).current, 1);
+    assert.strictEqual(Game.streak(ks, day('2026-03-05'), [day('2026-03-02')]).current, 4);
+  }],
+  ['streak: grants stay capped at 2 leave days', () => {
+    const ks = []; for (let i = 1; i <= 7; i++) ks.push('2026-03-0' + i);
+    const g = [day('2026-03-01'), day('2026-03-02'), day('2026-03-03')];
+    assert.strictEqual(Game.streak(days(...ks), day('2026-03-07'), g).leave, 2);
+    assert.strictEqual(Game.streak(days(...ks), day('2026-03-07')).leave, 1);
+  }],
+  ['compute counts chest leave rolls; XP ignores chests', () => {
+    const d = { days: days('2026-03-01', '2026-03-03'), shop: { 'chest-b-2026-03-01': { chest: 'bonus', quest: 'b-2026-03-01', rolls: [{ kind: 'leave' }, { kind: 'cash', amount: 50 }], t: day('2026-03-01') } } };
+    assert.deepStrictEqual(Game.leaveGrants(d), [day('2026-03-01')]);
+    assert.strictEqual(Game.compute(d, { modules: [] }, day('2026-03-03')).streak.current, 2);
+    assert.strictEqual(Game.xpBreakdown(d).total, 0);
   }]
 ];

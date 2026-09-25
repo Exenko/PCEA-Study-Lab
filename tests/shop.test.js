@@ -88,5 +88,17 @@ module.exports = [
     assert.strictEqual(C.offers('Ann', {}, cat, T)[0].seed, C.hash('ann|0|0'));
     const d = { shop: { b: { tool: 'reroll', cost: 50, t: 1 }, u: { use: 'reroll', t: 2 } } };
     assert.strictEqual(C.offers('Ann', d, cat, T)[0].seed, C.hash('ann|0|0|1'));
+  }],
+  ['state adds chest cash and free tool uses', () => {
+    const d = { shop: {
+      a: { tpl: 'x', pay: 60, rep: 1, score: 1, t: 1 },
+      b: { chest: 'small', quest: 'd-x-0', rolls: [{ kind: 'cash', amount: 40 }], t: 2 },
+      c: { chest: 'bonus', quest: 'b-x', rolls: [{ kind: 'consumable', tool: 'hint' }, { kind: 'consumable', tool: 'hint' }], t: 3 },
+      u: { use: 'hint', t: 4 } } };
+    const s = C.state(d);
+    assert.strictEqual(s.cash, 100);
+    assert.strictEqual(s.left('hint'), 1);
+    assert.ok(s.has('hint'));
+    assert.strictEqual(s.completed, 1);
   }]
 ];
