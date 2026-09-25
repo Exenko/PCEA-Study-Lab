@@ -432,7 +432,7 @@
       labels: () => [['Expected hours', 'hours'], ['Labor cost', '$K']],
       solve: i => { const hrs = i.stdHours * i.qty * i.realization; return [hrs, hrs * i.rate / 1000]; },
       make(h, tier) {
-        const S = h.num(20, 120, 1), Q = h.num(10, 80, 1) * K[tier], R = h.num(1.1, 1.8, 0.05), W = Math.round(h.num(90, 180, 1) * h.num(1.5, 2, 0.05));
+        const S = h.num(20, 120, 1), Q = h.num(10, 80, 1) * K[tier], R = h.num(1.1, 1.8, 0.05), W = h.num(190, 300, 5);
         return { inputs: { stdHours: S, qty: Q, realization: R, rate: W }, story: `Labor squeeze: the wrap rate jumped to $${W}/hour.` };
       }
     }

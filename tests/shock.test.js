@@ -41,7 +41,7 @@ module.exports = [
       'npv': () => i.rate >= 0.12 && i.flows.length >= 7,
       'evm-eac': () => i.ev / i.ac < 0.7,
       'cpif-fee': () => { const raw = i.targetFee + i.conShare * (i.targetCost - i.actual); return raw < i.minFee || raw > i.maxFee; },
-      'mfg-labor': () => i.rate >= 135
+      'mfg-labor': () => i.rate > 180
     }[id];
     assert.ok(out(), id + ' ' + JSON.stringify(i));
   })]
