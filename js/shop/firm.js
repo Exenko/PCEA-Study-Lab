@@ -4,6 +4,7 @@
   const I = typeof module !== 'undefined' && module.exports ? require('./idle.js') : root.ShopIdle;
   const T = typeof module !== 'undefined' && module.exports ? require('./templates.js') : root.ShopTemplates;
   const E = typeof module !== 'undefined' && module.exports ? require('./events.js') : root.ShopEvents;
+  const X = typeof module !== 'undefined' && module.exports ? require('../chests.js') : root.Chests;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const money = v => '$' + (+v).toLocaleString('en-US', { maximumFractionDigits: 1 }) + 'K';
   const title = id => (T.find(t => t.id === id) || { title: id }).title;
@@ -40,10 +41,11 @@
         <div class="hud-bar"><i style="width:${pct(b.hours, f.capHours)}%"></i></div>${stall}</div>`;
     });
     for (let i = shift.length; i < f.desks; i++) cards.push('<div class="idle-desk empty"><span class="muted small">Empty desk: automate a contract in the Workshop</span></div>');
-    return `<h2>Your desks</h2>
+    const desk = X.equipped(d).desk;
+    return `<div class="firm${desk ? ' desk-' + desk.value : ''}"><h2>Your desks</h2>
       <p class="muted">Running pipelines fill their outbox for up to ${f.capHours} hours. Collect to bank the cash.</p>
       <div class="idle-desks">${cards.join('')}</div>
-      <div class="row-btns"><button class="btn" id="collect" ${total > 0 ? '' : 'disabled'}>Collect all</button></div>`;
+      <div class="row-btns"><button class="btn" id="collect" ${total > 0 ? '' : 'disabled'}>Collect all</button></div></div>`;
   }
 
   function upgradesHTML(d, st) {

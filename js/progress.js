@@ -14,6 +14,7 @@ const Progress = (() => {
         <h1>Progress</h1>
         ${Rewards.questsHTML()}
         ${Hud.progressHTML()}
+        ${Rewards.cosmeticsHTML()}
         <div class="kpis">
           <div class="kpi"><b>${Object.values(Store.data.sections).filter(s => s.done).length}</b><span>sections completed</span></div>
           <div class="kpi"><b>${checks.length ? Math.round(firstTry / checks.length * 100) + '%' : '—'}</b><span>questions right first try (${checks.length} answered)</span></div>

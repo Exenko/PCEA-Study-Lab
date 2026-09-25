@@ -20,10 +20,10 @@ const Hud = (() => {
     return Math.max(0, Math.min(100, (g.xp.total - g.rank.min) / (g.rank.next.xp - g.rank.min) * 100));
   }
   function paint(g) {
-    const qb = Rewards.badge();
+    const qb = Rewards.badge(), eq = Chests.equipped(Store.data);
     box.innerHTML = `<a href="#/progress" class="hud-rank" title="${fmt(g.xp.total)} XP${g.rank.next ? ' · ' + fmt(g.rank.next.xp - g.xp.total) + ' to ' + esc(g.rank.next.name) : ''}">
-        <b>${esc(g.rank.name)}</b><span class="hud-bar"><i style="width:${pct(g)}%"></i></span></a>
-      <span class="hud-streak ${g.streak.current ? 'on' : ''}" title="${g.streak.current}-day streak · best ${g.streak.best} · ${g.streak.leave} leave day${g.streak.leave === 1 ? '' : 's'}">${FLAME}${g.streak.current}</span>
+        <b>${esc(g.rank.name)}</b>${eq.title ? `<small class="hud-title">${esc(eq.title.name)}</small>` : ''}<span class="hud-bar"><i style="width:${pct(g)}%"></i></span></a>
+      <span class="hud-streak ${g.streak.current ? 'on' : ''}${eq.flame ? ' flame-' + eq.flame.value : ''}" title="${g.streak.current}-day streak · best ${g.streak.best} · ${g.streak.leave} leave day${g.streak.leave === 1 ? '' : 's'}">${FLAME}${g.streak.current}</span>
       <a href="#/progress" class="hud-quests${qb.claimable ? ' ready' : ''}" title="Daily quests: ${qb.done} of ${qb.total} done${qb.claimable ? ' · reward ready' : ''}">${qb.done}/${qb.total}</a>`;
   }
   function toast(title, body) {

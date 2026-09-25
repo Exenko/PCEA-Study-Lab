@@ -25,5 +25,13 @@ module.exports = [
     assert.ok(html.includes('href="#/shop/pipe/esc-compound"'));
     assert.strictEqual(html.split('wk-chip stalled').length - 1, 1);
     assert.strictEqual(F.stallChip(d, 'lc-unit', sched({})), '');
+  }],
+  ['firm panel carries the equipped, owned desk theme class', () => {
+    const own = { 'chest-w-2026-W39': { chest: 'big', quest: 'w-2026-W39', rolls: [{ kind: 'cosmetic', cos: 'desk-brass' }], t: 1 } };
+    const d = D(pipe('esc-compound', 0), own);
+    d.settings = { cosmetics: { desk: 'desk-brass' } };
+    assert.ok(F.panel(d, 40 * H, sched({})).startsWith('<div class="firm desk-brass">'));
+    d.settings.cosmetics.desk = 'desk-ledger';
+    assert.ok(F.panel(d, 40 * H, sched({})).startsWith('<div class="firm">'));
   }]
 ];
