@@ -1,6 +1,7 @@
 const assert = require('assert');
 const I = require('../js/shop/idle.js');
 const C = require('../js/shop/core.js');
+const G = require('../js/game.js');
 const Store = require('./fixtures/load-store.js')();
 const H = I.HOUR;
 const pipe = (id, at, extra) => ({ ['pipe-' + id]: Object.assign({ pipe: id, steps: [], outs: [], stepCount: 2, primitivesOnly: false, passed: true, tier: 1, passedAt: at, t: at }, extra) });
@@ -131,5 +132,45 @@ module.exports = [
     const d2 = D(pipe('a', 1000), { shift: { shift: { a: 1000 }, off: [], t: 10 * H } });
     Object.assign(d2.shop, pipe('z', 3000));
     assert.ok(I.onShift(d2).find(o => o.id === 'z' && o.since === 3000));
+  }],
+  ['an open event caps accrual at its time; the window before stays collectable', () => {
+    const A = 5 * H, d = D(pipe('a', 0), { ['evt-a-' + A]: { evt: 'a', kind: 'shock', module: 'm05', at: A, seed: 1, t: A } });
+    assert.strictEqual(I.stalledAt(d, 'a'), A);
+    assert.deepStrictEqual(I.outbox(d, 'a', 8 * H), { amount: 70, hours: 5, full: false });
+    assert.strictEqual(I.outbox(d, 'a', 3 * H).amount, 42);
+    const c = I.collect(d, 'a', 8 * H);
+    assert.deepStrictEqual(c.rec, { collect: 'a', from: 0, to: A, amount: 70, t: 8 * H });
+    d.shop[c.key] = c.rec;
+    assert.strictEqual(I.collect(d, 'a', 9 * H), null);
+  }],
+  ['resolving restarts accrual at the resolve time and pays the bonus as cash only', () => {
+    const A = 5 * H, d = D(pipe('a', 0), {
+      ['evt-a-' + A]: { evt: 'a', kind: 'shock', module: 'm05', at: A, seed: 1, t: A },
+      ['collect-a-0']: { collect: 'a', from: 0, to: A, amount: 70, t: A },
+      ['evtdone-a-' + A]: { evtdone: 'evt-a-' + A, bonus: 28, t: 7 * H }
+    });
+    assert.strictEqual(I.stalledAt(d, 'a'), null);
+    assert.strictEqual(I.start(d, 'a', 0), 7 * H);
+    assert.strictEqual(I.outbox(d, 'a', 8 * H).amount, 14);
+    const st = C.state(d);
+    assert.strictEqual(st.cash, 98);
+    assert.strictEqual(st.completed, 0);
+    assert.strictEqual(st.rep, 0);
+    assert.strictEqual(G.xpBreakdown(d).shop, 0);
+  }],
+  ['two open events on one pipeline: earliest is the open one', () => {
+    const d = D(pipe('a', 0), { 'evt-a-9': { evt: 'a', kind: 'audit', module: 'm05', at: 9, cards: [], seed: 1, t: 9 }, 'evt-a-4': { evt: 'a', kind: 'shock', module: 'm05', at: 4, seed: 2, t: 4 } });
+    assert.deepStrictEqual(I.openEvents(d, 'a').map(o => o.key), ['evt-a-4', 'evt-a-9']);
+    assert.strictEqual(I.openEvent(d, 'a').key, 'evt-a-4');
+    assert.strictEqual(I.openEvent(d, 'b'), null);
+  }],
+  ['a stalled pipeline turned off and on again still earns nothing until resolved', () => {
+    const A = 5 * H, d = D(pipe('a', 0), pipe('b', 0), { ['evt-a-' + A]: { evt: 'a', kind: 'shock', module: 'm05', at: A, seed: 1, t: A } });
+    const off = I.setShift(d, ['b'], 8 * H);
+    assert.strictEqual(off.writes[0].rec.to, A);
+    apply(d, off);
+    apply(d, I.setShift(d, ['a', 'b'], 9 * H));
+    assert.strictEqual(I.outbox(d, 'a', 12 * H).amount, 0);
+    assert.strictEqual(I.collect(d, 'a', 12 * H), null);
   }]
 ];

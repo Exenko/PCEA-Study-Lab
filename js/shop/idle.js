@@ -43,11 +43,26 @@
     const gross = RATE * (C.BASE[r.tier] || C.BASE[1]), upkeep = UPKEEP * (r.stepCount || 0);
     return { gross, upkeep, net: Math.max(0, gross * firm(d).mult - upkeep) };
   }
-  const start = (d, id, since) => recs(d).filter(r => r.collect === id && Number.isFinite(r.to)).reduce((m, r) => Math.max(m, r.to), since);
+  const shop = d => (d && d.shop) || {};
+  // An event is open while its evt record exists and no evtdone record points at it. Two devices can race, so keep them all, earliest first.
+  function openEvents(d, id) {
+    const s = shop(d), done = new Set(Object.values(s).filter(r => r && typeof r.evtdone === 'string').map(r => r.evtdone));
+    return Object.entries(s).filter(([key, r]) => r && r.evt === id && Number.isFinite(r.at) && !done.has(key))
+      .map(([key, rec]) => ({ key, rec })).sort((a, b) => a.rec.at - b.rec.at || (a.key < b.key ? -1 : 1));
+  }
+  const openEvent = (d, id) => openEvents(d, id)[0] || null;
+  const stalledAt = (d, id) => { const o = openEvent(d, id); return o ? o.rec.at : null; };
+  const end = (d, id, now) => { const at = stalledAt(d, id); return at == null ? now : Math.min(now, at); };
+  const resolvedFor = (d, r) => (shop(d)[r.evtdone] || {}).evt;
+  const start = (d, id, since) => recs(d).reduce((m, r) => {
+    if (r.collect === id && Number.isFinite(r.to)) return Math.max(m, r.to);
+    if (typeof r.evtdone === 'string' && Number.isFinite(r.t) && resolvedFor(d, r) === id) return Math.max(m, r.t);
+    return m;
+  }, since);
   function outbox(d, id, now) {
     const o = onShift(d).find(x => x.id === id);
     if (!o) return { amount: 0, hours: 0, full: false };
-    const f = firm(d), hours = Math.max(0, (now - start(d, id, o.since)) / HOUR);
+    const f = firm(d), hours = Math.max(0, (end(d, id, now) - start(d, id, o.since)) / HOUR);
     return { amount: r1(rate(d, id).net * Math.min(f.capHours, hours)), hours, full: hours >= f.capHours };
   }
   function collect(d, id, now) {
@@ -56,7 +71,7 @@
     const b = outbox(d, id, now);
     if (!(b.amount > 0)) return null;
     const s = start(d, id, o.since);
-    return { key: 'collect-' + id + '-' + s, rec: { collect: id, from: s, to: now, amount: b.amount, t: now } };
+    return { key: 'collect-' + id + '-' + s, rec: { collect: id, from: s, to: end(d, id, now), amount: b.amount, t: now } };
   }
   const collectAll = (d, now) => onShift(d).map(o => collect(d, o.id, now)).filter(Boolean);
 
@@ -104,6 +119,6 @@
     return { writes };
   }
 
-  const ShopIdle = { HOUR, CAPS, UPGRADES, firm, running, onShift, rate, start, outbox, collect, collectAll, setShift, repass, buyUpgrade };
+  const ShopIdle = { HOUR, CAPS, UPGRADES, firm, running, onShift, rate, start, outbox, collect, collectAll, setShift, repass, buyUpgrade, openEvents, openEvent, stalledAt };
   if (typeof module !== 'undefined' && module.exports) module.exports = ShopIdle; else root.ShopIdle = ShopIdle;
 })(this);

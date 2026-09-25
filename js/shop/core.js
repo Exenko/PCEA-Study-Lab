@@ -74,6 +74,7 @@
       if (r.tool) { cash -= r.cost || 0; owned[r.tool] = (owned[r.tool] || 0) + 1; }
       if (r.use) used[r.use] = (used[r.use] || 0) + 1;
       if (r.collect) cash += credit.get(r) || 0;
+      if (r.evtdone) cash += r.bonus || 0;
       if (r.upg) { cash -= r.cost || 0; if (r.upg in upgrades) upgrades[r.upg]++; }
     }
     const repLevel = Math.floor(Math.sqrt(rep));
