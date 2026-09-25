@@ -3,23 +3,41 @@
   const C = typeof module !== 'undefined' && module.exports ? require('./core.js') : root.ShopCore;
   const I = typeof module !== 'undefined' && module.exports ? require('./idle.js') : root.ShopIdle;
   const T = typeof module !== 'undefined' && module.exports ? require('./templates.js') : root.ShopTemplates;
+  const E = typeof module !== 'undefined' && module.exports ? require('./events.js') : root.ShopEvents;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const money = v => '$' + (+v).toLocaleString('en-US', { maximumFractionDigits: 1 }) + 'K';
   const title = id => (T.find(t => t.id === id) || { title: id }).title;
   const pct = (hours, cap) => Math.min(100, hours / cap * 100);
   let timer = null;
 
-  function panel(d, now) {
+  // Browser scheduler for ShopEvents: due and last-review state from Scheduler, card ids per module from PCEA.
+  const env = () => ({ profile: Store.profile, isDue: Scheduler.isDue, get: Scheduler.get,
+    cards: m => { const mod = PCEA.module(m); return mod ? mod.cardList.map(c => c.id) : []; } });
+  function stallChip(d, id, sched) {
+    const o = E.open(d, id);
+    if (!o) return '';
+    if (o.rec.kind === 'audit') {
+      const p = E.auditProgress(d, o.rec, sched), m = esc(o.rec.module);
+      return `<span class="wk-chip stalled">Stalled: Audit ${m} (${p.done}/${p.total} reviewed)</span>
+        <div class="idle-acts">${p.done >= p.total ? `<button class="btn small" data-resolve="${esc(id)}">Resolve</button>` : `<a class="btn small ghost" href="#/cards?m=${m}">Review cards</a>`}</div>`;
+    }
+    return `<span class="wk-chip stalled">Stalled: Market shock</span>
+      <div class="idle-acts"><a class="btn small ghost" href="#/shop/pipe/${esc(id)}">Fix in Workshop</a></div>`;
+  }
+  const eventLine = w => title(w.rec.evt) + ': ' + (w.rec.kind === 'audit' ? 'audit, ' + (w.rec.cards || []).length + ' cards to review' : 'market shock');
+
+  function panel(d, now, sched) {
     if (!I.running(d).length) return '';
     const f = I.firm(d), shift = I.onShift(d);
     let total = 0;
     const cards = shift.map(o => {
       const r = I.rate(d, o.id), b = I.outbox(d, o.id, now);
       total += b.amount;
-      return `<div class="idle-desk" data-desk="${esc(o.id)}"><b>${esc(title(o.id))}</b>
+      const stall = stallChip(d, o.id, sched);
+      return `<div class="idle-desk${stall ? ' stalled' : ''}" data-desk="${esc(o.id)}"><b>${esc(title(o.id))}</b>
         <span class="muted small">${money(r.net)}/h net</span>
         <div class="idle-out"><output>${money(b.amount)}</output><span class="wk-chip full" ${b.full ? '' : 'hidden'}>Full</span></div>
-        <div class="hud-bar"><i style="width:${pct(b.hours, f.capHours)}%"></i></div></div>`;
+        <div class="hud-bar"><i style="width:${pct(b.hours, f.capHours)}%"></i></div>${stall}</div>`;
     });
     for (let i = shift.length; i < f.desks; i++) cards.push('<div class="idle-desk empty"><span class="muted small">Empty desk: automate a contract in the Workshop</span></div>');
     return `<h2>Your desks</h2>
@@ -49,12 +67,21 @@
     clearInterval(timer);
     const btn = root.querySelector('#collect');
     if (btn) btn.onclick = () => {
-      const ws = I.collectAll(Store.data, Date.now());
-      if (!ws.length) return;
-      apply(ws);
-      Hud.toast('+' + money(Math.round(ws.reduce((s, w) => s + w.rec.amount, 0) * 10) / 10) + ' banked', ws.length + ' desk' + (ws.length > 1 ? 's' : ''));
+      const res = E.collectAll(Store.data, Date.now(), env());
+      if (!res.writes.length) return;
+      apply(res.writes);
+      const cols = res.writes.filter(w => w.rec.collect), cash = Math.round(cols.reduce((s, w) => s + w.rec.amount, 0) * 10) / 10;
+      Hud.toast('+' + money(cash) + ' banked', res.events.length ? 'While you were away... ' + res.events.map(eventLine).join('; ')
+        : cols.length + ' desk' + (cols.length > 1 ? 's' : ''));
       rerender();
     };
+    root.querySelectorAll('[data-resolve]').forEach(b => b.onclick = () => {
+      const r = E.resolveAudit(Store.data, b.dataset.resolve, Date.now(), env());
+      if (!r) { rerender(); return; }
+      apply(r.writes);
+      Hud.toast('Audit cleared', '+' + money(r.rec.bonus) + ' bonus');
+      rerender();
+    });
     root.querySelectorAll('[data-upg]').forEach(b => b.onclick = () => {
       const res = I.buyUpgrade(Store.data, b.dataset.upg, Date.now());
       if (!res) return;
@@ -78,6 +105,6 @@
       if (btn) btn.disabled = total <= 0;
     }, 1000);
   }
-  const ShopFirm = { panel, upgradesHTML, wire };
+  const ShopFirm = { panel, upgradesHTML, wire, env, stallChip };
   if (typeof module !== 'undefined' && module.exports) module.exports = ShopFirm; else root.ShopFirm = ShopFirm;
 })(this);

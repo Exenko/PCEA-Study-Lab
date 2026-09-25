@@ -31,7 +31,7 @@ const Shop = (() => {
     const offers = C.offers(Store.profile, Store.data, cat, ShopTemplates);
     const locked = [...new Set(ShopTemplates.map(t => t.module))].filter(m => !open.has(m)).sort();
     root.innerHTML = `<div class="shop">${header(st)}
-      ${ShopFirm.panel(Store.data, Date.now())}
+      ${ShopFirm.panel(Store.data, Date.now(), ShopFirm.env())}
       <h2>Contract board</h2>
       <p class="muted">New offers appear after each job. Pay depends on accuracy: within 1% earns full pay, within 5% earns 60%, within 10% earns 20%, and anything further off costs you.</p>
       <div class="offers">${offers.map(o => `<a class="offer" href="#/shop/job/${o.slot}">
