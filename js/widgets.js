@@ -1,16 +1,51 @@
-// Interactive widgets. Use in content with  :::widget name args:::
+// Interactive widgets. Use in content with  :::widget name [key=value ...] [lock=a,b]:::
 const Widgets = (() => {
   const reg = {};
   const E = Render.el;
+  const M = WMath;
+  const { mean, sd, quant, ols } = M;
+  const median = a => quant([...a].sort((x, y) => x - y), 0.5);
   const f2 = (v, d = 2) => (isFinite(v) ? Number(v).toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
   const pct = (v, d = 1) => (isFinite(v) ? (v * 100).toFixed(d) + '%' : '—');
+  const DEV = typeof location !== 'undefined' && /[?&]dev\b/.test(location.search);
+
+  // ---------- widget handle: presets, locks, setters, published outputs ----------
+  function handle(a) {
+    const listeners = [];
+    const w = {
+      name: a.name, presets: a.presets, lock: new Set(a.lock), out: {}, setters: {},
+      set(k, v) { if (w.setters[k]) w.setters[k](v); },
+      setMany(o) { Object.keys(o).forEach(k => w.set(k, o[k])); },
+      onUpdate(fn) { listeners.push(fn); },
+      emit(out) { w.out = out; listeners.forEach(f => f(out)); }
+    };
+    return w;
+  }
+  function mount(box, argStr) {
+    const a = Challenge.parseArgs(argStr);
+    const w = box.w = handle(a);
+    const fn = reg[a.name];
+    if (!fn) { box.textContent = 'Unknown widget: ' + a.name; return w; }
+    try { fn(box, w); } catch (e) { box.textContent = 'Widget error: ' + e.message; console.error(e); }
+    return w;
+  }
+  function publish(box, out) {
+    if (DEV && typeof WidgetMeta !== 'undefined') {
+      const want = ((WidgetMeta[box.w.name] || {}).outputs || []).slice().sort().join();
+      if (Object.keys(out).sort().join() !== want) console.warn('widget', box.w.name, 'published', Object.keys(out), 'manifest', want);
+    }
+    box.w.emit(out);
+  }
+  const preset = (box, k, d) => (k in box.w.presets ? box.w.presets[k] : d);
 
   // ---------- shared helpers ----------
   function controls(box, defs, onChange) {
+    const w = box.w;
     const wrap = E('div', 'w-controls');
     const vals = {};
     defs.forEach(d => {
-      vals[d.k] = d.v;
+      const v0 = d.k in w.presets ? w.presets[d.k] : d.v;
+      vals[d.k] = d.type === 'select' ? String(v0) : +v0;
       const lab = E('label', 'w-ctl');
       const name = E('span', 'w-ctl-name', d.label);
       const out = E('span', 'w-ctl-val');
@@ -18,21 +53,22 @@ const Widgets = (() => {
       if (d.type === 'select') {
         inp = E('select');
         d.options.forEach(o => { const op = E('option', null, o[1]); op.value = o[0]; inp.appendChild(op); });
-        inp.value = d.v;
       } else {
         inp = E('input');
         inp.type = d.type || 'range';
         if (d.min != null) inp.min = d.min;
         if (d.max != null) inp.max = d.max;
         inp.step = d.step || 'any';
-        inp.value = d.v;
       }
+      inp.value = vals[d.k];
       const show = () => { out.textContent = d.type === 'select' || d.type === 'number' ? '' : (d.fmt ? d.fmt(vals[d.k]) : vals[d.k]); };
       inp.addEventListener('input', () => {
         vals[d.k] = d.type === 'select' ? inp.value : parseFloat(inp.value);
         if (d.type !== 'select' && isNaN(vals[d.k])) return;
         show(); onChange(vals);
       });
+      w.setters[d.k] = x => { vals[d.k] = d.type === 'select' ? String(x) : +x; inp.value = vals[d.k]; show(); onChange(vals); };
+      if (w.lock.has(d.k)) lab.hidden = true;
       show();
       lab.append(name, inp, out);
       wrap.appendChild(lab);
@@ -54,40 +90,6 @@ const Widgets = (() => {
     box.appendChild(E('div', 'w-legend', items.map(([cls, t]) => `<span><i class="sw ${cls}"></i>${Render.inline(t)}</span>`).join('')));
   }
 
-  // ---------- math helpers ----------
-  function mean(a) { return a.reduce((s, x) => s + x, 0) / a.length; }
-  function sd(a) { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1)); }
-  function quant(sorted, p) {
-    const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i);
-    return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo);
-  }
-  function median(a) { const s = [...a].sort((x, y) => x - y); return quant(s, 0.5); }
-  function erf(x) {
-    const t = 1 / (1 + 0.3275911 * Math.abs(x));
-    const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
-    return x >= 0 ? y : -y;
-  }
-  const Phi = z => 0.5 * (1 + erf(z / Math.SQRT2));
-  function randn() { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-  function triInv(u, a, c, b) {
-    if (b <= a) return a;
-    const Fc = (c - a) / (b - a);
-    return u < Fc ? a + Math.sqrt(u * (b - a) * (c - a)) : b - Math.sqrt((1 - u) * (b - a) * (b - c));
-  }
-  function ols(xs, ys) {
-    const n = xs.length;
-    const mx = mean(xs), my = mean(ys);
-    let sxx = 0, sxy = 0, sst = 0;
-    for (let i = 0; i < n; i++) { sxx += (xs[i] - mx) ** 2; sxy += (xs[i] - mx) * (ys[i] - my); sst += (ys[i] - my) ** 2; }
-    const b1 = sxy / sxx, b0 = my - b1 * mx;
-    let sse = 0;
-    const res = xs.map((x, i) => { const e = ys[i] - (b0 + b1 * x); sse += e * e; return e; });
-    const ssr = sst - sse, df = n - 2;
-    const mse = sse / df, see = Math.sqrt(mse);
-    const seb1 = see / Math.sqrt(sxx);
-    return { n, b0, b1, mx, my, sst, sse, ssr, r2: ssr / sst, see, cv: see / my, t: b1 / seb1, F: ssr / mse, res, sxx };
-  }
-
   // ======================================================================
   // M6: descriptive statistics lab
   reg['stats-lab'] = box => {
@@ -99,7 +101,7 @@ const Widgets = (() => {
       'With outlier': '48, 50, 51, 49, 52, 50, 47, 53, 51, 50, 49, 95'
     };
     const bar = E('div', 'w-presets');
-    const ta = E('textarea', 'w-data'); ta.rows = 2; ta.value = presets['Practice Q1'];
+    const ta = E('textarea', 'w-data'); ta.rows = 2; ta.value = String(preset(box, 'data', presets['Practice Q1'])).replace(/,(?=\S)/g, ', ');
     Object.keys(presets).forEach(k => { const b = E('button', 'chip', k); b.onclick = () => { ta.value = presets[k]; draw(); }; bar.appendChild(b); });
     box.append(bar, ta);
     const plotBox = E('div'); box.appendChild(plotBox);
@@ -108,7 +110,7 @@ const Widgets = (() => {
     function draw() {
       const a = ta.value.split(/[\s,;]+/).map(parseFloat).filter(isFinite);
       plotBox.innerHTML = '';
-      if (a.length < 2) { ro([['Need at least 2 numbers', '']]); return; }
+      if (a.length < 2) { ro([['Need at least 2 numbers', '']]); publish(box, { n: a.length, mean: NaN, median: NaN, sd: NaN, cv: NaN, beyond2: NaN }); return; }
       const s = [...a].sort((x, y) => x - y);
       const m = mean(a), med = quant(s, 0.5), sdev = sd(a), cv = sdev / m;
       const counts = {}; a.forEach(x => counts[x] = (counts[x] || 0) + 1);
@@ -132,7 +134,9 @@ const Widgets = (() => {
         ['CV', pct(cv), cv < 0.15 ? 'good' : 'bad'], ['Shape', skew],
         ['Beyond 2s', a.filter(x => Math.abs(x - m) > 2 * sdev).length], ['Beyond 3s', a.filter(x => Math.abs(x - m) > 3 * sdev).length]
       ]);
+      publish(box, { n: a.length, mean: m, median: med, sd: sdev, cv, beyond2: a.filter(x => Math.abs(x - m) > 2 * sdev).length });
     }
+    box.w.setters.data = s => { ta.value = String(s).replace(/,(?=\S)/g, ', '); draw(); };
     ta.oninput = draw; draw();
   };
 
@@ -148,7 +152,8 @@ const Widgets = (() => {
     box.appendChild(row);
     const note = E('div', 'w-note'); box.appendChild(note);
     const xs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20];
-    const noise = xs.map(() => 1 + 0.05 * randn());
+    const rnd = M.rng(7);
+    const noise = xs.map(() => 1 + 0.05 * M.randn(rnd));
     function draw() {
       L.innerHTML = ''; R.innerHTML = '';
       const f = v.f === 'linear' ? x => v.a + v.b * x : v.f === 'power' ? x => v.a * Math.pow(x, v.b) : x => v.a * Math.exp(v.b * x / 5);
@@ -169,6 +174,7 @@ const Widgets = (() => {
       p2.fn(x => fit.b0 + fit.b1 * x, 'series c2');
       const back = v.f === 'linear' ? `a = ${f2(fit.b0)}, b = ${f2(fit.b1, 3)}` : `a = e^${f2(fit.b0, 3)} = ${f2(Math.exp(fit.b0))}, b = ${f2(v.f === 'exp' ? fit.b1 * 5 : fit.b1, 3)}`;
       note.innerHTML = Render.inline(`Fit in ${lbl[2]} space: slope ${f2(fit.b1, 3)}, intercept ${f2(fit.b0, 3)}, $R^2$ = ${f2(fit.r2, 3)}. Transformed back: ${back}.`);
+      publish(box, { r2: fit.r2, slope: fit.b1, intercept: fit.b0 });
     }
     draw();
   };
@@ -218,6 +224,7 @@ const Widgets = (() => {
         [`Total cost units 1–${N}`, f2(sum)],
         ['Unit-cost ratio at doublings', doubling.slice(0, 4).join(' · ') || '—']
       ]);
+      publish(box, { b, unitN: unit[N - 1][1], cavN: cav[N - 1][1], totalN: sum });
     }
     draw();
   };
@@ -252,6 +259,7 @@ const Widgets = (() => {
         ['True LMP (exact discrete sum)', f2(exact, 3), 'good'],
         ['True LMP as a fraction of N', F === 1 ? f2(exact / N, 3) + ' × N' : 'n/a (not first lot)']
       ]);
+      publish(box, { ari, geo, heur, half, exact });
     }
     draw();
   };
@@ -261,14 +269,17 @@ const Widgets = (() => {
   reg['regression'] = box => {
     title(box, 'Regression playground', 'click to add points, drag to move, right-click to delete');
     const presets = {
-      'Seeker (guide)': [[4, 5], [7, 5], [8, 10], [12, 7], [16, 13]],
-      'Tight linear': [[2, 4.1], [4, 6.2], [6, 7.8], [8, 10.3], [10, 11.9], [12, 14.2], [14, 15.8], [16, 18.1]],
-      'Curved (try a transform)': [[1, 2], [2, 2.6], [4, 3.9], [6, 5.8], [8, 8.4], [10, 11.8], [12, 16], [14, 21], [16, 27]],
-      'Funnel (heteroscedastic)': [[2, 3], [3, 3.4], [5, 4.2], [7, 7.5], [9, 5.5], [11, 11], [13, 6.8], [15, 15.5], [17, 8.5], [18, 17]]
+      seeker: ['Seeker (guide)', [[4, 5], [7, 5], [8, 10], [12, 7], [16, 13]]],
+      tight: ['Tight linear', [[2, 4.1], [4, 6.2], [6, 7.8], [8, 10.3], [10, 11.9], [12, 14.2], [14, 15.8], [16, 18.1]]],
+      outlier: ['One bad point', [[2, 4.1], [4, 6.2], [6, 7.8], [8, 10.3], [10, 11.9], [12, 14.2], [14, 15.8], [16, 2]]],
+      curved: ['Curved (try a transform)', [[1, 2], [2, 2.6], [4, 3.9], [6, 5.8], [8, 8.4], [10, 11.8], [12, 16], [14, 21], [16, 27]]],
+      funnel: ['Funnel (heteroscedastic)', [[2, 3], [3, 3.4], [5, 4.2], [7, 7.5], [9, 5.5], [11, 11], [13, 6.8], [15, 15.5], [17, 8.5], [18, 17]]]
     };
-    let pts = presets['Seeker (guide)'].map(p => p.slice());
+    let pts;
+    const load = id => { pts = (presets[id] || presets.seeker)[1].map(p => p.slice()); };
+    load(preset(box, 'data', 'seeker'));
     const bar = E('div', 'w-presets');
-    Object.keys(presets).forEach(k => { const b = E('button', 'chip', k); b.onclick = () => { pts = presets[k].map(p => p.slice()); draw(); }; bar.appendChild(b); });
+    Object.keys(presets).forEach(k => { const b = E('button', 'chip', presets[k][0]); b.onclick = () => { load(k); draw(); }; bar.appendChild(b); });
     const clr = E('button', 'chip', 'Clear'); clr.onclick = () => { pts = []; draw(); }; bar.appendChild(clr);
     box.appendChild(bar);
     const top = E('div'), bot = E('div');
@@ -306,7 +317,7 @@ const Widgets = (() => {
     function draw() {
       p.clear(); p.axes(); rp.clear();
       pts.forEach((q, i) => p.dot(q[0], q[1], i === drag ? 'pt hot' : 'pt', 6));
-      if (pts.length < 3) { rp.axes(); ro([['Add at least 3 points', '']]); return; }
+      if (pts.length < 3) { rp.axes(); ro([['Add at least 3 points', '']]); publish(box, { n: pts.length, b0: NaN, b1: NaN, r2: NaN, see: NaN, cv: NaN, t: NaN, p: NaN, sse: NaN }); return; }
       const r = ols(pts.map(q => q[0]), pts.map(q => q[1]));
       p.fn(x => r.b0 + r.b1 * x, 'series c1');
       p.dot(r.mx, r.my, 'pt mean', 5);
@@ -316,7 +327,7 @@ const Widgets = (() => {
       pts.forEach((q, i) => rp.dot(q[0], r.res[i], 'pt alt', 4));
       // approximate two-tailed p for t via normal/t tail (df small -> use t approx)
       const df = r.n - 2;
-      const tp = 2 * (1 - tcdf(Math.abs(r.t), df));
+      const tp = 2 * (1 - M.tcdf(Math.abs(r.t), df));
       ro([
         ['Equation', `Ŷ = ${f2(r.b0)} + ${f2(r.b1, 3)}X`],
         ['$R^2$', f2(r.r2, 3)],
@@ -325,39 +336,9 @@ const Widgets = (() => {
         ['t-stat (slope)', f2(r.t)], ['F = $t^2$', f2(r.F)],
         ['p-value (slope)', f2(tp, 3), tp < 0.05 ? 'good' : 'bad'], ['n, df', `${r.n}, ${df}`]
       ]);
+      publish(box, { n: r.n, b0: r.b0, b1: r.b1, r2: r.r2, see: r.see, cv: r.cv, t: r.t, p: tp, sse: r.sse });
     }
-    // Student t CDF via regularized incomplete beta (continued fraction)
-    function tcdf(t, df) {
-      const x = df / (df + t * t);
-      return 1 - 0.5 * ibeta(x, df / 2, 0.5);
-    }
-    function ibeta(x, a, b) {
-      if (x <= 0) return 0; if (x >= 1) return 1;
-      const lbeta = lgamma(a + b) - lgamma(a) - lgamma(b);
-      const front = Math.exp(Math.log(x) * a + Math.log(1 - x) * b + lbeta);
-      if (x < (a + 1) / (a + b + 2)) return front * cf(x, a, b) / a;
-      return 1 - front * cf(1 - x, b, a) / b;
-    }
-    function cf(x, a, b) {
-      let c = 1, d = 1 - (a + b) * x / (a + 1); d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); let h = d;
-      for (let m = 1; m < 200; m++) {
-        const m2 = 2 * m;
-        let aa = m * (b - m) * x / ((a + m2 - 1) * (a + m2));
-        d = 1 + aa * d; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); c = 1 + aa / c; h *= d * c;
-        aa = -(a + m) * (a + b + m) * x / ((a + m2) * (a + m2 + 1));
-        d = 1 + aa * d; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); c = 1 + aa / c;
-        const del = d * c; h *= del; if (Math.abs(del - 1) < 1e-10) break;
-      }
-      return h;
-    }
-    function lgamma(z) {
-      const g = [676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
-      if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lgamma(1 - z);
-      z -= 1; let x = 0.99999999999980993;
-      for (let i = 0; i < 8; i++) x += g[i] / (z + i + 1);
-      const t = z + 7.5;
-      return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
-    }
+    box.w.setters.data = id => { load(id); draw(); };
     draw();
   };
 
@@ -386,6 +367,7 @@ const Widgets = (() => {
       }
       tb.innerHTML = h + '</table>';
       note.innerHTML = Render.inline(`Outlay profile normalized to ${pn.map(x => pct(x, 0)).join(' / ')}. In ${BY} the raw index is 1.0000 (the base year), but the weighted index is **${wtd(BY).toFixed(4)}** because money appropriated in ${BY} is spent over three years at later price levels. **BY$ → TY$: multiply. TY$ → BY$: divide.**`);
+      publish(box, { raw1: raw(BY + 1), wtdBY: wtd(BY), tyBY: v.amt * wtd(BY) });
     }
     draw();
   };
@@ -414,19 +396,11 @@ const Widgets = (() => {
     const ro = readout(box);
     run.onclick = go;
     function go() {
-      const N = +v.n, rho = v.rho, out = new Float64Array(N);
-      for (let t = 0; t < N; t++) {
-        const Z = randn(); let s = 0;
-        for (const e of els) {
-          const z = Math.sqrt(rho) * Z + Math.sqrt(1 - rho) * randn();
-          s += triInv(Phi(z), Math.min(e.a, e.c), e.c, Math.max(e.b, e.c));
-        }
-        out[t] = s;
-      }
-      const s = Array.from(out).sort((x, y) => x - y);
+      const N = +v.n;
+      const s = M.mcSum(els, v.rho, N, 11);
       const pe = els.reduce((a, e) => a + e.c, 0);
       const mu = mean(s), sdev = sd(s);
-      const pctOfPE = s.findIndex(x => x > pe) / N;
+      const above = s.findIndex(x => x > pe), pctOfPE = (above < 0 ? N : above) / N;
       L.innerHTML = ''; R.innerHTML = '';
       const bins = 30, lo = s[0], hi = s[N - 1], w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
       s.forEach(x => cnt[Math.min(bins - 1, Math.floor((x - lo) / w))]++);
@@ -443,6 +417,7 @@ const Widgets = (() => {
         ['50th percentile', f2(quant(s, 0.5), 1)], ['80th percentile', f2(quant(s, 0.8), 1)],
         ['Sum of element means', f2(els.reduce((a, e) => a + (e.a + e.b + e.c) / 3, 0), 1)]
       ]);
+      publish(box, { pe, pePct: pctOfPE, mean: mu, sd: sdev, p50: quant(s, 0.5), p70: quant(s, 0.7), p80: quant(s, 0.8) });
     }
     go();
   };
@@ -488,6 +463,7 @@ const Widgets = (() => {
       p.vline(mu, 'marker c1'); p.vline(med, 'marker c2'); p.vline(mode, 'marker c3');
       ro([['Parameters', desc], ['Mean', f2(mu)], ['Median', f2(med)], ['Mode', f2(mode)], ['Std dev', f2(s)],
         ['Skew', Math.abs(mu - med) < 0.01 * (s || 1) ? 'symmetric' : mu > med ? 'right (mean > median > mode)' : 'left']]);
+      publish(box, { mean: mu, median: med, mode, sd: s });
     }
     draw();
   };
@@ -528,6 +504,7 @@ const Widgets = (() => {
         ['EUAC A / B', `${f2(pvA / sumDf, 1)} / ${f2(pvB / sumDf, 1)}`],
         ['SIR of B over A = PV savings / extra investment', v.ib !== v.ia ? f2(sir, 2) : '—', sir > 1 ? 'good' : 'bad']
       ]);
+      publish(box, { pvA, pvB, diff: pvA - pvB, sir });
     }
     draw();
   };
@@ -571,6 +548,7 @@ const Widgets = (() => {
         ['Final price', f2(r.price)],
         ['Region', v.ac <= v.tc ? 'underrun: contractor keeps ' + pct(1 - v.gs, 0) + ' of savings' : v.ac <= pta ? 'overrun, still sharing' : 'beyond PTA: contractor absorbs 100%']
       ]);
+      publish(box, { tpPrice, pta, ac: v.ac, profit: r.profit, price: r.price });
     }
     draw();
   };
@@ -597,6 +575,7 @@ const Widgets = (() => {
       p.axes(); p.fn(fee, 'series c1'); p.vline(v.ac, 'marker hot');
       ro([['RIE (fee between min and max)', `${f2(lo, 1)} to ${f2(hi, 1)}`, 'c2t'], ['Fee at actual cost', f2(fee(v.ac)), 'good'],
         ['Total price to government', f2(v.ac + fee(v.ac))], ['Fee as % of actual cost', pct(fee(v.ac) / v.ac)]]);
+      publish(box, { rieLo: lo, rieHi: hi, fee: fee(v.ac), price: v.ac + fee(v.ac) });
     }
     draw();
   };
@@ -632,6 +611,7 @@ const Widgets = (() => {
         ['TCPI (to hit BAC)', f2(tcpi, 3), tcpi - cpi > 0.1 ? 'bad' : ''],
         ['TCPI − CPI', f2(tcpi - cpi, 3) + (tcpi - cpi > 0.1 ? ' (unrealistic)' : '')]
       ]);
+      publish(box, { cv, sv, cpi, spi, eac: eac1, tcpi, vac: bac - eac1 });
     }
     draw();
   };
@@ -652,6 +632,7 @@ const Widgets = (() => {
       const oh = v.dl * v.oh, sub = v.dl + oh, ga = sub * v.ga, cost = sub + ga, fee = cost * v.fee, price = cost + fee;
       ro([['Direct labor', f2(v.dl)], ['+ Overhead', f2(oh)], ['= Subtotal', f2(sub)], ['+ G&A', f2(ga)], ['= Fully burdened cost/hr', f2(cost)],
         ['+ Fee', f2(fee)], ['= Wrap rate (price/hr)', f2(price), 'good'], ['Wrap multiple on DL', f2(price / v.dl, 3) + '×'], [`Price for ${v.hrs} hrs`, f2(price * v.hrs, 0)]]);
+      publish(box, { cost, wrap: price, multiple: price / v.dl, price: price * v.hrs });
     }
     draw();
   };
@@ -675,6 +656,7 @@ const Widgets = (() => {
       p2.axes(); p2.fn(s => 1000 * s / eff(s), 'series c2');
       ro([['Effort at ' + v.s + ' KSLOC', f2(eff(v.s), 0) + ' PM'], ['Productivity', f2(1000 * v.s / eff(v.s), 0) + ' SLOC/PM'],
         ['Doubling size multiplies effort by', f2(Math.pow(2, v.E), 3) + '×'], ['Scale', v.E > 1 ? 'diseconomy of scale' : v.E < 1 ? 'economy of scale' : 'linear']]);
+      publish(box, { effort: eff(v.s), prod: 1000 * v.s / eff(v.s), doubleX: Math.pow(2, v.E) });
     }
     draw();
   };
@@ -694,6 +676,7 @@ const Widgets = (() => {
       const ratio = v.s1 / v.s0, sized = v.c0 * Math.pow(ratio, v.b), out = sized * v.cx;
       ro([['Size ratio', f2(ratio, 3)], ['Size-adjusted $C_0 (S_1/S_0)^b$', f2(sized)], ['× complexity', f2(out), 'good'],
         ['vs. linear scaling', f2(v.c0 * ratio * v.cx)]]);
+      publish(box, { ratio, sized, est: out, linear: v.c0 * ratio * v.cx });
     }
     draw();
   };
@@ -720,7 +703,8 @@ const Widgets = (() => {
       list.appendChild(r);
     });
     box.appendChild(list);
+    publish(box, {});
   };
 
-  return { get: n => reg[n], names: () => Object.keys(reg), _math: { ols, mean, sd, median } };
+  return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();

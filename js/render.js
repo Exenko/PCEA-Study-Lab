@@ -3,7 +3,7 @@
 //   +++                       step break (Brilliant-style reveal)
 //   :::check [id] ... :::     question block (see parseCheck)
 //   :::tip|warn|key|example [Title] ... :::   callout
-//   :::widget name [args]:::  interactive widget
+//   :::widget name [k=v ...] [lock=a,b]:::  interactive widget
 const Render = (() => {
   const OPEN = '\uE000', CLOSE = '\uE001';
 
@@ -189,10 +189,7 @@ const Render = (() => {
 
   function buildWidget(d) {
     const box = el('div', 'widget');
-    const [name, ...rest] = d.args.split(/\s+/);
-    const fn = Widgets.get(name);
-    if (!fn) { box.textContent = 'Unknown widget: ' + name; return box; }
-    try { fn(box, rest.join(' ')); } catch (e) { box.textContent = 'Widget error: ' + e.message; console.error(e); }
+    Widgets.mount(box, d.args);
     return box;
   }
 

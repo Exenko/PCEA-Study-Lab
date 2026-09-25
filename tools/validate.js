@@ -5,10 +5,20 @@ const root = path.join(__dirname, '..');
 global.window = {};
 eval(fs.readFileSync(path.join(root, 'js/registry.js'), 'utf8'));
 const PCEA = window.PCEA;
-const WIDGETS = ['stats-lab', 'transform', 'lc-explorer', 'lmp', 'regression', 'escalation', 'montecarlo', 'dist', 'npv', 'fpif', 'cpif', 'evm', 'burden', 'sw-effort', 'analogy', 'trl'];
+const Meta = require('../js/widget-meta.js');
+const Challenge = require('../js/challenge.js');
 const CALLOUTS = ['tip', 'warn', 'key', 'example', 'formula', 'note', 'check', 'widget'];
 let errors = 0;
 const err = (f, msg) => { errors++; console.log(`ERROR ${f}: ${msg}`); };
+
+function checkWidgetArgs(where, argStr) {
+  const a = Challenge.parseArgs(argStr), meta = Meta[a.name];
+  if (!meta) { err(where, 'unknown widget ' + a.name); return null; }
+  a.bad.forEach(t => err(where, `${a.name}: bad argument ${t}`));
+  Object.keys(a.presets).forEach(k => { if (!meta.controls.includes(k) && !meta.setters.includes(k)) err(where, `${a.name}: unknown preset ${k}`); });
+  a.lock.forEach(k => { if (!meta.controls.includes(k)) err(where, `${a.name}: cannot lock ${k}`); });
+  return meta;
+}
 
 for (const rel of process.argv.slice(2)) {
   const file = path.resolve(rel);
@@ -34,10 +44,10 @@ for (const rel of process.argv.slice(2)) {
       const op = line.match(/^:::(\w+)\s*(.*)$/);
       if (one) {
         if (one[1] !== 'widget') err(where, `single-line :::${one[1]}::: only allowed for widgets`);
-        else if (!WIDGETS.includes(one[2].split(/\s+/)[0])) err(where, 'unknown widget ' + one[2]);
+        else checkWidgetArgs(where, one[2]);
       } else if (op) {
         if (!CALLOUTS.includes(op[1])) err(where, 'unknown directive ' + op[1]);
-        if (op[1] === 'widget' && !WIDGETS.includes(op[2].split(/\s+/)[0])) err(where, 'unknown widget ' + op[2]);
+        if (op[1] === 'widget') checkWidgetArgs(where, op[2]);
         open = op[1];
       }
       if (!open && /^:::\s*$/.test(line)) err(where, `line ${i}: stray closing :::`);
