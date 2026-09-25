@@ -59,5 +59,8 @@ module.exports = [
         }
       }
     }
+  }],
+  ['every template has a hint line', () => {
+    T.forEach(t => assert.ok(typeof t.hint === 'string' && t.hint.length >= 20 && t.hint.length <= 160, t.id));
   }]
 ];

@@ -17,6 +17,7 @@
   // ---- M5 Inflation & escalation ----
   add({ id: 'esc-compound', module: 'm05', section: 'm05/procedures', title: 'Escalate to then-year dollars',
     ins: { cost: { label: 'Base-year cost', unit: '$M' }, rate: { label: 'Inflation per year', unit: '%' }, years: { label: 'Years', unit: 'yr' } },
+    hint: 'Compound forward: raise (1 + rate) to the number of years, then multiply by the base-year cost.',
     gen(h, tier) {
     const C = r1(h.num(2, 20, 0.5) * K[tier]), by = h.num(2018, 2024, 1), n = h.num(2, 8, 1), rt = h.pick([0.02, 0.025, 0.03, 0.035, 0.04]);
     const ty = C * Math.pow(1 + rt, n);
@@ -29,6 +30,7 @@
   } });
   add({ id: 'esc-index', module: 'm05', section: 'm05/indices', title: 'Deflate with index numbers',
     ins: { cost: { label: 'Then-year cost', unit: '$M' }, idxBase: { label: 'Index, base year', unit: '' }, idxYear: { label: 'Index, spend year', unit: '' } },
+    hint: 'Constant-year dollars = then-year dollars x (base-year index / spend-year index).',
     gen(h, tier) {
     const T$ = r1(h.num(5, 50, 0.5) * K[tier]), ib = r3(h.num(0.9, 1.1, 0.005)), it = r3(ib * (1 + h.num(0.05, 0.35, 0.01))), by = h.num(2015, 2022, 1), yr = by + h.num(3, 9, 1);
     const v = T$ * ib / it;
@@ -43,6 +45,7 @@
   // ---- M2 Methods ----
   add({ id: 'analogy-scale', module: 'm02', section: 'm02/analogy', title: 'Analogy with scaling and complexity',
     ins: { cost: { label: 'Analog cost', unit: '$M' }, oldWt: { label: 'Analog weight', unit: 'lb' }, newWt: { label: 'New weight', unit: 'lb' }, exp: { label: 'Scaling exponent', unit: '' }, factor: { label: 'Complexity factor', unit: '' } },
+    hint: 'Scale by (new weight / old weight) raised to the exponent, then apply the complexity factor.',
     gen(h, tier) {
     const C = r1(h.num(10, 90, 1) * K[tier]), wo = h.num(200, 900, 10), wn = r1(wo * h.num(0.7, 1.5, 0.05)), cf = h.pick([1.05, 1.1, 1.15, 1.2, 1.25, 1.3]), p = 0.7;
     const v = C * Math.pow(wn / wo, p) * cf;
@@ -57,6 +60,7 @@
   // ---- M3 Parametric ----
   add({ id: 'cer-power', module: 'm03', section: 'm03/forms', title: 'Apply a power CER',
     ins: { a: { label: 'Coefficient a', unit: '' }, b: { label: 'Exponent b', unit: '' }, weight: { label: 'Weight', unit: 'lb' } },
+    hint: 'Raise the weight to the exponent b, then multiply by the coefficient a.',
     gen(h, tier) {
     const a = h.num(1.5, 6, 0.1), b = h.num(0.5, 0.95, 0.01), X = h.num(50, 900, 10) * K[tier];
     const v = a * Math.pow(X, b);
@@ -71,6 +75,7 @@
   // ---- M6 Descriptive statistics ----
   add({ id: 'stats-cv', module: 'm06', section: 'm06/dispersion', title: 'Mean and coefficient of variation',
     ins: { costs: { label: 'Historical costs', unit: '$K' } },
+    hint: 'Find the mean first. CV = sample standard deviation (divide by n - 1) / mean, as a percent.',
     gen(h, tier) {
     const n = 4 + tier, base = h.num(20, 80, 1) * K[tier];
     const xs = []; for (let i = 0; i < n; i++) xs.push(h.num(Math.round(base * 0.6), Math.round(base * 1.4), 1));
@@ -88,6 +93,7 @@
   // ---- M7 Learning curves ----
   add({ id: 'lc-unit', module: 'm07', section: 'm07/equation', title: 'Unit cost on a learning curve',
     ins: { t1: { label: 'Unit 1 hours', unit: 'hours' }, slope: { label: 'Learning slope', unit: '%' }, unit: { label: 'Unit number', unit: '' } },
+    hint: 'Convert the slope to an exponent first: b = log2(slope). Then hours = T1 x unit^b.',
     gen(h, tier) {
     const T1 = h.num(800, 3000, 50) * K[tier], s = h.pick([0.80, 0.82, 0.85, 0.88, 0.90, 0.92, 0.95]), N = h.num(10, 200, 1);
     const b = lcB(s), v = T1 * Math.pow(N, b);
@@ -100,6 +106,7 @@
   } });
   add({ id: 'lc-lot', module: 'm07', section: 'm07/formulas', title: 'Price a production lot',
     ins: { t1: { label: 'First-unit cost', unit: '$K' }, slope: { label: 'Learning slope', unit: '%' }, first: { label: 'First unit in lot', unit: '' }, qty: { label: 'Lot quantity', unit: '' } },
+    hint: 'The lot runs from the first unit to first + quantity - 1. Add up T1 x x^b for every unit in it.',
     gen(h, tier) {
     const T1 = h.num(200, 900, 10) * K[tier], s = h.pick([0.80, 0.85, 0.88, 0.90, 0.92]), F = h.num(11, 60, 1), Q = h.num(10, 40, 1), L = F + Q - 1;
     const b = lcB(s);
@@ -114,6 +121,7 @@
   } });
   add({ id: 'lc-slope', module: 'm07', section: 'm07/process', title: 'Back out the learning slope',
     ins: { unit1: { label: 'Unit A', unit: '' }, hours1: { label: 'Hours for unit A', unit: 'hours' }, unit2: { label: 'Unit B', unit: '' }, hours2: { label: 'Hours for unit B', unit: 'hours' } },
+    hint: 'b = ln(hours B / hours A) / ln(unit B / unit A). The slope is 2^b, as a percent.',
     gen(h, tier) {
     const X1 = h.num(5, 20, 1), X2 = X1 * h.pick([2, 3, 4, 5]), Y1 = h.num(500, 2000, 10) * K[tier], s0 = h.pick([0.78, 0.82, 0.85, 0.88, 0.91, 0.94]);
     const Y2 = r1(Y1 * Math.pow(X2 / X1, lcB(s0)));
@@ -129,6 +137,7 @@
   // ---- M8 Regression ----
   add({ id: 'reg-fit', module: 'm08', section: 'm08/fit', title: 'Fit a linear CER',
     ins: { xs: { label: 'X values', unit: '' }, ys: { label: 'Y values', unit: '$K' }, xNew: { label: 'X to predict', unit: '' } },
+    hint: 'Slope b = sum of (x - mean x)(y - mean y) / sum of (x - mean x)^2. Intercept a = mean y - b x mean x.',
     gen(h, tier) {
     const x0 = h.num(1, 5, 1), st = h.num(1, 4, 1), a = h.num(10, 40, 1) * K[tier], b = h.num(2, 9, 0.5) * K[tier];
     const X = [0, 1, 2, 3, 4].map(i => x0 + i * st), Y = X.map(x => r1(a + b * x + h.num(-3, 3, 0.5) * K[tier]));
@@ -146,6 +155,7 @@
   // ---- M9 Risk ----
   add({ id: 'tri-stats', module: 'm09', section: 'm09/triangular', title: 'Triangular distribution statistics',
     ins: { low: { label: 'Low', unit: '$M' }, mode: { label: 'Most likely', unit: '$M' }, high: { label: 'High', unit: '$M' } },
+    hint: 'Mean = (L + M + H) / 3. Variance = (L^2 + M^2 + H^2 - LM - LH - MH) / 18.',
     gen(h, tier) {
     const L = h.num(5, 20, 0.5) * K[tier], Mo = L + h.num(1, 10, 0.5) * K[tier], H = Mo + h.num(2, 25, 0.5) * K[tier];
     const mean = (L + Mo + H) / 3, sd = Math.sqrt((L * L + Mo * Mo + H * H - L * Mo - L * H - Mo * H) / 18);
@@ -158,6 +168,7 @@
   } });
   add({ id: 'risk-sum', module: 'm09', section: 'm09/summing', title: 'Roll up WBS risk',
     ins: { means: { label: 'Element means', unit: '$M' }, sds: { label: 'Element std devs', unit: '$M' }, correlated: { label: 'Perfectly correlated? (1 = yes)', unit: 'flag' } },
+    hint: 'Means always add. Independent sigmas add as root-sum-square; perfectly correlated sigmas add directly.',
     gen(h, tier) {
     const mu = [0, 1, 2].map(() => h.num(10, 60, 1) * K[tier]), sd = mu.map(m => r1(m * h.num(0.1, 0.35, 0.05)));
     const corr = tier >= 2, tm = mu.reduce((s, v) => s + v, 0), ts = corr ? sd.reduce((s, v) => s + v, 0) : Math.sqrt(sd.reduce((s, v) => s + v * v, 0));
@@ -174,6 +185,7 @@
   // ---- M10 Probability ----
   add({ id: 'normal-prob', module: 'm10', section: 'm10/distributions-basic', title: 'Confidence of a budget',
     ins: { mean: { label: 'Mean', unit: '$M' }, sd: { label: 'Std deviation', unit: '$M' }, budget: { label: 'Budget', unit: '$M' } },
+    hint: 'Turn the budget into a z-score, (budget - mean) / sd, then look up the normal CDF.',
     gen(h, tier) {
     const mu = h.num(50, 200, 1) * K[tier], sg = r1(mu * h.num(0.08, 0.25, 0.01)), z0 = h.pick([-1, -0.5, 0.5, 1, 1.5, 2]), B = r1(mu + z0 * sg);
     const z = (B - mu) / sg, p = phi(z) * 100;
@@ -186,6 +198,7 @@
   } });
   add({ id: 'expected-value', module: 'm10', section: 'm10/intro', title: 'Expected cost of outcomes',
     ins: { probs: { label: 'Outcome probabilities', unit: '' }, costs: { label: 'Outcome costs', unit: '$M' } },
+    hint: 'Multiply each outcome cost by its probability and add the products.',
     gen(h, tier) {
     const p1 = h.pick([0.1, 0.2, 0.25, 0.3]), p2 = h.pick([0.3, 0.4, 0.5]), p3 = r2(1 - p1 - p2);
     const c = [h.num(10, 30, 1), h.num(30, 60, 1), h.num(60, 120, 1)].map(v => v * K[tier]);
@@ -201,6 +214,7 @@
   // ---- M11 Manufacturing ----
   add({ id: 'mfg-labor', module: 'm11', section: 'm11/standards', title: 'Labor from standards',
     ins: { stdHours: { label: 'Standard hours per unit', unit: 'hours' }, qty: { label: 'Units', unit: '' }, realization: { label: 'Realization factor', unit: '' }, rate: { label: 'Wrap rate', unit: '$/hour' } },
+    hint: 'Hours = standard hours x units x realization factor. Cost = hours x wrap rate, in $K.',
     gen(h, tier) {
     const S = h.num(20, 120, 1), Q = h.num(10, 80, 1) * K[tier], R = h.num(1.1, 1.8, 0.05), W = h.num(90, 180, 1);
     const hrs = S * Q * R, cost = hrs * W / 1000;
@@ -213,6 +227,7 @@
   } });
   add({ id: 'make-buy', module: 'm11', section: 'm11/makebuy', title: 'Make-or-buy break-even',
     ins: { tooling: { label: 'Tooling', unit: '$K' }, makeUnit: { label: 'Make cost per unit', unit: '$' }, buyUnit: { label: 'Buy price per unit', unit: '$' } },
+    hint: 'Break-even quantity = tooling / (buy price - make cost per unit). Tooling is in $K, unit prices in $.',
     gen(h, tier) {
     const F = h.num(50, 400, 10) * K[tier], v = h.num(20, 120, 1), p = v + h.num(10, 80, 1);
     const q = F * 1000 / (p - v);
@@ -227,6 +242,7 @@
   // ---- M12 Software ----
   add({ id: 'sw-effort', module: 'm12', section: 'm12/parametric', title: 'Software effort and cost',
     ins: { a: { label: 'Coefficient A', unit: '' }, b: { label: 'Exponent B', unit: '' }, ksloc: { label: 'Size', unit: 'KSLOC' }, rate: { label: 'Cost per person-month', unit: '$K' } },
+    hint: 'Effort = A x KSLOC^B person-months. Cost = effort x cost per person-month.',
     gen(h, tier) {
     const A = h.pick([2.4, 2.94, 3.0, 3.2]), B = h.pick([1.05, 1.08, 1.1, 1.12, 1.15]), S = h.num(10, 120, 1) * K[tier], rate = h.num(15, 25, 0.5);
     const E = A * Math.pow(S, B), cost = E * rate / 1000;
@@ -241,6 +257,7 @@
   // ---- M13 Economic analysis ----
   add({ id: 'npv', module: 'm13', section: 'm13/discounting', title: 'Net present value',
     ins: { invest: { label: 'Up-front cost', unit: '$K' }, flows: { label: 'Savings, years 1-5', unit: '$K' }, rate: { label: 'Discount rate', unit: '%' } },
+    hint: 'Discount each year saving by (1 + r)^year, add them up, then subtract the up-front cost.',
     gen(h, tier) {
     let I, A, r, v;
     for (let tries = 0; tries < 50; tries++) {
@@ -259,6 +276,7 @@
   } });
   add({ id: 'pv-annuity', module: 'm13', section: 'm13/comparison', title: 'Present value of a level cost stream',
     ins: { amount: { label: 'Cost per year', unit: '$K' }, years: { label: 'Years', unit: 'yr' }, rate: { label: 'Discount rate', unit: '%' } },
+    hint: 'PV = amount x (1 - (1 + r)^-years) / r.',
     gen(h, tier) {
     const A = h.num(20, 200, 5) * K[tier], n = h.num(5, 20, 1), r = h.pick([0.02, 0.03, 0.05, 0.07]);
     const pv = A * (1 - Math.pow(1 + r, -n)) / r;
@@ -274,6 +292,7 @@
   const SHARES = [[80, 20], [70, 30], [75, 25], [85, 15]];
   add({ id: 'cpif-fee', module: 'm14', section: 'm14/cpif', title: 'CPIF fee settlement',
     ins: { targetCost: { label: 'Target cost', unit: '$M' }, targetFee: { label: 'Target fee', unit: '$M' }, govShare: { label: 'Govt share', unit: '%' }, conShare: { label: 'Contractor share', unit: '%' }, minFee: { label: 'Minimum fee', unit: '$M' }, maxFee: { label: 'Maximum fee', unit: '$M' }, actual: { label: 'Actual cost', unit: '$M' } },
+    hint: 'Fee = target fee + contractor share x (target cost - actual cost), then clamp to the min and max fee.',
     gen(h, tier) {
     const TC = h.num(50, 200, 1) * K[tier], TF = r2(TC * h.pick([0.06, 0.07, 0.08])), [g, c] = h.pick(SHARES);
     const mn = r2(TC * h.pick([0.02, 0.03])), mx = r2(TC * h.pick([0.1, 0.12])), AC = r2(TC * (1 + h.num(-0.25, 0.25, 0.01)));
@@ -287,6 +306,7 @@
   } });
   add({ id: 'fpif-pta', module: 'm14', section: 'm14/fpif', title: 'FPIF price and PTA',
     ins: { targetCost: { label: 'Target cost', unit: '$M' }, targetProfit: { label: 'Target profit', unit: '$M' }, ceiling: { label: 'Ceiling price', unit: '$M' }, govShare: { label: 'Govt share', unit: '%' }, conShare: { label: 'Contractor share', unit: '%' }, actual: { label: 'Actual cost', unit: '$M' } },
+    hint: 'PTA = target cost + (ceiling price - target price) / government share.',
     gen(h, tier) {
     const TC = h.num(50, 200, 1) * K[tier], TP = r2(TC * h.pick([0.08, 0.1, 0.12])), CP = r2((TC + TP) * h.pick([1.1, 1.15, 1.2, 1.25])), [g, c] = h.pick(SHARES);
     const AC = r2(TC * (1 + h.num(-0.15, 0.3, 0.01)));
@@ -306,6 +326,7 @@
   }
   add({ id: 'evm-eac', module: 'm15', section: 'm15/eac', title: 'Forecast at completion',
     ins: { bac: { label: 'BAC', unit: '$M' }, pv: { label: 'PV', unit: '$M' }, ev: { label: 'EV', unit: '$M' }, ac: { label: 'AC', unit: '$M' }, composite: { label: 'Composite EAC? (1 = yes)', unit: 'flag' } },
+    hint: 'Start with CPI = EV / AC. The composite EAC also needs SPI = EV / PV.',
     gen(h, tier) {
     const e = evmInputs(h, tier), comp = tier >= 2;
     const eac = comp ? e.AC + (e.BAC - e.EV) / (e.CPI * e.SPI) : e.BAC / e.CPI;
@@ -318,6 +339,7 @@
   } });
   add({ id: 'evm-tcpi', module: 'm15', section: 'm15/tcpi', title: 'Efficiency needed to finish on budget',
     ins: { bac: { label: 'BAC', unit: '$M' }, ev: { label: 'EV', unit: '$M' }, ac: { label: 'AC', unit: '$M' } },
+    hint: 'TCPI = remaining work / remaining budget = (BAC - EV) / (BAC - AC).',
     gen(h, tier) {
     const e = evmInputs(h, tier), tcpi = (e.BAC - e.EV) / (e.BAC - e.AC), eac = e.BAC / e.CPI;
     return {
@@ -331,6 +353,7 @@
   // ---- M16 Cost management ----
   add({ id: 'abc-cost', module: 'm16', section: 'm16/abc-allocation', title: 'Activity-based costing',
     ins: { setupPool: { label: 'Setup cost pool', unit: '$K' }, setups: { label: 'Total setups', unit: '' }, inspPool: { label: 'Inspection cost pool', unit: '$K' }, inspections: { label: 'Total inspections', unit: '' }, aSetups: { label: 'Product A setups', unit: '' }, aInsp: { label: 'Product A inspections', unit: '' } },
+    hint: 'Rate = cost pool / driver count. Charge each rate by how much Product A uses.',
     gen(h, tier) {
     const P1 = h.num(100, 600, 10) * K[tier], D1 = h.num(200, 2000, 50), P2 = h.num(50, 400, 10) * K[tier], D2 = h.num(100, 1000, 25);
     const u1 = h.num(10, Math.round(D1 / 4), 5), u2 = h.num(5, Math.round(D2 / 4), 5);
