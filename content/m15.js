@@ -105,7 +105,10 @@ Q: Why is too much Level-of-Effort (LOE) a problem?
 - LOE always results in overruns
 - LOE is never allowed
 > With LOE, CV and SV are zero by definition. Keep LOE to genuine support activities (program management, administration).
-:::`
+:::
+
+:::widget evm:::
+`
     },
     {
       id: 'variances', title: 'Variances and performance indices', summary: 'CV, SV, CPI, SPI — diagnosis of cost and schedule health',
@@ -170,6 +173,14 @@ Q: Same data. What is CPI (4 decimals)?
 Q: Same data. What is SV?
 = -50
 > SV = 350 − 400 = −50 (behind schedule).
+:::
+
+:::challenge evm sc=overrun bac=1000 m=6 lock=sc,bac
+Q: In this program the cost overrun grows over time. Scrub forward to the **first month** in which CPI drops below 0.90.
+goal: cpi < 0.9
+goal: cpi > 0.89
+show: m=14
+> CPI slides from 0.925 at month 10 to 0.895 at month 14. Cumulative CPI moves slowly because each month is averaged into everything before it, so once it slips it's hard to recover.
 :::`
     },
     {
@@ -219,6 +230,12 @@ Q: BAC=1000, CPI=0.8333. CPI-based EAC?
 Q: BAC 1000, EV 350, AC 420, CPI 0.8333, SPI 0.875. Composite EAC? (whole dollars)
 = 1311 ±2
 > 420 + (1000−350)/(0.8333 × 0.875) = 420 + 650/0.7292 = 1311.
+:::
+
+:::challenge evm sc=overrun bac=1000 m=14 lock=sc,bac,m
+Q: At month 14 the CPI is 0.895 and BAC is \$1,000. Predict the EAC using $EAC = BAC / CPI$.
+predict: eac +- 0.5%
+> $1000 / 0.895 \approx 1117$. The CPI method assumes the remaining work goes at the same efficiency as the work so far.
 :::`
     },
     {
@@ -311,6 +328,14 @@ Q: Why is retroactive adjustment of BCWS a problem?
 - It is required for baseline changes
 - It always improves cost performance
 > Adjusting BCWS (the plan) after the fact to match BCWP (what was earned) is "rubber baselining" — it destroys the baseline's integrity.
+:::
+
+:::challenge evm sc=overrun bac=1000 m=10 lock=sc,bac,m
+Q: At month 10, compare the TCPI (to finish on BAC) with the CPI so far. Is finishing on budget realistic?
+* No: TCPI is more than 0.10 above CPI
+- Yes: TCPI is below CPI
+- Yes: TCPI and CPI are about equal
+> TCPI is 1.083 against a CPI of 0.925, a gap of 0.16. A TCPI more than about 0.10 above the current CPI would require the remaining work to be done far more efficiently than anything so far, which programs rarely achieve.
 :::`
     },
     {
