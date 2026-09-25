@@ -31,10 +31,9 @@
     const off = new Set((sr && sr.off) || []), map = (sr && sr.shift) || {};
     const out = Object.entries(map).filter(([id, s]) => live.has(id) && Number.isFinite(s)).map(([id, since]) => ({ id, since }))
       .sort((a, b) => a.since - b.since || (a.id < b.id ? -1 : 1)).slice(0, f.desks);
-    const floor = Math.max((sr && sr.t) || 0, f.deskT);
     for (const r of run) {
       if (out.length >= f.desks) break;
-      if (!off.has(r.pipe) && !out.some(o => o.id === r.pipe)) out.push({ id: r.pipe, since: Math.max(r.passedAt || r.t || 0, floor) });
+      if (!off.has(r.pipe) && !out.some(o => o.id === r.pipe)) out.push({ id: r.pipe, since: r.passedAt || r.t || 0 });
     }
     return out;
   }
@@ -61,16 +60,28 @@
   }
   const collectAll = (d, now) => onShift(d).map(o => collect(d, o.id, now)).filter(Boolean);
 
-  function setShift(d, ids, now) {
-    const f = firm(d), live = new Set(running(d).map(r => r.pipe));
+  function setShift(d, ids, now, extraDesks = 0) {
+    const f = firm(d), run = running(d), live = new Set(run.map(r => r.pipe));
     ids = ids.filter(id => live.has(id));
-    if (ids.length > f.desks) throw new Error('Not enough desks');
+    if (ids.length > f.desks + extraDesks) throw new Error('Not enough desks');
     const cur = onShift(d), next = new Set(ids), sr = shiftRec(d), removed = cur.filter(o => !next.has(o.id));
     const writes = [];
     removed.forEach(o => { const c = collect(d, o.id, now); if (c) writes.push(c); });
+
+    // Build shift from ids
     const shift = {};
     ids.forEach(id => { const o = cur.find(x => x.id === id); shift[id] = o ? o.since : now; });
-    const off = [...new Set([...((sr && sr.off) || []), ...removed.map(o => o.id)])].filter(id => !next.has(id)).sort();
+
+    // Compute off: existing + removed, but not in new shift
+    const offSet = new Set([...((sr && sr.off) || []), ...removed.map(o => o.id)]);
+
+    // Fill free desks
+    for (const r of run) {
+      if (Object.keys(shift).length >= f.desks + extraDesks) break;
+      if (!(r.pipe in shift) && !offSet.has(r.pipe)) shift[r.pipe] = now;
+    }
+
+    const off = [...offSet].filter(id => !(id in shift)).sort();
     writes.push({ key: 'shift', rec: { shift, off, t: now } });
     return { writes };
   }
@@ -78,7 +89,7 @@
   function buyUpgrade(d, id, now) {
     const cost = firm(d).next[id];
     if (cost == null || C.state(d).cash < cost) return null;
-    const writes = id === 'desk' ? setShift(d, onShift(d).map(o => o.id), now).writes : [];
+    const writes = id === 'desk' ? setShift(d, onShift(d).map(o => o.id), now, 1).writes : [];
     writes.push({ key: 'upg-' + id + '-' + now, rec: { upg: id, cost, t: now } });
     return { writes };
   }

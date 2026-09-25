@@ -99,5 +99,15 @@ module.exports = [
     assert.strictEqual(I.buyUpgrade(rich, 'cap', 10), null);
     assert.deepStrictEqual(I.buyUpgrade(rich, 'analyst', 10).writes, [{ key: 'upg-analyst-10', rec: { upg: 'analyst', cost: 400, t: 10 } }]);
     assert.strictEqual(I.buyUpgrade(rich, 'nope', 10), null);
+  }],
+  ['freed desk fills at now; late-synced pipeline keeps its pass time', () => {
+    const d = D(pipe('a', 1000), pipe('b', 2000), pipe('c', 3000)), now = 1000 + 5 * H;
+    const res = I.setShift(d, ['a'], now);
+    assert.deepStrictEqual(res.writes[1].rec, { shift: { a: 1000, c: now }, off: ['b'], t: now });
+    apply(d, res);
+    assert.deepStrictEqual(I.onShift(d), [{ id: 'a', since: 1000 }, { id: 'c', since: now }]);
+    const d2 = D(pipe('a', 1000), { shift: { shift: { a: 1000 }, off: [], t: 10 * H } });
+    Object.assign(d2.shop, pipe('z', 3000));
+    assert.ok(I.onShift(d2).find(o => o.id === 'z' && o.since === 3000));
   }]
 ];
