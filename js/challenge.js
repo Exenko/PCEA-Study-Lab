@@ -110,6 +110,18 @@
     return Math.abs(v) >= 1000 ? Math.round(v).toLocaleString('en-US') : String(+v.toPrecision(4));
   }
 
-  const Challenge = { parseKV, parseArgs, parseTol, within, parseGoal, evalGoal, evalGoals, parse, readNum, fmt };
+  // Learner typed a whole number where the answer is a small fraction (e.g. "88" for 0.885) -> scale to /100.
+  function readGuess(s, actual) {
+    const t = String(s).trim();
+    const x = readNum(t);
+    if (!/%$/.test(t) && isFinite(actual) && Math.abs(actual) <= 1 && Math.abs(x) > 1 && Math.abs(x) <= 100) return x / 100;
+    return x;
+  }
+  function fmtLike(v, actual) {
+    if (isFinite(actual) && Math.abs(actual) < 1 && actual !== 0) return `${fmt(v)} (${+(v * 100).toPrecision(3)}%)`;
+    return fmt(v);
+  }
+
+  const Challenge = { parseKV, parseArgs, parseTol, within, parseGoal, evalGoal, evalGoals, parse, readNum, fmt, readGuess, fmtLike };
   if (typeof module !== 'undefined' && module.exports) module.exports = Challenge; else root.Challenge = Challenge;
 })(typeof window !== 'undefined' ? window : this);

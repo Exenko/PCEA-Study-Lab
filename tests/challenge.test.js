@@ -75,5 +75,16 @@ module.exports = [
     assert.strictEqual(C.fmt(5.80712), '5.807');
     assert.strictEqual(C.fmt(0.0566968), '0.0567');
     assert.strictEqual(C.fmt(NaN), '—');
+  }],
+  ['readGuess: percent-without-sign scaling for small actuals', () => {
+    assert.strictEqual(C.readGuess('88', 0.885), 0.88);
+    assert.strictEqual(C.readGuess('88%', 0.885), 0.88);
+    assert.strictEqual(C.readGuess('0.88', 0.885), 0.88);
+    assert.strictEqual(C.readGuess('2.14', 2.1435), 2.14);
+    assert.strictEqual(C.readGuess('150', 0.5), 150);
+  }],
+  ['fmtLike: percent hint for small fractional actuals', () => {
+    assert.strictEqual(C.fmtLike(0.0567, 0.0567), '0.0567 (5.67%)');
+    assert.strictEqual(C.fmtLike(1117.3, 1117.3), '1,117');
   }]
 ];

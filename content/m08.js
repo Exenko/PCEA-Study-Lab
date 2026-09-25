@@ -55,7 +55,7 @@ Play with the points. Drag one far from the others and watch the slope, $R^2$ an
 :::widget regression:::
 
 :::challenge regression data=seeker mode=hand lock=mode
-Q: Fit the Seeker data **by hand**. Drag the two orange handles until your line's total squared error is within 5% of the best possible.
+Q: Fit the Seeker data **by hand**. Drag the two round handles until your line's total squared error is within 5% of the best possible.
 goal: ratio < 1.05
 show: hand=ols
 > The shaded squares are the squared residuals, and OLS picks the one line with the smallest total area. For these data that's $\hat{Y} = 2.50 + 0.585X$, with SSE about 18.17. Every other line leaves more area.

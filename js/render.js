@@ -138,6 +138,7 @@ const Render = (() => {
     box.appendChild(el('div', 'check-label', 'Check your understanding'));
     box.appendChild(el('div', 'check-q', md(c.q.join('\n'))));
     const fb = el('div', 'check-fb');
+    fb.setAttribute('role', 'status');
     const exp = el('div', 'check-explain', c.explain.length ? md(c.explain.join('\n')) : '');
     exp.hidden = true;
 
@@ -217,6 +218,7 @@ const Render = (() => {
     box.appendChild(wbox);
     const w = Widgets.mount(wbox, d.args);
     const fb = el('div', 'check-fb');
+    fb.setAttribute('role', 'status');
     const exp = el('div', 'check-explain', md(c.explain.join('\n')));
     exp.hidden = true;
     const isDone = () => box.classList.contains('done');
@@ -231,11 +233,13 @@ const Render = (() => {
       tools.append(stuck, showMe);
       box.appendChild(tools);
       let helped = false;
+      let timer = null;
       const offerHelp = () => { stuck.hidden = true; showMe.hidden = false; };
-      const timer = setTimeout(() => { if (!isDone()) offerHelp(); }, 45000);
+      const startTimer = () => { if (timer === null) timer = setTimeout(() => { if (!isDone()) offerHelp(); }, 45000); };
       stuck.onclick = offerHelp;
       showMe.onclick = () => { helped = true; w.setMany(c.show); };
       w.onUpdate(out => {
+        startTimer();
         if (isDone() || !Challenge.evalGoals(c.goals, out)) return;
         clearTimeout(timer);
         tools.hidden = true;
@@ -243,14 +247,18 @@ const Render = (() => {
         fb.className = 'check-fb good';
         complete(!helped);
       });
-      if (saved && saved.done) { clearTimeout(timer); tools.hidden = true; markDone(); w.setMany(c.show); }
+      if (saved && saved.done) { tools.hidden = true; markDone(); w.setMany(c.show); }
     } else if (c.type === 'predict') {
       const row = el('div', 'check-input');
       const inp = el('input');
       inp.type = 'text'; inp.placeholder = 'Your prediction';
+      inp.setAttribute('aria-describedby', id + '-note');
       const go = el('button', 'btn small', 'Lock it in');
       row.append(inp, go);
+      const note = el('div', 'w-note', 'Make your prediction first; the chart unlocks after.');
+      note.id = id + '-note';
       box.insertBefore(row, wbox);
+      box.insertBefore(note, wbox);
       const unfreeze = () => { wbox.classList.remove('w-frozen'); wbox.inert = false; };
       const reveal = guess => {
         const actual = w.out[c.predict.out];
@@ -258,13 +266,13 @@ const Render = (() => {
         unfreeze();
         inp.value = inp.value || String(guess);
         inp.disabled = go.disabled = true;
-        fb.innerHTML = `<b>${ok ? 'Close enough.' : 'Not quite.'}</b> You said ${Challenge.fmt(guess)}; the model gives ${Challenge.fmt(actual)}.`;
+        fb.innerHTML = `<b>${ok ? 'Close enough.' : 'Not quite.'}</b> You said ${Challenge.fmtLike(guess, actual)}; the model gives ${Challenge.fmtLike(actual, actual)}.`;
         fb.className = 'check-fb ' + (ok ? 'good' : 'bad');
         return ok;
       };
       const submit = () => {
-        const g = Challenge.readNum(inp.value);
-        if (!isFinite(g)) return;
+        const g = Challenge.readGuess(inp.value, w.out[c.predict.out]);
+        if (!isFinite(g)) { fb.innerHTML = 'Enter a number.'; fb.className = 'check-fb bad'; return; }
         complete(reveal(g), { guess: g });
       };
       go.onclick = submit;

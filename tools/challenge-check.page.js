@@ -101,6 +101,13 @@
     root.querySelector('.challenge .check-input .btn').click();
     assert(Store.data.checks[id].done && Store.data.checks[id].first === false, JSON.stringify(Store.data.checks[id]));
   });
+  ui('predict accepts a percent typed without % sign', () => {
+    const body = [':::challenge stats-lab data=229.70,221.58,244.94,250.66', 'Q: cv?', 'predict: cv +- 5%', '> divide sd by mean', ':::'].join('\n');
+    const { root, id } = mk(body);
+    root.querySelector('.challenge input').value = '5.67';
+    root.querySelector('.challenge .check-input .btn').click();
+    assert(Store.data.checks[id].first === true, JSON.stringify(Store.data.checks[id]));
+  });
   ui('choose: wrong then right is not first try', () => {
     const { root, id } = mk([':::challenge trl', 'Q: pick', '- wrong', '* right', '> x', ':::'].join('\n'));
     const [bad, good] = root.querySelectorAll('.challenge .opt');

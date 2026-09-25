@@ -103,6 +103,7 @@ const Widgets = (() => {
     const bar = E('div', 'w-presets');
     const ta = E('textarea', 'w-data'); ta.rows = 2; ta.value = String(preset(box, 'data', presets['Practice Q1'])).replace(/,(?=\S)/g, ', ');
     Object.keys(presets).forEach(k => { const b = E('button', 'chip', k); b.onclick = () => { ta.value = presets[k]; draw(); }; bar.appendChild(b); });
+    bar.hidden = 'data' in box.w.presets;
     box.append(bar, ta);
     const plotBox = E('div'); box.appendChild(plotBox);
     const ro = readout(box);
@@ -281,6 +282,7 @@ const Widgets = (() => {
     const bar = E('div', 'w-presets');
     Object.keys(presets).forEach(k => { const b = E('button', 'chip', presets[k][0]); b.onclick = () => { load(k); draw(); }; bar.appendChild(b); });
     const clr = E('button', 'chip', 'Clear'); clr.onclick = () => { pts = []; draw(); }; bar.appendChild(clr);
+    bar.hidden = 'data' in box.w.presets;
     box.appendChild(bar);
     const v = controls(box, [
       { k: 'mode', label: 'Line', type: 'select', v: 'ols', options: [['ols', 'Least squares (OLS)'], ['hand', 'Fit by hand (drag the two handles)']] }
@@ -316,7 +318,10 @@ const Widgets = (() => {
       if (x < 0 || x > 20 || y < 0 || y > 30) return;
       const h = v.mode === 'hand' ? nearHandle(x, y) : -1;
       if (h >= 0) drag = -2 - h;
-      else { drag = nearest(x, y); if (drag < 0) { pts.push([x, y]); drag = pts.length - 1; } }
+      else {
+        drag = nearest(x, y);
+        if (drag < 0) { if (v.mode === 'hand') return; pts.push([x, y]); drag = pts.length - 1; }
+      }
       p.svg.setPointerCapture(e.pointerId);
       draw();
     });
@@ -328,6 +333,7 @@ const Widgets = (() => {
       draw();
     });
     p.svg.addEventListener('pointerup', () => { drag = -1; });
+    p.svg.addEventListener('pointercancel', () => { drag = -1; });
     function draw() {
       p.clear(); p.axes(); rp.clear();
       if (pts.length < 3) {
@@ -429,9 +435,12 @@ const Widgets = (() => {
     ], go);
     const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R); box.appendChild(row);
     const ro = readout(box);
+    let s0Key = null, s0Cache = null;
     function go() {
       const N = +v.n;
-      const s = M.mcSum(els, v.rho, N, 11), s0 = M.mcSum(els, 0, N, 11);
+      const key = N + JSON.stringify(els);
+      if (key !== s0Key) { s0Cache = M.mcSum(els, 0, N, 11); s0Key = key; }
+      const s = M.mcSum(els, v.rho, N, 11), s0 = s0Cache;
       const pe = els.reduce((a, e) => a + e.c, 0);
       const mu = mean(s), sdev = sd(s);
       const above = s.findIndex(x => x > pe), pctOfPE = (above < 0 ? N : above) / N;
