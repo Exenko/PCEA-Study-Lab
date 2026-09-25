@@ -41,10 +41,29 @@
     const rep = score >= 0.6 ? 1 : each.some(x => x < 0) ? -1 : 0;
     return { each, score, pay: Math.round(base * score * 10) / 10, rep };
   }
+  // Two devices can each collect from their own `to`, producing overlapping [from,to] windows for the
+  // same pipeline. Credit each record only for the slice of its window not already covered by an
+  // earlier (by `from`, then `to`) record for that same id, so overlaps are never paid twice.
+  function collectCredit(recs) {
+    const byId = {};
+    recs.forEach(r => { if (r.collect) (byId[r.collect] = byId[r.collect] || []).push(r); });
+    const credit = new Map();
+    Object.values(byId).forEach(list => {
+      list.sort((a, b) => (a.from || 0) - (b.from || 0) || (a.to || 0) - (b.to || 0));
+      let covered = -Infinity;
+      list.forEach(r => {
+        const from = r.from || 0, to = r.to || 0;
+        credit.set(r, to <= from ? 0 : (r.amount || 0) * Math.max(0, to - Math.max(from, covered)) / (to - from));
+        covered = Math.max(covered, to);
+      });
+    });
+    return credit;
+  }
   function state(d) {
     const recs = Object.entries((d && d.shop) || {}).filter(([, r]) => r && typeof r === 'object')
       .sort(([ka, a], [kb, b]) => (a.t || 0) - (b.t || 0) || (ka < kb ? -1 : ka > kb ? 1 : 0))
       .map(([, r]) => r);
+    const credit = collectCredit(recs);
     let cash = 0, rep = 0, completed = 0;
     const owned = {}, used = {}, campaign = [], upgrades = { desk: 0, cap: 0, analyst: 0 };
     for (const r of recs) {
@@ -54,7 +73,7 @@
       }
       if (r.tool) { cash -= r.cost || 0; owned[r.tool] = (owned[r.tool] || 0) + 1; }
       if (r.use) used[r.use] = (used[r.use] || 0) + 1;
-      if (r.collect) cash += r.amount || 0;
+      if (r.collect) cash += credit.get(r) || 0;
       if (r.upg) { cash -= r.cost || 0; if (r.upg in upgrades) upgrades[r.upg]++; }
     }
     const repLevel = Math.floor(Math.sqrt(rep));

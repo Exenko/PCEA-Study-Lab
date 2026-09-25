@@ -71,6 +71,14 @@ module.exports = [
     assert.strictEqual(s.rep, 1);
     assert.deepStrictEqual(s.upgrades, { desk: 2, cap: 0, analyst: 1 });
   }],
+  ['state credits overlapping collects without double count', () => {
+    const d = { shop: { a: { collect: 'x', from: 0, to: 100, amount: 10, t: 1 }, b: { collect: 'x', from: 50, to: 150, amount: 10, t: 2 } } };
+    assert.strictEqual(C.state(d).cash, 15);
+    const d2 = { shop: { a: { collect: 'x', from: 0, to: 100, amount: 10, t: 1 }, b: { collect: 'x', from: 100, to: 200, amount: 10, t: 2 } } };
+    assert.strictEqual(C.state(d2).cash, 20);
+    const d3 = { shop: { a: { collect: 'x', from: 0, to: 100, amount: 10, t: 1 }, b: { collect: 'y', from: 50, to: 150, amount: 10, t: 2 } } };
+    assert.strictEqual(C.state(d3).cash, 20);
+  }],
   ['hint and reroll are consumable tools', () => {
     ['hint', 'reroll'].forEach(id => { const t = C.TOOLS.find(x => x.id === id); assert.ok(t && t.consumable && t.cost > 0, id); });
     assert.strictEqual(C.TOOLS.find(x => x.id === 'hint').cost, 60);
