@@ -5,7 +5,7 @@
     'transform': { controls: ['f', 'a', 'b'], setters: [], outputs: ['r2', 'slope', 'intercept'] },
     'lc-explorer': { controls: ['theory', 't1', 'lcs', 'n', 'log'], setters: [], outputs: ['b', 'unitN', 'cavN', 'totalN'] },
     'lmp': { controls: ['F', 'L', 'lcs'], setters: [], outputs: ['ari', 'geo', 'heur', 'half', 'exact'] },
-    'regression': { controls: [], setters: ['data'], outputs: ['n', 'b0', 'b1', 'r2', 'see', 'cv', 't', 'p', 'sse'] },
+    'regression': { controls: ['mode'], setters: ['data', 'hand'], outputs: ['n', 'b0', 'b1', 'r2', 'see', 'cv', 't', 'p', 'sse', 'sseHand', 'ratio'] },
     'escalation': { controls: ['r', 'o1', 'o2', 'o3', 'amt'], setters: [], outputs: ['raw1', 'wtdBY', 'tyBY'] },
     'montecarlo': { controls: ['rho', 'n'], setters: [], outputs: ['pe', 'pePct', 'mean', 'sd', 'p50', 'p70', 'p80'] },
     'dist': { controls: ['d', 'p1', 'p2', 'p3'], setters: [], outputs: ['mean', 'median', 'mode', 'sd'] },

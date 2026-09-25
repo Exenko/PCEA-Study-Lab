@@ -282,12 +282,29 @@ const Widgets = (() => {
     Object.keys(presets).forEach(k => { const b = E('button', 'chip', presets[k][0]); b.onclick = () => { load(k); draw(); }; bar.appendChild(b); });
     const clr = E('button', 'chip', 'Clear'); clr.onclick = () => { pts = []; draw(); }; bar.appendChild(clr);
     box.appendChild(bar);
+    const v = controls(box, [
+      { k: 'mode', label: 'Line', type: 'select', v: 'ols', options: [['ols', 'Least squares (OLS)'], ['hand', 'Fit by hand (drag the two handles)']] }
+    ], draw);
     const top = E('div'), bot = E('div');
     box.append(top, bot);
     const ro = readout(box);
     const p = Plot.create(top, { xmin: 0, xmax: 20, ymin: 0, ymax: 30, xlabel: 'X (cost driver)', ylabel: 'Y (cost)' });
     const rp = Plot.create(bot, { h: 150, xmin: 0, xmax: 20, ymin: -6, ymax: 6, yticks: 4, xlabel: 'X', ylabel: 'residual' });
-    let drag = -1;
+    const HX = [1, 19];
+    let hand = [15, 15];
+    let drag = -1;   // point index, -2/-3 = hand handle 0/1, -1 = none
+    const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
+    const dist = (x0, y0, x1, y1) => Math.hypot((x0 - x1) / 20 * 28, (y0 - y1) / 30 * 15);
+    function nearest(x, y) {
+      let best = -1, bd = 0.9;
+      pts.forEach((q, i) => { const d = dist(q[0], q[1], x, y); if (d < bd) { bd = d; best = i; } });
+      return best;
+    }
+    function nearHandle(x, y) {
+      let best = -1, bd = 1.4;
+      HX.forEach((hx, i) => { const d = dist(hx, hand[i], x, y); if (d < bd) { bd = d; best = i; } });
+      return best;
+    }
     p.svg.addEventListener('contextmenu', e => {
       e.preventDefault();
       const [x, y] = p.evt(e);
@@ -297,38 +314,53 @@ const Widgets = (() => {
       if (e.button === 2) return;
       const [x, y] = p.evt(e);
       if (x < 0 || x > 20 || y < 0 || y > 30) return;
-      drag = nearest(x, y);
-      if (drag < 0) { pts.push([x, y]); drag = pts.length - 1; }
+      const h = v.mode === 'hand' ? nearHandle(x, y) : -1;
+      if (h >= 0) drag = -2 - h;
+      else { drag = nearest(x, y); if (drag < 0) { pts.push([x, y]); drag = pts.length - 1; } }
       p.svg.setPointerCapture(e.pointerId);
       draw();
     });
     p.svg.addEventListener('pointermove', e => {
-      if (drag < 0) return;
+      if (drag === -1) return;
       const [x, y] = p.evt(e);
-      pts[drag] = [Math.min(20, Math.max(0, x)), Math.min(30, Math.max(0, y))];
+      if (drag <= -2) hand[-2 - drag] = clamp(y, 0, 30);
+      else pts[drag] = [clamp(x, 0, 20), clamp(y, 0, 30)];
       draw();
     });
     p.svg.addEventListener('pointerup', () => { drag = -1; });
-    function nearest(x, y) {
-      let best = -1, bd = 0.9;
-      pts.forEach((q, i) => { const d = Math.hypot((q[0] - x) / 20 * 28, (q[1] - y) / 30 * 15); if (d < bd) { bd = d; best = i; } });
-      return best;
-    }
     function draw() {
       p.clear(); p.axes(); rp.clear();
-      pts.forEach((q, i) => p.dot(q[0], q[1], i === drag ? 'pt hot' : 'pt', 6));
-      if (pts.length < 3) { rp.axes(); ro([['Add at least 3 points', '']]); publish(box, { n: pts.length, b0: NaN, b1: NaN, r2: NaN, see: NaN, cv: NaN, t: NaN, p: NaN, sse: NaN }); return; }
+      if (pts.length < 3) {
+        pts.forEach(q => p.dot(q[0], q[1], 'pt', 6));
+        rp.axes(); ro([['Add at least 3 points', '']]);
+        publish(box, { n: pts.length, b0: NaN, b1: NaN, r2: NaN, see: NaN, cv: NaN, t: NaN, p: NaN, sse: NaN, sseHand: NaN, ratio: NaN });
+        return;
+      }
       const r = ols(pts.map(q => q[0]), pts.map(q => q[1]));
-      p.fn(x => r.b0 + r.b1 * x, 'series c1');
+      const byHand = v.mode === 'hand';
+      const hb1 = (hand[1] - hand[0]) / (HX[1] - HX[0]), hb0 = hand[0] - hb1 * HX[0];
+      const lineAt = byHand ? x => hb0 + hb1 * x : x => r.b0 + r.b1 * x;
+      const sseHand = pts.reduce((s, q) => s + (q[1] - (hb0 + hb1 * q[0])) ** 2, 0);
+      // squared residuals as true squares: side |e| in y-units, converted to x-units by the pixel aspect
+      const k = (p.y(0) - p.y(1)) / (p.x(1) - p.x(0));
+      pts.forEach(q => { const e = q[1] - lineAt(q[0]); p.rect(q[0], q[1], q[0] + Math.abs(e) * k * (q[0] > 10 ? -1 : 1), lineAt(q[0]), 'sq'); });
+      p.fn(lineAt, byHand ? 'series hand' : 'series c1');
+      if (byHand) HX.forEach((hx, i) => p.dot(hx, hand[i], 'handle', 8));
       p.dot(r.mx, r.my, 'pt mean', 5);
-      pts.forEach((q, i) => p.seg(q[0], q[1], q[0], r.b0 + r.b1 * q[0], 'resid'));
-      const m = Math.max(1, ...r.res.map(Math.abs)) * 1.2;
+      pts.forEach((q, i) => p.dot(q[0], q[1], i === drag ? 'pt hot' : 'pt', 6));
+      const res = pts.map(q => q[1] - lineAt(q[0]));
+      const m = Math.max(1, ...res.map(Math.abs)) * 1.2;
       rp.o.ymin = -m; rp.o.ymax = m; rp.axes(); rp.hline(0, 'marker');
-      pts.forEach((q, i) => rp.dot(q[0], r.res[i], 'pt alt', 4));
-      // approximate two-tailed p for t via normal/t tail (df small -> use t approx)
+      pts.forEach((q, i) => rp.dot(q[0], res[i], 'pt alt', 4));
       const df = r.n - 2;
       const tp = 2 * (1 - M.tcdf(Math.abs(r.t), df));
-      ro([
+      const ratio = sseHand / r.sse;
+      ro(byHand ? [
+        ['Your line', `Ŷ = ${f2(hb0)} + ${f2(hb1, 3)}X`],
+        ['Your SSE (total area of the squares)', f2(sseHand, 2)],
+        ['Your SSE ÷ least-squares SSE', f2(ratio, 3), ratio < 1.05 ? 'good' : 'bad'],
+        ['n', r.n]
+      ] : [
         ['Equation', `Ŷ = ${f2(r.b0)} + ${f2(r.b1, 3)}X`],
         ['$R^2$', f2(r.r2, 3)],
         ['SEE', f2(r.see)], ['CV = SEE/$\\bar{Y}$', pct(r.cv), r.cv < 0.15 ? 'good' : 'bad'],
@@ -336,9 +368,13 @@ const Widgets = (() => {
         ['t-stat (slope)', f2(r.t)], ['F = $t^2$', f2(r.F)],
         ['p-value (slope)', f2(tp, 3), tp < 0.05 ? 'good' : 'bad'], ['n, df', `${r.n}, ${df}`]
       ]);
-      publish(box, { n: r.n, b0: r.b0, b1: r.b1, r2: r.r2, see: r.see, cv: r.cv, t: r.t, p: tp, sse: r.sse });
+      publish(box, { n: r.n, b0: r.b0, b1: r.b1, r2: r.r2, see: r.see, cv: r.cv, t: r.t, p: tp, sse: r.sse, sseHand, ratio });
     }
     box.w.setters.data = id => { load(id); draw(); };
+    box.w.setters.hand = s => {
+      if (s === 'ols' && pts.length >= 3) { const r = ols(pts.map(q => q[0]), pts.map(q => q[1])); hand = HX.map(x => r.b0 + r.b1 * x); }
+      draw();
+    };
     draw();
   };
 
