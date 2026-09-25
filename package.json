@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "node tests/run.js",
-    "validate": "node tools/validate.js content/m01.js content/m02.js content/m03.js content/m04.js content/m05.js content/m06.js content/m07.js content/m08.js content/m09.js content/m10.js content/m11.js content/m12.js content/m13.js content/m14.js content/m15.js content/m16.js"
+    "validate": "node tools/validate.js content/m01.js content/m02.js content/m03.js content/m04.js content/m05.js content/m06.js content/m07.js content/m08.js content/m09.js content/m10.js content/m11.js content/m12.js content/m13.js content/m14.js content/m15.js content/m16.js",
+    "check:challenges": "node tools/challenge-check.js"
   },
   "engines": { "node": ">=16" }
 }

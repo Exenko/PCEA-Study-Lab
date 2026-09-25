@@ -7,7 +7,7 @@ eval(fs.readFileSync(path.join(root, 'js/registry.js'), 'utf8'));
 const PCEA = window.PCEA;
 const Meta = require('../js/widget-meta.js');
 const Challenge = require('../js/challenge.js');
-const CALLOUTS = ['tip', 'warn', 'key', 'example', 'formula', 'note', 'check', 'widget'];
+const CALLOUTS = ['tip', 'warn', 'key', 'example', 'formula', 'note', 'check', 'widget', 'challenge'];
 let errors = 0;
 const err = (f, msg) => { errors++; console.log(`ERROR ${f}: ${msg}`); };
 
@@ -20,8 +20,21 @@ function checkWidgetArgs(where, argStr) {
   return meta;
 }
 
+let challengeCount = 0;
+function checkChallenge(where, b) {
+  challengeCount++;
+  const meta = Meta[Challenge.parseArgs(b.args).name];
+  const c = Challenge.parse(b.lines);
+  c.errors.forEach(e => err(where, e));
+  if (!meta) return;
+  c.goals.forEach(g => { if (!meta.outputs.includes(g.out)) err(where, 'goal uses unknown output ' + g.out); });
+  if (c.predict && !meta.outputs.includes(c.predict.out)) err(where, 'predict uses unknown output ' + c.predict.out);
+  Object.keys(c.show).forEach(k => { if (!meta.controls.includes(k) && !meta.setters.includes(k)) err(where, 'show sets unknown key ' + k); });
+}
+
 for (const rel of process.argv.slice(2)) {
   const file = path.resolve(rel);
+  challengeCount = 0;
   const src = fs.readFileSync(file, 'utf8');
   if (/\$\{/.test(src)) err(rel, 'contains "${" (breaks String.raw template)');
   const before = PCEA.modules.length;
@@ -37,9 +50,14 @@ for (const rel of process.argv.slice(2)) {
     if (!s.id || !s.title || !s.body) err(where, 'section missing id/title/body');
     if (secIds.has(s.id)) err(where, 'duplicate section id'); secIds.add(s.id);
     // directive structure
-    let open = null;
+    let open = null, block = null;
     s.body.split('\n').forEach((line, i) => {
-      if (open) { if (/^:::\s*$/.test(line)) open = null; else if (/^:::\w/.test(line)) err(where, `line ${i}: directive opened inside :::${open}`); return; }
+      if (open) {
+        if (/^:::\s*$/.test(line)) { if (open === 'challenge') checkChallenge(`${where} line ${block.i}`, block); open = null; }
+        else if (/^:::\w/.test(line)) err(where, `line ${i}: directive opened inside :::${open}`);
+        else block.lines.push(line);
+        return;
+      }
       const one = line.match(/^:::(\w+)\s*(.*?):::\s*$/);
       const op = line.match(/^:::(\w+)\s*(.*)$/);
       if (one) {
@@ -47,8 +65,9 @@ for (const rel of process.argv.slice(2)) {
         else checkWidgetArgs(where, one[2]);
       } else if (op) {
         if (!CALLOUTS.includes(op[1])) err(where, 'unknown directive ' + op[1]);
-        if (op[1] === 'widget') checkWidgetArgs(where, op[2]);
+        if (op[1] === 'widget' || op[1] === 'challenge') checkWidgetArgs(where, op[2]);
         open = op[1];
+        block = { i, args: op[2], lines: [] };
       }
       if (!open && /^:::\s*$/.test(line)) err(where, `line ${i}: stray closing :::`);
     });
@@ -83,7 +102,7 @@ for (const rel of process.argv.slice(2)) {
   }));
   const raw = (m.cards || '').split('\n').filter(l => /^Q:/.test(l)).length;
   if (raw !== cards.length) err(rel, `cards: ${raw} Q: lines but ${cards.length} parsed (a Q: is missing its A:?)`);
-  console.log(`${rel}: ${m.sections.length} sections, ${checks} checks, ${cards.length} cards, ${new Set(cards.map(c => c.tag)).size} card topics, source=${m.source}`);
+  console.log(`${rel}: ${m.sections.length} sections, ${checks} checks, ${challengeCount} challenges, ${cards.length} cards, ${new Set(cards.map(c => c.tag)).size} card topics, source=${m.source}`);
 }
 console.log(errors ? `${errors} ERROR(S)` : 'OK');
 process.exit(errors ? 1 : 0);
