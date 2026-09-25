@@ -21,9 +21,11 @@ const ShopWorkshop = (() => {
         if (s === 'locked') return `<div class="wk-item locked"><b>${esc(t.title)}</b><span class="muted small">${Math.min(n, P.GATE)}/${P.GATE} exact solves</span></div>`;
         if (s === 'ready') return `<a class="wk-item ready" href="#/shop/pipe/${t.id}"><b>${esc(t.title)}</b><span class="wk-chip ready">${STATUS.ready}</span></a>`;
         const rec = P.record(d, t.id), on = shift.has(t.id), tier = rec.tier || 1;
-        return `<div class="wk-item running"><a href="#/shop/pipe/${t.id}"><b>${esc(t.title)}</b></a>
+        const stall = ShopEvents.open(d, t.id) ? ShopFirm.stallChip(d, t.id, ShopFirm.env()) : '';
+        return `<div class="wk-item running${stall ? ' stalled' : ''}"><a href="#/shop/pipe/${t.id}"><b>${esc(t.title)}</b></a>
           <span class="muted small">${money(I.rate(d, t.id).net)}/h net &middot; ${rec.stepCount || 0} steps &middot; tier ${'I'.repeat(tier)}</span>
           ${tier < maxTier ? `<a class="wk-chip" href="#/shop/pipe/${t.id}">Re-test for tier ${'I'.repeat(maxTier)}</a>` : ''}
+          ${stall}
           <button class="btn small ${on ? '' : 'ghost'}" data-shift="${t.id}" ${!on && busy ? 'disabled' : ''}>${on ? 'On shift' : busy ? 'All desks busy' : 'Off shift'}</button></div>`;
       }).join('')}</div>`;
   }
@@ -44,7 +46,13 @@ const ShopWorkshop = (() => {
     const tpl = ShopTemplates.find(t => t.id === id);
     if (!tpl || P.status(Store.data, id) === 'locked') { location.hash = '#/shop'; return; }
     let roll = 0, result = null, tier = 1;
-    const sample = () => { const st = C.state(Store.data); tier = 1 + (roll % st.maxTier); return tpl.gen(C.helpers(C.rng(C.hash(Store.profile.toLowerCase() + '|' + id + '|sample|' + roll))), tier); };
+    const shockEvt = () => { const o = ShopEvents.open(Store.data, id); return o && o.rec.kind === 'shock' && tpl.shock ? o : null; };
+    const sample = () => {
+      const st = C.state(Store.data), o = shockEvt();
+      tier = 1 + (roll % st.maxTier);
+      if (o && roll === 0) return tpl.shock(C.helpers(C.rng(o.rec.seed)), tier);
+      return tpl.gen(C.helpers(C.rng(C.hash(Store.profile.toLowerCase() + '|' + id + '|sample|' + roll))), tier);
+    };
     let job = sample();
     const rec = () => P.record(Store.data, id) || {};
     const draftRec = () => P.draft(Store.data, id) || {};
@@ -77,6 +85,8 @@ const ShopWorkshop = (() => {
       root.innerHTML = `<div class="shop wk"><a href="#/shop" class="muted small">&larr; Contract board</a>
         <h1>${esc(tpl.title)}</h1>
         <p class="muted">Wire blocks so the outputs answer any contract of this type. <a href="#/learn/${m}/${s}">Review the lesson</a></p>
+        ${shockEvt() ? `<div class="wk-shock"><b>Market shock</b><span>${esc(ShopEvents.story(id, shockEvt().rec.seed))}</span>
+          <span class="muted small">Test runs use ${ShopEvents.SHOCK_N} shocked contracts and ${P.VALIDATE_N - ShopEvents.SHOCK_N} normal ones. Pass to restart this desk.</span></div>` : ''}
         <section class="wk-inputs"><h3>Sample inputs · tier ${'I'.repeat(tier)}</h3>
           <dl>${Object.entries(tpl.ins).map(([k, meta]) => `<dt>${esc(meta.label)}</dt><dd>${esc(fmtIn(job.inputs[k], meta.unit))} ${meta.unit && meta.unit !== 'flag' ? `<span class="muted small">${esc(meta.unit)}</span>` : ''}</dd>`).join('')}</dl>
           <button class="btn ghost small" id="reroll">Reroll sample</button></section>
@@ -135,21 +145,26 @@ const ShopWorkshop = (() => {
       const probs = P.check(pipe, tpl.ins, job.answers.length, P.allowed(Store.data));
       if (probs.length) { result = `<p class="wk-msg">Fix the highlighted slots first (${probs.length} problem${probs.length > 1 ? 's' : ''}).</p>`; render(); return; }
       const tries = (draftRec().tries || 0) + 1, st = C.state(Store.data);
-      const v = P.validate(pipe, tpl, Store.profile.toLowerCase() + '|' + id + '|' + tries, st.maxTier);
+      const shocked = shockEvt(), seedKey = Store.profile.toLowerCase() + '|' + id + '|' + tries;
+      const v = shocked ? ShopEvents.shockValidate(Store.data, id, pipe, seedKey) : P.validate(pipe, tpl, seedKey, st.maxTier);
+      let fix = null;
       const unlocks = v.passed ? P.unlocksFor(pipe, id, Store.data) : [];
       Store.data.shop['draft-' + id] = { draftOf: id, draft: pipe, tries, t: Date.now() };
       if (v.passed) {
         const now = Date.now();
+        fix = shocked ? ShopEvents.resolveShock(Store.data, id, now) : null;
         ShopIdle.repass(Store.data, id, now).writes.forEach(w => { Store.data.shop[w.key] = w.rec; });
         Store.data.shop['pipe-' + id] = { pipe: id, steps: JSON.parse(JSON.stringify(pipe.steps)), outs: JSON.parse(JSON.stringify(pipe.outs)), stepCount: pipe.steps.length, primitivesOnly: P.primitivesOnly(pipe), passed: true, tier: st.maxTier, passedAt: now, t: now };
+        if (fix) fix.writes.forEach(w => { Store.data.shop[w.key] = w.rec; });
       }
       unlocks.forEach(n => { Store.data.shop['node-' + n] = { node: n, t: Date.now() }; });
       Store.markActive();
       Store.save();
       result = `<table class="ptable wk-table"><tr><th>Contract</th>${v.rows[0].labels.map((l, i) => `<th>Answer ${i + 1}</th>`).join('')}</tr>
-        ${v.rows.map((r, k) => `<tr><td>#${k + 1} <span class="tier">${'I'.repeat(r.tier)}</span></td>${r.each.map((x, i) => { const [cls, txt] = BAND(x); return `<td class="${cls}" title="${esc(r.labels[i])}">${txt}${r.off[i] == null ? '' : ` (${fmt(r.off[i])}% off)`}</td>`; }).join('')}</tr>`).join('')}</table>
+        ${v.rows.map((r, k) => `<tr><td>#${k + 1} <span class="tier">${'I'.repeat(r.tier)}</span>${r.shock ? ' <span class="wk-chip stalled">shock</span>' : ''}</td>${r.each.map((x, i) => { const [cls, txt] = BAND(x); return `<td class="${cls}" title="${esc(r.labels[i])}">${txt}${r.off[i] == null ? '' : ` (${fmt(r.off[i])}% off)`}</td>`; }).join('')}</tr>`).join('')}</table>
         ${v.passed ? `<div class="result-head good"><b>Pipeline running</b><span>${pipe.steps.length} step${pipe.steps.length > 1 ? 's' : ''}</span></div>` : `<p class="muted">Not every answer was within 1%. <a href="#/learn/${m}/${s}">Review the lesson</a> and adjust the wiring.</p>`}`;
       render();
+      if (fix) Hud.toast('Market shock fixed', '+' + money(fix.rec.bonus) + ' bonus');
       if (unlocks.length) {
         const chain = root.querySelector('.wk-chain');
         void chain.offsetWidth;
