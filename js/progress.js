@@ -12,6 +12,7 @@ const Progress = (() => {
     root.innerHTML = `
       <div class="progress-page">
         <h1>Progress</h1>
+        ${Rewards.questsHTML()}
         ${Hud.progressHTML()}
         <div class="kpis">
           <div class="kpi"><b>${Object.values(Store.data.sections).filter(s => s.done).length}</b><span>sections completed</span></div>
@@ -58,6 +59,7 @@ const Progress = (() => {
       f.text().then(t => { try { Store.importJSON(t); App.profileChanged(); App.render(); } catch (err) { alert('Import failed: ' + err.message); } });
     };
     root.querySelector('#rstC').onclick = () => { if (confirm('Reset all flashcard progress (levels, stars, history)?')) { Store.reset('cards'); App.render(); } };
+    Rewards.wire(root, () => App.render());
     root.querySelector('#rstL').onclick = () => { if (confirm('Reset lesson progress (completed sections and answered questions)?')) { Store.reset('sections'); Store.reset('checks'); App.render(); } };
   }
   return { route };
