@@ -729,6 +729,62 @@ const Widgets = (() => {
     draw();
   };
 
+  // M4: normalization lab
+  reg['normalize'] = box => {
+    title(box, 'Normalize the data', 'eight historical programs; turn each adjustment on');
+    const onoff = [['0', 'Off'], ['1', 'On']];
+    const v = controls(box, [
+      { k: 'units', label: 'Convert $K to $M', type: 'select', v: '0', options: onoff },
+      { k: 'infl', label: 'Escalate TY$ to BY2026$ (2.5%/yr)', type: 'select', v: '0', options: onoff },
+      { k: 'qty', label: 'Adjust lot average to T1 (90% curve)', type: 'select', v: '0', options: onoff }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    function draw() {
+      const o = { units: v.units === '1', infl: v.infl === '1', qty: v.qty === '1' };
+      const D = M.NORM_DATA, ys = D.map(d => M.normalizeCost(d, o));
+      const fit = ols(D.map(d => d.kg), ys);
+      pb.innerHTML = '';
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax: 650, ymin: 0, ymax: Math.max(...ys) * 1.1, xlabel: 'weight (kg)', ylabel: o.units ? 'cost ($M)' : 'cost (mixed $K and $M)' });
+      p.axes(); p.fn(x => fit.b0 + fit.b1 * x, 'series c1');
+      D.forEach((d, i) => p.dot(d.kg, ys[i], i === 0 ? 'pt hot' : d.k && !o.units ? 'pt bad' : 'pt', i === 0 ? 7 : 5));
+      tb.innerHTML = '<table><tr><th>#</th><th>kg</th><th>Year (TY$)</th><th>Lot midpoint</th><th>Recorded</th><th>Normalized</th></tr>' +
+        D.map((d, i) => `<tr><td>${i + 1}${i === 0 ? ' ★' : ''}</td><td>${d.kg}</td><td>${d.y}</td><td>${d.q}</td><td>${f2(d.rec)} ${d.k ? '$K' : '$M'}</td><td>${f2(ys[i], 3)}</td></tr>`).join('') + '</table>';
+      const nAdjust = [o.units, o.infl, o.qty].filter(Boolean).length;
+      ro([['Adjustments on', nAdjust + ' of 3'], ['$R^2$ of cost vs. weight', f2(fit.r2, 3), fit.r2 > 0.99 ? 'good' : 'bad'], ['Point 1 (★) normalized', f2(ys[0], 3)]]);
+      publish(box, { r2: fit.r2, nAdjust, byValue: ys[0] });
+    }
+    draw();
+  };
+
+  // M2: estimating method by life-cycle phase
+  reg['method-phase'] = box => {
+    title(box, 'Which method, when?', 'illustrative mix of techniques as a program matures');
+    const v = controls(box, [{ k: 'phase', label: 'Phase', min: 0, max: 4, step: 1, v: 0, fmt: i => M.PHASES[Math.round(i)] }], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, M.METHODS.map((n, i) => ['m' + i, n]));
+    const ro = readout(box);
+    const short = ['Concept', 'Tech dev', 'EMD', 'Production', 'O&S'];
+    function draw() {
+      pb.innerHTML = '';
+      const ph = Math.round(v.phase), W = M.METHOD_WEIGHTS;
+      const p = Plot.create(pb, { h: 240, xmin: 0, xmax: 4, ymin: 0, ymax: 1, xticks: 4, xlabel: 'life-cycle phase', ylabel: 'share of the estimate', xfmt: i => short[Math.round(i)] || '', yfmt: y => Math.round(y * 100) + '%' });
+      p.axes();
+      for (let k = 0; k < 4; k++) {
+        const top = W.map((w, i) => [i, w.slice(0, k + 1).reduce((s, x) => s + x, 0)]);
+        const bot = W.map((w, i) => [i, w.slice(0, k).reduce((s, x) => s + x, 0)]).reverse();
+        const d = top.concat(bot).map((q, i) => (i ? 'L' : 'M') + p.x(q[0]).toFixed(1) + ' ' + p.y(q[1]).toFixed(1)).join(' ') + ' Z';
+        Plot.svgEl('path', { d, class: 'stack m' + k }, p.svg);
+      }
+      p.vline(ph, 'marker hot');
+      const w = W[ph], dom = w.indexOf(Math.max(...w));
+      ro(M.METHODS.map((n, i) => [n, pct(w[i], 0), i === dom ? 'good' : '']));
+      publish(box, { phase: ph, dominant: dom });
+    }
+    draw();
+  };
+
   // M1/M5: TRL ladder
   reg['trl'] = box => {
     title(box, 'Technology Readiness Levels', 'click a level');

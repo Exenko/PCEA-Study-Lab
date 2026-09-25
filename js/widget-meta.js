@@ -16,6 +16,8 @@
     'burden': { controls: ['dl', 'oh', 'ga', 'fee', 'hrs'], setters: [], outputs: ['cost', 'wrap', 'multiple', 'price'] },
     'sw-effort': { controls: ['A', 'E', 's'], setters: [], outputs: ['effort', 'prod', 'doubleX'] },
     'analogy': { controls: ['c0', 's0', 's1', 'b', 'cx'], setters: [], outputs: ['ratio', 'sized', 'est', 'linear'] },
+    'normalize': { controls: ['units', 'infl', 'qty'], setters: [], outputs: ['r2', 'nAdjust', 'byValue'] },
+    'method-phase': { controls: ['phase'], setters: [], outputs: ['phase', 'dominant'] },
     'trl': { controls: [], setters: [], outputs: [] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;

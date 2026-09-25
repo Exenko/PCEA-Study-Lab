@@ -494,3 +494,9 @@ a.offer:hover, a.camp:hover { border-color: var(--accent); box-shadow: var(--sha
   .wk-step { flex: 0 0 240px; }
   .wk-step:not(:last-of-type)::after { content: '\2192'; left: auto; right: -17px; top: 40%; bottom: auto; }
 }
+.plot .stack { stroke: var(--paper); stroke-width: 1; }
+.plot .stack.m0, .sw.m0 { fill: color-mix(in srgb, var(--c1) 55%, transparent); background: color-mix(in srgb, var(--c1) 55%, transparent) !important; }
+.plot .stack.m1, .sw.m1 { fill: color-mix(in srgb, var(--c2) 55%, transparent); background: color-mix(in srgb, var(--c2) 55%, transparent) !important; }
+.plot .stack.m2, .sw.m2 { fill: color-mix(in srgb, var(--c3) 55%, transparent); background: color-mix(in srgb, var(--c3) 55%, transparent) !important; }
+.plot .stack.m3, .sw.m3 { fill: color-mix(in srgb, var(--mid) 65%, transparent); background: color-mix(in srgb, var(--mid) 65%, transparent) !important; }
+.sw.m0, .sw.m1, .sw.m2, .sw.m3 { height: 10px !important; }
