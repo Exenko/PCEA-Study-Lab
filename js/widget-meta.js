@@ -18,6 +18,8 @@
     'analogy': { controls: ['c0', 's0', 's1', 'b', 'cx'], setters: [], outputs: ['ratio', 'sized', 'est', 'linear'] },
     'normalize': { controls: ['units', 'infl', 'qty'], setters: [], outputs: ['r2', 'nAdjust', 'byValue'] },
     'method-phase': { controls: ['phase'], setters: [], outputs: ['phase', 'dominant'] },
+    'ci-sim': { controls: ['n', 'level', 'method'], setters: ['seed'], outputs: ['n', 'coverage', 'halfWidth'] },
+    'lockin': { controls: ['x'], setters: [], outputs: ['x', 'committed', 'spent', 'gap', 'phase'] },
     'trl': { controls: [], setters: [], outputs: [] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;

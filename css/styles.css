@@ -500,3 +500,6 @@ a.offer:hover, a.camp:hover { border-color: var(--accent); box-shadow: var(--sha
 .plot .stack.m2, .sw.m2 { fill: color-mix(in srgb, var(--c3) 55%, transparent); background: color-mix(in srgb, var(--c3) 55%, transparent) !important; }
 .plot .stack.m3, .sw.m3 { fill: color-mix(in srgb, var(--mid) 65%, transparent); background: color-mix(in srgb, var(--mid) 65%, transparent) !important; }
 .sw.m0, .sw.m1, .sw.m2, .sw.m3 { height: 10px !important; }
+.plot .ci-hit { stroke: var(--c1); stroke-width: 2.2; }
+.plot .ci-miss { stroke: var(--bad); stroke-width: 2.8; }
+.sw.bad { background: var(--bad) !important; }

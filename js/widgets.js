@@ -785,6 +785,66 @@ const Widgets = (() => {
     draw();
   };
 
+  // M10: confidence interval coverage
+  reg['ci-sim'] = box => {
+    title(box, 'Confidence interval simulator', 'population is normal with μ = 100, σ = 15');
+    const v = controls(box, [
+      { k: 'n', label: 'Sample size n', min: 2, max: 60, step: 1, v: 10 },
+      { k: 'level', label: 'Confidence level', type: 'select', v: '0.95', options: [['0.9', '90%'], ['0.95', '95%'], ['0.99', '99%']] },
+      { k: 'method', label: 'Critical value', type: 'select', v: 't', options: [['t', 't with n − 1 df'], ['z', 'z (treats s as if it were σ)']] }
+    ], draw);
+    let seed = +preset(box, 'seed', 1);
+    box.w.setters.seed = s => { seed = +s; draw(); };
+    const again = E('button', 'btn small ghost', 'Draw new samples');
+    again.onclick = () => { seed++; draw(); };
+    box.appendChild(again);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'interval covers μ'], ['bad', 'interval misses μ'], ['c2', 'true μ']]);
+    const ro = readout(box);
+    function draw() {
+      const n = Math.round(v.n), level = parseFloat(v.level);
+      const r = M.ciSim({ n, level, method: v.method, seed, k: 1000, mu: 100, sigma: 15 });
+      pb.innerHTML = '';
+      const shown = r.intervals.slice(0, 40);
+      const lo = Math.min(70, ...shown.map(q => q[0])), hi = Math.max(130, ...shown.map(q => q[1]));
+      const p = Plot.create(pb, { h: 300, xmin: lo, xmax: hi, ymin: 0, ymax: 41, yticks: 2, xlabel: 'interval for μ (first 40 samples)', yfmt: () => '', pad: { l: 20, r: 16, t: 10, b: 40 } });
+      p.axes(); p.vline(100, 'marker c2');
+      shown.forEach((q, i) => p.seg(q[0], i + 1, q[1], i + 1, q[2] ? 'ci-hit' : 'ci-miss'));
+      ro([
+        ['Critical value', f2(r.crit, 3)],
+        ['Intervals covering μ (of 1,000)', pct(r.coverage, 1), Math.abs(r.coverage - level) < 0.02 ? 'good' : 'bad'],
+        ['Nominal level', pct(level, 0)],
+        ['Average half-width', f2(r.halfWidth, 2)]
+      ]);
+      publish(box, { n, coverage: r.coverage, halfWidth: r.halfWidth });
+    }
+    draw();
+  };
+
+  // M16: locked-in vs. spent life-cycle cost
+  reg['lockin'] = box => {
+    title(box, 'Locked-in vs. spent', 'illustrative life-cycle curves');
+    const v = controls(box, [{ k: 'x', label: 'Point in the life cycle', min: 0, max: 100, step: 1, v: 5, fmt: x => x + '%' }], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c2', 'committed (locked in)'], ['c1', 'spent']]);
+    const ro = readout(box);
+    const starts = [0, 10, 35, 60], labels = ['Concept', 'Design', 'Production', 'O&S'];
+    function draw() {
+      pb.innerHTML = '';
+      const L = M.lockin(v.x);
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax: 100, ymin: 0, ymax: 1.08, xlabel: 'program timeline (%)', ylabel: 'share of life-cycle cost', yfmt: y => Math.round(y * 100) + '%' });
+      p.axes();
+      starts.slice(1).forEach(b => p.vline(b, 'marker'));
+      starts.forEach((s, i) => p.text(s + 1, 1.04, labels[i], 'annot'));
+      p.fn(x => M.lockin(x).committed, 'series c2');
+      p.fn(x => M.lockin(x).spent, 'series c1');
+      p.seg(v.x, L.spent, v.x, L.committed, 'marker hot');
+      ro([['Phase', M.LOCK_PHASES[L.phase]], ['Committed', pct(L.committed, 0)], ['Spent', pct(L.spent, 0)], ['Gap (committed − spent)', pct(L.gap, 1), 'c2t']]);
+      publish(box, { x: v.x, committed: L.committed, spent: L.spent, gap: L.gap, phase: L.phase });
+    }
+    draw();
+  };
+
   // M1/M5: TRL ladder
   reg['trl'] = box => {
     title(box, 'Technology Readiness Levels', 'click a level');
