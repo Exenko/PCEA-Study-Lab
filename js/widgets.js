@@ -411,7 +411,7 @@ const Widgets = (() => {
   // ======================================================================
   // M9/M10: Monte Carlo S-curve
   reg['montecarlo'] = box => {
-    title(box, 'Monte Carlo cost risk', 'sum of triangular WBS elements');
+    title(box, 'Monte Carlo cost risk', 'sum of triangular WBS elements; dashed curve = no correlation');
     const els = [
       { n: 'Airframe', a: 80, c: 100, b: 150 },
       { n: 'Propulsion', a: 40, c: 50, b: 80 },
@@ -422,38 +422,40 @@ const Widgets = (() => {
     let h = '<table><tr><th>Element</th><th>Low</th><th>Most likely</th><th>High</th></tr>';
     els.forEach((e, i) => { h += `<tr><td>${e.n}</td>` + ['a', 'c', 'b'].map(k => `<td><input type="number" data-i="${i}" data-k="${k}" value="${e[k]}"></td>`).join('') + '</tr>'; });
     tbl.innerHTML = h + '</table>';
-    tbl.querySelectorAll('input').forEach(inp => inp.oninput = () => { const x = parseFloat(inp.value); if (isFinite(x)) { els[inp.dataset.i][inp.dataset.k] = x; } });
+    tbl.querySelectorAll('input').forEach(inp => inp.oninput = () => { const x = parseFloat(inp.value); if (isFinite(x)) { els[inp.dataset.i][inp.dataset.k] = x; go(); } });
     const v = controls(box, [
       { k: 'rho', label: 'Correlation ρ', min: 0, max: 1, step: 0.05, v: 0.2, fmt: x => x.toFixed(2) },
       { k: 'n', label: 'Trials', type: 'select', v: '5000', options: [['1000', '1,000'], ['5000', '5,000'], ['20000', '20,000']] }
-    ], () => {});
-    const run = E('button', 'btn', 'Run simulation'); box.appendChild(run);
+    ], go);
     const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R); box.appendChild(row);
     const ro = readout(box);
-    run.onclick = go;
     function go() {
       const N = +v.n;
-      const s = M.mcSum(els, v.rho, N, 11);
+      const s = M.mcSum(els, v.rho, N, 11), s0 = M.mcSum(els, 0, N, 11);
       const pe = els.reduce((a, e) => a + e.c, 0);
       const mu = mean(s), sdev = sd(s);
       const above = s.findIndex(x => x > pe), pctOfPE = (above < 0 ? N : above) / N;
+      const p80 = quant(s, 0.8), p80ind = quant(s0, 0.8);
       L.innerHTML = ''; R.innerHTML = '';
-      const bins = 30, lo = s[0], hi = s[N - 1], w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
+      const bins = 30, lo = Math.min(s[0], s0[0]), hi = Math.max(s[N - 1], s0[N - 1]), w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
       s.forEach(x => cnt[Math.min(bins - 1, Math.floor((x - lo) / w))]++);
       const p1 = Plot.create(L, { w: 300, h: 230, xmin: lo, xmax: hi, ymin: 0, ymax: Math.max(...cnt) * 1.1, xlabel: 'total cost', ylabel: 'frequency', yfmt: () => '' });
       p1.axes(); cnt.forEach((c, i) => p1.rect(lo + i * w, 0, lo + (i + 1) * w, c, 'bar'));
       p1.vline(pe, 'marker c2'); p1.vline(mu, 'marker c1');
+      const step = Math.ceil(N / 300);
+      const curve = arr => arr.filter((_, i) => i % step === 0).map((x, i) => [x, (i * step) / N]);
       const p2 = Plot.create(R, { w: 300, h: 230, xmin: lo, xmax: hi, ymin: 0, ymax: 1, xlabel: 'total cost', ylabel: 'confidence', yfmt: x => (x * 100).toFixed(0) + '%' });
-      p2.axes(); p2.line(s.filter((_, i) => i % Math.ceil(N / 300) === 0).map((x, i, arr) => [x, (i * Math.ceil(N / 300)) / N]), 'series c1');
+      p2.axes(); p2.line(curve(s0), 'series ghost'); p2.line(curve(s), 'series c1');
       p2.vline(pe, 'marker c2'); p2.hline(0.8, 'marker');
       ro([
         ['Point estimate (sum of modes)', f2(pe, 1), 'c2t'],
         ['Percentile of point estimate', pct(pctOfPE, 0), 'bad'],
         ['Mean of total', f2(mu, 1), 'c1t'], ['Std dev of total', f2(sdev, 1)],
-        ['50th percentile', f2(quant(s, 0.5), 1)], ['80th percentile', f2(quant(s, 0.8), 1)],
+        ['50th percentile', f2(quant(s, 0.5), 1)], ['80th percentile', f2(p80, 1)],
+        ['80th percentile with ρ = 0', f2(p80ind, 1)],
         ['Sum of element means', f2(els.reduce((a, e) => a + (e.a + e.b + e.c) / 3, 0), 1)]
       ]);
-      publish(box, { pe, pePct: pctOfPE, mean: mu, sd: sdev, p50: quant(s, 0.5), p70: quant(s, 0.7), p80: quant(s, 0.8) });
+      publish(box, { pe, pePct: pctOfPE, mean: mu, sd: sdev, p50: quant(s, 0.5), p70: quant(s, 0.7), p80, p80ind, p80gap: p80 - p80ind });
     }
     go();
   };
@@ -519,9 +521,10 @@ const Widgets = (() => {
     ], draw);
     const pb = E('div'); box.appendChild(pb);
     legend(box, [['c1', 'Alternative A (cumulative PV)'], ['c2', 'Alternative B']]);
+    const pb2 = E('div'); box.appendChild(pb2);
     const ro = readout(box);
     function draw() {
-      pb.innerHTML = '';
+      pb.innerHTML = ''; pb2.innerHTML = '';
       const df = t => 1 / Math.pow(1 + v.r, v.mid === 'mid' ? t - 0.5 : t);
       const cum = (inv, c) => { const out = [[0, inv]]; let s = inv; for (let t = 1; t <= v.n; t++) { s += c * df(t); out.push([t, s]); } return out; };
       const A = cum(v.ia, v.ca), B = cum(v.ib, v.cb);
@@ -533,14 +536,22 @@ const Widgets = (() => {
       for (let i = 1; i < A.length; i++) if ((A[i - 1][1] - B[i - 1][1]) * (A[i][1] - B[i][1]) <= 0 && A[i - 1][1] !== B[i - 1][1]) { be = 'year ' + i; break; }
       let sumDf = 0; for (let t = 1; t <= v.n; t++) sumDf += df(t);
       const sir = ((v.ca - v.cb) * sumDf) / (v.ib - v.ia);
+      const gap = r => M.pvCost(v.ia, v.ca, v.n, r, v.mid === 'mid') - M.pvCost(v.ib, v.cb, v.n, r, v.mid === 'mid');
+      const beRate = M.bisect(gap, 0, 0.2);
+      const gs = []; for (let i = 0; i <= 40; i++) gs.push([0.1 * i / 40, gap(0.1 * i / 40)]);
+      const gy = gs.map(q => q[1]), glo = Math.min(0, ...gy), ghi = Math.max(0, ...gy), gpad = (ghi - glo) * 0.1 || 1;
+      const q = Plot.create(pb2, { h: 180, xmin: 0, xmax: 0.1, ymin: glo - gpad, ymax: ghi + gpad, xlabel: 'discount rate', ylabel: 'PV(A) − PV(B)', xfmt: x => (x * 100).toFixed(0) + '%' });
+      q.axes(); q.hline(0, 'marker'); q.line(gs, 'series c3'); q.vline(v.r, 'marker hot');
+      if (beRate <= 0.1) q.vline(beRate, 'marker c2');
       ro([
         ['PV of cost, A', f2(pvA, 1), pvA <= pvB ? 'good' : ''], ['PV of cost, B', f2(pvB, 1), pvB < pvA ? 'good' : ''],
         ['Undiscounted A / B', `${f2(undA, 0)} / ${f2(undB, 0)}`],
         ['Discounted break-even', be],
+        ['Break-even discount rate', isFinite(beRate) ? pct(beRate, 2) : 'none from 0% to 20%'],
         ['EUAC A / B', `${f2(pvA / sumDf, 1)} / ${f2(pvB / sumDf, 1)}`],
         ['SIR of B over A = PV savings / extra investment', v.ib !== v.ia ? f2(sir, 2) : '—', sir > 1 ? 'good' : 'bad']
       ]);
-      publish(box, { pvA, pvB, diff: pvA - pvB, sir });
+      publish(box, { pvA, pvB, diff: pvA - pvB, sir, beRate });
     }
     draw();
   };

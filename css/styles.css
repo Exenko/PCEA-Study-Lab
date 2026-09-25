@@ -238,6 +238,7 @@ svg.plot { width: 100%; height: auto; display: block; background: var(--paper); 
 .plot .bar.c1f { fill: var(--c1); } .plot .bar.c2f { fill: var(--c2); }
 .plot .sq { fill: color-mix(in srgb, var(--c2) 16%, transparent); stroke: color-mix(in srgb, var(--c2) 60%, transparent); stroke-width: 1; }
 .plot .series.hand { stroke: var(--c2); }
+.plot .series.ghost { stroke: var(--muted); stroke-dasharray: 5 4; stroke-width: 1.6; }
 .plot .handle { fill: var(--paper); stroke: var(--c2); stroke-width: 3; cursor: grab; }
 .plot .resid { stroke: var(--c2); stroke-width: 1; stroke-dasharray: 2 2; }
 .plot .annot { fill: var(--ink-2); font-size: 11px; font-weight: 600; }
