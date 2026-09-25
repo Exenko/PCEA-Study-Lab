@@ -66,6 +66,19 @@
     return o && o.rec.kind === 'shock' ? resolveAll(d, id, now) : null;
   }
 
-  const ShopEvents = { COOLDOWN, IMMUNE, SHOCK_N, chance, open, stalledAt, roll, collect, collectAll, auditProgress, bonus, resolveAudit, resolveShock };
+  // Workshop fix for a shocked pipeline: the first SHOCK_N contracts come from shock(), the rest are normal.
+  function shockValidate(d, id, pipe, seedKey) {
+    const tpl = tplOf(id), maxTier = C.state(d).maxTier;
+    if (!tpl || typeof tpl.shock !== 'function') return P.validate(pipe, tpl, seedKey, maxTier);
+    const jobs = [];
+    for (let k = 0; k < P.VALIDATE_N; k++) {
+      const tier = 1 + (k % Math.max(1, maxTier)), h = C.helpers(C.rng(C.hash(seedKey + '|' + k)));
+      jobs.push(k < SHOCK_N ? { tier, job: tpl.shock(h, tier), shock: true } : { tier, job: tpl.gen(h, tier) });
+    }
+    return P.score(pipe, tpl, jobs);
+  }
+  const story = (id, seed) => { const t = tplOf(id); return t && typeof t.shock === 'function' ? t.shock(C.helpers(C.rng(seed)), 1).story : ''; };
+
+  const ShopEvents = { COOLDOWN, IMMUNE, SHOCK_N, chance, open, stalledAt, roll, collect, collectAll, auditProgress, bonus, resolveAudit, resolveShock, shockValidate, story };
   if (node) module.exports = ShopEvents; else root.ShopEvents = ShopEvents;
 })(this);

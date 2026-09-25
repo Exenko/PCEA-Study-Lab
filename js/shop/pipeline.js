@@ -86,20 +86,29 @@
     return p.pct ? 'This port expects a rate or share' : 'This port does not expect a rate or share';
   }
 
-  // Runs the pipeline on VALIDATE_N fresh contracts spread across tiers 1..maxTier. Pass means every answer within 1%.
-  function validate(pipe, tpl, seedKey, maxTier) {
+  // Scores a pipeline on prepared jobs. Pass means every answer within 1%.
+  function score(pipe, tpl, jobs) {
     const rows = [];
     let problems = null;
-    for (let k = 0; k < VALIDATE_N; k++) {
-      const tier = 1 + (k % Math.max(1, maxTier));
-      const job = tpl.gen(C.helpers(C.rng(C.hash(seedKey + '|' + k))), tier);
+    jobs.forEach(({ tier, job, shock }) => {
       if (!problems) problems = check(pipe, tpl.ins, job.answers.length, null);
       const res = run(pipe, job.inputs);
       const each = job.answers.map((a, i) => res.outs[i] == null ? -0.3 : C.answerScore(res.outs[i], a.value));
       const off = job.answers.map((a, i) => res.outs[i] == null ? null : Math.abs(res.outs[i] - a.value) / Math.abs(a.value) * 100);
-      rows.push({ tier, labels: job.answers.map(a => a.label), each, off });
-    }
+      const row = { tier, labels: job.answers.map(a => a.label), each, off };
+      if (shock) row.shock = true;
+      rows.push(row);
+    });
     return { rows, problems, passed: problems.length === 0 && rows.every(r => r.each.every(x => x === 1)) };
+  }
+  // Runs the pipeline on VALIDATE_N fresh contracts spread across tiers 1..maxTier.
+  function validate(pipe, tpl, seedKey, maxTier) {
+    const jobs = [];
+    for (let k = 0; k < VALIDATE_N; k++) {
+      const tier = 1 + (k % Math.max(1, maxTier));
+      jobs.push({ tier, job: tpl.gen(C.helpers(C.rng(C.hash(seedKey + '|' + k))), tier) });
+    }
+    return score(pipe, tpl, jobs);
   }
 
   const GATE = 3;
@@ -125,6 +134,6 @@
     return N.DOMAIN.filter(n => n.earnedFrom.includes(id) && !have.has(n.id)).map(n => n.id);
   }
 
-  const ShopPipe = { run, check, removeStep, moveStep, primitivesOnly, pctWarning, validate, VALIDATE_N, GATE, handSolves, earned, allowed, record, draft, status, unlocksFor };
+  const ShopPipe = { run, check, removeStep, moveStep, primitivesOnly, pctWarning, score, validate, VALIDATE_N, GATE, handSolves, earned, allowed, record, draft, status, unlocksFor };
   if (typeof module !== 'undefined' && module.exports) module.exports = ShopPipe; else root.ShopPipe = ShopPipe;
 })(this);

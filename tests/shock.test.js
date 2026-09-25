@@ -2,6 +2,7 @@ const assert = require('assert');
 const T = require('../js/shop/templates.js');
 const C = require('../js/shop/core.js');
 const P = require('../js/shop/pipeline.js');
+const E = require('../js/shop/events.js');
 const REF = require('./fixtures/pipes.js');
 const HARD = require('./fixtures/hard-pipes.js');
 const SHOCKED = ['cpif-fee', 'esc-compound', 'esc-index', 'evm-eac', 'lc-lot', 'lc-unit', 'mfg-labor', 'npv'];
@@ -44,5 +45,26 @@ module.exports = [
       'mfg-labor': () => i.rate > 180
     }[id];
     assert.ok(out(), id + ' ' + JSON.stringify(i));
-  })]
+  })],
+  ['shockValidate mixes three shocked and two normal contracts', () => {
+    const v = E.shockValidate({ shop: {} }, 'esc-index', REF['esc-index'].prim, 'ann|esc-index|1');
+    assert.strictEqual(v.rows.length, P.VALIDATE_N);
+    assert.deepStrictEqual(v.rows.map(r => !!r.shock), [true, true, true, false, false]);
+    assert.strictEqual(v.passed, true);
+  }],
+  ['every reference pipeline passes shock validation; hard-coded ones fail', () => {
+    for (const id of SHOCKED) for (let k = 1; k <= 5; k++) {
+      assert.strictEqual(E.shockValidate({ shop: {} }, id, REF[id].prim, 'ref|' + id + '|' + k).passed, true, id);
+      assert.strictEqual(E.shockValidate({ shop: {} }, id, HARD[id], 'hard|' + id + '|' + k).passed, false, id);
+    }
+  }],
+  ['plain validate rows carry no shock flag and a shockless template falls back to it', () => {
+    const v = P.validate(REF['esc-compound'].prim, tpl('esc-compound'), 'x', 3);
+    assert.ok(v.rows.every(r => !('shock' in r)));
+    assert.deepStrictEqual(E.shockValidate({ shop: {} }, 'cer-power', REF['cer-power'].prim, 'x'), P.validate(REF['cer-power'].prim, tpl('cer-power'), 'x', 1));
+  }],
+  ['story is the seeded shock story', () => {
+    assert.strictEqual(E.story('lc-lot', 42), tpl('lc-lot').shock(C.helpers(C.rng(42)), 1).story);
+    assert.strictEqual(E.story('cer-power', 42), '');
+  }]
 ];
