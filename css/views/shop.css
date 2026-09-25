@@ -327,6 +327,20 @@
 .wk-item.running {
   border-color: var(--good);
   background: var(--good-soft);
+  text-decoration: none;
+}
+
+.wk-item.running > a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.wk-item.running > a:hover {
+  text-decoration: underline;
+}
+
+.wk-item.running > button {
+  align-self: flex-start;
 }
 
 .wk-item b {

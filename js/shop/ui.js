@@ -37,6 +37,7 @@ const Shop = (() => {
       <div class="offers">${offers.map(o => `<a class="offer" href="#/shop/job/${o.slot}">
         <div class="offer-top"><span class="muted small">${esc(modName(o.tpl.module))}</span><span class="tier">${'I'.repeat(o.tier)}</span></div>
         <b>${esc(o.tpl.title)}</b><span class="muted small">Up to ${money(C.BASE[o.tier])} · ${o.job.answers.length} answer${o.job.answers.length > 1 ? 's' : ''}</span></a>`).join('')}</div>
+      ${st.left('reroll') > 0 ? `<div class="row-btns"><button class="btn ghost small" id="reroll-board">Reroll board (${st.left('reroll')} left)</button></div>` : ''}
       ${locked.length ? `<p class="muted small">Locked contract types: ${locked.map(m => `<a href="#/cards?m=${m}">${esc(modName(m))}</a>`).join(', ')}. Study about a third of a module's flashcards to Familiar to open its contracts.</p>` : ''}
       ${ShopWorkshop.panel(Store.data, open)}
       <h2>Campaign</h2>
@@ -66,6 +67,9 @@ const Shop = (() => {
       board(root);
     });
     ShopFirm.wire(root, () => board(root));
+    ShopWorkshop.wirePanel(root, () => board(root));
+    const rr = root.querySelector('#reroll-board');
+    if (rr) rr.onclick = () => { record('use-reroll-' + Date.now(), { use: 'reroll' }); Store.save(); board(root); };
   }
 
   function toolsHTML(st) {
@@ -102,10 +106,12 @@ const Shop = (() => {
       <div class="offer-top"><span class="muted">${esc(modName(o.tpl.module))}</span>${stars(o.tier)}</div>
       <h1>${esc(o.tpl.title)}</h1>
       <div class="brief">${Render.md(o.job.brief)}</div>
+      <p class="muted hint-line" hidden></p>
       ${answerInputs(o.job.answers)}
       ${toolsHTML(st)}
       <div class="row-btns"><button class="btn" id="submit">Submit estimate</button>
-        ${st.left('opinion') > 0 ? `<button class="btn ghost" id="opinion">Second opinion (${st.left('opinion')} left)</button>` : ''}</div>
+        ${st.left('opinion') > 0 ? `<button class="btn ghost" id="opinion">Second opinion (${st.left('opinion')} left)</button>` : ''}
+        ${st.left('hint') > 0 && o.tpl.hint ? `<button class="btn ghost" id="hint">Hint (${st.left('hint')} left)</button>` : ''}</div>
       <div class="result" hidden></div></div>`;
     wireCalc(root);
     const inputs = [...root.querySelectorAll('.ans input')];
@@ -116,6 +122,15 @@ const Shop = (() => {
       Store.save();
       inputs.forEach((inp, i) => { const ok = C.answerScore(inp.value, o.job.answers[i].value) >= 0.6; inp.parentElement.querySelector('.ans-fb').textContent = ok ? 'Looks right' : 'Recheck this'; inp.parentElement.className = 'ans ' + (ok ? 'good' : 'bad'); });
       op.remove();
+    };
+    const hb = root.querySelector('#hint');
+    if (hb) hb.onclick = () => {
+      record('use-hint-' + Date.now(), { use: 'hint' });
+      Store.save();
+      const p = root.querySelector('.hint-line');
+      p.textContent = 'Hint: ' + o.tpl.hint;
+      p.hidden = false;
+      hb.remove();
     };
     root.querySelector('#submit').onclick = () => {
       if (inputs.some(i => !i.value.trim()) && !confirm('Some answers are blank. Submit anyway?')) return;
@@ -135,7 +150,7 @@ const Shop = (() => {
       inp.parentElement.className = 'ans ' + cls;
       inp.parentElement.querySelector('.ans-fb').textContent = `${txt} · answer ${fmtAns(jb.answers[i].value)}`;
     });
-    root.querySelectorAll('#submit, #opinion').forEach(b => b.remove());
+    root.querySelectorAll('#submit, #opinion, #hint').forEach(b => b.remove());
     const res = root.querySelector('.result');
     res.hidden = false;
     res.innerHTML = `<div class="result-head ${g.pay >= 0 ? 'good' : 'bad'}"><b>${g.pay >= 0 ? 'Paid' : 'Loss'} ${money(g.pay)}</b><span>Reputation ${g.rep > 0 ? '+' : ''}${g.rep}</span></div>

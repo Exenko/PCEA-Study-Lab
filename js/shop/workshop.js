@@ -5,6 +5,7 @@ const ShopWorkshop = (() => {
   const fmt = v => Array.isArray(v) ? '[' + v.slice(0, 6).map(fmt).join(', ') + (v.length > 6 ? ', ...' : '') + ']'
     : (+(+v).toPrecision(6)).toLocaleString('en-US', { maximumFractionDigits: 4 });
   const fmtIn = (v, unit) => unit === '%' && !Array.isArray(v) ? fmt(v * 100) + '%' : fmt(v);
+  const money = v => '$' + (+v).toLocaleString('en-US', { maximumFractionDigits: 1 }) + 'K';
   const BAND = x => x === 1 ? ['good', 'Within 1%'] : x === 0.6 ? ['mid', 'Within 5%'] : x === 0.2 ? ['mid', 'Within 10%'] : ['bad', 'Off by more than 10%'];
   const STATUS = { locked: 'Locked', ready: 'Ready to automate', running: 'Running' };
   const empty = n => ({ steps: [], outs: Array(n).fill(null) });
@@ -12,14 +13,31 @@ const ShopWorkshop = (() => {
   function panel(d, open) {
     const tpls = ShopTemplates.filter(t => open.has(t.module));
     if (!tpls.length) return '';
+    const I = ShopIdle, maxTier = C.state(d).maxTier, shift = new Set(I.onShift(d).map(o => o.id)), busy = shift.size >= I.firm(d).desks;
     return `<h2>Workshop</h2>
       <p class="muted">Solve a contract type exactly (within 1%) ${P.GATE} times, then automate it. Pass using only basic blocks to earn a reusable block.</p>
       <div class="wk-list">${tpls.map(t => {
         const s = P.status(d, t.id), n = P.handSolves(d, t.id);
-        const note = s === 'locked' ? `${Math.min(n, P.GATE)}/${P.GATE} exact solves` : STATUS[s];
-        return s === 'locked' ? `<div class="wk-item locked"><b>${esc(t.title)}</b><span class="muted small">${note}</span></div>`
-          : `<a class="wk-item ${s}" href="#/shop/pipe/${t.id}"><b>${esc(t.title)}</b><span class="wk-chip ${s}">${note}</span></a>`;
+        if (s === 'locked') return `<div class="wk-item locked"><b>${esc(t.title)}</b><span class="muted small">${Math.min(n, P.GATE)}/${P.GATE} exact solves</span></div>`;
+        if (s === 'ready') return `<a class="wk-item ready" href="#/shop/pipe/${t.id}"><b>${esc(t.title)}</b><span class="wk-chip ready">${STATUS.ready}</span></a>`;
+        const rec = P.record(d, t.id), on = shift.has(t.id), tier = rec.tier || 1;
+        return `<div class="wk-item running"><a href="#/shop/pipe/${t.id}"><b>${esc(t.title)}</b></a>
+          <span class="muted small">${money(I.rate(d, t.id).net)}/h net &middot; ${rec.stepCount || 0} steps &middot; tier ${'I'.repeat(tier)}</span>
+          ${tier < maxTier ? `<a class="wk-chip" href="#/shop/pipe/${t.id}">Re-test for tier ${'I'.repeat(maxTier)}</a>` : ''}
+          <button class="btn small ${on ? '' : 'ghost'}" data-shift="${t.id}" ${!on && busy ? 'disabled' : ''}>${on ? 'On shift' : busy ? 'All desks busy' : 'Off shift'}</button></div>`;
       }).join('')}</div>`;
+  }
+
+  function wirePanel(root, rerender) {
+    root.querySelectorAll('[data-shift]').forEach(b => b.onclick = () => {
+      const id = b.dataset.shift, cur = ShopIdle.onShift(Store.data).map(o => o.id);
+      const ids = cur.includes(id) ? cur.filter(x => x !== id) : [...cur, id];
+      let res;
+      try { res = ShopIdle.setShift(Store.data, ids, Date.now()); } catch (e) { return; }
+      res.writes.forEach(w => { Store.data.shop[w.key] = w.rec; });
+      Store.save();
+      rerender();
+    });
   }
 
   function route(root, id) {
@@ -121,7 +139,9 @@ const ShopWorkshop = (() => {
       const unlocks = v.passed ? P.unlocksFor(pipe, id, Store.data) : [];
       Store.data.shop['draft-' + id] = { draftOf: id, draft: pipe, tries, t: Date.now() };
       if (v.passed) {
-        Store.data.shop['pipe-' + id] = { pipe: id, steps: JSON.parse(JSON.stringify(pipe.steps)), outs: JSON.parse(JSON.stringify(pipe.outs)), stepCount: pipe.steps.length, primitivesOnly: P.primitivesOnly(pipe), passed: true, t: Date.now() };
+        const now = Date.now();
+        if (ShopIdle.onShift(Store.data).some(o => o.id === id)) { const c = ShopIdle.collect(Store.data, id, now); if (c) Store.data.shop[c.key] = c.rec; }
+        Store.data.shop['pipe-' + id] = { pipe: id, steps: JSON.parse(JSON.stringify(pipe.steps)), outs: JSON.parse(JSON.stringify(pipe.outs)), stepCount: pipe.steps.length, primitivesOnly: P.primitivesOnly(pipe), passed: true, tier: st.maxTier, passedAt: now, t: now };
       }
       unlocks.forEach(n => { Store.data.shop['node-' + n] = { node: n, t: Date.now() }; });
       Store.markActive();
@@ -141,5 +161,5 @@ const ShopWorkshop = (() => {
     }
     render();
   }
-  return { panel, route };
+  return { panel, wirePanel, route };
 })();
