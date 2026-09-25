@@ -630,35 +630,36 @@ const Widgets = (() => {
   // ======================================================================
   // M15: EVM
   reg['evm'] = box => {
-    title(box, 'Earned value calculator');
+    title(box, 'Earned value over time', 'scrub the month and watch the indices move');
     const v = controls(box, [
+      { k: 'sc', label: 'Scenario', type: 'select', v: 'overrun', options: [['track', 'On plan'], ['overrun', 'Growing cost overrun'], ['late', 'Behind schedule, on cost']] },
       { k: 'bac', label: 'BAC', type: 'number', v: 1000 },
-      { k: 'pv', label: 'PV (BCWS)', type: 'number', v: 400 },
-      { k: 'ev', label: 'EV (BCWP)', type: 'number', v: 350 },
-      { k: 'ac', label: 'AC (ACWP)', type: 'number', v: 420 }
+      { k: 'm', label: 'Month', min: 1, max: 24, step: 1, v: 6 }
     ], draw);
     const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c3', 'PV (plan)'], ['c1', 'EV (earned)'], ['c2', 'AC (actual cost)']]);
     const ro = readout(box);
     function draw() {
       pb.innerHTML = '';
-      const { bac, pv, ev, ac } = v;
+      const bac = v.bac, m = Math.round(v.m);
+      const at = t => M.evmAt(v.sc, bac, t);
+      const curve = (k, upto) => { const out = []; for (let t = 0; t <= upto + 1e-9; t += 0.25) out.push([t, at(t)[k]]); return out; };
+      const { pv, ev, ac } = at(m);
       const cv = ev - ac, sv = ev - pv, cpi = ev / ac, spi = ev / pv;
-      const eac1 = bac / cpi, eac2 = ac + (bac - ev) / (cpi * spi), eac3 = ac + (bac - ev);
-      const tcpi = (bac - ev) / (bac - ac);
-      const p = Plot.create(pb, { h: 150, xmin: 0, xmax: Math.max(bac, ac, eac2) * 1.05, ymin: 0, ymax: 4, yticks: 1, pad: { l: 70, r: 16, t: 8, b: 30 }, yfmt: () => '' });
-      p.axes();
-      [['PV', pv, 'bar'], ['EV', ev, 'bar c1f'], ['AC', ac, 'bar c2f']].forEach(([n, x, c], i) => { p.rect(0, 3.2 - i, x, 2.6 - i, c); p.text(0, 2.8 - i, n + ' ', 'annot', 'end'); });
-      p.vline(bac, 'marker'); p.text(bac, 3.6, 'BAC', 'annot', 'middle');
+      const eac = bac / cpi, tcpi = (bac - ev) / (bac - ac), open = bac > ac;
+      const p = Plot.create(pb, { xmin: 0, xmax: 24, ymin: 0, ymax: Math.max(bac, at(24).ac) * 1.05, xlabel: 'month', ylabel: 'cumulative $' });
+      p.axes(); p.hline(bac, 'marker'); p.text(0.4, bac * 1.02, 'BAC', 'annot');
+      p.line(curve('pv', 24), 'series c3'); p.line(curve('ev', m), 'series c1'); p.line(curve('ac', m), 'series c2');
+      p.vline(m, 'marker hot');
       ro([
+        ['PV / EV / AC', `${f2(pv, 0)} / ${f2(ev, 0)} / ${f2(ac, 0)}`],
         ['CV = EV − AC', f2(cv, 0), cv < 0 ? 'bad' : 'good'], ['SV = EV − PV', f2(sv, 0), sv < 0 ? 'bad' : 'good'],
         ['CPI = EV/AC', f2(cpi, 3), cpi < 1 ? 'bad' : 'good'], ['SPI = EV/PV', f2(spi, 3), spi < 1 ? 'bad' : 'good'],
-        ['% complete = EV/BAC', pct(ev / bac)], ['% spent = AC/BAC', pct(ac / bac)],
-        ['EAC = BAC/CPI', f2(eac1, 0)], ['EAC = AC + (BAC−EV)/(CPI·SPI)', f2(eac2, 0)], ['EAC = AC + (BAC−EV)', f2(eac3, 0)],
-        ['VAC = BAC − EAC(CPI)', f2(bac - eac1, 0), bac - eac1 < 0 ? 'bad' : 'good'],
-        ['TCPI (to hit BAC)', f2(tcpi, 3), tcpi - cpi > 0.1 ? 'bad' : ''],
-        ['TCPI − CPI', f2(tcpi - cpi, 3) + (tcpi - cpi > 0.1 ? ' (unrealistic)' : '')]
+        ['EAC = BAC/CPI', f2(eac, 0)], ['VAC = BAC − EAC', f2(bac - eac, 0), bac - eac < 0 ? 'bad' : 'good'],
+        ['TCPI = (BAC − EV)/(BAC − AC)', open ? f2(tcpi, 3) : 'n/a (BAC already spent)', open && tcpi - cpi > 0.1 ? 'bad' : ''],
+        ['TCPI − CPI', open ? f2(tcpi - cpi, 3) + (tcpi - cpi > 0.1 ? ' (unrealistic)' : '') : '—']
       ]);
-      publish(box, { cv, sv, cpi, spi, eac: eac1, tcpi, vac: bac - eac1 });
+      publish(box, { m, pv, ev, ac, cv, sv, cpi, spi, eac, tcpi, vac: bac - eac });
     }
     draw();
   };

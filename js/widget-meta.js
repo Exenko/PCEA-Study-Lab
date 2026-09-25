@@ -12,7 +12,7 @@
     'npv': { controls: ['r', 'ia', 'ca', 'ib', 'cb', 'n', 'mid'], setters: [], outputs: ['pvA', 'pvB', 'diff', 'sir', 'beRate'] },
     'fpif': { controls: ['tc', 'tp', 'cp', 'gs', 'ac'], setters: [], outputs: ['tpPrice', 'pta', 'ac', 'profit', 'price'] },
     'cpif': { controls: ['tc', 'tf', 'mn', 'mx', 'gs', 'ac'], setters: [], outputs: ['rieLo', 'rieHi', 'fee', 'price'] },
-    'evm': { controls: ['bac', 'pv', 'ev', 'ac'], setters: [], outputs: ['cv', 'sv', 'cpi', 'spi', 'eac', 'tcpi', 'vac'] },
+    'evm': { controls: ['sc', 'bac', 'm'], setters: [], outputs: ['m', 'pv', 'ev', 'ac', 'cv', 'sv', 'cpi', 'spi', 'eac', 'tcpi', 'vac'] },
     'burden': { controls: ['dl', 'oh', 'ga', 'fee', 'hrs'], setters: [], outputs: ['cost', 'wrap', 'multiple', 'price'] },
     'sw-effort': { controls: ['A', 'E', 's'], setters: [], outputs: ['effort', 'prod', 'doubleX'] },
     'analogy': { controls: ['c0', 's0', 's1', 'b', 'cx'], setters: [], outputs: ['ratio', 'sized', 'est', 'linear'] },
