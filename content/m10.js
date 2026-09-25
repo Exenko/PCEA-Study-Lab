@@ -175,6 +175,14 @@ Q: A risk event has probability $p = 0.2$. What is its variance as a Bernoulli v
 See the distribution explorer to watch mean, median, mode separate as skew changes:
 
 :::widget dist:::
+
+:::challenge dist d=logn p1=40 p2=50
+Q: For this lognormal, in what order do the mean, median and mode fall?
+* mode < median < mean
+- mean < median < mode
+- All three are equal
+> The lognormal is right-skewed: the long upper tail pulls the mean above the median, and the peak (mode) sits lowest. That's the usual shape of cost data.
+:::
 `
     },
     {
@@ -321,6 +329,19 @@ $$\text{CI} = 50 \pm 4.262 = (45.74, \; 54.26)$$
 Q: n = 25, $\bar x = 52$, s = 10. What is the standard error of $\bar x$?
 = 2
 > $s/\sqrt n = 10/5 = 2$. A 95% CI is about $52 \pm (t_{0.025,24}) \times 2 \approx 52 \pm 4.1$.
+:::
+
+:::challenge ci-sim n=5 level=0.95 method=z lock=n,level,method
+Q: Each of 1,000 samples of size 5 gets a "95%" interval built with $z = 1.96$ and the sample $s$. Predict what share of them actually contain $\mu$. Type it with a % sign.
+predict: coverage +- 0.04
+> Only about 88% do. With small $n$, $s$ is itself uncertain, and $z$ ignores that. The $t$ distribution with $n - 1$ df has fatter tails ($t = 2.78$ for 4 df), which restores 95% coverage.
+:::
+
+:::challenge ci-sim n=5 level=0.95 method=z lock=n,level
+Q: Keep $n = 5$. Change one setting so the intervals really do cover $\mu$ about 95% of the time (at least 94%).
+goal: coverage >= 0.94
+show: method=t
+> Switching to $t$ widens every interval by $2.78 / 1.96$ at 4 df. That's enough to account for estimating $\sigma$ with $s$. As $n$ grows, $t$ approaches $z$ and the difference fades.
 :::
 `
     },

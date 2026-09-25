@@ -112,6 +112,13 @@ Q: Which technique is most at risk of defending poor analogy choices?
 - Parametric
 - Build-up
 > Analogy relies on a single (or few) analog(s) and subjective adjustments with no statistical rigor.
+:::
+
+:::challenge analogy c0=50 s0=1000 s1=1400 b=0.7 cx=1 lock=c0,s0,s1,cx
+Q: The analog cost \$50M at a size of 1,000; the new system is 1,400. Adjust the scaling exponent until the size-adjusted cost is **\$60M**.
+goal: sized ~ 60 +- 0.5%
+show: b=0.55
+> $50 \times 1.4^{b} = 60$ gives $b = \ln 1.2 / \ln 1.4 \approx 0.54$. An exponent below 1 means cost grows more slowly than size (economies of scale). With $b = 1$, linear scaling would give \$70M.
 :::`
     },
     {
@@ -380,6 +387,15 @@ Q: Lots 1–2 of a production missile have actual costs. Estimating lot 3, the b
 - Expert engineering judgment
 * Extrapolation from the program's own actuals (learning curve)
 > Own actuals are more credible and relevant than external analogs.
+:::
+
+:::challenge method-phase
+Q: Slide through the phases. In which phase does engineering build-up first become the leading technique?
+* Production & deployment
+- Engineering & Manufacturing Development
+- Technology development
+- Operations & support
+> In EMD the estimate is still mostly parametric while build-up grows. By production, detailed drawings, vendor quotes and early actuals make build-up the main technique. In O&S, actuals-based trends take over.
 :::`
     },
     {

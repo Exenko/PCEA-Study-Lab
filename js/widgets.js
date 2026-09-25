@@ -1,16 +1,51 @@
-// Interactive widgets. Use in content with  :::widget name args:::
+// Interactive widgets. Use in content with  :::widget name [key=value ...] [lock=a,b]:::
 const Widgets = (() => {
   const reg = {};
   const E = Render.el;
+  const M = WMath;
+  const { mean, sd, quant, ols } = M;
+  const median = a => quant([...a].sort((x, y) => x - y), 0.5);
   const f2 = (v, d = 2) => (isFinite(v) ? Number(v).toLocaleString(undefined, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
   const pct = (v, d = 1) => (isFinite(v) ? (v * 100).toFixed(d) + '%' : '—');
+  const DEV = typeof location !== 'undefined' && /[?&]dev\b/.test(location.search);
+
+  // ---------- widget handle: presets, locks, setters, published outputs ----------
+  function handle(a) {
+    const listeners = [];
+    const w = {
+      name: a.name, presets: a.presets, lock: new Set(a.lock), out: {}, setters: {},
+      set(k, v) { if (w.setters[k]) w.setters[k](v); },
+      setMany(o) { Object.keys(o).forEach(k => w.set(k, o[k])); },
+      onUpdate(fn) { listeners.push(fn); },
+      emit(out) { w.out = out; listeners.forEach(f => f(out)); }
+    };
+    return w;
+  }
+  function mount(box, argStr) {
+    const a = Challenge.parseArgs(argStr);
+    const w = box.w = handle(a);
+    const fn = reg[a.name];
+    if (!fn) { box.textContent = 'Unknown widget: ' + a.name; return w; }
+    try { fn(box, w); } catch (e) { box.textContent = 'Widget error: ' + e.message; console.error(e); }
+    return w;
+  }
+  function publish(box, out) {
+    if (DEV && typeof WidgetMeta !== 'undefined') {
+      const want = ((WidgetMeta[box.w.name] || {}).outputs || []).slice().sort().join();
+      if (Object.keys(out).sort().join() !== want) console.warn('widget', box.w.name, 'published', Object.keys(out), 'manifest', want);
+    }
+    box.w.emit(out);
+  }
+  const preset = (box, k, d) => (k in box.w.presets ? box.w.presets[k] : d);
 
   // ---------- shared helpers ----------
   function controls(box, defs, onChange) {
+    const w = box.w;
     const wrap = E('div', 'w-controls');
     const vals = {};
     defs.forEach(d => {
-      vals[d.k] = d.v;
+      const v0 = d.k in w.presets ? w.presets[d.k] : d.v;
+      vals[d.k] = d.type === 'select' ? String(v0) : +v0;
       const lab = E('label', 'w-ctl');
       const name = E('span', 'w-ctl-name', d.label);
       const out = E('span', 'w-ctl-val');
@@ -18,21 +53,22 @@ const Widgets = (() => {
       if (d.type === 'select') {
         inp = E('select');
         d.options.forEach(o => { const op = E('option', null, o[1]); op.value = o[0]; inp.appendChild(op); });
-        inp.value = d.v;
       } else {
         inp = E('input');
         inp.type = d.type || 'range';
         if (d.min != null) inp.min = d.min;
         if (d.max != null) inp.max = d.max;
         inp.step = d.step || 'any';
-        inp.value = d.v;
       }
+      inp.value = vals[d.k];
       const show = () => { out.textContent = d.type === 'select' || d.type === 'number' ? '' : (d.fmt ? d.fmt(vals[d.k]) : vals[d.k]); };
       inp.addEventListener('input', () => {
         vals[d.k] = d.type === 'select' ? inp.value : parseFloat(inp.value);
         if (d.type !== 'select' && isNaN(vals[d.k])) return;
         show(); onChange(vals);
       });
+      w.setters[d.k] = x => { vals[d.k] = d.type === 'select' ? String(x) : +x; inp.value = vals[d.k]; show(); onChange(vals); };
+      if (w.lock.has(d.k)) lab.hidden = true;
       show();
       lab.append(name, inp, out);
       wrap.appendChild(lab);
@@ -54,40 +90,6 @@ const Widgets = (() => {
     box.appendChild(E('div', 'w-legend', items.map(([cls, t]) => `<span><i class="sw ${cls}"></i>${Render.inline(t)}</span>`).join('')));
   }
 
-  // ---------- math helpers ----------
-  function mean(a) { return a.reduce((s, x) => s + x, 0) / a.length; }
-  function sd(a) { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1)); }
-  function quant(sorted, p) {
-    const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i);
-    return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo);
-  }
-  function median(a) { const s = [...a].sort((x, y) => x - y); return quant(s, 0.5); }
-  function erf(x) {
-    const t = 1 / (1 + 0.3275911 * Math.abs(x));
-    const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
-    return x >= 0 ? y : -y;
-  }
-  const Phi = z => 0.5 * (1 + erf(z / Math.SQRT2));
-  function randn() { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-  function triInv(u, a, c, b) {
-    if (b <= a) return a;
-    const Fc = (c - a) / (b - a);
-    return u < Fc ? a + Math.sqrt(u * (b - a) * (c - a)) : b - Math.sqrt((1 - u) * (b - a) * (b - c));
-  }
-  function ols(xs, ys) {
-    const n = xs.length;
-    const mx = mean(xs), my = mean(ys);
-    let sxx = 0, sxy = 0, sst = 0;
-    for (let i = 0; i < n; i++) { sxx += (xs[i] - mx) ** 2; sxy += (xs[i] - mx) * (ys[i] - my); sst += (ys[i] - my) ** 2; }
-    const b1 = sxy / sxx, b0 = my - b1 * mx;
-    let sse = 0;
-    const res = xs.map((x, i) => { const e = ys[i] - (b0 + b1 * x); sse += e * e; return e; });
-    const ssr = sst - sse, df = n - 2;
-    const mse = sse / df, see = Math.sqrt(mse);
-    const seb1 = see / Math.sqrt(sxx);
-    return { n, b0, b1, mx, my, sst, sse, ssr, r2: ssr / sst, see, cv: see / my, t: b1 / seb1, F: ssr / mse, res, sxx };
-  }
-
   // ======================================================================
   // M6: descriptive statistics lab
   reg['stats-lab'] = box => {
@@ -99,8 +101,9 @@ const Widgets = (() => {
       'With outlier': '48, 50, 51, 49, 52, 50, 47, 53, 51, 50, 49, 95'
     };
     const bar = E('div', 'w-presets');
-    const ta = E('textarea', 'w-data'); ta.rows = 2; ta.value = presets['Practice Q1'];
+    const ta = E('textarea', 'w-data'); ta.rows = 2; ta.value = String(preset(box, 'data', presets['Practice Q1'])).replace(/,(?=\S)/g, ', ');
     Object.keys(presets).forEach(k => { const b = E('button', 'chip', k); b.onclick = () => { ta.value = presets[k]; draw(); }; bar.appendChild(b); });
+    bar.hidden = 'data' in box.w.presets;
     box.append(bar, ta);
     const plotBox = E('div'); box.appendChild(plotBox);
     const ro = readout(box);
@@ -108,7 +111,7 @@ const Widgets = (() => {
     function draw() {
       const a = ta.value.split(/[\s,;]+/).map(parseFloat).filter(isFinite);
       plotBox.innerHTML = '';
-      if (a.length < 2) { ro([['Need at least 2 numbers', '']]); return; }
+      if (a.length < 2) { ro([['Need at least 2 numbers', '']]); publish(box, { n: a.length, mean: NaN, median: NaN, sd: NaN, cv: NaN, beyond2: NaN }); return; }
       const s = [...a].sort((x, y) => x - y);
       const m = mean(a), med = quant(s, 0.5), sdev = sd(a), cv = sdev / m;
       const counts = {}; a.forEach(x => counts[x] = (counts[x] || 0) + 1);
@@ -132,7 +135,9 @@ const Widgets = (() => {
         ['CV', pct(cv), cv < 0.15 ? 'good' : 'bad'], ['Shape', skew],
         ['Beyond 2s', a.filter(x => Math.abs(x - m) > 2 * sdev).length], ['Beyond 3s', a.filter(x => Math.abs(x - m) > 3 * sdev).length]
       ]);
+      publish(box, { n: a.length, mean: m, median: med, sd: sdev, cv, beyond2: a.filter(x => Math.abs(x - m) > 2 * sdev).length });
     }
+    box.w.setters.data = s => { ta.value = String(s).replace(/,(?=\S)/g, ', '); draw(); };
     ta.oninput = draw; draw();
   };
 
@@ -148,7 +153,8 @@ const Widgets = (() => {
     box.appendChild(row);
     const note = E('div', 'w-note'); box.appendChild(note);
     const xs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20];
-    const noise = xs.map(() => 1 + 0.05 * randn());
+    const rnd = M.rng(7);
+    const noise = xs.map(() => 1 + 0.05 * M.randn(rnd));
     function draw() {
       L.innerHTML = ''; R.innerHTML = '';
       const f = v.f === 'linear' ? x => v.a + v.b * x : v.f === 'power' ? x => v.a * Math.pow(x, v.b) : x => v.a * Math.exp(v.b * x / 5);
@@ -169,6 +175,7 @@ const Widgets = (() => {
       p2.fn(x => fit.b0 + fit.b1 * x, 'series c2');
       const back = v.f === 'linear' ? `a = ${f2(fit.b0)}, b = ${f2(fit.b1, 3)}` : `a = e^${f2(fit.b0, 3)} = ${f2(Math.exp(fit.b0))}, b = ${f2(v.f === 'exp' ? fit.b1 * 5 : fit.b1, 3)}`;
       note.innerHTML = Render.inline(`Fit in ${lbl[2]} space: slope ${f2(fit.b1, 3)}, intercept ${f2(fit.b0, 3)}, $R^2$ = ${f2(fit.r2, 3)}. Transformed back: ${back}.`);
+      publish(box, { r2: fit.r2, slope: fit.b1, intercept: fit.b0 });
     }
     draw();
   };
@@ -218,6 +225,7 @@ const Widgets = (() => {
         [`Total cost units 1–${N}`, f2(sum)],
         ['Unit-cost ratio at doublings', doubling.slice(0, 4).join(' · ') || '—']
       ]);
+      publish(box, { b, unitN: unit[N - 1][1], cavN: cav[N - 1][1], totalN: sum });
     }
     draw();
   };
@@ -252,6 +260,7 @@ const Widgets = (() => {
         ['True LMP (exact discrete sum)', f2(exact, 3), 'good'],
         ['True LMP as a fraction of N', F === 1 ? f2(exact / N, 3) + ' × N' : 'n/a (not first lot)']
       ]);
+      publish(box, { ari, geo, heur, half, exact });
     }
     draw();
   };
@@ -261,22 +270,43 @@ const Widgets = (() => {
   reg['regression'] = box => {
     title(box, 'Regression playground', 'click to add points, drag to move, right-click to delete');
     const presets = {
-      'Seeker (guide)': [[4, 5], [7, 5], [8, 10], [12, 7], [16, 13]],
-      'Tight linear': [[2, 4.1], [4, 6.2], [6, 7.8], [8, 10.3], [10, 11.9], [12, 14.2], [14, 15.8], [16, 18.1]],
-      'Curved (try a transform)': [[1, 2], [2, 2.6], [4, 3.9], [6, 5.8], [8, 8.4], [10, 11.8], [12, 16], [14, 21], [16, 27]],
-      'Funnel (heteroscedastic)': [[2, 3], [3, 3.4], [5, 4.2], [7, 7.5], [9, 5.5], [11, 11], [13, 6.8], [15, 15.5], [17, 8.5], [18, 17]]
+      seeker: ['Seeker (guide)', [[4, 5], [7, 5], [8, 10], [12, 7], [16, 13]]],
+      tight: ['Tight linear', [[2, 4.1], [4, 6.2], [6, 7.8], [8, 10.3], [10, 11.9], [12, 14.2], [14, 15.8], [16, 18.1]]],
+      outlier: ['One bad point', [[2, 4.1], [4, 6.2], [6, 7.8], [8, 10.3], [10, 11.9], [12, 14.2], [14, 15.8], [16, 2]]],
+      curved: ['Curved (try a transform)', [[1, 2], [2, 2.6], [4, 3.9], [6, 5.8], [8, 8.4], [10, 11.8], [12, 16], [14, 21], [16, 27]]],
+      funnel: ['Funnel (heteroscedastic)', [[2, 3], [3, 3.4], [5, 4.2], [7, 7.5], [9, 5.5], [11, 11], [13, 6.8], [15, 15.5], [17, 8.5], [18, 17]]]
     };
-    let pts = presets['Seeker (guide)'].map(p => p.slice());
+    let pts;
+    const load = id => { pts = (presets[id] || presets.seeker)[1].map(p => p.slice()); };
+    load(preset(box, 'data', 'seeker'));
     const bar = E('div', 'w-presets');
-    Object.keys(presets).forEach(k => { const b = E('button', 'chip', k); b.onclick = () => { pts = presets[k].map(p => p.slice()); draw(); }; bar.appendChild(b); });
+    Object.keys(presets).forEach(k => { const b = E('button', 'chip', presets[k][0]); b.onclick = () => { load(k); draw(); }; bar.appendChild(b); });
     const clr = E('button', 'chip', 'Clear'); clr.onclick = () => { pts = []; draw(); }; bar.appendChild(clr);
+    bar.hidden = 'data' in box.w.presets;
     box.appendChild(bar);
+    const v = controls(box, [
+      { k: 'mode', label: 'Line', type: 'select', v: 'ols', options: [['ols', 'Least squares (OLS)'], ['hand', 'Fit by hand (drag the two handles)']] }
+    ], draw);
     const top = E('div'), bot = E('div');
     box.append(top, bot);
     const ro = readout(box);
     const p = Plot.create(top, { xmin: 0, xmax: 20, ymin: 0, ymax: 30, xlabel: 'X (cost driver)', ylabel: 'Y (cost)' });
     const rp = Plot.create(bot, { h: 150, xmin: 0, xmax: 20, ymin: -6, ymax: 6, yticks: 4, xlabel: 'X', ylabel: 'residual' });
-    let drag = -1;
+    const HX = [1, 19];
+    let hand = [15, 15];
+    let drag = -1;   // point index, -2/-3 = hand handle 0/1, -1 = none
+    const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
+    const dist = (x0, y0, x1, y1) => Math.hypot((x0 - x1) / 20 * 28, (y0 - y1) / 30 * 15);
+    function nearest(x, y) {
+      let best = -1, bd = 0.9;
+      pts.forEach((q, i) => { const d = dist(q[0], q[1], x, y); if (d < bd) { bd = d; best = i; } });
+      return best;
+    }
+    function nearHandle(x, y) {
+      let best = -1, bd = 1.4;
+      HX.forEach((hx, i) => { const d = dist(hx, hand[i], x, y); if (d < bd) { bd = d; best = i; } });
+      return best;
+    }
     p.svg.addEventListener('contextmenu', e => {
       e.preventDefault();
       const [x, y] = p.evt(e);
@@ -286,38 +316,57 @@ const Widgets = (() => {
       if (e.button === 2) return;
       const [x, y] = p.evt(e);
       if (x < 0 || x > 20 || y < 0 || y > 30) return;
-      drag = nearest(x, y);
-      if (drag < 0) { pts.push([x, y]); drag = pts.length - 1; }
+      const h = v.mode === 'hand' ? nearHandle(x, y) : -1;
+      if (h >= 0) drag = -2 - h;
+      else {
+        drag = nearest(x, y);
+        if (drag < 0) { if (v.mode === 'hand') return; pts.push([x, y]); drag = pts.length - 1; }
+      }
       p.svg.setPointerCapture(e.pointerId);
       draw();
     });
     p.svg.addEventListener('pointermove', e => {
-      if (drag < 0) return;
+      if (drag === -1) return;
       const [x, y] = p.evt(e);
-      pts[drag] = [Math.min(20, Math.max(0, x)), Math.min(30, Math.max(0, y))];
+      if (drag <= -2) hand[-2 - drag] = clamp(y, 0, 30);
+      else pts[drag] = [clamp(x, 0, 20), clamp(y, 0, 30)];
       draw();
     });
     p.svg.addEventListener('pointerup', () => { drag = -1; });
-    function nearest(x, y) {
-      let best = -1, bd = 0.9;
-      pts.forEach((q, i) => { const d = Math.hypot((q[0] - x) / 20 * 28, (q[1] - y) / 30 * 15); if (d < bd) { bd = d; best = i; } });
-      return best;
-    }
+    p.svg.addEventListener('pointercancel', () => { drag = -1; });
     function draw() {
       p.clear(); p.axes(); rp.clear();
-      pts.forEach((q, i) => p.dot(q[0], q[1], i === drag ? 'pt hot' : 'pt', 6));
-      if (pts.length < 3) { rp.axes(); ro([['Add at least 3 points', '']]); return; }
+      if (pts.length < 3) {
+        pts.forEach(q => p.dot(q[0], q[1], 'pt', 6));
+        rp.axes(); ro([['Add at least 3 points', '']]);
+        publish(box, { n: pts.length, b0: NaN, b1: NaN, r2: NaN, see: NaN, cv: NaN, t: NaN, p: NaN, sse: NaN, sseHand: NaN, ratio: NaN });
+        return;
+      }
       const r = ols(pts.map(q => q[0]), pts.map(q => q[1]));
-      p.fn(x => r.b0 + r.b1 * x, 'series c1');
+      const byHand = v.mode === 'hand';
+      const hb1 = (hand[1] - hand[0]) / (HX[1] - HX[0]), hb0 = hand[0] - hb1 * HX[0];
+      const lineAt = byHand ? x => hb0 + hb1 * x : x => r.b0 + r.b1 * x;
+      const sseHand = pts.reduce((s, q) => s + (q[1] - (hb0 + hb1 * q[0])) ** 2, 0);
+      // squared residuals as true squares: side |e| in y-units, converted to x-units by the pixel aspect
+      const k = (p.y(0) - p.y(1)) / (p.x(1) - p.x(0));
+      pts.forEach(q => { const e = q[1] - lineAt(q[0]); p.rect(q[0], q[1], q[0] + Math.abs(e) * k * (q[0] > 10 ? -1 : 1), lineAt(q[0]), 'sq'); });
+      p.fn(lineAt, byHand ? 'series hand' : 'series c1');
+      if (byHand) HX.forEach((hx, i) => p.dot(hx, hand[i], 'handle', 8));
       p.dot(r.mx, r.my, 'pt mean', 5);
-      pts.forEach((q, i) => p.seg(q[0], q[1], q[0], r.b0 + r.b1 * q[0], 'resid'));
-      const m = Math.max(1, ...r.res.map(Math.abs)) * 1.2;
+      pts.forEach((q, i) => p.dot(q[0], q[1], i === drag ? 'pt hot' : 'pt', 6));
+      const res = pts.map(q => q[1] - lineAt(q[0]));
+      const m = Math.max(1, ...res.map(Math.abs)) * 1.2;
       rp.o.ymin = -m; rp.o.ymax = m; rp.axes(); rp.hline(0, 'marker');
-      pts.forEach((q, i) => rp.dot(q[0], r.res[i], 'pt alt', 4));
-      // approximate two-tailed p for t via normal/t tail (df small -> use t approx)
+      pts.forEach((q, i) => rp.dot(q[0], res[i], 'pt alt', 4));
       const df = r.n - 2;
-      const tp = 2 * (1 - tcdf(Math.abs(r.t), df));
-      ro([
+      const tp = 2 * (1 - M.tcdf(Math.abs(r.t), df));
+      const ratio = sseHand / r.sse;
+      ro(byHand ? [
+        ['Your line', `Ŷ = ${f2(hb0)} + ${f2(hb1, 3)}X`],
+        ['Your SSE (total area of the squares)', f2(sseHand, 2)],
+        ['Your SSE ÷ least-squares SSE', f2(ratio, 3), ratio < 1.05 ? 'good' : 'bad'],
+        ['n', r.n]
+      ] : [
         ['Equation', `Ŷ = ${f2(r.b0)} + ${f2(r.b1, 3)}X`],
         ['$R^2$', f2(r.r2, 3)],
         ['SEE', f2(r.see)], ['CV = SEE/$\\bar{Y}$', pct(r.cv), r.cv < 0.15 ? 'good' : 'bad'],
@@ -325,39 +374,13 @@ const Widgets = (() => {
         ['t-stat (slope)', f2(r.t)], ['F = $t^2$', f2(r.F)],
         ['p-value (slope)', f2(tp, 3), tp < 0.05 ? 'good' : 'bad'], ['n, df', `${r.n}, ${df}`]
       ]);
+      publish(box, { n: r.n, b0: r.b0, b1: r.b1, r2: r.r2, see: r.see, cv: r.cv, t: r.t, p: tp, sse: r.sse, sseHand, ratio });
     }
-    // Student t CDF via regularized incomplete beta (continued fraction)
-    function tcdf(t, df) {
-      const x = df / (df + t * t);
-      return 1 - 0.5 * ibeta(x, df / 2, 0.5);
-    }
-    function ibeta(x, a, b) {
-      if (x <= 0) return 0; if (x >= 1) return 1;
-      const lbeta = lgamma(a + b) - lgamma(a) - lgamma(b);
-      const front = Math.exp(Math.log(x) * a + Math.log(1 - x) * b + lbeta);
-      if (x < (a + 1) / (a + b + 2)) return front * cf(x, a, b) / a;
-      return 1 - front * cf(1 - x, b, a) / b;
-    }
-    function cf(x, a, b) {
-      let c = 1, d = 1 - (a + b) * x / (a + 1); d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); let h = d;
-      for (let m = 1; m < 200; m++) {
-        const m2 = 2 * m;
-        let aa = m * (b - m) * x / ((a + m2 - 1) * (a + m2));
-        d = 1 + aa * d; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); c = 1 + aa / c; h *= d * c;
-        aa = -(a + m) * (a + b + m) * x / ((a + m2) * (a + m2 + 1));
-        d = 1 + aa * d; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); c = 1 + aa / c;
-        const del = d * c; h *= del; if (Math.abs(del - 1) < 1e-10) break;
-      }
-      return h;
-    }
-    function lgamma(z) {
-      const g = [676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
-      if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lgamma(1 - z);
-      z -= 1; let x = 0.99999999999980993;
-      for (let i = 0; i < 8; i++) x += g[i] / (z + i + 1);
-      const t = z + 7.5;
-      return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
-    }
+    box.w.setters.data = id => { load(id); draw(); };
+    box.w.setters.hand = s => {
+      if (s === 'ols' && pts.length >= 3) { const r = ols(pts.map(q => q[0]), pts.map(q => q[1])); hand = HX.map(x => r.b0 + r.b1 * x); }
+      draw();
+    };
     draw();
   };
 
@@ -386,6 +409,7 @@ const Widgets = (() => {
       }
       tb.innerHTML = h + '</table>';
       note.innerHTML = Render.inline(`Outlay profile normalized to ${pn.map(x => pct(x, 0)).join(' / ')}. In ${BY} the raw index is 1.0000 (the base year), but the weighted index is **${wtd(BY).toFixed(4)}** because money appropriated in ${BY} is spent over three years at later price levels. **BY$ → TY$: multiply. TY$ → BY$: divide.**`);
+      publish(box, { raw1: raw(BY + 1), wtdBY: wtd(BY), tyBY: v.amt * wtd(BY) });
     }
     draw();
   };
@@ -393,7 +417,7 @@ const Widgets = (() => {
   // ======================================================================
   // M9/M10: Monte Carlo S-curve
   reg['montecarlo'] = box => {
-    title(box, 'Monte Carlo cost risk', 'sum of triangular WBS elements');
+    title(box, 'Monte Carlo cost risk', 'sum of triangular WBS elements; dashed curve = no correlation');
     const els = [
       { n: 'Airframe', a: 80, c: 100, b: 150 },
       { n: 'Propulsion', a: 40, c: 50, b: 80 },
@@ -404,45 +428,43 @@ const Widgets = (() => {
     let h = '<table><tr><th>Element</th><th>Low</th><th>Most likely</th><th>High</th></tr>';
     els.forEach((e, i) => { h += `<tr><td>${e.n}</td>` + ['a', 'c', 'b'].map(k => `<td><input type="number" data-i="${i}" data-k="${k}" value="${e[k]}"></td>`).join('') + '</tr>'; });
     tbl.innerHTML = h + '</table>';
-    tbl.querySelectorAll('input').forEach(inp => inp.oninput = () => { const x = parseFloat(inp.value); if (isFinite(x)) { els[inp.dataset.i][inp.dataset.k] = x; } });
+    tbl.querySelectorAll('input').forEach(inp => inp.oninput = () => { const x = parseFloat(inp.value); if (isFinite(x)) { els[inp.dataset.i][inp.dataset.k] = x; go(); } });
     const v = controls(box, [
       { k: 'rho', label: 'Correlation ρ', min: 0, max: 1, step: 0.05, v: 0.2, fmt: x => x.toFixed(2) },
       { k: 'n', label: 'Trials', type: 'select', v: '5000', options: [['1000', '1,000'], ['5000', '5,000'], ['20000', '20,000']] }
-    ], () => {});
-    const run = E('button', 'btn', 'Run simulation'); box.appendChild(run);
+    ], go);
     const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R); box.appendChild(row);
     const ro = readout(box);
-    run.onclick = go;
+    let s0Key = null, s0Cache = null;
     function go() {
-      const N = +v.n, rho = v.rho, out = new Float64Array(N);
-      for (let t = 0; t < N; t++) {
-        const Z = randn(); let s = 0;
-        for (const e of els) {
-          const z = Math.sqrt(rho) * Z + Math.sqrt(1 - rho) * randn();
-          s += triInv(Phi(z), Math.min(e.a, e.c), e.c, Math.max(e.b, e.c));
-        }
-        out[t] = s;
-      }
-      const s = Array.from(out).sort((x, y) => x - y);
+      const N = +v.n;
+      const key = N + JSON.stringify(els);
+      if (key !== s0Key) { s0Cache = M.mcSum(els, 0, N, 11); s0Key = key; }
+      const s = M.mcSum(els, v.rho, N, 11), s0 = s0Cache;
       const pe = els.reduce((a, e) => a + e.c, 0);
       const mu = mean(s), sdev = sd(s);
-      const pctOfPE = s.findIndex(x => x > pe) / N;
+      const above = s.findIndex(x => x > pe), pctOfPE = (above < 0 ? N : above) / N;
+      const p80 = quant(s, 0.8), p80ind = quant(s0, 0.8);
       L.innerHTML = ''; R.innerHTML = '';
-      const bins = 30, lo = s[0], hi = s[N - 1], w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
+      const bins = 30, lo = Math.min(s[0], s0[0]), hi = Math.max(s[N - 1], s0[N - 1]), w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
       s.forEach(x => cnt[Math.min(bins - 1, Math.floor((x - lo) / w))]++);
       const p1 = Plot.create(L, { w: 300, h: 230, xmin: lo, xmax: hi, ymin: 0, ymax: Math.max(...cnt) * 1.1, xlabel: 'total cost', ylabel: 'frequency', yfmt: () => '' });
       p1.axes(); cnt.forEach((c, i) => p1.rect(lo + i * w, 0, lo + (i + 1) * w, c, 'bar'));
       p1.vline(pe, 'marker c2'); p1.vline(mu, 'marker c1');
+      const step = Math.ceil(N / 300);
+      const curve = arr => arr.filter((_, i) => i % step === 0).map((x, i) => [x, (i * step) / N]);
       const p2 = Plot.create(R, { w: 300, h: 230, xmin: lo, xmax: hi, ymin: 0, ymax: 1, xlabel: 'total cost', ylabel: 'confidence', yfmt: x => (x * 100).toFixed(0) + '%' });
-      p2.axes(); p2.line(s.filter((_, i) => i % Math.ceil(N / 300) === 0).map((x, i, arr) => [x, (i * Math.ceil(N / 300)) / N]), 'series c1');
+      p2.axes(); p2.line(curve(s0), 'series ghost'); p2.line(curve(s), 'series c1');
       p2.vline(pe, 'marker c2'); p2.hline(0.8, 'marker');
       ro([
         ['Point estimate (sum of modes)', f2(pe, 1), 'c2t'],
         ['Percentile of point estimate', pct(pctOfPE, 0), 'bad'],
         ['Mean of total', f2(mu, 1), 'c1t'], ['Std dev of total', f2(sdev, 1)],
-        ['50th percentile', f2(quant(s, 0.5), 1)], ['80th percentile', f2(quant(s, 0.8), 1)],
+        ['50th percentile', f2(quant(s, 0.5), 1)], ['80th percentile', f2(p80, 1)],
+        ['80th percentile with ρ = 0', f2(p80ind, 1)],
         ['Sum of element means', f2(els.reduce((a, e) => a + (e.a + e.b + e.c) / 3, 0), 1)]
       ]);
+      publish(box, { pe, pePct: pctOfPE, mean: mu, sd: sdev, p50: quant(s, 0.5), p70: quant(s, 0.7), p80, p80ind, p80gap: p80 - p80ind });
     }
     go();
   };
@@ -488,6 +510,7 @@ const Widgets = (() => {
       p.vline(mu, 'marker c1'); p.vline(med, 'marker c2'); p.vline(mode, 'marker c3');
       ro([['Parameters', desc], ['Mean', f2(mu)], ['Median', f2(med)], ['Mode', f2(mode)], ['Std dev', f2(s)],
         ['Skew', Math.abs(mu - med) < 0.01 * (s || 1) ? 'symmetric' : mu > med ? 'right (mean > median > mode)' : 'left']]);
+      publish(box, { mean: mu, median: med, mode, sd: s });
     }
     draw();
   };
@@ -507,9 +530,10 @@ const Widgets = (() => {
     ], draw);
     const pb = E('div'); box.appendChild(pb);
     legend(box, [['c1', 'Alternative A (cumulative PV)'], ['c2', 'Alternative B']]);
+    const pb2 = E('div'); box.appendChild(pb2);
     const ro = readout(box);
     function draw() {
-      pb.innerHTML = '';
+      pb.innerHTML = ''; pb2.innerHTML = '';
       const df = t => 1 / Math.pow(1 + v.r, v.mid === 'mid' ? t - 0.5 : t);
       const cum = (inv, c) => { const out = [[0, inv]]; let s = inv; for (let t = 1; t <= v.n; t++) { s += c * df(t); out.push([t, s]); } return out; };
       const A = cum(v.ia, v.ca), B = cum(v.ib, v.cb);
@@ -521,13 +545,22 @@ const Widgets = (() => {
       for (let i = 1; i < A.length; i++) if ((A[i - 1][1] - B[i - 1][1]) * (A[i][1] - B[i][1]) <= 0 && A[i - 1][1] !== B[i - 1][1]) { be = 'year ' + i; break; }
       let sumDf = 0; for (let t = 1; t <= v.n; t++) sumDf += df(t);
       const sir = ((v.ca - v.cb) * sumDf) / (v.ib - v.ia);
+      const gap = r => M.pvCost(v.ia, v.ca, v.n, r, v.mid === 'mid') - M.pvCost(v.ib, v.cb, v.n, r, v.mid === 'mid');
+      const beRate = M.bisect(gap, 0, 0.2);
+      const gs = []; for (let i = 0; i <= 40; i++) gs.push([0.1 * i / 40, gap(0.1 * i / 40)]);
+      const gy = gs.map(q => q[1]), glo = Math.min(0, ...gy), ghi = Math.max(0, ...gy), gpad = (ghi - glo) * 0.1 || 1;
+      const q = Plot.create(pb2, { h: 180, xmin: 0, xmax: 0.1, ymin: glo - gpad, ymax: ghi + gpad, xlabel: 'discount rate', ylabel: 'PV(A) − PV(B)', xfmt: x => (x * 100).toFixed(0) + '%' });
+      q.axes(); q.hline(0, 'marker'); q.line(gs, 'series c3'); q.vline(v.r, 'marker hot');
+      if (beRate <= 0.1) q.vline(beRate, 'marker c2');
       ro([
         ['PV of cost, A', f2(pvA, 1), pvA <= pvB ? 'good' : ''], ['PV of cost, B', f2(pvB, 1), pvB < pvA ? 'good' : ''],
         ['Undiscounted A / B', `${f2(undA, 0)} / ${f2(undB, 0)}`],
         ['Discounted break-even', be],
+        ['Break-even discount rate', isFinite(beRate) ? pct(beRate, 2) : 'none from 0% to 20%'],
         ['EUAC A / B', `${f2(pvA / sumDf, 1)} / ${f2(pvB / sumDf, 1)}`],
         ['SIR of B over A = PV savings / extra investment', v.ib !== v.ia ? f2(sir, 2) : '—', sir > 1 ? 'good' : 'bad']
       ]);
+      publish(box, { pvA, pvB, diff: pvA - pvB, sir, beRate });
     }
     draw();
   };
@@ -571,6 +604,7 @@ const Widgets = (() => {
         ['Final price', f2(r.price)],
         ['Region', v.ac <= v.tc ? 'underrun: contractor keeps ' + pct(1 - v.gs, 0) + ' of savings' : v.ac <= pta ? 'overrun, still sharing' : 'beyond PTA: contractor absorbs 100%']
       ]);
+      publish(box, { tpPrice, pta, ac: v.ac, profit: r.profit, price: r.price });
     }
     draw();
   };
@@ -597,6 +631,7 @@ const Widgets = (() => {
       p.axes(); p.fn(fee, 'series c1'); p.vline(v.ac, 'marker hot');
       ro([['RIE (fee between min and max)', `${f2(lo, 1)} to ${f2(hi, 1)}`, 'c2t'], ['Fee at actual cost', f2(fee(v.ac)), 'good'],
         ['Total price to government', f2(v.ac + fee(v.ac))], ['Fee as % of actual cost', pct(fee(v.ac) / v.ac)]]);
+      publish(box, { rieLo: lo, rieHi: hi, fee: fee(v.ac), price: v.ac + fee(v.ac) });
     }
     draw();
   };
@@ -604,34 +639,36 @@ const Widgets = (() => {
   // ======================================================================
   // M15: EVM
   reg['evm'] = box => {
-    title(box, 'Earned value calculator');
+    title(box, 'Earned value over time', 'scrub the month and watch the indices move');
     const v = controls(box, [
+      { k: 'sc', label: 'Scenario', type: 'select', v: 'overrun', options: [['track', 'On plan'], ['overrun', 'Growing cost overrun'], ['late', 'Behind schedule, on cost']] },
       { k: 'bac', label: 'BAC', type: 'number', v: 1000 },
-      { k: 'pv', label: 'PV (BCWS)', type: 'number', v: 400 },
-      { k: 'ev', label: 'EV (BCWP)', type: 'number', v: 350 },
-      { k: 'ac', label: 'AC (ACWP)', type: 'number', v: 420 }
+      { k: 'm', label: 'Month', min: 1, max: 24, step: 1, v: 6 }
     ], draw);
     const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c3', 'PV (plan)'], ['c1', 'EV (earned)'], ['c2', 'AC (actual cost)']]);
     const ro = readout(box);
     function draw() {
       pb.innerHTML = '';
-      const { bac, pv, ev, ac } = v;
+      const bac = v.bac, m = Math.round(v.m);
+      const at = t => M.evmAt(v.sc, bac, t);
+      const curve = (k, upto) => { const out = []; for (let t = 0; t <= upto + 1e-9; t += 0.25) out.push([t, at(t)[k]]); return out; };
+      const { pv, ev, ac } = at(m);
       const cv = ev - ac, sv = ev - pv, cpi = ev / ac, spi = ev / pv;
-      const eac1 = bac / cpi, eac2 = ac + (bac - ev) / (cpi * spi), eac3 = ac + (bac - ev);
-      const tcpi = (bac - ev) / (bac - ac);
-      const p = Plot.create(pb, { h: 150, xmin: 0, xmax: Math.max(bac, ac, eac2) * 1.05, ymin: 0, ymax: 4, yticks: 1, pad: { l: 70, r: 16, t: 8, b: 30 }, yfmt: () => '' });
-      p.axes();
-      [['PV', pv, 'bar'], ['EV', ev, 'bar c1f'], ['AC', ac, 'bar c2f']].forEach(([n, x, c], i) => { p.rect(0, 3.2 - i, x, 2.6 - i, c); p.text(0, 2.8 - i, n + ' ', 'annot', 'end'); });
-      p.vline(bac, 'marker'); p.text(bac, 3.6, 'BAC', 'annot', 'middle');
+      const eac = bac / cpi, tcpi = (bac - ev) / (bac - ac), open = bac > ac;
+      const p = Plot.create(pb, { xmin: 0, xmax: 24, ymin: 0, ymax: Math.max(bac, at(24).ac) * 1.05, xlabel: 'month', ylabel: 'cumulative $' });
+      p.axes(); p.hline(bac, 'marker'); p.text(0.4, bac * 1.02, 'BAC', 'annot');
+      p.line(curve('pv', 24), 'series c3'); p.line(curve('ev', m), 'series c1'); p.line(curve('ac', m), 'series c2');
+      p.vline(m, 'marker hot');
       ro([
+        ['PV / EV / AC', `${f2(pv, 0)} / ${f2(ev, 0)} / ${f2(ac, 0)}`],
         ['CV = EV − AC', f2(cv, 0), cv < 0 ? 'bad' : 'good'], ['SV = EV − PV', f2(sv, 0), sv < 0 ? 'bad' : 'good'],
         ['CPI = EV/AC', f2(cpi, 3), cpi < 1 ? 'bad' : 'good'], ['SPI = EV/PV', f2(spi, 3), spi < 1 ? 'bad' : 'good'],
-        ['% complete = EV/BAC', pct(ev / bac)], ['% spent = AC/BAC', pct(ac / bac)],
-        ['EAC = BAC/CPI', f2(eac1, 0)], ['EAC = AC + (BAC−EV)/(CPI·SPI)', f2(eac2, 0)], ['EAC = AC + (BAC−EV)', f2(eac3, 0)],
-        ['VAC = BAC − EAC(CPI)', f2(bac - eac1, 0), bac - eac1 < 0 ? 'bad' : 'good'],
-        ['TCPI (to hit BAC)', f2(tcpi, 3), tcpi - cpi > 0.1 ? 'bad' : ''],
-        ['TCPI − CPI', f2(tcpi - cpi, 3) + (tcpi - cpi > 0.1 ? ' (unrealistic)' : '')]
+        ['EAC = BAC/CPI', f2(eac, 0)], ['VAC = BAC − EAC', f2(bac - eac, 0), bac - eac < 0 ? 'bad' : 'good'],
+        ['TCPI = (BAC − EV)/(BAC − AC)', open ? f2(tcpi, 3) : 'n/a (BAC already spent)', open && tcpi - cpi > 0.1 ? 'bad' : ''],
+        ['TCPI − CPI', open ? f2(tcpi - cpi, 3) + (tcpi - cpi > 0.1 ? ' (unrealistic)' : '') : '—']
       ]);
+      publish(box, { m, pv, ev, ac, cv, sv, cpi, spi, eac, tcpi, vac: bac - eac });
     }
     draw();
   };
@@ -652,6 +689,7 @@ const Widgets = (() => {
       const oh = v.dl * v.oh, sub = v.dl + oh, ga = sub * v.ga, cost = sub + ga, fee = cost * v.fee, price = cost + fee;
       ro([['Direct labor', f2(v.dl)], ['+ Overhead', f2(oh)], ['= Subtotal', f2(sub)], ['+ G&A', f2(ga)], ['= Fully burdened cost/hr', f2(cost)],
         ['+ Fee', f2(fee)], ['= Wrap rate (price/hr)', f2(price), 'good'], ['Wrap multiple on DL', f2(price / v.dl, 3) + '×'], [`Price for ${v.hrs} hrs`, f2(price * v.hrs, 0)]]);
+      publish(box, { cost, wrap: price, multiple: price / v.dl, price: price * v.hrs });
     }
     draw();
   };
@@ -675,6 +713,7 @@ const Widgets = (() => {
       p2.axes(); p2.fn(s => 1000 * s / eff(s), 'series c2');
       ro([['Effort at ' + v.s + ' KSLOC', f2(eff(v.s), 0) + ' PM'], ['Productivity', f2(1000 * v.s / eff(v.s), 0) + ' SLOC/PM'],
         ['Doubling size multiplies effort by', f2(Math.pow(2, v.E), 3) + '×'], ['Scale', v.E > 1 ? 'diseconomy of scale' : v.E < 1 ? 'economy of scale' : 'linear']]);
+      publish(box, { effort: eff(v.s), prod: 1000 * v.s / eff(v.s), doubleX: Math.pow(2, v.E) });
     }
     draw();
   };
@@ -694,6 +733,123 @@ const Widgets = (() => {
       const ratio = v.s1 / v.s0, sized = v.c0 * Math.pow(ratio, v.b), out = sized * v.cx;
       ro([['Size ratio', f2(ratio, 3)], ['Size-adjusted $C_0 (S_1/S_0)^b$', f2(sized)], ['× complexity', f2(out), 'good'],
         ['vs. linear scaling', f2(v.c0 * ratio * v.cx)]]);
+      publish(box, { ratio, sized, est: out, linear: v.c0 * ratio * v.cx });
+    }
+    draw();
+  };
+
+  // M4: normalization lab
+  reg['normalize'] = box => {
+    title(box, 'Normalize the data', 'eight historical programs; turn each adjustment on');
+    const onoff = [['0', 'Off'], ['1', 'On']];
+    const v = controls(box, [
+      { k: 'units', label: 'Convert $K to $M', type: 'select', v: '0', options: onoff },
+      { k: 'infl', label: 'Escalate TY$ to BY2026$ (2.5%/yr)', type: 'select', v: '0', options: onoff },
+      { k: 'qty', label: 'Adjust lot average to T1 (90% curve)', type: 'select', v: '0', options: onoff }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    function draw() {
+      const o = { units: v.units === '1', infl: v.infl === '1', qty: v.qty === '1' };
+      const D = M.NORM_DATA, ys = D.map(d => M.normalizeCost(d, o));
+      const fit = ols(D.map(d => d.kg), ys);
+      pb.innerHTML = '';
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax: 650, ymin: 0, ymax: Math.max(...ys) * 1.1, xlabel: 'weight (kg)', ylabel: o.units ? 'cost ($M)' : 'cost (mixed $K and $M)' });
+      p.axes(); p.fn(x => fit.b0 + fit.b1 * x, 'series c1');
+      D.forEach((d, i) => p.dot(d.kg, ys[i], i === 0 ? 'pt hot' : d.k && !o.units ? 'pt bad' : 'pt', i === 0 ? 7 : 5));
+      tb.innerHTML = '<table><tr><th>#</th><th>kg</th><th>Year (TY$)</th><th>Lot midpoint</th><th>Recorded</th><th>Normalized</th></tr>' +
+        D.map((d, i) => `<tr><td>${i + 1}${i === 0 ? ' ★' : ''}</td><td>${d.kg}</td><td>${d.y}</td><td>${d.q}</td><td>${f2(d.rec)} ${d.k ? '$K' : '$M'}</td><td>${f2(ys[i], 3)}</td></tr>`).join('') + '</table>';
+      const nAdjust = [o.units, o.infl, o.qty].filter(Boolean).length;
+      ro([['Adjustments on', nAdjust + ' of 3'], ['$R^2$ of cost vs. weight', f2(fit.r2, 3), fit.r2 > 0.99 ? 'good' : 'bad'], ['Point 1 (★) normalized', f2(ys[0], 3)]]);
+      publish(box, { r2: fit.r2, nAdjust, byValue: ys[0] });
+    }
+    draw();
+  };
+
+  // M2: estimating method by life-cycle phase
+  reg['method-phase'] = box => {
+    title(box, 'Which method, when?', 'illustrative mix of techniques as a program matures');
+    const v = controls(box, [{ k: 'phase', label: 'Phase', min: 0, max: 4, step: 1, v: 0, fmt: i => M.PHASES[Math.round(i)] }], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, M.METHODS.map((n, i) => ['m' + i, n]));
+    const ro = readout(box);
+    const short = ['Concept', 'Tech dev', 'EMD', 'Production', 'O&S'];
+    function draw() {
+      pb.innerHTML = '';
+      const ph = Math.round(v.phase), W = M.METHOD_WEIGHTS;
+      const p = Plot.create(pb, { h: 240, xmin: 0, xmax: 4, ymin: 0, ymax: 1, xticks: 4, xlabel: 'life-cycle phase', ylabel: 'share of the estimate', xfmt: i => short[Math.round(i)] || '', yfmt: y => Math.round(y * 100) + '%' });
+      p.axes();
+      for (let k = 0; k < 4; k++) {
+        const top = W.map((w, i) => [i, w.slice(0, k + 1).reduce((s, x) => s + x, 0)]);
+        const bot = W.map((w, i) => [i, w.slice(0, k).reduce((s, x) => s + x, 0)]).reverse();
+        const d = top.concat(bot).map((q, i) => (i ? 'L' : 'M') + p.x(q[0]).toFixed(1) + ' ' + p.y(q[1]).toFixed(1)).join(' ') + ' Z';
+        Plot.svgEl('path', { d, class: 'stack m' + k }, p.svg);
+      }
+      p.vline(ph, 'marker hot');
+      const w = W[ph], dom = w.indexOf(Math.max(...w));
+      ro(M.METHODS.map((n, i) => [n, pct(w[i], 0), i === dom ? 'good' : '']));
+      publish(box, { phase: ph, dominant: dom });
+    }
+    draw();
+  };
+
+  // M10: confidence interval coverage
+  reg['ci-sim'] = box => {
+    title(box, 'Confidence interval simulator', 'population is normal with μ = 100, σ = 15');
+    const v = controls(box, [
+      { k: 'n', label: 'Sample size n', min: 2, max: 60, step: 1, v: 10 },
+      { k: 'level', label: 'Confidence level', type: 'select', v: '0.95', options: [['0.9', '90%'], ['0.95', '95%'], ['0.99', '99%']] },
+      { k: 'method', label: 'Critical value', type: 'select', v: 't', options: [['t', 't with n − 1 df'], ['z', 'z (treats s as if it were σ)']] }
+    ], draw);
+    let seed = +preset(box, 'seed', 1);
+    box.w.setters.seed = s => { seed = +s; draw(); };
+    const again = E('button', 'btn small ghost', 'Draw new samples');
+    again.onclick = () => { seed++; draw(); };
+    box.appendChild(again);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'interval covers μ'], ['bad', 'interval misses μ'], ['c2', 'true μ']]);
+    const ro = readout(box);
+    function draw() {
+      const n = Math.round(v.n), level = parseFloat(v.level);
+      const r = M.ciSim({ n, level, method: v.method, seed, k: 1000, mu: 100, sigma: 15 });
+      pb.innerHTML = '';
+      const shown = r.intervals.slice(0, 40);
+      const lo = Math.min(70, ...shown.map(q => q[0])), hi = Math.max(130, ...shown.map(q => q[1]));
+      const p = Plot.create(pb, { h: 300, xmin: lo, xmax: hi, ymin: 0, ymax: 41, yticks: 2, xlabel: 'interval for μ (first 40 samples)', yfmt: () => '', pad: { l: 20, r: 16, t: 10, b: 40 } });
+      p.axes(); p.vline(100, 'marker c2');
+      shown.forEach((q, i) => p.seg(q[0], i + 1, q[1], i + 1, q[2] ? 'ci-hit' : 'ci-miss'));
+      ro([
+        ['Critical value', f2(r.crit, 3)],
+        ['Intervals covering μ (of 1,000)', pct(r.coverage, 1), Math.abs(r.coverage - level) < 0.02 ? 'good' : 'bad'],
+        ['Nominal level', pct(level, 0)],
+        ['Average half-width', f2(r.halfWidth, 2)]
+      ]);
+      publish(box, { n, coverage: r.coverage, halfWidth: r.halfWidth });
+    }
+    draw();
+  };
+
+  // M16: locked-in vs. spent life-cycle cost
+  reg['lockin'] = box => {
+    title(box, 'Locked-in vs. spent', 'illustrative life-cycle curves');
+    const v = controls(box, [{ k: 'x', label: 'Point in the life cycle', min: 0, max: 100, step: 1, v: 5, fmt: x => x + '%' }], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c2', 'committed (locked in)'], ['c1', 'spent']]);
+    const ro = readout(box);
+    const starts = [0, 10, 35, 60], labels = ['Concept', 'Design', 'Production', 'O&S'];
+    function draw() {
+      pb.innerHTML = '';
+      const L = M.lockin(v.x);
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax: 100, ymin: 0, ymax: 1.08, xlabel: 'program timeline (%)', ylabel: 'share of life-cycle cost', yfmt: y => Math.round(y * 100) + '%' });
+      p.axes();
+      starts.slice(1).forEach(b => p.vline(b, 'marker'));
+      starts.forEach((s, i) => p.text(s + 1, 1.04, labels[i], 'annot'));
+      p.fn(x => M.lockin(x).committed, 'series c2');
+      p.fn(x => M.lockin(x).spent, 'series c1');
+      p.seg(v.x, L.spent, v.x, L.committed, 'marker hot');
+      ro([['Phase', M.LOCK_PHASES[L.phase]], ['Committed', pct(L.committed, 0)], ['Spent', pct(L.spent, 0)], ['Gap (committed − spent)', pct(L.gap, 1), 'c2t']]);
+      publish(box, { x: v.x, committed: L.committed, spent: L.spent, gap: L.gap, phase: L.phase });
     }
     draw();
   };
@@ -720,7 +876,8 @@ const Widgets = (() => {
       list.appendChild(r);
     });
     box.appendChild(list);
+    publish(box, {});
   };
 
-  return { get: n => reg[n], names: () => Object.keys(reg), _math: { ols, mean, sd, median } };
+  return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();

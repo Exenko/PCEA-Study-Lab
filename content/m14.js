@@ -139,6 +139,13 @@ $$PTA = TC + \frac{CP - TPr}{\text{Government Share}}$$
 
 :::widget fpif:::
 
+:::challenge fpif tc=100 tp=10 cp=120 gs=0.7 ac=100 lock=tc,tp,cp,gs
+Q: Slide actual cost to the **Point of Total Assumption**, the cost beyond which the contractor pays for every extra dollar.
+goal: ac ~ 114.29 +- 1
+show: ac=114
+> $PTA = (\text{ceiling} - \text{target price}) / \text{gov share} + TC = (120 - 110) / 0.7 + 100 = 114.29$. Past this point the price is capped at the ceiling, so each extra dollar of cost comes out of profit.
+:::
+
 +++
 
 :::check
@@ -207,6 +214,14 @@ $$AC_{\text{(Fee=Min)}} = TC + \frac{TF - \text{Min Fee}}{\text{Contractor Share
 Between these two actual costs, the share ratio is "live" and the contractor has cost-control incentive. Outside, the fee is pegged to its floor or ceiling.
 
 :::widget cpif:::
+
+:::challenge cpif ac=130
+Q: Actual cost comes in at 130, with a target cost of 100, a target fee of 8, a fee range of 3 to 12, and an 80/20 share. What happens to the fee?
+* It stops at the minimum fee of 3, and the government pays the rest of the overrun
+- It keeps falling 20 cents per dollar and turns negative
+- It stays at the target fee of 8
+> The RIE here runs from 80 to 125. Past 125, the fee sits at its floor of 3, and a CPIF contract still reimburses allowable cost. That's the key difference from FPIF, where cost above the PTA comes out of the contractor's profit.
+:::
 
 +++
 

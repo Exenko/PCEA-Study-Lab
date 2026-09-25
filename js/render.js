@@ -3,7 +3,8 @@
 //   +++                       step break (Brilliant-style reveal)
 //   :::check [id] ... :::     question block (see parseCheck)
 //   :::tip|warn|key|example [Title] ... :::   callout
-//   :::widget name [args]:::  interactive widget
+//   :::widget name [k=v ...] [lock=a,b]:::  interactive widget
+//   :::challenge widget [k=v ...] [lock=a,b] ... :::   guided challenge (see js/challenge.js)
 const Render = (() => {
   const OPEN = '\uE000', CLOSE = '\uE001';
 
@@ -90,6 +91,43 @@ const Render = (() => {
     return Math.abs(x - num.v) <= tol + 1e-12;
   }
 
+  // Records a completed check or challenge; first = right on first try without help.
+  function record(id, first, extra, ctx) {
+    if (!Store.data.checks[id]) Store.data.checks[id] = Object.assign({ first }, extra);
+    Store.data.checks[id].done = true;
+    Store.markActive();
+    Store.save();
+    ctx.onChange && ctx.onChange();
+  }
+
+  // Multiple-choice buttons; onRight(firstTry) fires when the right option is clicked.
+  function optionList(opts, fb, onRight) {
+    const list = el('div', 'check-opts');
+    let attempts = 0;
+    opts.forEach(o => {
+      const b = el('button', 'opt', inline(o.text));
+      b.onclick = () => {
+        attempts++;
+        if (o.right) {
+          b.classList.add('right');
+          fb.innerHTML = '<b>Correct.</b>';
+          fb.className = 'check-fb good';
+          list.querySelectorAll('.opt').forEach(x => x.disabled = true);
+          onRight(attempts === 1);
+        } else {
+          b.classList.add('wrong'); b.disabled = true;
+          fb.innerHTML = 'Not quite &mdash; try again.';
+          fb.className = 'check-fb bad';
+        }
+      };
+      list.appendChild(b);
+    });
+    return list;
+  }
+  function lockOptions(list, opts) {
+    list.querySelectorAll('.opt').forEach((b, i) => { b.disabled = true; if (opts[i].right) b.classList.add('right'); });
+  }
+
   // ctx: { key, onChange }  -> checks report state through ctx
   function buildCheck(d, ctx, idx) {
     const c = parseCheck(d.body);
@@ -100,59 +138,34 @@ const Render = (() => {
     box.appendChild(el('div', 'check-label', 'Check your understanding'));
     box.appendChild(el('div', 'check-q', md(c.q.join('\n'))));
     const fb = el('div', 'check-fb');
+    fb.setAttribute('role', 'status');
     const exp = el('div', 'check-explain', c.explain.length ? md(c.explain.join('\n')) : '');
     exp.hidden = true;
-    let attempts = 0;
 
-    const finish = (right, revealed) => {
-      if (!Store.data.checks[id]) Store.data.checks[id] = { first: right && attempts === 1 };
-      Store.data.checks[id].done = true;
-      Store.markActive();
-      Store.save();
+    const finish = (first, revealed) => {
       box.classList.add('done');
       exp.hidden = false;
       if (revealed) fb.innerHTML = 'Answer revealed.';
-      ctx.onChange && ctx.onChange();
+      record(id, first, {}, ctx);
     };
 
     if (c.opts.length) {
-      const list = el('div', 'check-opts');
-      c.opts.forEach(o => {
-        const b = el('button', 'opt', inline(o.text));
-        b.onclick = () => {
-          if (box.classList.contains('done') && !o.right) return;
-          attempts++;
-          if (o.right) {
-            b.classList.add('right');
-            fb.innerHTML = '<b>Correct.</b>';
-            fb.className = 'check-fb good';
-            list.querySelectorAll('.opt').forEach(x => x.disabled = true);
-            finish(true);
-          } else {
-            b.classList.add('wrong'); b.disabled = true;
-            fb.innerHTML = 'Not quite &mdash; try again.';
-            fb.className = 'check-fb bad';
-          }
-        };
-        list.appendChild(b);
-      });
+      const list = optionList(c.opts, fb, first => finish(first));
       box.appendChild(list);
-      if (saved && saved.done) {
-        list.querySelectorAll('.opt').forEach((b, i) => { b.disabled = true; if (c.opts[i].right) b.classList.add('right'); });
-        box.classList.add('done'); exp.hidden = false;
-      }
+      if (saved && saved.done) { lockOptions(list, c.opts); box.classList.add('done'); exp.hidden = false; }
     } else {
       const row = el('div', 'check-input');
       const inp = el('input');
       inp.type = 'text'; inp.placeholder = c.num ? 'Enter a number' : 'Type your answer';
       const go = el('button', 'btn small', 'Check');
+      let attempts = 0;
       const submit = () => {
         if (!inp.value.trim()) return;
         attempts++;
         const ok = c.num ? numMatch(inp.value, c.num) : c.text.includes(inp.value.trim().toLowerCase());
         if (ok) {
           fb.innerHTML = '<b>Correct.</b>'; fb.className = 'check-fb good';
-          inp.disabled = true; go.disabled = true; finish(true);
+          inp.disabled = true; go.disabled = true; finish(attempts === 1);
         } else {
           fb.innerHTML = attempts >= 2 ? 'Not quite. You can reveal the answer.' : 'Not quite &mdash; try again.';
           fb.className = 'check-fb bad';
@@ -187,12 +200,99 @@ const Render = (() => {
     return box;
   }
 
+  const CH_LABEL = { target: 'Challenge', predict: 'Predict, then check', choose: 'Explore, then answer' };
+  function buildChallenge(d, ctx, idx) {
+    const c = Challenge.parse(d.body);
+    const id = ctx.key + '#c' + idx;
+    const saved = Store.data.checks[id];
+    const box = el('div', 'check challenge');
+    box.dataset.checkId = id;
+    if (c.errors.length) {
+      box.classList.add('done');
+      box.appendChild(el('div', 'check-fb bad', 'Challenge error: ' + c.errors.join('; ')));
+      return box;
+    }
+    box.appendChild(el('div', 'check-label', CH_LABEL[c.type]));
+    box.appendChild(el('div', 'check-q', md(c.q.join('\n'))));
+    const wbox = el('div', 'widget');
+    box.appendChild(wbox);
+    const w = Widgets.mount(wbox, d.args);
+    const fb = el('div', 'check-fb');
+    fb.setAttribute('role', 'status');
+    const exp = el('div', 'check-explain', md(c.explain.join('\n')));
+    exp.hidden = true;
+    const isDone = () => box.classList.contains('done');
+    const markDone = () => { box.classList.add('done'); exp.hidden = false; };
+    const complete = (first, extra) => { markDone(); record(id, first, extra || {}, ctx); };
+
+    if (c.type === 'target') {
+      const tools = el('div', 'row-btns ch-tools');
+      const stuck = el('button', 'btn small ghost', "I'm stuck");
+      const showMe = el('button', 'btn small ghost', 'Show me');
+      showMe.hidden = true;
+      tools.append(stuck, showMe);
+      box.appendChild(tools);
+      let helped = false;
+      let timer = null;
+      const offerHelp = () => { stuck.hidden = true; showMe.hidden = false; };
+      const startTimer = () => { if (timer === null) timer = setTimeout(() => { if (!isDone()) offerHelp(); }, 45000); };
+      stuck.onclick = offerHelp;
+      showMe.onclick = () => { helped = true; w.setMany(c.show); };
+      w.onUpdate(out => {
+        startTimer();
+        if (isDone() || !Challenge.evalGoals(c.goals, out)) return;
+        clearTimeout(timer);
+        tools.hidden = true;
+        fb.innerHTML = helped ? 'Here is one setting that works. Move away and back to see why.' : '<b>Goal reached.</b>';
+        fb.className = 'check-fb good';
+        complete(!helped);
+      });
+      if (saved && saved.done) { tools.hidden = true; markDone(); w.setMany(c.show); }
+    } else if (c.type === 'predict') {
+      const row = el('div', 'check-input');
+      const inp = el('input');
+      inp.type = 'text'; inp.placeholder = 'Your prediction';
+      inp.setAttribute('aria-describedby', id + '-note');
+      const go = el('button', 'btn small', 'Lock it in');
+      row.append(inp, go);
+      const note = el('div', 'w-note', 'Make your prediction first; the chart unlocks after.');
+      note.id = id + '-note';
+      box.insertBefore(row, wbox);
+      box.insertBefore(note, wbox);
+      const unfreeze = () => { wbox.classList.remove('w-frozen'); wbox.inert = false; };
+      const reveal = guess => {
+        const actual = w.out[c.predict.out];
+        const ok = Challenge.within(guess, actual, c.predict.tol);
+        unfreeze();
+        inp.value = inp.value || String(guess);
+        inp.disabled = go.disabled = true;
+        fb.innerHTML = `<b>${ok ? 'Close enough.' : 'Not quite.'}</b> You said ${Challenge.fmtLike(guess, actual)}; the model gives ${Challenge.fmtLike(actual, actual)}.`;
+        fb.className = 'check-fb ' + (ok ? 'good' : 'bad');
+        return ok;
+      };
+      const submit = () => {
+        const g = Challenge.readGuess(inp.value, w.out[c.predict.out]);
+        if (!isFinite(g)) { fb.innerHTML = 'Enter a number.'; fb.className = 'check-fb bad'; return; }
+        complete(reveal(g), { guess: g });
+      };
+      go.onclick = submit;
+      inp.onkeydown = e => { if (e.key === 'Enter') submit(); };
+      if (saved && saved.done) {
+        markDone();
+        if (isFinite(saved.guess)) reveal(saved.guess); else { unfreeze(); inp.disabled = go.disabled = true; }
+      } else { wbox.classList.add('w-frozen'); wbox.inert = true; }
+    } else {
+      const list = optionList(c.opts, fb, first => complete(first));
+      box.appendChild(list);
+      if (saved && saved.done) { lockOptions(list, c.opts); markDone(); }
+    }
+    box.append(fb, exp);
+    return box;
+  }
+
   function buildWidget(d) {
     const box = el('div', 'widget');
-    const [name, ...rest] = d.args.split(/\s+/);
-    const fn = Widgets.get(name);
-    if (!fn) { box.textContent = 'Unknown widget: ' + name; return box; }
-    try { fn(box, rest.join(' ')); } catch (e) { box.textContent = 'Widget error: ' + e.message; console.error(e); }
+    Widgets.mount(box, d.args);
     return box;
   }
 
@@ -201,6 +301,7 @@ const Render = (() => {
     for (const b of splitDirectives(text)) {
       if (b.kind === 'md') { if (b.text.trim()) step.appendChild(el('div', 'prose', md(b.text))); continue; }
       if (b.type === 'check') step.appendChild(buildCheck(b, ctx, counter.n++));
+      else if (b.type === 'challenge') step.appendChild(buildChallenge(b, ctx, counter.c++));
       else if (b.type === 'widget') step.appendChild(buildWidget(b));
       else step.appendChild(buildCallout(b));
     }
@@ -209,9 +310,9 @@ const Render = (() => {
 
   // Returns array of step elements for a section body.
   function section(body, ctx) {
-    const counter = { n: 0 };
+    const counter = { n: 0, c: 0 };
     return body.split(/^\+\+\+\s*$/m).map(t => buildStep(t, ctx, counter));
   }
 
-  return { md, inline, section, el };
+  return { md, inline, section, el, split: splitDirectives };
 })();

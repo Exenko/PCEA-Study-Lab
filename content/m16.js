@@ -52,6 +52,21 @@ Q: True or false: Most of a system's total life-cycle cost is spent during the d
 - True
 * False
 > Most LCC is *locked in* during design, but most money is actually *spent* during production and O&S. This distinction drives the need for early cost management.
+:::
+
+:::challenge lockin x=5
+Q: Scrub along the life cycle to where the gap between **committed** and **spent** cost is largest (at least 80 percentage points).
+goal: gap >= 0.8
+show: x=35
+> On this illustrative curve the gap peaks around the end of design: about 90% of life-cycle cost is committed while only about 10% has been spent. After that, spending catches up, but the decisions have already been made.
+:::
+
+:::challenge lockin x=35 lock=x
+Q: At the end of design, which statement matches the "locked in vs. spent" principle?
+* Most life-cycle cost is committed, but little has been spent
+- Most life-cycle cost has been spent, with little left to commit
+- Committed and spent cost rise together
+> Design decisions lock in most future cost long before the money is spent. That's why CAIV and target costing push cost management early, while there is still flexibility.
 :::`
     },
     {

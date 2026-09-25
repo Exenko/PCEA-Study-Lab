@@ -334,6 +334,21 @@ Most COCOMO-family models rate each driver on a scale (Very Low to Extra High) a
 
 :::tip
 Cost driver selection is **as important as size** in a credible software estimate. A 50 KSLOC project can cost 100 PM (nominal) or 300 PM (high reliability + tight schedule) depending on drivers.
+:::
+
+:::widget sw-effort:::
+
+:::challenge sw-effort A=2.94 E=1.1 s=100 lock=A,E
+Q: With $E = 1.10$, the program's size doubles from 100 to 200 KSLOC. Predict the factor by which effort grows.
+predict: doubleX +- 1%
+> Effort scales by $2^{E} = 2^{1.10} \approx 2.14$. Doubling the size more than doubles the effort: that's the diseconomy of scale built into most software cost models.
+:::
+
+:::challenge sw-effort A=2.94 E=1.1 s=100 lock=A,s
+Q: Find the exponent at which doubling the size exactly doubles the effort.
+goal: doubleX ~ 2 +- 0.5%
+show: E=1
+> At $E = 1$, effort is proportional to size, so productivity (SLOC per person-month) is flat. Above 1, productivity falls as programs grow; below 1, it rises.
 :::`
     },
 

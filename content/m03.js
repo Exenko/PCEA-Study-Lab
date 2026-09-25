@@ -168,6 +168,13 @@ A driver must pass both **statistical tests** (significance) and **logic tests**
 
 :::widget regression:::
 
+:::challenge regression data=tight lock=mode
+Q: This tight data set has $R^2$ near 1. Drag **one** point until $R^2$ drops below 0.5.
+goal: r2 < 0.5
+show: data=outlier
+> A single bad point can wreck a CER. $R^2$ compares explained variation with total variation, and one far-off point adds a lot of unexplained variation. Check the data for errors and outliers before you trust a fit.
+:::
+
 +++
 
 ### Step 4: Parametric Model Development

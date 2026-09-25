@@ -332,6 +332,24 @@ Q: A new electronic warfare system is being estimated. The baseline shows it wil
 
 :::widget trl:::
 
+:::challenge trl
+Q: A full system prototype has flown in its operational environment, but the production system hasn't been qualified yet. Which TRL is it?
+* TRL 7
+- TRL 6
+- TRL 8
+- TRL 9
+> TRL 7 is a system prototype demonstrated in an operational environment. TRL 6 stops at a relevant environment; TRL 8 needs the actual system completed and qualified.
+:::
+
+:::challenge trl
+Q: A breadboard of a new sensor has been validated, but only on a lab bench. Which TRL is it?
+* TRL 4
+- TRL 3
+- TRL 5
+- TRL 6
+> TRL 4 is component or breadboard validation in a laboratory environment. The same breadboard validated in a relevant environment would be TRL 5.
+:::
+
 +++
 
 ### Relevance to cost estimating

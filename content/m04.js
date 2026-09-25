@@ -275,6 +275,19 @@ Q: One missile's unit cost is the average of units 1–50, another's the average
 * Quantity (learning curve) normalization
 - Content normalization
 > Average costs at different points on the learning curve aren't comparable. Adjust both to a common unit.
+:::
+
+:::challenge normalize
+Q: These eight data points were recorded in different years, lot sizes and units, so the cost-vs-weight scatter is meaningless. Turn on adjustments until $R^2$ is above 0.99.
+goal: r2 > 0.99
+show: units=1 infl=1 qty=1
+> All three are needed: the same units (\$M), the same base-year dollars (BY2026), and the same point on the learning curve (T1). With only units and inflation fixed, lot averages from large lots still sit low. Normalization is what makes the real relationship visible.
+:::
+
+:::challenge normalize units=1 infl=1 lock=units,infl,qty
+Q: Point 1 was recorded as \$4,317.55K in 2014 dollars. Convert it to \$M and escalate it to BY2026 at 2.5% a year (12 years). What is it worth?
+predict: byValue +- 1%
+> $4.31755 \times 1.025^{12} = 4.31755 \times 1.3449 \approx 5.81$, so about \$5.81M. Moving to a later base year multiplies by the index ratio; moving to an earlier one divides.
 :::`
     },
     {

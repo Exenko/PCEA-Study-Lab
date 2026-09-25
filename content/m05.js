@@ -195,6 +195,21 @@ Q: Your estimate covers aerospace labor and titanium procurement. Should you use
 - Yes; CPI is the standard for all U.S. cost estimation.
 - Yes, but only for the labor portion.
 > Defense costs inflate differently than consumer prices. CPI-based escalation would underestimate true DoD cost growth.
+:::
+
+:::widget escalation:::
+
+:::challenge escalation r=0.025 o1=0.5 o2=0.35 o3=0.15 amt=100 lock=r,o1,o2,o3,amt
+Q: 100 BY2025\$ of work will be appropriated in 2025 and outlaid 50% / 35% / 15% over three years at 2.5% inflation. Predict the TY\$ you must appropriate in 2025.
+predict: tyBY +- 0.5%
+> The weighted index is $0.50(1) + 0.35(1.025) + 0.15(1.025^2) = 1.0163$, so you need about \$101.63 TY. The raw index for 2025 is 1.0000, but money appropriated in 2025 is spent at later price levels.
+:::
+
+:::challenge escalation r=0.025 o1=0.5 o2=0.35 o3=0.15 amt=100 lock=o1,o2,o3,amt
+Q: Keep the same outlay profile. Find the inflation rate at which the 2025 appropriation must be about **\$103** (within \$0.10).
+goal: tyBY ~ 103 +- 0.1
+show: r=0.045
+> The appropriation grows by about $0.65r$ (the 35% and 15% of outlays that fall in later years), so about 4.5% gives \$103. A longer outlay tail makes the weighted index more sensitive to inflation.
 :::`
     },
     {

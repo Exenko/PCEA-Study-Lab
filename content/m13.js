@@ -180,6 +180,21 @@ This factor lets you compute the PV of a recurring cost in one step: $PV = \text
 
 :::widget npv:::
 
+:::challenge npv r=0.03 lock=ia,ca,ib,cb,n,mid
+Q: At 3%, B's lower annual cost outweighs its higher investment. Raise the discount rate until A and B have the same present value (within \$1).
+goal: diff ~ 0 +- 1
+show: r=0.0775
+> Discounting shrinks future savings but not the up-front investment. B's \$22/yr of savings justify its extra \$150 only below about 7.6%; above that rate, A wins. The lower panel shows where the difference crosses zero.
+:::
+
+:::challenge npv r=0.03
+Q: As the discount rate rises, which alternative gains ground?
+* A: low investment, high annual cost
+- B: high investment, low annual cost
+- Neither, because the rate affects both equally
+> A higher rate shrinks the present value of future costs but not today's. Most of A's cost is in the future, so A gains. Capital-heavy alternatives look best at low discount rates.
+:::
+
 +++
 
 :::check
