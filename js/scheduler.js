@@ -19,6 +19,9 @@ const Scheduler = (() => {
 
   function grade(id, g) {
     const s = ensure(id), now = Date.now();
+    const d0 = new Date(now); d0.setHours(0, 0, 0, 0);
+    // Quests count cards that were overdue at day start, so keep the due time as it stood before today's first grade.
+    if (!(s.last >= d0.getTime())) s.pdue = s.seen ? s.due : null;
     s.seen++; s.last = now;
     if (g === G.KNEW) {
       s.right++; s.hits++;

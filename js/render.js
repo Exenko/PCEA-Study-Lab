@@ -93,7 +93,7 @@ const Render = (() => {
 
   // Records a completed check or challenge; first = right on first try without help.
   function record(id, first, extra, ctx) {
-    if (!Store.data.checks[id]) Store.data.checks[id] = Object.assign({ first }, extra);
+    if (!Store.data.checks[id]) Store.data.checks[id] = Object.assign({ first }, extra, { at: Date.now() });
     Store.data.checks[id].done = true;
     Store.markActive();
     Store.save();
