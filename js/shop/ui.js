@@ -21,8 +21,8 @@ const Shop = (() => {
       <div><div class="rw-label">Your firm</div><h1 class="firm" title="Click to rename">${esc(firm())}</h1></div>
       <div class="shop-kpis">
         <div class="kpi"><b class="${st.cash < 0 ? 'neg' : ''}">${money(st.cash)}</b><span>cash</span></div>
-        <div class="kpi"><b>Level ${st.repLevel}</b><span>reputation · ${st.rep}/${st.nextRep} to next</span><div class="hud-bar"><i style="width:${repPct}%"></i></div></div>
-        <div class="kpi"><b>${st.completed}</b><span>jobs finished · tier ${'I'.repeat(st.maxTier)} open</span></div>
+        <div class="kpi"><b>Level ${st.repLevel}</b><span>reputation</span><span class="muted small">${st.rep}/${st.nextRep} to next</span><div class="hud-bar"><i style="width:${repPct}%"></i></div></div>
+        <div class="kpi"><b>${st.completed}</b><span>completed</span><span class="muted small">tier ${'I'.repeat(st.maxTier)} open</span></div>
       </div></div>`;
   }
 
@@ -31,18 +31,19 @@ const Shop = (() => {
     const offers = C.offers(Store.profile, Store.data, cat, ShopTemplates);
     const locked = [...new Set(ShopTemplates.map(t => t.module))].filter(m => !open.has(m)).sort();
     root.innerHTML = `<div class="shop">${header(st)}
+      ${ShopFirm.panel(Store.data, Date.now())}
       <h2>Contract board</h2>
       <p class="muted">New offers appear after each job. Pay depends on accuracy: within 1% earns full pay, within 5% earns 60%, within 10% earns 20%, and anything further off costs you.</p>
       <div class="offers">${offers.map(o => `<a class="offer" href="#/shop/job/${o.slot}">
-        <div class="offer-top"><span class="muted small">${esc(modName(o.tpl.module))}</span>${stars(o.tier)}</div>
+        <div class="offer-top"><span class="muted small">${esc(modName(o.tpl.module))}</span><span class="tier">${'I'.repeat(o.tier)}</span></div>
         <b>${esc(o.tpl.title)}</b><span class="muted small">Up to ${money(C.BASE[o.tier])} · ${o.job.answers.length} answer${o.job.answers.length > 1 ? 's' : ''}</span></a>`).join('')}</div>
       ${locked.length ? `<p class="muted small">Locked contract types: ${locked.map(m => `<a href="#/cards?m=${m}">${esc(modName(m))}</a>`).join(', ')}. Study about a third of a module's flashcards to Familiar to open its contracts.</p>` : ''}
       ${ShopWorkshop.panel(Store.data, open)}
       <h2>Campaign</h2>
       <div class="camps">${ShopCampaign.map(c => {
         const done = st.campaign.includes(c.id), avail = st.repLevel >= c.rep;
-        return avail ? `<a class="camp ${done ? 'done' : ''}" href="#/shop/campaign/${c.id}"><b>${esc(c.title)}</b><span class="muted small">${done ? 'Completed · replay for practice' : c.steps.length + ' steps · up to ' + money(C.CAMPAIGN_BASE)}</span></a>`
-          : `<div class="camp locked"><b>${esc(c.title)}</b><span class="muted small">Needs reputation level ${c.rep}</span></div>`;
+        return avail ? `<a class="camp ${done ? 'done' : ''}" href="#/shop/campaign/${c.id}"><b>${esc(c.title)}</b><span class="muted small">${done ? '✓ Completed' : c.steps.length + ' steps'}</span><span class="muted small">${done ? 'Practice available' : 'up to ' + money(C.CAMPAIGN_BASE)}</span></a>`
+          : `<div class="camp locked"><b>${esc(c.title)}</b><span class="muted small">Level ${c.rep} required</span></div>`;
       }).join('')}</div>
       <h2>Tool shop</h2>
       <div class="tools">${C.TOOLS.map(t => {
@@ -50,6 +51,7 @@ const Shop = (() => {
         return `<div class="tool"><b>${esc(t.name)}</b><span class="muted small">${esc(t.desc)}</span>
           <div class="tool-foot">${owned ? '<span class="muted small">Owned</span>' : `<button class="btn small" data-buy="${t.id}" ${st.cash < t.cost ? 'disabled' : ''}>Buy ${money(t.cost)}</button>`}${t.consumable ? `<span class="muted small">${st.left(t.id)} left</span>` : ''}</div></div>`;
       }).join('')}</div>
+      ${ShopFirm.upgradesHTML(Store.data, st)}
       ${st.has('tables') ? tablesHTML() : ''}</div>`;
     root.querySelector('.firm').onclick = () => {
       const n = prompt('Firm name', firm());
@@ -63,6 +65,7 @@ const Shop = (() => {
       Hud.toast('Bought ' + t.name, t.desc);
       board(root);
     });
+    ShopFirm.wire(root, () => board(root));
   }
 
   function toolsHTML(st) {
