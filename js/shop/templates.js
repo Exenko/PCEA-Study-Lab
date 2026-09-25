@@ -366,5 +366,85 @@
     };
   } });
 
+  // ---- Market shocks: inputs outside the normal ranges, answered by the same math as gen(). gen() itself is untouched. ----
+  const SHOCKS = {
+    'esc-compound': {
+      labels: () => [['Then-year cost', '$M']],
+      solve: i => [i.cost * Math.pow(1 + i.rate, i.years)],
+      make(h, tier) {
+        const C = r1(h.num(2, 20, 0.5) * K[tier]), n = h.num(2, 8, 1), rt = h.pick([-0.01, -0.015, -0.02, -0.03]);
+        return { inputs: { cost: C, rate: rt, years: n }, story: `Deflation: prices are falling ${pct(-rt)} a year.` };
+      }
+    },
+    'esc-index': {
+      labels: () => [['Cost in base-year dollars', '$M']],
+      solve: i => [i.cost * i.idxBase / i.idxYear],
+      make(h, tier) {
+        const T$ = r1(h.num(5, 50, 0.5) * K[tier]), ib = r1(h.num(95, 110, 0.5)), it = r1(ib * (1 + h.num(0.05, 0.35, 0.01)));
+        return { inputs: { cost: T$, idxBase: ib, idxYear: it }, story: `The cost index was rebased: the base year now reads ${ib}, not about 1.0.` };
+      }
+    },
+    'lc-unit': {
+      labels: i => [[`Hours for unit ${i.unit}`, 'hours']],
+      solve: i => [i.t1 * Math.pow(i.unit, lcB(i.slope))],
+      make(h, tier) {
+        const T1 = h.num(800, 3000, 50) * K[tier], s = h.num(0.70, 0.78, 0.01), N = h.num(10, 200, 1);
+        return { inputs: { t1: T1, slope: s, unit: N }, story: `A new process steepened the learning curve to ${pct(s, 0)}.` };
+      }
+    },
+    'lc-lot': {
+      labels: () => [['Lot cost', '$K'], ['Average unit cost', '$K']],
+      solve: i => { const b = lcB(i.slope); let sum = 0; for (let x = i.first; x <= i.first + i.qty - 1; x++) sum += i.t1 * Math.pow(x, b); return [sum, sum / i.qty]; },
+      make(h, tier) {
+        const T1 = h.num(200, 900, 10) * K[tier], s = h.pick([0.80, 0.85, 0.88, 0.90, 0.92]), F = h.num(500, 900, 10), Q = h.num(10, 40, 1);
+        return { inputs: { t1: T1, slope: s, first: F, qty: Q }, story: `Production break: this lot starts at unit ${F}.` };
+      }
+    },
+    'npv': {
+      labels: () => [['NPV', '$K']],
+      solve: i => [-i.invest + i.flows.reduce((s, a, t) => s + a / Math.pow(1 + i.rate, t + 1), 0)],
+      make(h, tier) {
+        const I = h.num(100, 500, 10) * K[tier], r = h.pick([0.12, 0.15, 0.18, 0.2]), n = h.num(7, 10, 1), A = [];
+        for (let k = 0; k < n; k++) A.push(h.num(20, 150, 5) * K[tier]);
+        return { inputs: { invest: I, flows: A, rate: r }, story: `Rates are up: discount at ${pct(r, 0)} over ${n} years of savings.` };
+      }
+    },
+    'evm-eac': {
+      labels: () => [['CPI', ''], ['EAC', '$M']],
+      solve: i => { const cpi = i.ev / i.ac, spi = i.ev / i.pv; return [cpi, i.composite ? i.ac + (i.bac - i.ev) / (cpi * spi) : i.bac / cpi]; },
+      make(h, tier) {
+        const BAC = h.num(20, 200, 1) * K[tier], EV = r2(BAC * h.num(0.2, 0.7, 0.01)), PV = r2(EV * h.num(0.85, 1.15, 0.01)), AC = r2(EV / h.num(0.5, 0.68, 0.01));
+        return { inputs: { bac: BAC, pv: PV, ev: EV, ac: AC, composite: tier >= 2 ? 1 : 0 }, story: `The program is in trouble: CPI has fallen to ${f(EV / AC, 2)}.` };
+      }
+    },
+    'cpif-fee': {
+      labels: () => [['Fee', '$M'], ['Total price', '$M']],
+      solve: i => { const raw = i.targetFee + i.conShare * (i.targetCost - i.actual), fee = Math.min(i.maxFee, Math.max(i.minFee, raw)); return [fee, i.actual + fee]; },
+      make(h, tier) {
+        const TC = h.num(50, 200, 1) * K[tier], TF = r2(TC * h.pick([0.06, 0.07, 0.08])), [g, c] = h.pick(SHARES);
+        const mn = r2(TC * h.pick([0.02, 0.03])), mx = r2(TC * h.pick([0.1, 0.12])), over = h.pick([true, false]);
+        const AC = r2(TC * (over ? 1 + h.num(0.5, 0.8, 0.01) : 1 - h.num(0.45, 0.6, 0.01)));
+        return { inputs: { targetCost: TC, targetFee: TF, govShare: g / 100, conShare: c / 100, minFee: mn, maxFee: mx, actual: AC },
+          story: over ? 'A big overrun drives the fee down to its minimum.' : 'A big underrun drives the fee up to its maximum.' };
+      }
+    },
+    'mfg-labor': {
+      labels: () => [['Expected hours', 'hours'], ['Labor cost', '$K']],
+      solve: i => { const hrs = i.stdHours * i.qty * i.realization; return [hrs, hrs * i.rate / 1000]; },
+      make(h, tier) {
+        const S = h.num(20, 120, 1), Q = h.num(10, 80, 1) * K[tier], R = h.num(1.1, 1.8, 0.05), W = Math.round(h.num(90, 180, 1) * h.num(1.5, 2, 0.05));
+        return { inputs: { stdHours: S, qty: Q, realization: R, rate: W }, story: `Labor squeeze: the wrap rate jumped to $${W}/hour.` };
+      }
+    }
+  };
+  Object.entries(SHOCKS).forEach(([id, s]) => {
+    const t = T.find(x => x.id === id);
+    t.solve = s.solve;
+    t.shock = (h, tier) => {
+      const m = s.make(h, tier), v = s.solve(m.inputs);
+      return { inputs: m.inputs, story: m.story, answers: s.labels(m.inputs).map(([label, unit], k) => ({ label, unit, value: v[k] })) };
+    };
+  });
+
   if (typeof module !== 'undefined' && module.exports) module.exports = T; else root.ShopTemplates = T;
 })(this);
