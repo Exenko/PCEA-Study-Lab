@@ -1990,5 +1990,179 @@ const Widgets = (() => {
     draw();
   };
 
+  // ======================================================================
+  // M7: production break, unit theory (Fig 7.46)
+  reg['lc-break'] = box => {
+    title(box, 'Production break', 'unit theory — partial loss of learning re-anchors the curve');
+    const v = controls(box, [
+      { k: 't1', label: 'T1 (a)', min: 10, max: 1000, step: 10, v: 100 },
+      { k: 'lcs', label: 'LCS', min: 0.7, max: 0.99, step: 0.005, v: 0.90, fmt: x => (x * 100).toFixed(1) + '%' },
+      { k: 'n', label: 'Break unit N', type: 'number', min: 1, step: 1, v: 5 },
+      { k: 'L', label: 'Learning lost L%', min: 0, max: 100, step: 5, v: 50, fmt: x => x.toFixed(0) + '%' }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'original curve'], ['c2', 'post-break curve']]);
+    const ro = readout(box);
+    const note = E('div', 'w-note', 'Source example rounds $b$ to −0.152 (from LCS 90%); using the exact $b=\\ln(LCS)/\\ln2$ reproduces the same 89.15 / 2.128 / 84.081 to 3 decimals.');
+    box.appendChild(note);
+    function draw() {
+      pb.innerHTML = '';
+      const a = v.t1, b = Math.log(v.lcs) / Math.log(2), N = Math.max(1, Math.round(v.n)), L = v.L / 100;
+      const aP = L * a + (1 - L) * a * Math.pow(N, b);
+      const Q = Math.pow(aP / a, 1 / b);
+      const Xmax = Math.max(20, N + 15);
+      const orig = [], post = [];
+      for (let x = 1; x <= Xmax; x++) {
+        orig.push([x, a * Math.pow(x, b)]);
+        post.push([x, x < N ? a * Math.pow(x, b) : a * Math.pow(Q + (x - N), b)]);
+      }
+      const ymax = a * 1.05;
+      const p = Plot.create(pb, { xmin: 0, xmax: Xmax + 1, ymin: 0, ymax, xlabel: 'unit number', ylabel: 'unit cost' });
+      p.axes();
+      p.line(orig, 'series c1');
+      p.line(post, 'series c2');
+      p.vline(N, 'marker');
+      const unitNplus1 = a * Math.pow(Q + (N + 1 - N), b);
+      ro([
+        ['$b = \\ln(LCS)/\\ln 2$', f2(b, 3)],
+        ["Break unit cost $a'$", f2(aP)],
+        ['Effective unit number $Q$', f2(Q, 3)],
+        [`Unit ${N + 1} cost (post-break)`, f2(unitNplus1)]
+      ]);
+      publish(box, { aP, Q, unitNplus1 });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M7: retrograde analysis (Anderlohr) — assessing lost learning
+  reg['retrograde'] = box => {
+    title(box, 'Retrograde analysis', 'Anderlohr method — weight each factor’s contribution to lost learning');
+    const rows = [
+      { k: 'pers', label: 'Personnel learning', w: 30, p: 40 },
+      { k: 'sup', label: 'Supervisory learning', w: 20, p: 30 },
+      { k: 'cont', label: 'Continuity of productivity', w: 20, p: 50 },
+      { k: 'meth', label: 'Methods', w: 15, p: 20 },
+      { k: 'tool', label: 'Special tooling', w: 15, p: 25 }
+    ];
+    const defs = [];
+    rows.forEach(r => {
+      defs.push({ k: r.k + 'W', label: r.label + ' — weight%', min: 0, max: 100, step: 1, v: r.w });
+      defs.push({ k: r.k + 'P', label: r.label + ' — % lost', min: 0, max: 100, step: 1, v: r.p });
+    });
+    defs.push({ k: 't1', label: 'T1 (a)', min: 10, max: 1000, step: 10, v: 100 });
+    defs.push({ k: 'lcs', label: 'LCS', min: 0.7, max: 0.99, step: 0.005, v: 0.90, fmt: x => (x * 100).toFixed(1) + '%' });
+    defs.push({ k: 'n', label: 'Break unit N', type: 'number', min: 1, step: 1, v: 5 });
+    const v = controls(box, defs, draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    function draw() {
+      pb.innerHTML = '';
+      const weightSum = rows.reduce((s, r) => s + v[r.k + 'W'], 0);
+      const wLearningLost = rows.reduce((s, r) => s + v[r.k + 'W'] * v[r.k + 'P'], 0) / (weightSum || 1) / 100;
+      const p = Plot.create(pb, { h: 220, xmin: 0, xmax: 100, ymin: 0, ymax: rows.length, yticks: rows.length, xlabel: '% lost (bar width = weight)', yfmt: () => '', pad: { l: 20, r: 16, t: 10, b: 40 } });
+      p.axes();
+      rows.forEach((r, i) => {
+        const y0 = rows.length - i - 0.75, y1 = rows.length - i - 0.25;
+        p.rect(0, y0, v[r.k + 'P'], y1, 'bar c1f');
+        p.text(2, (y0 + y1) / 2, `${r.label}: w${v[r.k + 'W']}% × lost${v[r.k + 'P']}%`, 'annot', 'start');
+      });
+      const a = v.t1, b = Math.log(v.lcs) / Math.log(2), N = Math.max(1, Math.round(v.n)), L = wLearningLost;
+      const aP = L * a + (1 - L) * a * Math.pow(N, b);
+      const Q = Math.pow(aP / a, 1 / b);
+      ro([
+        ['Weight sum', weightSum.toFixed(0) + '%', weightSum !== 100 ? 'bad' : 'good'],
+        ['Weighted % learning lost', pct(wLearningLost, 1)],
+        ["Break unit cost $a'$ (T1 " + a + ', LCS ' + pct(v.lcs, 0) + ', N ' + N + ')', f2(aP)],
+        ['Effective unit number $Q$', f2(Q, 3)]
+      ]);
+      publish(box, { weightSum, wLearningLost, aP, Q });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M7: lot table — unit theory, lot boundaries (Fig 7.4)
+  reg['lot-table'] = box => {
+    title(box, 'Lot cost table', 'unit theory — drag lot boundaries to see lot totals and CAUC');
+    const N = 8;
+    const v = controls(box, [
+      { k: 't1', label: 'T1', min: 10, max: 5000, step: 10, v: 1000 },
+      { k: 'lcs', label: 'LCS', min: 0.7, max: 0.99, step: 0.005, v: 0.85, fmt: x => (x * 100).toFixed(1) + '%' },
+      { k: 'split', label: 'Lot 1 last unit (of 8)', type: 'number', min: 1, max: 7, step: 1, v: 3 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const note = E('div', 'w-note', 'Unit costs cannot be recovered from lot totals alone — the lot total only fixes the average.');
+    box.appendChild(note);
+    const ro = readout(box);
+    function draw() {
+      const a = v.t1, b = Math.log(v.lcs) / Math.log(2);
+      const uc = x => a * Math.pow(x, b);
+      const units = []; let cum = 0;
+      for (let x = 1; x <= N; x++) { cum += uc(x); units.push({ x, cost: uc(x), cum, cauc: cum / x }); }
+      const split = Math.min(N - 1, Math.max(1, Math.round(v.split)));
+      const lot1 = units.slice(0, split), lot2 = units.slice(split);
+      const lotTotal = arr => arr.reduce((s, u) => s + u.cost, 0);
+      const l1total = lotTotal(lot1), l2total = lotTotal(lot2);
+      const l1auc = l1total / lot1.length, l2auc = l2total / lot2.length;
+      const rowsHtml = units.map(u => `<tr><td>${u.x}</td><td>${f2(u.cost)}</td><td>${f2(u.cum)}</td><td>${f2(u.cauc)}</td><td>${u.x <= split ? '1' : '2'}</td></tr>`).join('');
+      pb.innerHTML = `<table class="w-table"><thead><tr><th>Unit</th><th>Unit cost</th><th>Cum. cost</th><th>CAUC</th><th>Lot</th></tr></thead><tbody>${rowsHtml}</tbody></table>`;
+      ro([
+        [`Lot 1 (units 1–${split})`, `total ${f2(l1total)}, AUC ${f2(l1auc)}`],
+        [`Lot 2 (units ${split + 1}–${N})`, `total ${f2(l2total)}, AUC ${f2(l2auc)}`],
+        [`Unit ${N} cost`, f2(units[N - 1].cost)],
+        [`Cumulative cost through ${N}`, f2(units[N - 1].cum)],
+        [`CAUC through ${N}`, f2(units[N - 1].cauc)]
+      ]);
+      publish(box, { unit2: units[1].cost, unit4: units[3].cost, unit8: units[7].cost, cum8: units[7].cum, cauc8: units[7].cauc, lot2Total: l2total, lot2AUC: l2auc, lot1Total: l1total });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M7: unit (Crawford) vs CUMAV (Wright) theory comparison
+  reg['lc-compare'] = box => {
+    title(box, 'Unit vs. CUMAV theory', 'same T1 and LCS, two different cost-quantity theories');
+    const v = controls(box, [
+      { k: 't1', label: 'T1', min: 10, max: 1000, step: 10, v: 100 },
+      { k: 'lcs', label: 'LCS', min: 0.7, max: 0.99, step: 0.005, v: 0.85, fmt: x => (x * 100).toFixed(1) + '%' },
+      { k: 'n', label: 'Units N', min: 4, max: 60, step: 1, v: 20 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'Unit theory (Crawford)'], ['c2', 'CUMAV theory (Wright)']]);
+    const ro = readout(box);
+    function draw() {
+      pb.innerHTML = '';
+      const a = v.t1, b = Math.log(v.lcs) / Math.log(2), N = Math.round(v.n);
+      const unitCurve = [], cumavCurve = [];
+      let unitTotal = 0;
+      for (let x = 1; x <= N; x++) {
+        const u = a * Math.pow(x, b);
+        unitTotal += u;
+        unitCurve.push([x, u]);
+        const cumavTotalX = a * Math.pow(x, b + 1);
+        const cumavUnit = x === 1 ? cumavTotalX : cumavTotalX - a * Math.pow(x - 1, b + 1);
+        cumavCurve.push([x, cumavUnit]);
+      }
+      const cumavTotalN = a * Math.pow(N, b + 1);
+      const cumavUnitN = N === 1 ? cumavTotalN : cumavTotalN - a * Math.pow(N - 1, b + 1);
+      const unitUnitN = unitCurve[N - 1][1];
+      const ymax = a * 1.05;
+      const p = Plot.create(pb, { xmin: 0, xmax: N + 1, ymin: 0, ymax, xlabel: 'unit number', ylabel: 'unit cost' });
+      p.axes();
+      p.line(unitCurve, 'series c1');
+      p.line(cumavCurve, 'series c2');
+      ro([
+        ['$b = \\ln(LCS)/\\ln 2$', f2(b, 3)],
+        [`Unit theory total cost through ${N}`, f2(unitTotal)],
+        [`CUMAV total cost through ${N} = a·N^(b+1)`, f2(cumavTotalN)],
+        [`Unit theory unit ${N} cost`, f2(unitUnitN)],
+        [`CUMAV unit ${N} cost = total(${N}) − total(${N - 1})`, f2(cumavUnitN)]
+      ]);
+      publish(box, { unitTotal, cumavTotalN, unitUnitN, cumavUnitN });
+    }
+    draw();
+  };
+
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();

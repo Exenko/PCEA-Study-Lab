@@ -46,7 +46,11 @@
     'outlier-regression': { controls: ['outlier'], setters: [], outputs: ['n', 'slope', 'intercept', 'r2', 'outlierZ'] },
     'bin-explorer': { controls: ['width', 'start', 'view'], setters: [], outputs: ['n', 'mean', 'q1', 'median', 'q3', 'iqr', 'outlierCount'] },
     'ml-classifier': { controls: ['k'], setters: [], outputs: ['weightProbAB', 'weightProbCD', 'powerProbAB', 'powerProbCD', 'nbProbAB', 'nbProbCD', 'knnClass', 'k'] },
-    'logistic-risk': { controls: ['size', 'dur', 'exp', 'team', 'cx', 'mkt'], setters: [], outputs: ['logOdds', 'p'] }
+    'logistic-risk': { controls: ['size', 'dur', 'exp', 'team', 'cx', 'mkt'], setters: [], outputs: ['logOdds', 'p'] },
+    'lc-break': { controls: ['t1', 'lcs', 'n', 'L'], setters: [], outputs: ['aP', 'Q', 'unitNplus1'] },
+    'retrograde': { controls: ['persW', 'persP', 'supW', 'supP', 'contW', 'contP', 'methW', 'methP', 'toolW', 'toolP', 't1', 'lcs', 'n'], setters: [], outputs: ['weightSum', 'wLearningLost', 'aP', 'Q'] },
+    'lot-table': { controls: ['t1', 'lcs', 'split'], setters: [], outputs: ['unit2', 'unit4', 'unit8', 'cum8', 'cauc8', 'lot2Total', 'lot2AUC', 'lot1Total'] },
+    'lc-compare': { controls: ['t1', 'lcs', 'n'], setters: [], outputs: ['unitTotal', 'cumavTotalN', 'unitUnitN', 'cumavUnitN'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);
