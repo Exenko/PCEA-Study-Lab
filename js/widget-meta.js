@@ -54,7 +54,11 @@
     'intercept-bow': { controls: ['c'], setters: [], outputs: ['a', 'b', 'r2', 'c'] },
     'nested-model': { controls: ['x1', 'x2', 'x3'], setters: [], outputs: ['adjr2', 'see', 'cv', 'F'] },
     'lot-table': { controls: ['t1', 'lcs', 'split'], setters: [], outputs: ['unit2', 'unit4', 'unit8', 'cum8', 'cauc8', 'lot2Total', 'lot2AUC', 'lot1Total'] },
-    'lc-compare': { controls: ['t1', 'lcs', 'n'], setters: [], outputs: ['unitTotal', 'cumavTotalN', 'unitUnitN', 'cumavUnitN'] }
+    'lc-compare': { controls: ['t1', 'lcs', 'n'], setters: [], outputs: ['unitTotal', 'cumavTotalN', 'unitUnitN', 'cumavUnitN'] },
+    'cer-pi': { controls: ['weight', 'u'], setters: [], outputs: ['est', 'mult', 'lo95', 'hi95', 'trial'] },
+    'schedule-network': { controls: ['mode', 'k', 'cv', 'scenario'], setters: [], outputs: ['meanFinish', 'pctB', 'cpMean', 'sd'] },
+    'conflation': { controls: ['disagree', 'method'], setters: [], outputs: ['sd', 'p10', 'p90', 'method'] },
+    'risk-cube': { controls: ['p1', 'p2', 'p3', 'p4', 'p5', 'c1', 'c2', 'c3', 'c4', 'c5'], setters: [], outputs: ['ev', 'sd', 'p80'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);

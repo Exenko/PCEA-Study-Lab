@@ -2426,5 +2426,241 @@ const Widgets = (() => {
     draw();
   };
 
+  // ======================================================================
+  // M9: CER prediction interval (Fig. 9.36-9.37)
+  reg['cer-pi'] = box => {
+    title(box, 'CER prediction interval', 'cost = 6.571 + 7.714·weight, with an 80/90/95% PI');
+    const b0 = 6.571, b1 = 7.714, SEE = 1.219, n = 7, df = 5, xbar = 4, sxxAdj = 140 - n * xbar * xbar;
+    const v = controls(box, [
+      { k: 'weight', label: 'Weight (driver, x1000 lb)', min: 1, max: 8, step: 0.1, v: 4.5 },
+      { k: 'u', label: 'Draw (uniform u, 0-1)', min: 0.001, max: 0.999, step: 0.001, v: 0.5 }
+    ], draw);
+    const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R); box.appendChild(row);
+    legend(box, [['c1', 'point estimate'], ['band', '95% PI'], ['c2', 'trial draw']]);
+    const ro = readout(box);
+    function draw() {
+      L.innerHTML = ''; R.innerHTML = '';
+      const weight = v.weight;
+      const est = b0 + b1 * weight;
+      const mult = SEE * Math.sqrt(1 + 1 / n + (weight - xbar) ** 2 / sxxAdj);
+      const lv = { '80': 0.10, '90': 0.05, '95': 0.025 };
+      const t80 = M.tinv(1 - lv['80'], df), t90 = M.tinv(1 - lv['90'], df), t95 = M.tinv(1 - lv['95'], df);
+      const lo95 = est - t95 * mult, hi95 = est + t95 * mult;
+      const lo90 = est - t90 * mult, hi90 = est + t90 * mult;
+      const lo80 = est - t80 * mult, hi80 = est + t80 * mult;
+      const u = v.u;
+      const alpha = u <= 0.5 ? 2 * u : 2 * (1 - u);
+      const tcrit = M.tinv(1 - alpha / 2, df);
+      const trial = u < 0.5 ? est - tcrit * mult : est + tcrit * mult;
+      const p1 = Plot.create(L, { w: 300, h: 230, xmin: 1, xmax: 8, ymin: 0, ymax: (b0 + b1 * 8) + 30, xlabel: 'weight', ylabel: 'cost' });
+      p1.axes();
+      const nseg = 40, up = [], dn = [];
+      for (let i = 0; i <= nseg; i++) {
+        const x = 1 + 7 * i / nseg;
+        const m = SEE * Math.sqrt(1 + 1 / n + (x - xbar) ** 2 / sxxAdj);
+        const yc = b0 + b1 * x;
+        up.push([x, yc + t95 * m]); dn.push([x, yc - t95 * m]);
+      }
+      const dpath = 'M' + up.concat(dn.reverse()).map(q => p1.x(q[0]).toFixed(1) + ',' + p1.y(q[1]).toFixed(1)).join('L') + 'Z';
+      Plot.svgEl('path', { d: dpath, class: 'band' }, p1.svg);
+      p1.fn(x => b0 + b1 * x, 'series c1');
+      p1.vline(weight, 'marker hot');
+      p1.dot(weight, trial, 'pt c2', 6);
+      const r = M.rng(99); const arr = [];
+      for (let i = 0; i < 1000; i++) {
+        const uu = r(); const a2 = uu <= 0.5 ? 2 * uu : 2 * (1 - uu);
+        const tc = M.tinv(1 - a2 / 2, df);
+        arr.push(uu < 0.5 ? est - tc * mult : est + tc * mult);
+      }
+      arr.sort((a, bx) => a - bx);
+      const bins = 30, lo = arr[0], hi = arr[arr.length - 1], w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
+      arr.forEach(x => cnt[Math.min(bins - 1, Math.floor((x - lo) / w))]++);
+      const p2 = Plot.create(R, { w: 300, h: 230, xmin: lo, xmax: hi, ymin: 0, ymax: Math.max(...cnt) * 1.1, xlabel: 'simulated cost', ylabel: 'frequency', yfmt: () => '' });
+      p2.axes(); cnt.forEach((c, i) => p2.rect(lo + i * w, 0, lo + (i + 1) * w, c, 'bar'));
+      p2.vline(est, 'marker c1'); p2.vline(trial, 'marker c2');
+      ro([
+        ['Point estimate', f2(est, 2), 'c1t'],
+        ['PI multiplier SEE·√(1+1/n+(x-x̄)²/Σd²)', f2(mult, 3)],
+        ['80% PI  (t=' + f2(t80, 3) + ')', `(${f2(lo80, 2)}, ${f2(hi80, 2)})`],
+        ['90% PI  (t=' + f2(t90, 3) + ')', `(${f2(lo90, 2)}, ${f2(hi90, 2)})`],
+        ['95% PI  (t=' + f2(t95, 3) + ')', `(${f2(lo95, 2)}, ${f2(hi95, 2)})`, 'c2t'],
+        ['Draw u → trial value', f2(trial, 2)]
+      ]);
+      publish(box, { est, mult, lo95, hi95, trial });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M9: schedule network risk (Figs. 9.38-9.40) — merge point makes finish >= any single path
+  reg['schedule-network'] = box => {
+    title(box, 'Schedule network risk', 'the critical path is the max of competing paths — merge bias pushes the finish date out');
+    const v = controls(box, [
+      { k: 'mode', label: 'Mode', type: 'select', v: 'A', options: [['A', 'A: two parallel tasks'], ['B', 'B: k parallel tasks'], ['C', 'C: network shapes']] },
+      { k: 'k', label: 'k (mode B)', min: 1, max: 10, step: 1, v: 5 },
+      { k: 'cv', label: 'CV % (mode B)', min: 10, max: 40, step: 5, v: 20 },
+      { k: 'scenario', label: 'Scenario (mode C)', type: 'select', v: 'parallel', options: [['single', 'single task'], ['serial', 'serial chain'], ['parallel', 'parallel'], ['crosslink', 'crosslink']] }
+    ], draw);
+    const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R); box.appendChild(row);
+    const ro = readout(box);
+    function singleC(r) { return 10 + 2 * M.randn(r); }
+    function serialC(r) { return (5 + 1.4 * M.randn(r)) + (5 + 1.4 * M.randn(r)); }
+    function parallelC(r) { return Math.max(10 + 2 * M.randn(r), 10 + 2 * M.randn(r)); }
+    function crosslinkC(r) { return Math.max(5 + 1.4 * M.randn(r), 5 + 1.4 * M.randn(r)) + (5 + 1.4 * M.randn(r)); }
+    function draw() {
+      L.innerHTML = ''; R.innerHTML = '';
+      const N = 1000;
+      let finish = [], meanFinish, pctB = NaN, cpMean, sdv;
+      if (v.mode === 'A') {
+        const r = M.rng(123); let bWins = 0;
+        for (let i = 0; i < N; i++) { const a = 10 + 2 * M.randn(r), b = 8 + 1.6 * M.randn(r); finish.push(Math.max(a, b)); if (b > a) bWins++; }
+        meanFinish = mean(finish); sdv = sd(finish); pctB = bWins / N; cpMean = meanFinish;
+      } else if (v.mode === 'B') {
+        const sdTask = 10 * v.cv / 100; const r = M.rng(123);
+        for (let i = 0; i < N; i++) { let m = -Infinity; for (let j = 0; j < v.k; j++) m = Math.max(m, 10 + sdTask * M.randn(r)); finish.push(m); }
+        meanFinish = mean(finish); sdv = sd(finish); cpMean = meanFinish;
+      } else {
+        const fn = { single: singleC, serial: serialC, parallel: parallelC, crosslink: crosslinkC }[v.scenario];
+        const r = M.rng(123);
+        for (let i = 0; i < N; i++) finish.push(fn(r));
+        meanFinish = mean(finish); sdv = sd(finish); cpMean = meanFinish;
+      }
+      const sorted = finish.slice().sort((a, b) => a - b);
+      const bins = 30, lo = sorted[0], hi = sorted[sorted.length - 1], w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
+      sorted.forEach(x => cnt[Math.min(bins - 1, Math.floor((x - lo) / w))]++);
+      const p1 = Plot.create(L, { w: 300, h: 230, xmin: lo, xmax: hi, ymin: 0, ymax: Math.max(...cnt) * 1.1, xlabel: 'finish time', ylabel: 'frequency', yfmt: () => '' });
+      p1.axes(); cnt.forEach((c, i) => p1.rect(lo + i * w, 0, lo + (i + 1) * w, c, 'bar'));
+      p1.vline(cpMean, 'marker c1');
+      if (v.mode === 'B') {
+        const pts = []; const cvv = v.cv;
+        for (let kk = 1; kk <= 10; kk++) { const r2 = M.rng(123); const sdTask = 10 * cvv / 100; const fin = []; for (let i = 0; i < 300; i++) { let m = -Infinity; for (let j = 0; j < kk; j++) m = Math.max(m, 10 + sdTask * M.randn(r2)); fin.push(m); } pts.push([kk, mean(fin)]); }
+        const p2 = Plot.create(R, { w: 300, h: 230, xmin: 1, xmax: 10, ymin: 8, ymax: Math.max(...pts.map(p => p[1])) * 1.15, xlabel: 'k (parallel tasks)', ylabel: 'mean critical path' });
+        p2.axes(); p2.line(pts, 'series c1'); pts.forEach(([x, y]) => p2.dot(x, y, 'pt', 4));
+      } else if (v.mode === 'C') {
+        const scenarios = ['single', 'serial', 'parallel', 'crosslink'];
+        const fns = { single: singleC, serial: serialC, parallel: parallelC, crosslink: crosslinkC };
+        const bars = scenarios.map(nm => { const r2 = M.rng(123); const arr = []; for (let i = 0; i < 500; i++) arr.push(fns[nm](r2)); return [nm, sd(arr)]; });
+        const p2 = Plot.create(R, { w: 300, h: 230, xmin: 0, xmax: 4, ymin: 0, ymax: Math.max(...bars.map(b => b[1])) * 1.2, xticks: 4, xlabel: '', ylabel: 'std dev of finish', xfmt: i => (scenarios[Math.round(i)] || '').slice(0, 4) });
+        p2.axes(); bars.forEach(([nm, s2], i) => p2.rect(i + 0.15, 0, i + 0.85, s2, nm === v.scenario ? 'series c2' : 'bar'));
+      } else {
+        const p2 = Plot.create(R, { w: 300, h: 230, xmin: 0, xmax: 2, ymin: 0, ymax: 14, xticks: 2, xlabel: '', ylabel: 'mean duration', xfmt: i => ['A', 'B'][Math.round(i)] || '' });
+        p2.axes();
+        const rA = M.rng(123); let asum = 0, bsum = 0; for (let i = 0; i < N; i++) { asum += 10 + 2 * M.randn(rA); bsum += 8 + 1.6 * M.randn(rA); }
+        p2.rect(0.15, 0, 0.85, asum / N, 'series c1'); p2.rect(1.15, 0, 1.85, bsum / N, 'series c2');
+      }
+      ro([
+        ['Mean finish (critical path)', f2(cpMean, 2), 'c1t'],
+        ['Std dev of finish', f2(sdv, 2)],
+        [v.mode === 'A' ? '% trials where B is the longer path' : 'n/a (mode A only)', v.mode === 'A' ? pct(pctB, 0) : '—'],
+        ['Mode', v.mode]
+      ]);
+      publish(box, { meanFinish, pctB, cpMean, sd: sdv });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M9: conflating expert opinions — averaging draws is not a valid conflation method
+  reg['conflation'] = box => {
+    title(box, 'Conflating expert opinions', 'averaging independent draws shrinks spread — that is the wrong way to combine estimates');
+    const base = [{ a: 80, c: 100, b: 130 }, { a: 90, c: 110, b: 150 }, { a: 70, c: 95, b: 120 }];
+    const center = mean(base.map(e => e.c));
+    const v = controls(box, [
+      { k: 'disagree', label: 'Expert disagreement (spread scale)', min: 0.5, max: 2, step: 0.1, v: 1 },
+      { k: 'method', label: 'Conflation method', type: 'select', v: 'avgdraws', options: [
+        ['avgdraws', 'Average of independent draws (wrong)'],
+        ['avgparams', 'Average L/M/H params, then sample'],
+        ['samepercentile', 'Average at same percentile'],
+        ['mixture', 'Stacked PDFs (mixture, 1/n each)'],
+        ['randexpert', 'Random expert per trial']
+      ] }
+    ], draw);
+    const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R); box.appendChild(row);
+    const ro = readout(box);
+    function experts() { const s = v.disagree; return base.map(e => ({ a: center + s * (e.a - center), c: center + s * (e.c - center), b: center + s * (e.b - center) })); }
+    function sample(method, exps, r) {
+      if (method === 'avgdraws') return mean(exps.map(e => M.triInv(r(), e.a, e.c, e.b)));
+      if (method === 'avgparams') { const A = mean(exps.map(e => e.a)), C = mean(exps.map(e => e.c)), B = mean(exps.map(e => e.b)); return M.triInv(r(), A, C, B); }
+      if (method === 'samepercentile') { const p = r(); return mean(exps.map(e => M.triInv(p, e.a, e.c, e.b))); }
+      const idx = Math.min(exps.length - 1, Math.floor(r() * exps.length));
+      const e = exps[idx];
+      return M.triInv(r(), e.a, e.c, e.b);
+    }
+    function draw() {
+      L.innerHTML = ''; R.innerHTML = '';
+      const N = 2000, exps = experts();
+      const methods = ['avgdraws', 'avgparams', 'samepercentile', 'mixture', 'randexpert'];
+      const stats = {};
+      methods.forEach(m => {
+        const r = M.rng(55); const arr = []; for (let i = 0; i < N; i++) arr.push(sample(m, exps, r));
+        arr.sort((x, y) => x - y);
+        stats[m] = { sdv: sd(arr), p10: quant(arr, 0.1), p90: quant(arr, 0.9), arr };
+      });
+      const cur = stats[v.method];
+      const bins = 30, lo = cur.arr[0], hi = cur.arr[cur.arr.length - 1], w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
+      cur.arr.forEach(x => cnt[Math.min(bins - 1, Math.floor((x - lo) / w))]++);
+      const p1 = Plot.create(L, { w: 300, h: 230, xmin: lo, xmax: hi, ymin: 0, ymax: Math.max(...cnt) * 1.1, xlabel: 'conflated estimate', ylabel: 'frequency', yfmt: () => '' });
+      p1.axes(); cnt.forEach((c, i) => p1.rect(lo + i * w, 0, lo + (i + 1) * w, c, 'bar'));
+      const p2 = Plot.create(R, { w: 300, h: 230, xmin: 0, xmax: methods.length, ymin: 0, ymax: Math.max(...methods.map(m => stats[m].sdv)) * 1.2, xticks: methods.length, xlabel: '', ylabel: 'std dev', xfmt: i => (methods[Math.round(i)] || '').slice(0, 6) });
+      p2.axes(); methods.forEach((m, i) => p2.rect(i + 0.15, 0, i + 0.85, stats[m].sdv, m === v.method ? 'series c2' : 'bar'));
+      ro([
+        ['Method', v.method, 'c1t'],
+        ['Std dev', f2(cur.sdv, 2)],
+        ['P10', f2(cur.p10, 2)], ['P90', f2(cur.p90, 2)],
+        ['Smallest SD (misleadingly "precise")', methods.reduce((a, b) => stats[a].sdv < stats[b].sdv ? a : b)],
+        ['"Average of draws" underestimates disagreement — not a valid conflation method', '']
+      ]);
+      publish(box, { sd: cur.sdv, p10: cur.p10, p90: cur.p90, method: v.method });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M9: discrete risk portfolio — Bernoulli risks, correct Var=P(1-P)C² (CEBoK prints P(1-P)C)
+  reg['risk-cube'] = box => {
+    title(box, 'Discrete risk portfolio', 'each risk is a Bernoulli event: E=P·C, Var=P(1-P)C² (CEBoK misprints Var=P(1-P)C)');
+    const names = ['R1', 'R2', 'R3', 'R4', 'R5'];
+    const defP = [0.3, 0.5, 0.1, 0.7, 0.2], defC = [5, 2, 20, 1, 10];
+    const defs = [];
+    names.forEach((nm, i) => defs.push({ k: 'p' + (i + 1), label: nm + ' — P(occur)', min: 0, max: 1, step: 0.05, v: defP[i], fmt: x => (x * 100).toFixed(0) + '%' }));
+    names.forEach((nm, i) => defs.push({ k: 'c' + (i + 1), label: nm + ' — Consequence ($M)', min: 0.5, max: 30, step: 0.5, v: defC[i] }));
+    const v = controls(box, defs, draw);
+    const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R); box.appendChild(row);
+    const ro = readout(box);
+    function draw() {
+      L.innerHTML = ''; R.innerHTML = '';
+      const P = names.map((_, i) => v['p' + (i + 1)]), C = names.map((_, i) => v['c' + (i + 1)]);
+      const ev = P.reduce((s, p, i) => s + p * C[i], 0);
+      const varr = P.reduce((s, p, i) => s + p * (1 - p) * C[i] * C[i], 0);
+      const sdv = Math.sqrt(varr);
+      const N = 3000, r = M.rng(77); const totals = [];
+      for (let i = 0; i < N; i++) { let t = 0; for (let j = 0; j < names.length; j++) if (r() < P[j]) t += C[j]; totals.push(t); }
+      totals.sort((a, b) => a - b);
+      const p80 = quant(totals, 0.8);
+      const bins = 25, lo = totals[0], hi = totals[N - 1], w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
+      totals.forEach(x => cnt[Math.min(bins - 1, Math.floor((x - lo) / w))]++);
+      const p1 = Plot.create(L, { w: 300, h: 230, xmin: lo, xmax: hi, ymin: 0, ymax: Math.max(...cnt) * 1.1, xlabel: 'total risk cost ($M)', ylabel: 'frequency', yfmt: () => '' });
+      p1.axes(); cnt.forEach((c, i) => p1.rect(lo + i * w, 0, lo + (i + 1) * w, c, 'bar'));
+      p1.vline(ev, 'marker c1'); p1.vline(p80, 'marker c2');
+      const maxC = Math.max(...C, 1);
+      const p2 = Plot.create(R, { w: 300, h: 230, xmin: 0, xmax: 6, ymin: 0, ymax: 6, xticks: 5, yticks: 5, xlabel: 'likelihood bin (1-5)', ylabel: 'consequence bin (1-5)' });
+      p2.axes();
+      names.forEach((nm, i) => {
+        const pb = Math.min(5, Math.max(1, Math.ceil(P[i] * 5) || 1));
+        const cb = Math.min(5, Math.max(1, Math.ceil(C[i] / maxC * 5) || 1));
+        p2.dot(pb - 0.5, cb - 0.5, 'pt hot', 8);
+        p2.text(pb - 0.5, cb - 0.5 + 0.35, nm, 'annot', 'middle');
+      });
+      ro([
+        ['Expected total (ΣP·C)', f2(ev, 2), 'c1t'],
+        ['Std dev (Σ P(1-P)C², independence)', f2(sdv, 2)],
+        ['P80 of total (from Monte Carlo — needs simulation, not a formula)', f2(p80, 2), 'c2t'],
+        ['Distribution is lumpy/skewed, not normal — mean ± z·σ misleads here', '']
+      ]);
+      publish(box, { ev, sd: sdv, p80 });
+    }
+    draw();
+  };
+
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();
