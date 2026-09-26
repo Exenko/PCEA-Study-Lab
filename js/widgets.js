@@ -396,6 +396,7 @@ const Widgets = (() => {
   reg['escalation'] = box => {
     title(box, 'Raw vs. weighted indices', 'why budget dollars need an outlay profile');
     const v = controls(box, [
+      { k: 'method', label: 'Method', type: 'select', v: 'navy', options: [['navy', 'Navy/Air Force (harmonic)'], ['army', 'Army (arithmetic)']] },
       { k: 'r', label: 'Annual inflation', min: 0, max: 0.08, step: 0.0025, v: 0.025, fmt: x => (x * 100).toFixed(2) + '%' },
       { k: 'o1', label: 'Outlay yr 1', min: 0, max: 1, step: 0.05, v: 0.5, fmt: pct },
       { k: 'o2', label: 'Outlay yr 2', min: 0, max: 1, step: 0.05, v: 0.35, fmt: pct },
@@ -409,16 +410,206 @@ const Widgets = (() => {
       const prof = [v.o1, v.o2, v.o3], tot = prof.reduce((s, x) => s + x, 0) || 1;
       const pn = prof.map(x => x / tot);
       const raw = y => Math.pow(1 + v.r, y - BY);
-      const wtd = y => pn.reduce((s, p, k) => s + p * raw(y + k), 0);
-      let h = '<table><tr><th>Year</th><th>Raw index</th><th>Weighted index</th><th>Outlays in year (TY$)</th><th>Appropriated in year (TY$)</th></tr>';
+      // Navy/Air Force method: weighted = 1 / sum(outlay_k / raw_k) — a weighted harmonic mean.
+      const wtdNavy = y => 1 / pn.reduce((s, p, k) => s + p / raw(y + k), 0);
+      // Army method: weighted = sum(outlay_k * raw_k) — a weighted arithmetic mean.
+      const wtdArmy = y => pn.reduce((s, p, k) => s + p * raw(y + k), 0);
+      const wtd = v.method === 'army' ? wtdArmy : wtdNavy;
+      let h = '<table><tr><th>Year</th><th>Raw index</th><th>Weighted index (Navy/AF)</th><th>Weighted index (Army)</th><th>Outlays in year (TY$)</th><th>Appropriated in year (TY$)</th></tr>';
       for (let y = BY; y <= BY + 5; y++) {
-        h += `<tr><td>${y}</td><td>${raw(y).toFixed(4)}</td><td>${wtd(y).toFixed(4)}</td><td>${f2(v.amt * raw(y))}</td><td>${f2(v.amt * wtd(y))}</td></tr>`;
+        h += `<tr><td>${y}</td><td>${raw(y).toFixed(4)}</td><td>${wtdNavy(y).toFixed(4)}</td><td>${wtdArmy(y).toFixed(4)}</td><td>${f2(v.amt * raw(y))}</td><td>${f2(v.amt * wtd(y))}</td></tr>`;
       }
       tb.innerHTML = h + '</table>';
-      note.innerHTML = Render.inline(`Outlay profile normalized to ${pn.map(x => pct(x, 0)).join(' / ')}. In ${BY} the raw index is 1.0000 (the base year), but the weighted index is **${wtd(BY).toFixed(4)}** because money appropriated in ${BY} is spent over three years at later price levels. **BY$ → TY$: multiply. TY$ → BY$: divide.**`);
+      note.innerHTML = Render.inline(`Outlay profile normalized to ${pn.map(x => pct(x, 0)).join(' / ')}. In ${BY} the raw index is 1.0000 (the base year). The Navy/Air Force method sums the de-escalated (each year's dollars) contributions and takes the reciprocal — a weighted harmonic mean, giving **${wtdNavy(BY).toFixed(4)}**. The Army method assumes the profile is in year-one (constant/base year) dollars and takes a weighted arithmetic mean, giving **${wtdArmy(BY).toFixed(4)}**. This module's default is the Navy/Air Force method. **BY$ → TY$: multiply. TY$ → BY$: divide.**`);
       publish(box, { raw1: raw(BY + 1), wtdBY: wtd(BY), tyBY: v.amt * wtd(BY) });
     }
     draw();
+  };
+
+  // M5: build a weighted index from an outlay profile, step by step
+  reg['weighted-index'] = box => {
+    title(box, 'Build a weighted index from an outlay profile', 'de-escalate each year’s portion, sum, then take the reciprocal');
+    const v = controls(box, [
+      { k: 'o1', label: 'Outlay % yr 1', min: 0, max: 100, step: 1, v: 40 },
+      { k: 'o2', label: 'Outlay % yr 2', min: 0, max: 100, step: 1, v: 30 },
+      { k: 'o3', label: 'Outlay % yr 3', min: 0, max: 100, step: 1, v: 20 },
+      { k: 'o4', label: 'Outlay % yr 4', min: 0, max: 100, step: 1, v: 10 },
+      { k: 'r', label: 'Annual inflation rate', min: 0, max: 0.2, step: 0.01, v: 0.1, fmt: x => (x * 100).toFixed(0) + '%' },
+      { k: 'guess', label: 'Your guess: weighted index', type: 'number', min: 0, step: 0.0001, v: 1 }
+    ], draw);
+    const warn = E('div', 'w-note'); box.appendChild(warn);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const ro = readout(box);
+    let revealed = false;
+    const btn = E('button', 'opt', 'Check my guess'); btn.type = 'button';
+    btn.addEventListener('click', () => { revealed = true; draw(); });
+    box.appendChild(btn);
+    function draw() {
+      const outlays = [v.o1, v.o2, v.o3, v.o4];
+      const total = outlays.reduce((s, x) => s + x, 0);
+      warn.innerHTML = Render.inline(Math.abs(total - 100) > 0.001 ? `**Outlay percentages sum to ${f2(total, 0)}%, not 100%.** Adjust before reading the index.` : `Outlay percentages sum to 100%.`);
+      warn.className = 'w-note' + (Math.abs(total - 100) > 0.001 ? ' bad' : '');
+      const raw = k => Math.pow(1 + v.r, k); // k = 0..3, raw index for year 1+k
+      const portions = outlays.map(o => o / 100);
+      const deesc = portions.map((p, k) => p / raw(k));
+      const sumDeesc = deesc.reduce((s, x) => s + x, 0);
+      const wtdNavy = 1 / sumDeesc;
+      const wtdArmy = portions.reduce((s, p, k) => s + p * raw(k), 0);
+      let h = '<table><tr><th>Year</th><th>Outlay portion</th><th>Raw index</th><th>De-escalated (portion / raw)</th></tr>';
+      portions.forEach((p, k) => { h += `<tr><td>Year ${k + 1}</td><td>${f2(p, 3)}</td><td>${raw(k).toFixed(4)}</td><td>${f2(deesc[k], 3)}</td></tr>`; });
+      h += `<tr><td colspan="3">Sum of de-escalated contributions</td><td><b>${f2(sumDeesc, 4)}</b></td></tr>`;
+      h += `<tr><td colspan="3">Weighted index = 1 / sum (Navy/Air Force method)</td><td><b>${f2(wtdNavy, 4)}</b></td></tr>`;
+      tb.innerHTML = h + '</table>';
+      note.innerHTML = Render.inline(`Army-method comparison (weighted arithmetic mean, sum of portion × raw index): **${f2(wtdArmy, 4)}**. Source example (outlay 40/30/20/10, 10% inflation): 0.400 + 0.273 + 0.165 + 0.075 = 0.9131 → 1/0.9131 = 1.0952.`);
+      if (revealed) {
+        const ok = Math.abs(v.guess - wtdNavy) < 0.01;
+        ro([['Your guess', f2(v.guess, 4)], ['Actual weighted index (Navy/AF)', f2(wtdNavy, 4), ok ? 'good' : 'bad'], ['Within 0.01?', ok ? 'yes' : 'no', ok ? 'good' : 'bad']]);
+      } else ro([['Guess the weighted index, then check', '—']]);
+      publish(box, { sumDeesc, wtdNavy, wtdArmy, guessOk: revealed ? Math.abs(v.guess - wtdNavy) < 0.01 : false });
+    }
+    draw();
+  };
+
+  // M5: the table's-year waystation — CY/TY stepper through Fig. 5.13/5.14
+  reg['cy-ty-stepper'] = box => {
+    title(box, 'Step through the table’s year', 'rule: going INTO the table’s year, divide; going OUT, multiply. Raw for CY, weighted for TY.');
+    const CASES = {
+      A: { label: 'A: Navy civ pay, CY07 → CY18', from: 'CY07', to: 'CY18', tblYr: '2010', start: 100, unit: '$K',
+        s1: { idx: 'raw', op: 'div', factor: 0.918, result: 108.9, label: 'CY07 → CY10 (table’s year)' },
+        s2: { idx: 'raw', op: 'mul', factor: 1.200, result: 130.7, label: 'CY10 → CY18' } },
+      B: { label: 'B: AF RDT&EN, CY06 → TY15', from: 'CY06', to: 'TY15', tblYr: '2015', start: 10, unit: '$M',
+        s1: { idx: 'raw', op: 'div', factor: 0.832, result: 12.0, label: 'CY06 → CY15 (table’s year)' },
+        s2: { idx: 'weighted', op: 'mul', factor: 1.012, result: 12.2, label: 'CY15 → TY15' } },
+      C: { label: 'C: Army MILCON, TY15 → CY09', from: 'TY15', to: 'CY09', tblYr: '2008', start: 10, unit: '$M',
+        s1: { idx: 'weighted', op: 'div', factor: 1.198, result: 8.3, label: 'TY15 → CY08 (table’s year)' },
+        s2: { idx: 'raw', op: 'mul', factor: 1.020, result: 8.5, label: 'CY08 → CY09' } },
+      D: { label: 'D: Navy RDT&EN, TY15 → TY13', from: 'TY15', to: 'TY13', tblYr: '2009', start: 100, unit: '$M',
+        s1: { idx: 'weighted', op: 'div', factor: 1.142, result: 87.6, label: 'TY15 → CY09 (table’s year)' },
+        s2: { idx: 'weighted', op: 'mul', factor: 1.098, result: 96.1, label: 'CY09 → TY13' } }
+    };
+    const v = controls(box, [{ k: 'c', label: 'Example', type: 'select', v: 'A', options: Object.keys(CASES).map(k => [k, CASES[k].label]) }], () => { picks = {}; render(); });
+    const info = E('div', 'w-note'); box.appendChild(info);
+    const list = E('div', 'w-table'); box.appendChild(list);
+    const ro = readout(box);
+    let picks = { 1: {}, 2: {} };
+    function render() {
+      const cs = CASES[v.c];
+      info.innerHTML = Render.inline(`Start: **${f2(cs.start, cs.start >= 100 ? 0 : 1)}${cs.unit} ${cs.from}**. Table’s year: ${cs.tblYr}. Target: **${cs.to}**.`);
+      let h = '<table><tr><th>Step</th><th>Index type</th><th>Operation</th></tr>';
+      [1, 2].forEach(n => {
+        const st = cs['s' + n];
+        h += `<tr><td>${n}: ${st.label}</td><td>` +
+          ['raw', 'weighted'].map(t => `<button type="button" data-step="${n}" data-field="idx" data-val="${t}" class="opt${picks[n].idx === t ? ' on' : ''}">${t}</button>`).join(' ') +
+          `</td><td>` +
+          ['div', 'mul'].map(o => `<button type="button" data-step="${n}" data-field="op" data-val="${o}" class="opt${picks[n].op === o ? ' on' : ''}">${o === 'div' ? '÷' : '×'}</button>`).join(' ') +
+          `</td></tr>`;
+      });
+      list.innerHTML = h + '</table>';
+      list.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+        picks[+b.dataset.step][b.dataset.field] = b.dataset.val;
+        render();
+      }));
+      const done = [1, 2].every(n => picks[n].idx && picks[n].op);
+      let rows = [];
+      let val = cs.start, ok1 = null, ok2 = null;
+      if (picks[1].idx && picks[1].op) {
+        ok1 = picks[1].idx === cs.s1.idx && picks[1].op === cs.s1.op;
+        val = picks[1].op === 'div' ? val / cs.s1.factor : val * cs.s1.factor;
+        rows.push(['Step 1 result', `${f2(val, 1)}${cs.unit}`, ok1 ? 'good' : 'bad']);
+        rows.push(['Step 1 rule', `into table’s year → divide; ${cs.from.slice(0, 2)} → raw if CY, weighted if TY`, ok1 ? 'good' : 'bad']);
+      }
+      if (picks[2].idx && picks[2].op) {
+        ok2 = picks[2].idx === cs.s2.idx && picks[2].op === cs.s2.op;
+        val = picks[2].op === 'div' ? val / cs.s2.factor : val * cs.s2.factor;
+        rows.push(['Step 2 result', `${f2(val, 1)}${cs.unit}`, ok2 ? 'good' : 'bad']);
+      }
+      if (done) rows.push(['Source answer', `${f2(cs.s2.result, 1)}${cs.unit} ${cs.to}`]);
+      ro(rows.length ? rows : [['Pick index type and operation for step 1', '—']]);
+      publish(box, { correct: done && !!ok1 && !!ok2, step: (picks[1].idx && picks[1].op ? 1 : 0) + (picks[2].idx && picks[2].op ? 1 : 0) });
+    }
+    render();
+  };
+
+  // M5: composite index builder
+  reg['composite-index'] = box => {
+    title(box, 'Build a composite index', 'weighted average of commodity escalation rates');
+    const PRESETS = {
+      steel: [{ n: 'Steel', w: 20, r: 5.6 }, { n: 'Automotive', w: 35, r: 6.2 }, { n: 'Machinery', w: 45, r: 5.7 }],
+      rdten: [{ n: 'RDT&EN purchases', w: 88.55, r: 6 }, { n: 'Civilian payroll', w: 11.45, r: 6 }],
+      omn: [{ n: 'O&M purchases', w: 41.74, r: 6 }, { n: 'Civilian payroll', w: 41.21, r: 6 }, { n: 'Fuel', w: 17.05, r: 6 }],
+      milcon: [{ n: 'Civilian pay', w: 7.18, r: 6 }, { n: 'Military construction purchases', w: 92.82, r: 6 }]
+    };
+    let rows = PRESETS.steel.map(r => ({ ...r }));
+    const btnWrap = E('div'); box.appendChild(btnWrap);
+    [['steel', 'Steel/auto/machinery (default)'], ['rdten', 'Navy RDT&EN composite'], ['omn', 'Navy O&MN composite'], ['milcon', 'Navy MILCON composite']].forEach(([k, label]) => {
+      const b = E('button', 'opt', label); b.type = 'button';
+      b.addEventListener('click', () => { rows = PRESETS[k].map(r => ({ ...r })); render(); });
+      btnWrap.appendChild(b);
+    });
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const warn = E('div', 'w-note'); box.appendChild(warn);
+    const ro = readout(box);
+    function render() {
+      let h = '<table><tr><th>Commodity</th><th>Weight %</th><th>Escalation rate %</th></tr>';
+      rows.forEach((r, i) => {
+        h += `<tr><td>${r.n}</td><td><input type="number" data-i="${i}" data-f="w" value="${r.w}" step="0.01"></td><td><input type="number" data-i="${i}" data-f="r" value="${r.r}" step="0.01"></td></tr>`;
+      });
+      tb.innerHTML = h + '</table>';
+      tb.querySelectorAll('input').forEach(inp => inp.oninput = () => { const x = parseFloat(inp.value); if (isFinite(x)) { rows[inp.dataset.i][inp.dataset.f] = x; render(); } });
+      const totalW = rows.reduce((s, r) => s + r.w, 0);
+      const compRate = rows.reduce((s, r) => s + (r.w / 100) * r.r, 0);
+      const compIndex = rows.reduce((s, r) => s + (r.w / 100) * (1 + r.r / 100), 0);
+      warn.innerHTML = Render.inline(Math.abs(totalW - 100) > 0.01 ? `**Weights sum to ${f2(totalW, 2)}%, not 100%.**` : `Weights sum to 100%.`);
+      warn.className = 'w-note' + (Math.abs(totalW - 100) > 0.01 ? ' bad' : '');
+      ro([['Composite escalation rate', f2(compRate, 3) + '%'], ['Composite index', f2(compIndex, 5)]]);
+      publish(box, { totalW, compRate, compIndex });
+    }
+    render();
+  };
+
+  // M5: inflation sensitivity over time + doubling time
+  reg['inflation-sensitivity'] = box => {
+    const last = {};
+    title(box, 'How sensitive is a long estimate to the inflation rate?', '$1M base-year amount compounded over 20 years');
+    const v = controls(box, [
+      { k: 'lo', label: 'Low rate', min: 0.01, max: 0.06, step: 0.0025, v: 0.03, fmt: x => (x * 100).toFixed(2) + '%' },
+      { k: 'hi', label: 'High rate', min: 0.01, max: 0.08, step: 0.0025, v: 0.05, fmt: x => (x * 100).toFixed(2) + '%' }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'low'], ['c2', 'assumed 4%'], ['c3', 'high']]);
+    const ro = readout(box);
+    function draw() {
+      pb.innerHTML = '';
+      const mid = 0.04, N = 20, amt = 1;
+      const series = r => { const out = []; for (let y = 0; y <= N; y++) out.push([y, amt * Math.pow(1 + r, y)]); return out; };
+      const lo = series(v.lo), midS = series(mid), hi = series(v.hi);
+      const ymax = Math.max(lo[N][1], midS[N][1], hi[N][1]) * 1.05;
+      const p = Plot.create(pb, { xmin: 0, xmax: N, ymin: 0, ymax, xlabel: 'year', ylabel: '$M (then-year)' });
+      p.axes(); p.line(lo, 'series c1'); p.line(midS, 'series c2'); p.line(hi, 'series c3');
+      ro([
+        [`End value at ${pct(v.lo)}`, f2(lo[N][1], 2) + 'M'], [`End value at 4.00%`, f2(midS[N][1], 2) + 'M'], [`End value at ${pct(v.hi)}`, f2(hi[N][1], 2) + 'M'],
+        ['Divergence (high − low) at year 20', f2(hi[N][1] - lo[N][1], 2) + 'M']
+      ]);
+      Object.assign(last, { loEnd: lo[N][1], midEnd: midS[N][1], hiEnd: hi[N][1], divergence: hi[N][1] - lo[N][1] }); if ('exact' in last) publish(box, Object.assign({}, last));
+    }
+    draw();
+
+    title(box, 'Doubling time', 'exact vs. Rule of 70 (source) vs. Rule of 72');
+    const v2 = controls(box, [{ k: 'r', label: 'Annual rate', min: 0.01, max: 0.1, step: 0.0025, v: 0.04, fmt: x => (x * 100).toFixed(2) + '%' }], draw2);
+    const ro2 = readout(box);
+    function draw2() {
+      const exact = Math.LN2 / Math.log(1 + v2.r);
+      const r70 = 0.70 / v2.r, r72 = 0.72 / v2.r;
+      ro2([
+        ['Exact doubling time (ln2 / ln(1+r))', f2(exact, 2) + ' yrs', 'c1t'],
+        ['Rule of 70 (0.70 / r) — source’s approximation', f2(r70, 2) + ' yrs'],
+        ['Rule of 72 (0.72 / r)', f2(r72, 2) + ' yrs'],
+        ['Rule-of-70 error vs. exact', f2(Math.abs(r70 - exact), 3) + ' yrs']
+      ]);
+      Object.assign(last, { exact, r70, r72 }); publish(box, Object.assign({}, last));
+    }
+    draw2();
   };
 
   // ======================================================================
