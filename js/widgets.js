@@ -1222,5 +1222,197 @@ const Widgets = (() => {
     draw();
   };
 
+  // M3: multivariate CER — cold iron hours & complement predicting purchased services (Example 2, illustrative reconstruction of CEBoK stats)
+  reg['multi-driver'] = box => {
+    title(box, 'Two cost drivers, one estimate', 'purchased services for 7 ship classes — cold iron hours vs. complement (illustrative reconstruction matched to CEBoK stats)');
+    const X1 = [1800, 2600, 3400, 4200, 5800, 4600, 5200]; // cold iron hours
+    const X2 = [370, 232, 439, 428, 311, 379, 406]; // complement
+    const Y = [642.66, 501.61, 930.14, 849.72, 805.47, 950.68, 866.72]; // purchased services ($K), reconstructed to match published R^2/CV
+    const v = controls(box, [
+      { k: 'mode', label: 'Driver set', type: 'select', v: 'both', options: [['cold', 'Cold iron hours only'], ['comp', 'Complement only'], ['both', 'Both drivers']] }
+    ], draw);
+    const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R);
+    box.appendChild(row);
+    legend(box, [['c1', 'predicted vs. actual (45° = perfect)'], ['c2', 'cold iron hours'], ['c3', 'complement']]);
+    const ro = readout(box);
+    function pearson(a, b) {
+      const ma = mean(a), mb = mean(b);
+      let sab = 0, saa = 0, sbb = 0;
+      for (let i = 0; i < a.length; i++) { sab += (a[i] - ma) * (b[i] - mb); saa += (a[i] - ma) ** 2; sbb += (b[i] - mb) ** 2; }
+      return sab / Math.sqrt(saa * sbb);
+    }
+    function fitMulti(x1, x2, y) {
+      const n = x1.length;
+      const X = x1.map((v, i) => [1, v, x2[i]]);
+      // normal equations, 3x3 solve
+      const XtX = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], Xty = [0, 0, 0];
+      for (let i = 0; i < n; i++) for (let a = 0; a < 3; a++) { Xty[a] += X[i][a] * y[i]; for (let b = 0; b < 3; b++) XtX[a][b] += X[i][a] * X[i][b]; }
+      const A = XtX.map((r, i) => r.concat([Xty[i]]));
+      for (let c = 0; c < 3; c++) {
+        let p = c; for (let r = c + 1; r < 3; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+        [A[c], A[p]] = [A[p], A[c]];
+        for (let r = 0; r < 3; r++) { if (r === c) continue; const f = A[r][c] / A[c][c]; for (let k = c; k < 4; k++) A[r][k] -= f * A[c][k]; }
+      }
+      const beta = A.map((r, i) => r[3] / r[i]);
+      const pred = X.map(r => r[0] * beta[0] + r[1] * beta[1] + r[2] * beta[2]);
+      const my = mean(y);
+      const sse = y.reduce((s, yi, i) => s + (yi - pred[i]) ** 2, 0);
+      const sst = y.reduce((s, yi) => s + (yi - my) ** 2, 0);
+      const see = Math.sqrt(sse / (n - 3));
+      return { beta, pred, r2: 1 - sse / sst, cv: see / my };
+    }
+    function draw() {
+      L.innerHTML = ''; R.innerHTML = '';
+      const single = ols;
+      const cold = single(X1, Y), comp = single(X2, Y), both = fitMulti(X1, X2, Y);
+      let pred, r2, cv, eqn;
+      if (v.mode === 'cold') { pred = X1.map(x => cold.b0 + cold.b1 * x); r2 = cold.r2; cv = cold.cv; eqn = `y = ${f2(cold.b0, 0)} + ${f2(cold.b1, 2)}·coldIron`; }
+      else if (v.mode === 'comp') { pred = X2.map(x => comp.b0 + comp.b1 * x); r2 = comp.r2; cv = comp.cv; eqn = `y = ${f2(comp.b0, 0)} + ${f2(comp.b1, 2)}·complement`; }
+      else { pred = both.pred; r2 = both.r2; cv = both.cv; eqn = `y = ${f2(both.beta[0], 0)} + ${f2(both.beta[1], 3)}·coldIron + ${f2(both.beta[2], 2)}·complement`; }
+      const maxV = Math.max(...Y, ...pred) * 1.15;
+      const p1 = Plot.create(L, { w: 300, h: 240, xmin: 0, xmax: maxV, ymin: 0, ymax: maxV, xlabel: 'predicted ($K)', ylabel: 'actual ($K)' });
+      p1.axes(); p1.line([[0, 0], [maxV, maxV]], 'series');
+      Y.forEach((y, i) => p1.dot(pred[i], y, 'pt c1', 6));
+      const r = pearson(X1, X2);
+      const p2 = Plot.create(R, { w: 300, h: 240, xmin: 0, xmax: Math.max(...X1) * 1.15, ymin: 0, ymax: Math.max(...X2) * 1.15, xlabel: 'cold iron hours', ylabel: 'complement' });
+      p2.axes(); X1.forEach((x, i) => p2.dot(x, X2[i], 'pt alt', 6));
+      p2.text(Math.max(...X1) * 0.5, Math.max(...X2) * 1.05, `driver-vs-driver r = ${f2(r, 2)}`, 'annot');
+      ro([
+        ['Fitted equation', eqn],
+        ['$R^2$', f2(r2, 3), r2 > 0.8 ? 'good' : ''],
+        ['CV (both drivers only)', v.mode === 'both' ? pct(cv) : '—', v.mode === 'both' ? 'good' : ''],
+        ['Cold-iron-only $R^2$', f2(cold.r2, 3)], ['Complement-only $R^2$', f2(comp.r2, 3)],
+        ['Correlation between the two drivers', f2(r, 2), Math.abs(r) < 0.3 ? 'good' : 'bad']
+      ]);
+      publish(box, { r2, cv: v.mode === 'both' ? cv : NaN, mode: v.mode });
+    }
+    draw();
+  };
+
+  // M3: site activation CER — 11 sites, optionally + 4 new sites (Example 1, illustrative reconstruction of CEBoK stats)
+  reg['site-activation'] = box => {
+    title(box, 'Site activation CER', 'workstations per site predict site activation cost (illustrative reconstruction matched to CEBoK stats)');
+    const X11 = [8, 28, 12, 9, 21, 29, 42, 7, 36, 9, 7];
+    const Y11 = [326250, 753979, 496446, 430914, 440618, 752273, 1303204, 223350, 1109971, 218469, 364968];
+    const Xnew = [15, 33, 18, 25];
+    const Ynew = [302344, 888678, 565241, 750181];
+    const v = controls(box, [
+      { k: 'addNew', label: 'Add 4 new sites (Fig 3.8, 15 total)', type: 'checkbox', v: 0 },
+      { k: 'ws', label: 'Workstations to predict', min: 1, max: 45, step: 1, v: 20 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'original 11 sites'], ['c3', '4 new sites'], ['c2', 'predicted point']]);
+    const ro = readout(box);
+    function draw() {
+      const X = v.addNew ? X11.concat(Xnew) : X11.slice();
+      const Y = v.addNew ? Y11.concat(Ynew) : Y11.slice();
+      const fit = ols(X, Y);
+      const pred = fit.b0 + fit.b1 * v.ws;
+      pb.innerHTML = '';
+      const xmax = Math.max(...X, v.ws) * 1.15;
+      const ymax = Math.max(...Y, pred) * 1.15;
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax, ymin: 0, ymax, xlabel: 'number of workstations', ylabel: 'site activation cost ($)' });
+      p.axes(); p.fn(x => fit.b0 + fit.b1 * x, 'series c1');
+      X11.forEach((x, i) => p.dot(x, Y11[i], 'pt c1', 6));
+      if (v.addNew) Xnew.forEach((x, i) => p.dot(x, Ynew[i], 'pt c3', 6));
+      p.dot(v.ws, pred, 'pt c2', 7);
+      ro([
+        ['n sites', X.length],
+        ['Intercept', '$' + f2(fit.b0, 0)],
+        ['Slope (per workstation)', '$' + f2(fit.b1, 0)],
+        ['$R^2$', f2(fit.r2, 3), fit.r2 > 0.85 ? 'good' : ''],
+        [`Predicted cost at ${Math.round(v.ws)} workstations`, '$' + f2(pred, 0), 'good']
+      ]);
+      publish(box, { intercept: fit.b0, slope: fit.b1, r2: fit.r2, pred });
+    }
+    draw();
+  };
+
+  // M3: CER functional-form explorer — see the curve straighten out in transformed space
+  reg['cer-forms'] = box => {
+    title(box, 'CER functional forms', 'linear, power, exponential, logarithmic — and their straight-line space');
+    const v = controls(box, [
+      { k: 'form', label: 'Form', type: 'select', v: 'power', options: [['linear', 'Linear  y = a + bx'], ['power', 'Power  y = a·x^b'], ['exp', 'Exponential  y = a·e^(bx)'], ['log', 'Logarithmic  y = a + b·ln(x)']] },
+      { k: 'a', label: 'a', min: 0.5, max: 20, step: 0.5, v: 5 },
+      { k: 'b', label: 'b', min: -1.5, max: 1.5, step: 0.05, v: 0.7 },
+      { k: 'x', label: 'x (read off y here)', min: 1, max: 20, step: 0.5, v: 10 },
+      { k: 'log', label: 'Log view (straighten the curve)', type: 'checkbox', v: 0 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    function fOf(form, a, b) {
+      if (form === 'linear') return x => a + b * x;
+      if (form === 'power') return x => a * Math.pow(x, b);
+      if (form === 'exp') return x => a * Math.exp(b * x / 5);
+      return x => a + b * Math.log(x);
+    }
+    function draw() {
+      pb.innerHTML = '';
+      const f = fOf(v.form, v.a, v.b);
+      const xmin = 1, xmax = 20;
+      const xs = []; for (let x = xmin; x <= xmax; x += 0.25) xs.push(x);
+      const ys = xs.map(f);
+      const y = f(v.x);
+      const lg = v.form !== 'linear' && v.log;
+      let plotXs = xs, plotYs = ys, xlabel = 'x', ylabel = 'y', space = 'natural';
+      if (lg) {
+        if (v.form === 'power') { plotXs = xs.map(Math.log); plotYs = ys.map(Math.log); xlabel = 'ln x'; ylabel = 'ln y'; space = 'log-log'; }
+        else if (v.form === 'exp') { plotXs = xs; plotYs = ys.map(Math.log); xlabel = 'x'; ylabel = 'ln y'; space = 'semi-log'; }
+        else { plotXs = xs.map(Math.log); plotYs = ys; xlabel = 'ln x'; ylabel = 'y'; space = 'semi-log'; }
+      }
+      const finite = plotYs.map((yy, i) => [plotXs[i], yy]).filter(q => isFinite(q[1]) && isFinite(q[0]));
+      const xr = finite.map(q => q[0]), yr = finite.map(q => q[1]);
+      const p = Plot.create(pb, { h: 260, xmin: Math.min(...xr), xmax: Math.max(...xr), ymin: Math.min(...yr), ymax: Math.max(...yr), xlabel: xlabel + ` (${space} space)`, ylabel });
+      p.axes(); p.line(finite, 'series c1');
+      const py = lg ? (v.form === 'power' ? Math.log(y) : v.form === 'exp' ? Math.log(y) : y) : y;
+      const px = lg ? (v.form === 'power' || v.form === 'log' ? Math.log(v.x) : v.x) : v.x;
+      if (isFinite(px) && isFinite(py)) p.dot(px, py, 'pt hot', 7);
+      ro([
+        ['Form', v.form], ['a', f2(v.a, 2)], ['b', f2(v.b, 2)],
+        [`y at x = ${f2(v.x, 1)}`, f2(y, 2)],
+        ['Straight-line space', v.form === 'linear' ? 'already linear' : lg ? space + ' (shown)' : space + ' (toggle "log view")']
+      ]);
+      publish(box, { form: v.form, a: v.a, b: v.b, y });
+    }
+    draw();
+  };
+
+  // M3: calibration — shift an illustrative linear CER to pass through a known actual
+  reg['calibration'] = box => {
+    title(box, 'Calibrating a CER', 'illustrative base CER shifted vertically to pass through an actual data point (Fig 3.4 concept)');
+    const a0 = 50, b0 = 3; // illustrative base CER: cost = 50 + 3*weight
+    const v = controls(box, [
+      { k: 'x1', label: 'Actual point: weight (x1)', min: 5, max: 90, step: 1, v: 40 },
+      { k: 'y2', label: 'Actual point: cost (y2)', min: 0, max: 400, step: 5, v: 250 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'base CER (illustrative)'], ['c2', 'calibrated CER'], ['hot', 'actual data point']]);
+    const ro = readout(box);
+    function draw() {
+      const y1 = a0 + b0 * v.x1;
+      const shift = v.y2 - y1;
+      const calIntercept = a0 + shift;
+      pb.innerHTML = '';
+      const xmax = 100;
+      const ymax = Math.max(a0 + b0 * xmax, calIntercept + b0 * xmax, v.y2) * 1.15;
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax, ymin: 0, ymax, xlabel: 'weight (illustrative)', ylabel: 'cost (illustrative)' });
+      p.axes();
+      p.fn(x => a0 + b0 * x, 'series c1');
+      p.fn(x => calIntercept + b0 * x, 'series c2');
+      p.dot(v.x1, y1, 'pt c1', 6); p.text(v.x1, y1, ' y1 (base)', 'annot c1');
+      p.dot(v.x1, v.y2, 'pt hot', 7); p.text(v.x1, v.y2, ' y2 (actual)', 'annot');
+      ro([
+        ['Base CER', `y = ${a0} + ${b0}x (illustrative)`],
+        ['Base predicted y1 at x1', f2(y1)],
+        ['Actual y2 at x1', f2(v.y2)],
+        ['Shift = y2 − y1', f2(shift), 'good'],
+        ['Calibrated intercept', f2(calIntercept), 'good'],
+        ['Calibrated CER', `y = ${f2(calIntercept)} + ${b0}x`]
+      ]);
+      publish(box, { shift, calIntercept });
+    }
+    draw();
+  };
+
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();

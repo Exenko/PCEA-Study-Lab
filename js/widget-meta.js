@@ -30,7 +30,11 @@
     'lifecycle-estimates': { controls: ['phase'], setters: [], outputs: ['phase', 'eacActive'] },
     'buildup-hours': { controls: ['std', 'variance', 'support'], setters: [], outputs: ['touchHrs', 'supportHrs', 'total'] },
     'techniques-compare': { controls: ['x', 'showAvg', 'showAnalogy', 'analogyPt', 'showParam', 'showCal', 'calPt'], setters: [], outputs: ['avg', 'analogy', 'param', 'cal', 'spread'] },
-    'schedule-analogy': { controls: ['nb', 'nonlinear'], setters: [], outputs: ['linearMonths', 'nonlinearMonths'] }
+    'schedule-analogy': { controls: ['nb', 'nonlinear'], setters: [], outputs: ['linearMonths', 'nonlinearMonths'] },
+    'multi-driver': { controls: ['mode'], setters: [], outputs: ['r2', 'cv', 'mode'] },
+    'site-activation': { controls: ['addNew', 'ws'], setters: [], outputs: ['intercept', 'slope', 'r2', 'pred'] },
+    'cer-forms': { controls: ['form', 'a', 'b', 'x', 'log'], setters: [], outputs: ['form', 'a', 'b', 'y'] },
+    'calibration': { controls: ['x1', 'y2'], setters: [], outputs: ['shift', 'calIntercept'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);
