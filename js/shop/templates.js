@@ -43,17 +43,17 @@
   } });
 
   // ---- M2 Methods ----
-  add({ id: 'analogy-scale', module: 'm02', section: 'm02/analogy', title: 'Analogy with scaling and complexity',
-    ins: { cost: { label: 'Analog cost', unit: '$M' }, oldWt: { label: 'Analog weight', unit: 'lb' }, newWt: { label: 'New weight', unit: 'lb' }, exp: { label: 'Scaling exponent', unit: '' }, factor: { label: 'Complexity factor', unit: '' } },
-    hint: 'Scale by (new weight / old weight) raised to the exponent, then apply the complexity factor.',
+  add({ id: 'analogy-scale', module: 'm02', section: 'm02/analogy', title: 'Analogy with a ratio and complexity adjustment',
+    ins: { cost: { label: 'Analog cost', unit: '$M' }, oldWt: { label: 'Analog weight', unit: 'lb' }, newWt: { label: 'New weight', unit: 'lb' }, factor: { label: 'Complexity factor', unit: '' } },
+    hint: 'An adjusted analogy is a ratio (a line through the origin): scale by new weight / old weight, then apply the complexity factor.',
     gen(h, tier) {
-    const C = r1(h.num(10, 90, 1) * K[tier]), wo = h.num(200, 900, 10), wn = r1(wo * h.num(0.7, 1.5, 0.05)), cf = h.pick([1.05, 1.1, 1.15, 1.2, 1.25, 1.3]), p = 0.7;
-    const v = C * Math.pow(wn / wo, p) * cf;
+    const C = r1(h.num(10, 90, 1) * K[tier]), wo = h.num(200, 900, 10), wn = r1(wo * h.num(0.7, 1.5, 0.05)), cf = h.pick([1.05, 1.1, 1.15, 1.2, 1.25, 1.3]);
+    const v = C * (wn / wo) * cf;
     return {
-      brief: `The analogous system cost ${M(C)} (same base year) and weighed ${wo} lb. The new system is expected to weigh ${wn} lb. Scale cost by weight with an exponent of ${p}, then apply a complexity factor of ${cf}. What is the analogy estimate?`,
+      brief: `The analogous system cost ${M(C)} (same base year) and weighed ${wo} lb. The new system is expected to weigh ${wn} lb — a physical-property adjustment, easy to justify. Apply a complexity factor of ${cf}. What is the analogy estimate?`,
       answers: [{ label: 'Analogy estimate', unit: '$M', value: v }],
-      explain: `$$\\text{Cost}_{new} = ${C} \\times \\left(\\frac{${wn}}{${wo}}\\right)^{${p}} \\times ${cf} = ${f(v, 3)}$$\n\nAn analogy is only as good as the adjustments; document why each factor applies.`,
-      inputs: { cost: C, oldWt: wo, newWt: wn, exp: p, factor: cf }
+      explain: `An adjusted analogy is a ratio equivalent to a linear equation through the origin (one data point can't determine a curve's exponent):\n\n$$\\text{Cost}_{new} = ${C} \\times \\frac{${wn}}{${wo}} \\times ${cf} = ${f(v, 3)}$$\n\nAn analogy is only as good as the adjustments; document why each factor applies.`,
+      inputs: { cost: C, oldWt: wo, newWt: wn, factor: cf }
     };
   } });
 

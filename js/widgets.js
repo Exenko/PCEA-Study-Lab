@@ -46,13 +46,16 @@ const Widgets = (() => {
     defs.forEach(d => {
       const v0 = d.k in w.presets ? w.presets[d.k] : d.v;
       vals[d.k] = d.type === 'select' ? String(v0) : +v0;
-      const lab = E('label', 'w-ctl');
+      const lab = E('label', 'w-ctl' + (d.type === 'checkbox' ? ' w-ctl-check' : ''));
       const name = E('span', 'w-ctl-name', d.label);
       const out = E('span', 'w-ctl-val');
       let inp;
       if (d.type === 'select') {
         inp = E('select');
         d.options.forEach(o => { const op = E('option', null, o[1]); op.value = o[0]; inp.appendChild(op); });
+      } else if (d.type === 'checkbox') {
+        inp = E('input');
+        inp.type = 'checkbox';
       } else {
         inp = E('input');
         inp.type = d.type || 'range';
@@ -60,14 +63,18 @@ const Widgets = (() => {
         if (d.max != null) inp.max = d.max;
         inp.step = d.step || 'any';
       }
-      inp.value = vals[d.k];
-      const show = () => { out.textContent = d.type === 'select' || d.type === 'number' ? '' : (d.fmt ? d.fmt(vals[d.k]) : vals[d.k]); };
-      inp.addEventListener('input', () => {
-        vals[d.k] = d.type === 'select' ? inp.value : parseFloat(inp.value);
-        if (d.type !== 'select' && isNaN(vals[d.k])) return;
+      if (d.type === 'checkbox') inp.checked = !!vals[d.k]; else inp.value = vals[d.k];
+      const show = () => { out.textContent = d.type === 'select' || d.type === 'number' || d.type === 'checkbox' ? '' : (d.fmt ? d.fmt(vals[d.k]) : vals[d.k]); };
+      inp.addEventListener(d.type === 'checkbox' ? 'change' : 'input', () => {
+        vals[d.k] = d.type === 'select' ? inp.value : d.type === 'checkbox' ? (inp.checked ? 1 : 0) : parseFloat(inp.value);
+        if (d.type !== 'select' && d.type !== 'checkbox' && isNaN(vals[d.k])) return;
         show(); onChange(vals);
       });
-      w.setters[d.k] = x => { vals[d.k] = d.type === 'select' ? String(x) : +x; inp.value = vals[d.k]; show(); onChange(vals); };
+      w.setters[d.k] = x => {
+        vals[d.k] = d.type === 'select' ? String(x) : +x;
+        if (d.type === 'checkbox') inp.checked = !!vals[d.k]; else inp.value = vals[d.k];
+        show(); onChange(vals);
+      };
       if (w.lock.has(d.k)) lab.hidden = true;
       show();
       lab.append(name, inp, out);
@@ -718,22 +725,43 @@ const Widgets = (() => {
     draw();
   };
 
-  // M2: analogy scaling
+  // M2: analogy scaling — CEBoK default is a linear ratio through the origin;
+  // the power-law exponent is an optional, clearly-labeled Beyond-CEBoK toggle.
   reg['analogy'] = box => {
-    title(box, 'Analogy with scaling', 'adjust a known cost for size and complexity');
+    title(box, 'Analogy scaling', 'a ratio through the origin, adjusted for a shared parameter');
     const v = controls(box, [
       { k: 'c0', label: 'Analog cost', type: 'number', v: 50 },
       { k: 's0', label: 'Analog size', type: 'number', v: 1000 },
       { k: 's1', label: 'New size', type: 'number', v: 1400 },
-      { k: 'b', label: 'Scaling exponent', min: 0.3, max: 1.2, step: 0.05, v: 0.7 },
-      { k: 'cx', label: 'Complexity factor', min: 0.5, max: 2, step: 0.05, v: 1.1 }
+      { k: 'cx', label: 'Complexity/adjustment factor', min: 0.5, max: 2, step: 0.05, v: 1 },
+      { k: 'powerOn', label: 'Power scaling (Beyond CEBoK)', type: 'checkbox', v: 0 },
+      { k: 'b', label: 'Scaling exponent (used only if power scaling is on)', min: 0.3, max: 1.2, step: 0.05, v: 0.7 }
     ], draw);
+    const pb = E('div'); box.appendChild(pb);
     const ro = readout(box);
     function draw() {
-      const ratio = v.s1 / v.s0, sized = v.c0 * Math.pow(ratio, v.b), out = sized * v.cx;
-      ro([['Size ratio', f2(ratio, 3)], ['Size-adjusted $C_0 (S_1/S_0)^b$', f2(sized)], ['× complexity', f2(out), 'good'],
-        ['vs. linear scaling', f2(v.c0 * ratio * v.cx)]]);
-      publish(box, { ratio, sized, est: out, linear: v.c0 * ratio * v.cx });
+      const on = !!v.powerOn;
+      const ratio = v.s1 / v.s0;
+      const linear = v.c0 * ratio * v.cx;
+      const power = v.c0 * Math.pow(ratio, v.b) * v.cx;
+      const est = on ? power : linear;
+      pb.innerHTML = '';
+      const xmax = Math.max(v.s0, v.s1) * 1.3;
+      const ymax = Math.max(v.c0, linear, on ? power : 0) * 1.3;
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax, ymin: 0, ymax, xlabel: 'shared size/parameter', ylabel: 'cost' });
+      p.axes();
+      p.rect(v.s0, 0, xmax, ymax, 'sq');
+      p.text(Math.min(xmax * 0.62, v.s0 + (xmax - v.s0) * 0.1), ymax * 0.94, 'outside the data', 'annot');
+      p.line([[0, 0], [xmax, v.c0 / v.s0 * xmax]], 'series c1');
+      if (on) p.fn(x => v.c0 * Math.pow(x / v.s0, v.b) * v.cx, 'series c3');
+      p.dot(v.s0, v.c0, 'pt hot', 6);
+      p.text(v.s0, v.c0, ' analog', 'annot');
+      p.dot(v.s1, est, 'pt c2', 6);
+      p.text(v.s1, est, ' new estimate', 'annot c2');
+      ro([['Size ratio', f2(ratio, 3)], ['Linear-ratio estimate (CEBoK)', f2(linear), on ? '' : 'good'],
+        ['Power-scaled estimate (Beyond CEBoK)', on ? f2(power) : '—', on ? 'good' : ''],
+        ['Estimate shown', f2(est)]]);
+      publish(box, { ratio, linear, power, est });
     }
     draw();
   };
@@ -867,16 +895,331 @@ const Widgets = (() => {
       'Actual system completed and qualified through test and demonstration',
       'Actual system proven through successful mission operations'
     ];
-    const band = i => i < 3 ? 'Research' : i < 5 ? 'Development' : i < 7 ? 'Demonstration' : 'Qualification / operations';
+    const band = i => i < 3 ? 'Research (Beyond CEBoK grouping)' : i < 5 ? 'Development (Beyond CEBoK grouping)' : i < 7 ? 'Demonstration (Beyond CEBoK grouping)' : 'Qualification / operations (Beyond CEBoK grouping)';
     const list = E('div', 'trl');
     lv.forEach((t, i) => {
-      const r = E('button', 'trl-row', `<b>TRL ${i + 1}</b><span>${t}</span><em>${band(i)}${i === 5 ? ' · typical Milestone B target' : ''}</em>`);
+      const r = E('button', 'trl-row', `<b>TRL ${i + 1}</b><span>${t}</span><em>${band(i)}</em>`);
       r.style.setProperty('--w', (30 + i * 8.5) + '%');
       r.onclick = () => r.classList.toggle('open');
       list.appendChild(r);
     });
     box.appendChild(list);
     publish(box, {});
+  };
+
+  // M1: MIL-HDBK-881A aircraft WBS (Fig 1.4), illustrative costs
+  reg['wbs-tree'] = box => {
+    title(box, 'Aircraft WBS (MIL-HDBK-881A)', 'illustrative leaf costs — expand Air Vehicle, edit, watch rollups');
+    const NONANALOGOUS = new Set(['av_recon', 'av_asw', 'av_arm']);
+    const topLevel = [
+      ['seng', 'Systems Engineering / Program Management', 40],
+      ['test', 'System Test and Evaluation', 30],
+      ['train', 'Training', 10],
+      ['data', 'Data', 8],
+      ['pse', 'Peculiar Support Equipment', 6],
+      ['cse', 'Common Support Equipment', 5],
+      ['osa', 'Operational Site Activation', 4],
+      ['indfac', 'Industrial Facilities', 7],
+      ['spares', 'Initial Spares and Spare Parts', 12]
+    ];
+    const avChildren = [
+      ['av_airframe', 'Airframe', 120], ['av_propulsion', 'Propulsion', 80],
+      ['av_avsw', 'Air Vehicle Applications Software', 15], ['av_avssw', 'Air Vehicle System Software', 15],
+      ['av_comms', 'Communications/Identification', 10], ['av_nav', 'Navigation/Guidance', 10],
+      ['av_cc', 'Central Computer', 8], ['av_fc', 'Fire Control', 12],
+      ['av_ddc', 'Data Display and Controls', 9], ['av_surv', 'Survivability', 14],
+      ['av_recon', 'Reconnaissance', 10], ['av_afc', 'Automatic Flight Control', 9],
+      ['av_cic', 'Central Integrated Checkout', 6], ['av_asw', 'Antisubmarine Warfare', 8],
+      ['av_arm', 'Armament', 11], ['av_wd', 'Weapons Delivery', 7], ['av_aux', 'Auxiliary Equipment', 6]
+    ];
+    const cost = {};
+    topLevel.forEach(([id, , v]) => cost[id] = +preset(box, id, v));
+    avChildren.forEach(([id, , v]) => cost[id] = +preset(box, id, v));
+    let commercial = !!+preset(box, 'commercial', 0);
+    let avOpen = true;
+
+    const bar = E('div', 'w-presets');
+    const cbtn = E('button', 'btn small ghost', 'Commercial airliner view: off');
+    cbtn.onclick = () => { commercial = !commercial; box.w.setters.commercial(commercial ? 1 : 0); };
+    bar.appendChild(cbtn);
+    box.appendChild(bar);
+    box.w.setters.commercial = x => { commercial = !!+x; cbtn.textContent = 'Commercial airliner view: ' + (commercial ? 'on' : 'off'); draw(); };
+
+    const tableWrap = E('div', 'w-table');
+    box.appendChild(tableWrap);
+    const ro = readout(box);
+
+    avChildren.forEach(([id]) => { box.w.setters[id] = x => { cost[id] = +x; draw(); }; });
+    topLevel.forEach(([id]) => { box.w.setters[id] = x => { cost[id] = +x; draw(); }; });
+
+    function avSum() { return avChildren.reduce((s, [id]) => s + (commercial && NONANALOGOUS.has(id) ? 0 : cost[id]), 0); }
+    function grandTotal() { return avSum() + topLevel.reduce((s, [id]) => s + cost[id], 0); }
+
+    function row(id, label, val, share, indent, isParent, greyed) {
+      const tr = E('tr', greyed ? 'greyed' : '');
+      const nameCell = isParent
+        ? `<button class="tree-toggle" data-id="${id}">${avOpen ? '▾' : '▸'}</button> <b>${label}</b>`
+        : `<span style="padding-left:${indent}px">${label}${greyed ? ' <em>(not analogous — hidden in commercial view)</em>' : ''}</span>`;
+      tr.innerHTML = `<td>${nameCell}</td><td>${isParent ? f2(val, 0) : ''}</td><td></td><td></td>`;
+      if (!isParent) {
+        const td = tr.children[1];
+        td.innerHTML = '';
+        const inp = E('input'); inp.type = 'number'; inp.min = 0; inp.step = 1; inp.value = val; inp.disabled = greyed;
+        inp.addEventListener('input', () => { cost[id] = parseFloat(inp.value) || 0; draw(); });
+        td.appendChild(inp);
+      }
+      const shareTd = tr.children[2];
+      shareTd.innerHTML = `<div class="share-bar"><i style="width:${(share * 100).toFixed(1)}%"></i></div>`;
+      tr.children[3].textContent = pct(share, 1);
+      return tr;
+    }
+
+    function draw() {
+      const total = grandTotal();
+      const avTotal = avSum();
+      const rows = [];
+      rows.push(row('av', 'Air Vehicle (AV)', avTotal, total ? avTotal / total : 0, 0, true, false));
+      if (avOpen) avChildren.forEach(([id, label]) => {
+        const grey = commercial && NONANALOGOUS.has(id);
+        rows.push(row(id, label, cost[id], total ? (grey ? 0 : cost[id]) / total : 0, 24, false, grey));
+      });
+      topLevel.forEach(([id, label]) => rows.push(row(id, label, cost[id], total ? cost[id] / total : 0, 0, false, false)));
+      tableWrap.innerHTML = '<table><thead><tr><th>Element</th><th>Cost ($M, illustrative)</th><th>Share of total</th><th></th></tr></thead></table>';
+      const table = tableWrap.querySelector('table');
+      rows.forEach(r => table.appendChild(r));
+      table.querySelectorAll('.tree-toggle').forEach(btn => btn.onclick = () => { avOpen = !avOpen; draw(); });
+      const hiddenCount = commercial ? NONANALOGOUS.size : 0;
+      ro([
+        ['Grand total', f2(total, 0) + ' $M (illustrative)'],
+        ['Air Vehicle share of total', pct(avTotal / (total || 1), 1)],
+        ['Elements hidden (commercial view)', hiddenCount]
+      ]);
+      publish(box, { total, airVehicleShare: avTotal / (total || 1), hiddenCount });
+    }
+    draw();
+  };
+
+  // M1: positional independence (Fig 1.3)
+  reg['independence'] = box => {
+    title(box, 'Positional independence', 'who does I and A report to?');
+    const nodes = ['C', 'S', 'P', 'B', 'I', 'A'];
+    const fixedParent = { S: 'C', P: 'S', B: 'S' };
+    const presets = {
+      'Case 1 (CEBoK)': { iParent: 'S', aParent: 'S' },
+      'Case 2 (CEBoK)': { iParent: 'B', aParent: 'B' }
+    };
+    const bar = E('div', 'w-presets');
+    Object.keys(presets).forEach(k => {
+      const b = E('button', 'chip', k);
+      b.onclick = () => { box.w.setMany(presets[k]); };
+      bar.appendChild(b);
+    });
+    box.appendChild(bar);
+    const v = controls(box, [
+      { k: 'iParent', label: 'I (cost group) reports to', type: 'select', v: preset(box, 'iParent', 'S'), options: [['S', 'S (sponsor)'], ['B', 'B (extra management layer)'], ['P', 'P (a different branch)'], ['A', 'A (the acquiring org itself)']] },
+      { k: 'aParent', label: 'A (acquiring org) reports to', type: 'select', v: preset(box, 'aParent', 'S'), options: [['S', 'S (sponsor)'], ['B', 'B (extra management layer)'], ['P', 'P (a different branch)']] }
+    ], draw);
+    const pb = E('div', 'w-org'); box.appendChild(pb);
+    const ro = readout(box);
+    function ancestors(n) {
+      const parent = Object.assign({}, fixedParent, { I: v.iParent, A: v.aParent });
+      const chain = [n];
+      let cur = n;
+      while (parent[cur]) { cur = parent[cur]; chain.push(cur); }
+      return chain;
+    }
+    function draw() {
+      const ai = ancestors('I'), aa = ancestors('A');
+      const lca = ai.find(n => aa.includes(n));
+      const independent = (lca === 'S' || lca === 'B') ? 1 : 0;
+      const parent = Object.assign({}, fixedParent, { I: v.iParent, A: v.aParent });
+      pb.innerHTML = '';
+      nodes.forEach(n => {
+        const el = E('div', 'org-node' + (n === lca ? ' hot' : '') + ((n === 'I' || n === 'A') ? ' me' : ''), n);
+        pb.appendChild(el);
+      });
+      const edges = Object.keys(parent).map(k => `${k}→${parent[k]}`).join('  ');
+      ro([
+        ['I’s chain', ai.join(' → ')],
+        ['A’s chain', aa.join(' → ')],
+        ['Nearest common superior', lca, independent ? 'good' : 'bad'],
+        ['Positionally independent?', independent ? 'Yes' : 'No', independent ? 'good' : 'bad']
+      ]);
+      pb.title = edges;
+      publish(box, { independent, commonSuperior: lca });
+    }
+    draw();
+  };
+
+  // M1: which estimate type applies at each life-cycle phase
+  reg['lifecycle-estimates'] = box => {
+    title(box, 'Estimate types across the life cycle', 'drag through the phases CEBoK ties estimates to');
+    const PH = ['Pre-systems acquisition', 'Systems acquisition (source selection)', 'Before full-rate production', 'In-process / O&S'];
+    const TYPE = [
+      'Analysis of Alternatives (AoA) / trade studies — select among alternatives before committing to a project',
+      'Source selection estimates — compare competitors’ approaches to satisfying requirements',
+      'A cost study before full-scale/full-rate production',
+      'Estimate At Completion (EAC) — for in-process programs with sufficient cost history, relying on EVM'
+    ];
+    const v = controls(box, [{ k: 'phase', label: 'Life-cycle phase', min: 0, max: 3, step: 1, v: 0, fmt: i => PH[Math.round(i)] }], draw);
+    const pb = E('div', 'w-table'); box.appendChild(pb);
+    const ro = readout(box);
+    function draw() {
+      const ph = Math.round(v.phase);
+      const eacActive = ph === 3 ? 1 : 0;
+      pb.innerHTML = `<table><tr><th>Phase</th><th>Estimate CEBoK ties to it</th></tr>` +
+        PH.map((p, i) => `<tr class="${i === ph ? 'greyed-off' : ''}" style="${i === ph ? 'font-weight:600' : 'opacity:.5'}"><td>${p}</td><td>${TYPE[i]}</td></tr>`).join('') +
+        `<tr><td><em>Throughout, any phase</em></td><td>Periodic Independent Cost Estimates (ICEs) for budgeting and program cost tracking</td></tr></table>`;
+      ro([['Phase', PH[ph]], ['Estimate type', TYPE[ph].split(' —')[0]], ['EAC applicable?', eacActive ? 'Yes' : 'No', eacActive ? 'good' : '']]);
+      publish(box, { phase: ph, eacActive });
+    }
+    draw();
+  };
+
+  // M1: cost-estimate quality checklist
+  reg['quality-check'] = box => {
+    title(box, 'Estimate quality checklist', 'toggle flaws and watch the six characteristics');
+    const v = controls(box, [
+      { k: 'noSource', label: 'Source data not documented', type: 'checkbox', v: 0 },
+      { k: 'noRepeat', label: "Calculations can't be repeated / traced", type: 'checkbox', v: 0 },
+      { k: 'badCER', label: 'CERs not valid or not normalized for inflation', type: 'checkbox', v: 0 },
+      { k: 'omitDouble', label: 'WBS elements omitted or double-counted', type: 'checkbox', v: 0 },
+      { k: 'late', label: 'Delivered after the decision was made', type: 'checkbox', v: 0 }
+    ], draw);
+    const ro = readout(box);
+    function draw() {
+      const accuracy = v.badCER ? 0 : 1;
+      const comprehensiveness = v.omitDouble ? 0 : 1;
+      const replicability = v.noSource ? 0 : 1;
+      const auditability = v.noRepeat ? 0 : 1;
+      const credibility = (accuracy && replicability && auditability) ? 1 : 0;
+      const timeliness = v.late ? 0 : 1;
+      const failCount = [accuracy, comprehensiveness, replicability, auditability, credibility, timeliness].filter(x => !x).length;
+      const g = x => x ? 'good' : 'bad';
+      ro([
+        ['Accuracy', accuracy ? 'pass' : 'FAIL', g(accuracy)],
+        ['Comprehensiveness', comprehensiveness ? 'pass' : 'FAIL', g(comprehensiveness)],
+        ['Replicability', replicability ? 'pass' : 'FAIL', g(replicability)],
+        ['Auditability', auditability ? 'pass' : 'FAIL', g(auditability)],
+        ['Credibility (needs Accuracy + Replicability + Auditability)', credibility ? 'pass' : 'FAIL', g(credibility)],
+        ['Timeliness', timeliness ? 'pass' : 'FAIL', g(timeliness)]
+      ]);
+      publish(box, { accuracy, comprehensiveness, replicability, auditability, credibility, timeliness, failCount });
+    }
+    draw();
+  };
+
+  // M2: build-up standard hours -> touch -> support -> total (JSF inlet nacelle example)
+  reg['buildup-hours'] = box => {
+    title(box, 'Build-up standard hours', 'standard x variance factor = touch; touch x support % = support; sum = total');
+    const v = controls(box, [
+      { k: 'std', label: 'Standard hours', type: 'number', v: 2000 },
+      { k: 'variance', label: 'Variance/realization factor', min: 1, max: 2, step: 0.01, v: 1.2 },
+      { k: 'support', label: 'Support-labor factor (%)', min: 0, max: 100, step: 1, v: 48 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'touch hours'], ['c2', 'support hours']]);
+    const ro = readout(box);
+    function draw() {
+      const touch = v.std * v.variance;
+      const support = touch * (v.support / 100);
+      const total = touch + support;
+      pb.innerHTML = '';
+      const p = Plot.create(pb, { h: 220, xmin: 0, xmax: 2, ymin: 0, ymax: total * 1.15, xlabel: '', ylabel: 'hours', xticks: 2, xfmt: () => '' });
+      p.axes();
+      p.rect(0.6, 0, 1.4, touch, 'bar c1f');
+      p.rect(0.6, touch, 1.4, total, 'bar c2f');
+      p.text(1, touch / 2, f2(touch, 0), 'annot', 'middle');
+      p.text(1, touch + support / 2, f2(support, 0), 'annot c2', 'middle');
+      ro([['Touch hours', f2(touch, 0)], ['Support hours', f2(support, 0)], ['Total hours', f2(total, 0), 'good']]);
+      publish(box, { touchHrs: touch, supportHrs: support, total });
+    }
+    draw();
+  };
+
+  // M2: techniques compared on one dataset — analogy / average / parametric / calibrated CER
+  reg['techniques-compare'] = box => {
+    title(box, 'Techniques compared', 'illustrative dataset — legitimate techniques on the same data disagree');
+    const D = [[10, 22], [20, 35], [35, 58], [50, 74], [65, 95], [80, 118], [95, 132]]; // [driver, cost] illustrative
+    const opts = D.map((d, i) => [String(i), `Point ${i + 1} (${d[0]}, ${d[1]})`]);
+    const v = controls(box, [
+      { k: 'x', label: 'New driver value', min: 5, max: 130, step: 1, v: 110 },
+      { k: 'showAvg', label: 'Average', type: 'checkbox', v: 1 },
+      { k: 'showAnalogy', label: 'Analogy', type: 'checkbox', v: 1 },
+      { k: 'analogyPt', label: 'Analogy point', type: 'select', v: '2', options: opts },
+      { k: 'showParam', label: 'Parametric (OLS)', type: 'checkbox', v: 1 },
+      { k: 'showCal', label: 'Calibrated CER', type: 'checkbox', v: 1 },
+      { k: 'calPt', label: 'Calibration point', type: 'select', v: '5', options: opts }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'data (illustrative)'], ['c2', 'average / parametric'], ['c3', 'analogy'], ['hot', 'calibrated CER']]);
+    const ro = readout(box);
+    function draw() {
+      const x = v.x;
+      const avg = mean(D.map(d => d[1]));
+      const ai = Math.round(v.analogyPt), ap = D[ai];
+      const analogy = ap[1] / ap[0] * x;
+      const fit = ols(D.map(d => d[0]), D.map(d => d[1]));
+      const param = fit.b0 + fit.b1 * x;
+      const ci = Math.round(v.calPt), cp = D[ci];
+      const calB0 = cp[1] - fit.b1 * cp[0];
+      const cal = calB0 + fit.b1 * x;
+      const ests = [];
+      if (v.showAvg) ests.push(avg);
+      if (v.showAnalogy) ests.push(analogy);
+      if (v.showParam) ests.push(param);
+      if (v.showCal) ests.push(cal);
+      const spread = ests.length ? Math.max(...ests) - Math.min(...ests) : 0;
+      pb.innerHTML = '';
+      const xmax = Math.max(x, ...D.map(d => d[0])) * 1.15;
+      const ymax = Math.max(avg, analogy, param, cal, ...D.map(d => d[1])) * 1.15;
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax, ymin: 0, ymax, xlabel: 'driver', ylabel: 'cost' });
+      p.axes();
+      D.forEach(d => p.dot(d[0], d[1], 'pt', 5));
+      p.dot(ap[0], ap[1], 'pt c3', 7);
+      p.dot(cp[0], cp[1], 'pt hot', 7);
+      if (v.showAvg) { p.hline(avg, 'marker c2'); p.dot(x, avg, 'pt c2', 6); }
+      if (v.showAnalogy) { p.line([[0, 0], [xmax, ap[1] / ap[0] * xmax]], 'series c3'); p.dot(x, analogy, 'pt c3', 6); }
+      if (v.showParam) { p.fn(xv => fit.b0 + fit.b1 * xv, 'series c2'); p.dot(x, param, 'pt c2', 6); }
+      if (v.showCal) { p.fn(xv => calB0 + fit.b1 * xv, 'series hot'); p.dot(x, cal, 'pt hot', 6); }
+      ro([['Average', f2(avg)], ['Analogy (through point ' + (ai + 1) + ')', f2(analogy)], ['Parametric (OLS)', f2(param)],
+        ['Calibrated CER (through point ' + (ci + 1) + ')', f2(cal)], ['Spread (max − min) of shown estimates', f2(spread), spread > 20 ? 'bad' : 'good']]);
+      publish(box, { avg, analogy, param, cal, spread });
+    }
+    draw();
+  };
+
+  // M2: schedule estimating by analogy — linear rate vs. an illustrative non-linear caveat
+  reg['schedule-analogy'] = box => {
+    title(box, 'Schedule analogy', 'System A: 10 components / 40 months -> rate for System B');
+    const v = controls(box, [
+      { k: 'nb', label: 'System B components', min: 10, max: 30, step: 1, v: 15 },
+      { k: 'nonlinear', label: 'Non-linear integration growth (illustrative)', type: 'checkbox', v: 0 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'linear rate'], ['c3', 'non-linear (illustrative)'], ['hot', 'System A (analog)']]);
+    const ro = readout(box);
+    const A = { n: 10, m: 40 }, rate = A.m / A.n;
+    function draw() {
+      const linearMonths = v.nb * rate;
+      // illustrative exponential-ish growth curve anchored at System A's point, clearly Beyond CEBoK
+      const k = Math.log(1.6) / A.n;
+      const nonlinearMonths = A.m * Math.exp(k * (v.nb - A.n));
+      pb.innerHTML = '';
+      const xmax = Math.max(v.nb, A.n) * 1.4;
+      const ymax = Math.max(linearMonths, v.nonlinear ? nonlinearMonths : 0, A.m) * 1.25;
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax, ymin: 0, ymax, xlabel: 'components', ylabel: 'months' });
+      p.axes();
+      p.line([[0, 0], [xmax, rate * xmax]], 'series c1');
+      if (v.nonlinear) p.fn(xv => A.m * Math.exp(k * (xv - A.n)), 'series c3');
+      p.dot(A.n, A.m, 'pt hot', 6);
+      p.dot(v.nb, linearMonths, 'pt c1', 6);
+      if (v.nonlinear) p.dot(v.nb, nonlinearMonths, 'pt c3', 6);
+      ro([['Rate (months/component)', f2(rate, 2)], ['Linear months for System B', f2(linearMonths, 1), 'good'],
+        ['Non-linear months (illustrative)', v.nonlinear ? f2(nonlinearMonths, 1) : '—']]);
+      publish(box, { linearMonths, nonlinearMonths });
+    }
+    draw();
   };
 
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };

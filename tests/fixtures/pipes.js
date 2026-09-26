@@ -11,8 +11,8 @@ module.exports = {
     domain: { steps: [S('indexConvert', { cost: 'in.cost', fromIdx: 'in.idxYear', toIdx: 'in.idxBase' })], outs: ['s0'] }
   },
   'analogy-scale': {
-    prim: { steps: [S('div', { a: 'in.newWt', b: 'in.oldWt' }), S('pow', { base: 's0', exp: 'in.exp' }), S('mul', { a: 'in.cost', b: 's1' }), S('mul', { a: 's2', b: 'in.factor' })], outs: ['s3'] },
-    domain: { steps: [S('div', { a: 'in.newWt', b: 'in.oldWt' }), S('powerCER', { a: 'in.cost', x: 's0', b: 'in.exp' }), S('mul', { a: 's1', b: 'in.factor' })], outs: ['s2'] }
+    prim: { steps: [S('div', { a: 'in.newWt', b: 'in.oldWt' }), S('mul', { a: 'in.cost', b: 's0' }), S('mul', { a: 's1', b: 'in.factor' })], outs: ['s2'] },
+    domain: { steps: [S('div', { a: 'in.newWt', b: 'in.oldWt' }), S('mul', { a: 'in.cost', b: 's0' }), S('mul', { a: 's1', b: 'in.factor' })], outs: ['s2'] }
   },
   'cer-power': {
     prim: { steps: [S('pow', { base: 'in.weight', exp: 'in.b' }), S('mul', { a: 'in.a', b: 's0' })], outs: ['s1'] },

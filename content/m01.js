@@ -5,11 +5,20 @@ PCEA.addModule({
 
 This module sets up the vocabulary for the rest of the course: definitions, who produces estimates, what they deliver, and the process to build a credible one.
 
-**Key framework:** A cost estimate is only as credible as its technical baseline, data, and methodology. The discipline organizes around four pillars: understanding *why* estimates are needed and *who* uses them; understanding the *environment and constraints* estimators work within; knowing what *products* must be delivered; and following a repeatable *process* to produce them.`,
+**Key framework:** A cost estimate is only as credible as its technical baseline, data, and methodology. This module covers why estimates are needed and who produces them; the context, benefits, qualities, limitations, and challenges of estimating; the four cost estimating products; and the seven-step process used to build them.`,
   sections: [
     {
       id: 'definition', title: 'Cost estimating vs. cost analysis', summary: 'Definitions, purpose, and the key distinction',
-      body: String.raw`**Cost estimating** is the process of collecting and analyzing historical data, and applying quantitative models, techniques, and databases to **predict the future cost** of an item, product, program, or task.
+      body: String.raw`**Cost estimating** is the process of collecting and analyzing historical data and applying quantitative models, techniques, tools, and databases to **predict the future cost** of an item, product, program or task to facilitate the successful completion of a program, project, or process.
+
+Often, the cost estimator adjusts for new materials, new technology, a new software programming language, or new resource allocations. Still, the estimate must never become divorced from historical experience or it risks losing credibility.
+
+Cost estimating has three primary functions:
+- **Translates requirements**: system and functional requirements into budget requirements
+- **Communicates realistic outcomes**: determines and communicates a realistic view of the likely cost outcome of a system or program
+- **Grounds the plan**: forms the basis of the plan to develop, field, and support the system or program
+
+For commercial entities (contractors), the estimate underpins new business proposals and the bid/no-bid decision. For government entities, an Independent Cost Estimate (ICE) or the program estimate serves as the basis for budget submissions.
 
 **Cost analysis** is broader. It includes estimating, but also covers evaluating and comparing costs to support decisions: analyzing alternatives, assessing affordability, reviewing proposals, and tracking performance against a baseline.
 
@@ -19,15 +28,30 @@ An estimate turns **uncertain future resources** into numbers decision-makers ca
 
 +++
 
-### Purpose and applications
+### Purpose
 
-Cost estimates support decisions across the entire program life cycle:
-- **Budgeting and programming** — how much, and when will funds be needed?
-- **Milestone and investment decisions** — is the program affordable?
-- **Analysis of alternatives (AoA)** and **economic analysis** — which option delivers the best value?
-- **Source selection** and **contract pricing** — is a proposal realistic and reasonable?
-- **Should-cost analysis** and cost management — where can cost be reduced?
-- **Earned value management (EVM)** — independent estimates at completion for performance tracking.
+Cost estimating serves three primary reasons:
+
+**1. Budgeting and Programming**: Independent Cost Estimates (ICEs) provide the basis for improving program budgets to give programs a chance for success and ensure effective utilization of valuable agency resources. When a program runs over budget, resources are diverted to cover the overrun, creating a ripple effect through other programs. Programs that run far over budget may be terminated, leaving capability gaps. Track records show how long an ICE-based budget remains adequate year-by-year and cumulatively.
+
+**2. Planning**: After establishing the budget, estimating supports the development of Basis of Estimate (BOE) documentation that establishes the integrated baseline. Cost estimates enable Earned Value Management (EVM) to track cost and performance against this baseline.
+
+**3. Trade-offs**: Trade-off studies use baseline cost estimates to explore the relative cost impact of changing requirements. Trade-offs aim to achieve the proper balance between maximizing utility and minimizing cost. Periodic Life Cycle Cost Estimates (LCCEs) measure overall progress toward cost goals.
+
++++
+
+### Applications
+
+As part of a total systems analysis, cost estimating helps decision makers:
+- make decisions on program viability, structure, and resource requirements
+- establish and defend budgets
+- conduct Analysis of Alternatives (AoA)
+- create new business proposals and perform source selection
+- conduct in-process reviews of major projects
+- perform design trade-offs
+- assess technology changes
+- comply with public law
+- satisfy oversight requirements
 
 :::check
 Q: Which statement best distinguishes cost *analysis* from cost *estimating*?
@@ -58,6 +82,44 @@ Q: An estimate predicts the cost of a new system will be \$45M. Five years later
 :::`
     },
     {
+      id: 'context', title: 'Context: when and why estimates are needed', summary: 'Budgeting cycles, milestones, and phases',
+      body: String.raw`Cost estimating is critical throughout the program lifecycle. A reasonable, supportable, and responsive budget supports efficient execution and is founded on competent estimates.
+
+### Government Budget Cycles and Milestones
+
+Within DoD, the **Programming, Planning, Budgeting, and Execution System (PPBES)** requires cost estimates for Program Objective Memorandum (POM) submissions. These estimates are revised through service comptroller, Office of the Secretary of Defense (OSD), and President's budget reviews. Budget justifications support white papers, budget cut analysis, and resource planning.
+
+Major programs require **validated cost estimates** to continue through milestone reviews. DoD Instruction 5000.2 (Operation of the Defense Acquisition System) and DoD Instruction 5000.4-M (Cost Analysis Guidance and Procedures) mandate that programs develop both a Program Office Estimate (POE) and a DoD Component Cost Analysis (CCA) at acquisition milestones.
+
+As programs mature technically and schedules change, cost estimates must be **periodically updated** to maintain management insight into program status, control resources, and balance the budget.
+
+### Estimate Types by Lifecycle Phase
+
+Different phases require different types of estimates:
+- **Pre-acquisition phase**: Analysis of Alternatives (AoA) and trade studies to select among alternatives before committing to a project
+- **Systems acquisition phase**: Source selection estimates to compare competitors' approaches
+- **Pre-production phase**: Cost studies before full-scale production
+- **Throughout lifecycle**: Periodic ICEs for budgeting and cost tracking as requirements change
+
+:::widget lifecycle-estimates:::
+
+:::challenge lifecycle-estimates
+Q: Drag the slider to the "In-process / O&S" phase. Which estimate type becomes applicable there that wasn't available earlier (it needs enough actual cost history and typically leans on EVM)?
+goal: eacActive ~ 1 +- 0
+show: phase=3
+> The Estimate At Completion (EAC) applies to in-process programs once there's sufficient cost history, typically built from EVM techniques.
+:::
+
+:::check
+Q: Why do programs need a validated cost estimate at major milestones?
+- It is required only for government contracts
+* To ensure informed decision-making and provide management insight into current program status and resource needs
+- To satisfy the contractor's internal controls
+- Only for programs that are over budget
+> DoD Instructions 5000.2 and 5000.4-M mandate validated estimates at milestones to support milestone reviews and acquisition decisions, similar to stage-gate processes in industry.
+:::`
+    },
+    {
       id: 'orgs', title: 'Who estimates: organizations and skills', summary: 'Government, contractors, and oversight bodies',
       body: String.raw`Cost estimating is performed by multiple, independent organizations to provide checks and balances:
 
@@ -67,83 +129,151 @@ Q: An estimate predicts the cost of a new system will be \$45M. Five years later
 | **Independent Government Cost Orgs** (e.g., DoD's **CAPE**, service cost agencies) | Build independent estimates outside the program's chain of command; objective, unbiased check at major milestones. |
 | **Contractor Cost Estimators** | Develop proposal cost estimates for government or commercial solicitations; basis for contract negotiation. |
 | **GAO (Government Accountability Office)** | Audits federal cost estimates against the GAO Cost Estimating and Assessment Guide (best practices). |
-| **Congressional Budget Office (CBO)** | Provides cost estimates of legislation for Congress. |
+| **OMB (Office of Management and Budget)** and **Congress** | Provide broader fiscal oversight and responsibility for government budgets and legislation. |
+| **Manufacturers** | Track operating costs to manage and reduce them; vital for competitive advantage and profitability. |
 | **FFRDCs and support organizations** (IDA, RAND, Aerospace, MITRE) | Provide estimating and analysis support to government sponsors. |
+| **Consultants** | Provide specialized estimating support to any of the above groups. |
 
 :::key
 Multiple independent organizations exist specifically to **counter advocacy bias and optimism** — a recurring theme throughout PCEA.
+:::
+
+:::tip Beyond CEBoK
+The **Congressional Budget Office (CBO)** provides cost estimates of legislation for Congress. Other specialized oversight and analysis organizations may exist in specific agencies or sectors; this module focuses on the core cost estimating organizations in DoD and government acquisition.
 :::
 
 +++
 
 ### Skills an estimator needs
 
-Cost estimators draw on a blend of skills:
+Cost estimators draw on a blend of skills and domains of expertise:
 
 | Area | Why |
 |---|---|
-| **Quantitative/analytical** | Statistics, regression, algebra; familiar with cost models and tools. |
-| **Technical understanding** | Enough engineering knowledge to understand the system and evaluate the reasonableness of the baseline. |
-| **Communication** | Clear documentation, briefing results to non-technical decision-makers, defending under scrutiny. |
-| **Research and data-gathering** | Locating, collecting, and validating historical data from diverse sources. |
-| **Judgment** | Knowing when data is insufficient; when to rely on analogy or expert opinion; disclosing those judgment calls. |
-| **Objectivity and integrity** | Resisting pressure to conform an estimate to a predetermined (lower) answer. |
+| **Mathematics and Statistics** | Probability and statistics, regression analysis, algebra; cost models and tools. |
+| **Economics, Business, and Accounting** | Understanding inflation, cost accounting data, and economic concepts that shape estimates. |
+| **Budgeting Process** | Knowledge of how cost estimates are used for resource allocation and budget planning. |
+| **Operations Research, Management Science, and Industrial Engineering** | Optimization techniques for system development; IE methods for production analysis. |
+| **Technical and Engineering Understanding** | Enough knowledge to understand the system, evaluate the baseline, and identify cost drivers. |
+| **Research and Data-gathering** | Locating, collecting, and validating historical data from diverse sources. |
+| **Communication and Salesmanship** | Clear documentation, briefing non-technical decision-makers, and defending estimates on their merits. |
+| **Marketing** | Understanding how to develop competitive proposals and support new business. |
+
+:::key
+Cost analysis draws on accounting data but is **neither accounting nor auditing**: it uses financial and technical data to project a future cost, not to record past transactions or verify compliance.
+:::
 
 :::check
-Q: Which skill is MOST critical to counter advocacy and optimism bias?
-- Advanced mathematical modeling
-* Objectivity and integrity; resisting pressure to conform to a predetermined answer
-- Familiarity with the latest cost models
-- Strong communication skills
-> The best method and data are useless if an estimator is pressured to produce a lower estimate to support program approval. Integrity underpins all other skills.
+Q: Which domain is essential for a cost estimator to understand inflation and cost accounting?
+- Marketing and salesmanship
+* Economics, business, and accounting
+- Quantitative analysis only
+- Technical and engineering knowledge
+> Cost estimating relies on cost accounting data and economic concepts like inflation. Understanding business and accounting systems is fundamental to credibility.
+:::
+
+### Positional independence
+
+An org chart alone decides whether a cost estimate can be called independent. CEBoK: the cost group (**I**) doing the estimate is **positionally independent** of the acquiring organization (**A**) if and only if it shares no common superior with the acquiring organization — down to the sponsor (**S**), or a delegate directly below the sponsor who plays the same role (**B**). Two structures from the CEBoK chart both work: in Case 1, I and A both report straight to S; in Case 2, an extra layer exists and both report to B instead, with B acting "just like S." Either way S (or S through B) can accept the estimate. What does *not* work is I sharing a nearer, lower-level boss with A — or worse, I reporting into A's own chain.
+
+:::widget independence:::
+
+:::challenge independence
+Q: I currently reports to B and A reports to B (CEBoK Case 2). If you instead move I so it reports directly to A, is I still positionally independent?
+goal: independent ~ 0 +- 0
+show: iParent=A
+> Moving I under A makes A a superior of I, so their nearest common superior becomes A itself — the opposite of independence.
 :::`
     },
     {
-      id: 'quality', title: 'The four qualities of a reliable estimate', summary: 'GAO best practices for credibility',
-      body: String.raw`The **Government Accountability Office (GAO)** defines a high-quality, reliable cost estimate with four characteristics:
+      id: 'quality', title: 'Six characteristics of high-quality cost estimates', summary: 'CEBoK framework for reliability and credibility',
+      body: String.raw`The characteristics of high-quality cost estimates are:
 
 | Characteristic | Meaning |
 |---|---|
-| **Comprehensive** | Covers the full life cycle and all cost elements; includes a complete Work Breakdown Structure (WBS) and clearly defined ground rules and assumptions. |
-| **Well-documented** | Someone unfamiliar with the program could **recreate** it from the documentation. Sources, methods, and calculations are traceable and reproducible. |
-| **Accurate** | Based on the best available data; unbiased (neither overly conservative nor optimistic); adjusted for inflation and normalized; free of computational errors. |
-| **Credible** | Limitations, risk, and uncertainty are discussed. Sensitivity analysis is performed. The estimate is **cross-checked** against an independent estimate or other methods. Differences are reconciled. |
+| **Accuracy** | Estimates are unbiased, neither unrealistically low nor overly conservative. Based on normalized data, valid inflation adjustments, and CERs with good curve fits and minimal error bands. Time-phasing is logical and reliable. |
+| **Comprehensiveness** | The estimate uses a WBS at appropriate detail to ensure all cost elements are included exactly once with no gaps or double-counting. All cost-driving Ground Rules and Assumptions (GR&A) are detailed. |
+| **Replicability** | The estimate presents a WBS fully traceable to system specifications. Source data, CER statistics, detailed calculations, results, and methodology rationale are thoroughly documented. |
+| **Auditability** | A reviewer can follow the estimation process, repeat the calculations, and arrive at the same answer. The estimate is transparent and verifiable. |
+| **Credibility** | **The single most important quality.** Requires the estimate to be accurate, replicable, and auditable. Limitations, risk, and uncertainty are discussed; sensitivity and cross-checks are performed; differences are reconciled. |
+| **Timeliness** | Even a high-quality estimate provides no value if not delivered to decision makers on time. Timing is critical to decision support. |
 
 :::check
-Q: A cost estimate includes detailed labor and material breakdowns, but does not mention the source of historical cost data or the assumptions underlying the labor rates. Which of GAO's four qualities is most at risk?
-- Comprehensive (should include all cost elements)
-* Well-documented (sources and assumptions must be traceable)
-- Accurate (no way to verify without the documentation)
-- Credible (cannot cross-check without knowing the method)
-> Well-documented means someone unfamiliar with the program can trace and recreate the estimate. Omitting data sources and rate assumptions makes it impossible to verify or reproduce.
+Q: A cost estimate includes detailed labor and material breakdowns, but does not mention the source of historical cost data or the assumptions underlying the labor rates. Which quality is most at risk?
+- Comprehensiveness (should include all cost elements)
+* Replicability (sources and assumptions must be documented so others can recreate it)
+- Accuracy (no way to verify without the documentation)
+- Credibility (cannot cross-check without knowing the method)
+> Replicability means someone unfamiliar with the program can trace and recreate the estimate from the documentation. Omitting data sources and rate assumptions makes it impossible to verify or reproduce.
+:::
+
+:::tip Beyond CEBoK
+The GAO (Government Accountability Office) defines a reliable estimate with four characteristics: Comprehensive, Well-documented, Accurate, and Credible. CEBoK expands this to six characteristics: Accuracy, Comprehensiveness, Replicability, Auditability, Credibility, and Timeliness. Both frameworks are widely used and respected in cost analysis practice.
+:::
+
+Toggle common estimate flaws below and watch which of the six characteristics fail. Credibility fails automatically whenever Accuracy, Replicability, or Auditability fails, since CEBoK defines credibility as requiring all three; Timeliness is independent of the other five.
+
+:::widget quality-check:::
+
+:::challenge quality-check
+Q: An estimator reused last year's CERs without checking whether they were normalized for inflation, and two WBS elements ended up double-counted. How many of the six characteristics fail?
+predict: failCount +- 0
+> Bad CERs breaks Accuracy; double-counted elements breaks Comprehensiveness; Credibility fails too because it needs Accuracy, Replicability, and Auditability all to hold, and Accuracy just failed. That is 3.
 :::
 
 +++
 
-### Common challenges to cost estimating
+### Benefits of Accurate Cost Estimating
 
-Estimates are difficult for predictable reasons:
+**For Government**: Accurate estimates assess the reasonableness of contractor proposals and help defense budgets to oversight organizations (OSD, OMB, Congress). They enable quick and accurate assessment of budget cut impacts.
 
-- **Immature or changing technical requirements** — the baseline itself evolves early in a program.
-- **Limited or poor-quality historical data** — sparse, inconsistent, proprietary, or not analogous to the new system.
-- **New or novel technology (low TRL)** — little or no analogous historical data; forces reliance on weaker methods (analogy, expert judgment).
-- **Advocacy and optimism bias** — pressure (conscious or unconscious) to produce an estimate supporting a predetermined (lower) outcome.
-- **Schedule and budget instability** — requirements creep and program replanning invalidate prior estimates.
-- **Uncertainty is often ignored** — decision-makers want a single number, not a range or distribution, but estimates are inherently uncertain.
-- **Time and resource constraints** — estimators asked to produce credible estimates on compressed schedules with limited data-collection time.
+**For Manufacturers**: Accurate cost estimates are essential for profitability and competitive advantage. An organization that completes projects within a reasonable budget enhances its reputation and future business opportunities.
+
+Accurate estimating avoids two costly mistakes:
+- **Buying In**: Bidding far below actual effort to win the contract. As development proceeds, the true cost becomes apparent, and either the customer or manufacturer absorbs the overrun, leading to lost profit or bankruptcy.
+- **Pricing Out**: Estimating too high, making the bid non-competitive and losing market share.
+
+Accurate, defensible estimates provide the framework for winning work at a reasonable profit while maintaining competitive advantage.
+
++++
+
+### Challenges to Cost Estimating
+
+Six primary challenges arise during cost estimation:
+
+**1. Decision Support**: Difficult to quantify cost impacts of alternatives; challenges in establishing Cost Estimating Relationships (CERs) linked to correct design parameters; cost analysis cannot directly exchange non-cost variables (requires operations research techniques).
+
+**2. Quality**: Obtaining good data is a notoriously difficult problem. Analysts often access only secondary data adjusted multiple times from original sources. Inadequately documented estimates lose credibility; information and tacit knowledge are lost when analysts leave.
+
+**3. Coordination**: System costs frequently cut across organizational boundaries. Data collection and validation require extensive coordination, consuming considerable time and resources.
+
+**4. Consistency**: Estimates must remain consistent throughout a program's lifespan and align with previous estimates. Comparing estimates across different structures requires mapping or adjusting for differing assumptions. Inconsistent historical data within and between sources creates barriers.
+
+**5. Resource and Schedule Constraints**: Estimates must be delivered timely or they become obsolete. Schedule must account for data availability without compromising quality. Time pressure impacts quality, coordination, and consistency.
+
+**6. Security and Access**: Proprietary or classified data restrictions may limit access to cost data and completed estimates. Data protection precautions can slow the process.
+
+### Limitations of Cost Estimating
+
+Realistically, cost analysis should:
+- **Conform** to the program and situation
+- **Match input quality**: results are only as good as the input data
+- **Disregard** political and non-cost impacts
+- **Employ** sound judgment and management
+- **Support, not dictate**: estimates inform decisions but do not make them
 
 :::check
-Q: A program is in early concept phase with a poorly defined technical baseline and very limited historical data. Which challenge is the estimator MOST likely to face?
-- Schedule and budget instability
-- Advocacy and optimism bias
-* Limited data forces reliance on analogy and expert judgment, which are weaker methods
-- Requirement changes (creep) will definitely occur
-> Early programs face data scarcity and baseline immaturity. This forces reliance on methods (analogy, expert opinion) that are inherently less precise, creating wider uncertainty ranges. (All the other challenges *may* occur, but data limitation is the most fundamental constraint at this phase.)
+Q: A program is in early concept phase with a poorly defined technical baseline and very limited historical data. Which challenge is most likely to impact the estimate?
+- Coordination across organizational boundaries
+- Security and access restrictions
+* Quality: limited data forces reliance on weaker methods and compromises estimate credibility
+- Resource constraints will prevent any estimate from being developed
+> Early programs face fundamental data scarcity. This forces reliance on analogy and expert opinion rather than stronger methods, directly impacting quality. While other challenges exist, data limitation is the most fundamental constraint.
 :::`
     },
     {
-      id: 'products', title: 'The three cost estimating products', summary: 'Baseline, estimate, and documentation',
-      body: String.raw`An estimate is more than a single number. It consists of three primary deliverable products:
+      id: 'products', title: 'The four cost estimating products', summary: 'Baseline, estimate, model, and documentation',
+      body: String.raw`An estimate is more than a single number. It consists of four primary deliverable products:
 
 ### 1. Technical and Schedule Baseline Description
 
@@ -158,9 +288,13 @@ In DoD, this is formalized in the **Cost Analysis Requirements Description (CARD
 Treat the baseline as an explicit, documented assumption set — not an implicit understanding. When the baseline changes, the estimate must be revisited.
 :::
 
-### 2. The cost estimate and cost model
+### 2. The Cost Estimate
 
 The **cost estimate** is the quantitative output: a summation of individual cost element estimates (organized by the WBS) into a total, usually time-phased by year and by appropriation/funding category.
+
+Estimates vary by type and fidelity, as detailed below.
+
+### 3. The Cost Model
 
 The **cost model** is the structured tool (spreadsheet, software, calculator) that organizes the WBS, applies estimating methods and cost estimating relationships (CERs) to each element, and produces the results.
 
@@ -169,25 +303,37 @@ A good cost model is:
 - Flexible enough to support sensitivity analysis and "what-if" trades
 - Documented so another analyst could reproduce and verify it
 
-### 3. Types of estimates
+**Three factors influence model structure:**
+- The maturity level of the technical and programmatic definition
+- The availability and maturity of relevant estimating methodologies
+- The availability of historical data for developing new estimating methodologies
 
-Estimates vary in fidelity and purpose:
+### 3a. Types of Estimates
 
-| Type | Purpose and Fidelity |
+Eight types of estimates support different purposes throughout the program lifecycle:
+
+| Type | Purpose |
 |---|---|
-| **ROM (Rough Order of Magnitude)** | Very early, low-fidelity feasibility/screening estimate; wide uncertainty range. |
-| **Budgetary estimate** | More refined; used for formal budget submissions with a more mature baseline. |
-| **Life-Cycle Cost Estimate (LCCE)** | Comprehensive; covers R&D, production, operating & support (O&S), and disposal across the entire program life. |
-| **Program Office Estimate (POE)** | Developed by the program's own estimators, closest to technical detail. |
-| **Independent Cost Estimate (ICE)** | Built by an organization independent of the program office to provide an objective check. |
-| **Should-cost estimate** | What a program *should* cost with efficient, economical operations; used to find cost reduction opportunities and negotiate contracts. |
-| **IGCE (Independent Government Cost Estimate)** | Government's estimate of a contract's cost, used in source selection and negotiations. |
+| **LCCE (Life Cycle Cost Estimate)** | Comprehensive; covers R&D, production, O&S, and disposal across the entire program life. Compiled as early as possible; basis for milestone decisions. |
+| **ICE (Independent Cost Estimate)** | Built by an organization independent of the program office, using the same baseline but different methodology. Provides objective assessment and identifies potential budgetary excesses and shortfalls. |
+| **Budget Estimate** | Developed strictly for funding authorization. Wider margin for error than other types; ensures feasibility and establishes baseline definitions and costs. |
+| **ROM (Rough Order of Magnitude)** | Very early, low-fidelity feasibility/screening estimate with wide uncertainty range. Used when little specific information is known. |
+| **EAC (Estimate At Completion)** | Used for in-process programs when sufficient cost history exists. Relies on Earned Value Management techniques. Critical for Nunn-McCurdy Act certification. |
+| **ICA (Independent Cost Assessment)** | Independent estimate with risk incorporated; starts with external estimate and adjusts based on objective view. Ranges from full ICE to cursory sufficiency review. |
+| **EA (Economic Analysis)** | Describes mission requirements and alternative courses of action. Compares costs and benefits (quantified monetarily). Also called cost-benefit analysis or Business Case Analysis. |
+| **AoA (Analysis of Alternatives)** | Evaluates costs and benefits (operational effectiveness/utility) of different courses of action. Involves performance characteristics as well as costs. |
+
+:::tip Beyond CEBoK
+Additional estimate types used in practice include: **POE (Program Office Estimate)** - developed by the program's own estimators, closest to technical detail; **Should-cost Estimate** - what a program should cost with efficient operations, used to identify cost reduction opportunities and negotiate contracts; **IGCE (Independent Government Cost Estimate)** - the government's estimate of a contract cost, used in source selection and negotiations.
+:::
 
 +++
 
-### Estimate documentation
+### 4. Estimate Documentation
 
-Documentation is a deliverable product in its own right, not an afterthought. It typically includes:
+Documentation is the fourth deliverable product, not an afterthought. It provides written justification for the cost estimate and demonstrates credibility. All steps in the estimate's development must be documented, including definitions, GR&A, methods, and rationale for method selection.
+
+Documentation typically includes:
 - Ground rules and assumptions (GR&A)
 - Technical and schedule baseline description
 - Data sources and adjustments (normalization, inflation)
@@ -195,7 +341,15 @@ Documentation is a deliverable product in its own right, not an afterthought. It
 - Results, including time-phasing, sensitivity and risk/uncertainty analysis
 - Comparison to any independent estimates and reconciliation of differences
 
-Good documentation is what makes an estimate "well-documented" and "credible" per GAO's four qualities.
+**Report Requirements**: The report must be:
+- **Crisp and complete**: covering the entire estimate scope
+- **Easily understood**: quickly comprehended by audiences unfamiliar with the estimate
+- **Thorough**: addressing important details of the estimate
+- **Demonstrative**: showing the competence behind the results
+
+For proposals, an executive volume should accompany the cost volume, summarizing technical aspects in simple terms since many evaluators lack technical background.
+
+**Cost As an Independent Variable (CAIV)**: A discipline that sets aggressive yet realistic cost objectives when defining requirements and acquiring systems. CAIV makes performance and schedule functions of available resources (cost). Incorporates sensitivity and risk analysis. (Covered in detail in Module 16 Cost Management.)
 
 :::check
 Q: Which statement best explains why documentation is a *product* rather than an optional add-on?
@@ -216,45 +370,78 @@ Q: A life-cycle cost estimate for a 30-year system typically predicts costs far 
 :::`
     },
     {
-      id: 'process', title: 'The cost estimating process', summary: 'CEBoK six steps and the WBS framework',
+      id: 'process', title: 'The cost estimating process', summary: 'CEBoK seven steps and the WBS framework',
       body: String.raw`The CEBoK outlines a repeatable, generally sequential process for building cost estimates. This process is the skeleton for most of the rest of CEBoK (Modules 2–13 expand each step).
 
-### The six CEBoK steps
+### The seven CEBoK steps
 
 1. **Work Breakdown Structure (WBS) development**: Decompose the program scope into discrete, definable work elements (hardware, software, services, data) that can each be estimated and tracked.
 
 2. **Program/System baseline development**: Establish the technical, programmatic, and schedule baseline; identify cost drivers; and define ground rules and assumptions (GR&A).
 
-3. **Data collection and data analysis**: Gather cost, technical, and programmatic data from analogous systems or prior phases. Normalize data (adjust for inflation, quantity, technical differences).
+3. **Data collection**: Gather cost, technical, and programmatic data from analogous systems or prior phases. Develop a data collection plan and identify primary and backup data sources.
 
-4. **Cost element methodology**: For each WBS element, select the most appropriate estimating method given available data and design maturity. Major families: **analogy**, **parametric (CER)**, **engineering build-up**, **extrapolation from actuals**, **expert opinion**.
+4. **Data analysis**: Normalize collected data (adjust for inflation, quantity, technical differences, recurring/non-recurring costs). Perform descriptive statistics and compare to historical factors and rules of thumb.
 
-5. **Model development and validation**: Integrate individual estimates into a cost model tied to the WBS. Validate with sanity checks, cross-checks, and sensitivity analysis.
+5. **Cost element methodology**: For each WBS element, select the most appropriate estimating method given available data and design maturity. Major families: **analogy**, **parametric (CER)**, **engineering build-up**, **extrapolation from actuals**, **expert opinion**.
 
-6. **Results and report generation**: Summarize results (often time-phased by year and funding category). Present risk and uncertainty analysis alongside the point estimate. Deliver the documentation package (GR&A, data, methods, results).
+6. **Model development and validation**: Integrate individual estimates into a cost model tied to the WBS. Validate with sanity checks, cross-checks, and sensitivity analysis.
+
+7. **Results and report generation**: Summarize results (often time-phased by year and funding category). Present risk and uncertainty analysis alongside the point estimate. Deliver the documentation package (GR&A, data, methods, results).
 
 :::check
 Q: At what stage of the CEBoK process are ground rules and assumptions (GR&A) defined?
-- During model validation (step 5), after the numbers are in
+- During data collection (step 3), as data sources are identified
 * During program/system baseline development (step 2), early in the process
-- During report generation (step 6), when presenting results
-- Only if the customer specifically requests them
-> GR&A (base year, quantities, schedule, what is in or out of scope) shape every later step — methodology selection, data collection, and model structure all depend on them. They must be set early and documented so changes can be tracked.
+- During methodology selection (step 5), before collecting data
+- During report generation (step 7), when presenting results
+> GR&A (base year, quantities, schedule, what is in or out of scope) shape every later step — data collection, methodology selection, and model structure all depend on them. They must be set early and documented so changes can be tracked.
 :::
 
 +++
 
 ### The Work Breakdown Structure (WBS)
 
-The **WBS** is a hierarchical decomposition of program scope into discrete work elements. Key characteristics:
+A **WBS** establishes a common frame of reference for relating job tasks to each other and for relating project costs at the summary level of detail. It provides a consistent, visible framework for specifying the objectives, labor, materials, and contracts of the program/system. A standardized WBS also satisfies mandatory cost reporting requirements (Module 4).
 
-- **Product-oriented** (not organized by contractor or funding line) — e.g., Air Vehicle, Payload, Support Equipment, rather than "Contractor A" or "FY 2024"
-- **Hierarchical**: Level 1 is the entire system; Level 2 are major elements; Level 3+ breaks them down further
-- **100% complete decomposition**: every element of program scope is included exactly once (no gaps or double-counting)
-- **Standard templates exist**: MIL-STD-881 for DoD systems; industry standards for commercial programs
-- **Backbone of the estimate**: the WBS organizes data collection, method selection, and integration of results
+The key WBS functions are to:
+- **display and define** the program/system using a **product-oriented family tree**,
+- **describe program components** at the level necessary to capture all elements of cost, and
+- **relate the elements of work** to each other and to the end product.
 
-The WBS is critical because it ensures every cost element is accounted for consistently, independent of which contractor performs the work or which funding line pays for it.
+The WBS must encompass **system-level activities** such as systems engineering, specific builds, integration, fielding, and support throughout the life cycle until the system is removed from inventory. It need not be identical across systems or phases but should be **consistent**, and can be **tailored** to capture a program's idiosyncrasies. Establish a **master WBS** for the whole life cycle as early as possible. CEBoK's example is the MIL-HDBK-881A aircraft WBS.
+
+:::tip Beyond CEBoK
+Common WBS conventions from MIL-STD-881 and PMI practice: Level 1 is the entire system, Level 2 the major elements (e.g., prime mission product, SEPM, test, training, data, spares), Level 3+ further breakdown; and the "100% rule" (every element of scope appears exactly once, no gaps or double-counting).
+:::
+
+The WBS is the backbone of the estimate: later steps (data collection, cost element methodology, model building) are all organized around it.
+
+Figure 1.4's MIL-HDBK-881A aircraft WBS shows this in practice: a top level (Aircraft System) breaking into Air Vehicle plus supporting elements (Systems Engineering/Program Management, System Test and Evaluation, Training, Data, Peculiar and Common Support Equipment, Operational Site Activation, Industrial Facilities, Initial Spares and Spare Parts), with Air Vehicle itself decomposing into items like Airframe, Propulsion, and mission-system software and equipment. Most top-level items are appropriate as an analogy for a commercial airliner; at the Air Vehicle level, Reconnaissance, Antisubmarine Warfare, and Armament are not relevant to commercial airliners and can be ignored.
+
+:::widget wbs-tree:::
+
+:::challenge wbs-tree
+Q: Switch to the "Commercial airliner view." Reconnaissance, Antisubmarine Warfare, and Armament are hidden because they don't apply to an airliner. How many elements does the toggle hide?
+predict: hiddenCount +- 0
+> The source names exactly three Air Vehicle elements as not relevant for commercial airliners: Reconnaissance, Antisubmarine Warfare, and Armament.
+:::
+
+### WBS Dictionary
+
+As part of WBS development, the program manager develops a **WBS dictionary** that:
+- Lists and defines each WBS element
+- Shows the hierarchical relationships
+- Describes resources and processes required for each element
+- Links to detailed technical definition documents
+
+The WBS dictionary should be revised regularly to reflect current program status and document all changes for future reference.
+
+### WBS vs. Cost Element Structure (CES)
+
+The **WBS** typically views the program from an engineering standpoint (product-oriented family tree).
+
+The **Cost Element Structure (CES)** specifically views the program from the cost estimating perspective. While the terms are often used interchangeably, a properly developed CES should encompass all WBS elements and provide a consistent framework for cost estimation and control.
 
 +++
 
@@ -277,11 +464,65 @@ Q: Ground rules and assumptions play a critical role in estimate credibility. Wh
 - They guarantee the estimate will be accurate
 - They prevent sensitivity analysis from being necessary
 > GR&A define the scope and conditions, so if someone else reads the documentation years later, or if program conditions change, it is clear what was assumed and what must be revisited. This traceability is what makes estimates reproducible and credible.
-:::`
+:::
+
++++
+
+### Data Collection
+
+Data is the foundation of credible estimates. The **four-step data collection process** ensures systematic data gathering:
+
+1. **Understand the estimating task**: Understand the intended use, scope, and context of the estimate based on the program/system baseline definition.
+
+2. **Establish cost structure**: Develop the Cost Element Structure (CES) based on the WBS; map existing data from different structures to the new structure.
+
+3. **Understand data needs**: Identify the estimating techniques that will be used and their associated data requirements. Identify potential data sources for each cost element component.
+
+4. **Develop collection plan**: Document the plan including primary and backup data sources, data to be collected (primary or secondary, cost/technical/programmatic), coverage of all cost elements, and a projected timeline. Identify data sources for cross-checks.
+
+**Compositing** is a technique for aggregating WBS items when only higher-level data is available. Items are weighted by a characteristic (weight, quantity, size, or percentage of new design) to create a composite value, ensuring no individual component is forgotten.
+
+**Data normalization** makes data consistent and comparable. Normalization types include adjustments by cost units, sizing units, mission application, platform environment, recurring/non-recurring costs, development state, and end terms for homogeneity. Normalization must be objective and not force data to fit a desired outcome. See Module 4 for detailed normalization procedures.`
     },
     {
-      id: 'methods', title: 'Cost estimating methods and methodology selection', summary: 'Analogy, parametric, build-up, and when to use each',
-      body: String.raw`For each WBS element, the estimator selects the most appropriate method given available data and design maturity. The major families are:
+      id: 'methods', title: 'Cost estimating methods and methodology selection', summary: 'Three basic techniques and when to use each',
+      body: String.raw`For each WBS element, the estimator selects the most appropriate method given available data and design maturity.
+
+**Three basic costing techniques** are available:
+
+1. **Analogy**: Compares the cost of an item to be estimated to a similar item, adjusting for differences. CEBoK's example: the Model X100 jet engine has only flown once before, so the analyst scales the prior engine's cost by a similar parameter — weight, since it's the same X-series family. The new engine's weight is double the old engine's, so the source simply **doubles the cost** (an implicit linear, exponent-1 scaling).
+2. **Parametric (CER)**: A mathematical relationship based on historical data that relates cost to one or more technical, performance, cost, or programmatic parameters.
+3. **Engineering Build-up (bottom-up)**: Estimates costs at the lowest definable level, frequently using Industrial Engineering techniques such as time standards.
+
+These three methods can be used at any level desired, as long as data is available at that level. The estimator determines the most appropriate technique based on available data, design maturity, and program phase.
+
+**Other methods** include:
+- **Expert Opinion / Delphi**: Subjective opinion of Subject Matter Experts (SMEs) to corroborate or adjust cost estimates.
+- **Extrapolation from Actuals**: Uses data from prototypes or completed/incomplete units to project future unit costs.
+
+**Double-counting Warning**: When using different methods for different cost elements, ensure you do not double-count. A high-level CER may already capture detail that would be included in a lower-level engineering build-up. Check for overlapping assumptions and cost drivers.
+
+:::tip Beyond CEBoK
+The source's X100 example doesn't give a dollar figure — only the doubling logic — so the cost below (Analog cost) is illustrative. CEBoK's analogy is a **linear ratio through the origin**: weight doubles, so cost doubles. The "Power scaling" checkbox is off by default (b = 1) to match that. Turning it on and dragging the exponent below 1 explores a non-linear, economies-of-scale idea that is **not** part of the source's adjusted-analogy method — a single analog point cannot determine a curve's exponent any more than it can determine a line's slope.
+:::
+
+:::widget analogy c0=10 s0=100 s1=200 cx=1 powerOn=0 b=1:::
+
+:::challenge analogy c0=10 s0=100 s1=100 cx=1 powerOn=0 b=1 lock=c0,s0,cx
+Q: The source doubles the X100's weight. Drag the new size to 200 (double the analog's 100) and read the linear-ratio analogy (the CEBoK method) estimate.
+goal: linear ~ 20 +- 0.5%
+show: s1=200
+> $Cost_{new} = Cost_{analogy} \times (S_1/S_0) = 10 \times (200/100) = 20$. Weight doubles, so cost doubles — a straight ratio through the origin, not a curve.
+:::
+
+:::challenge analogy c0=10 s0=100 s1=200 cx=1 powerOn=0 b=1 lock=c0,s0,s1,cx
+Q: (Beyond CEBoK) Turn on "Power scaling" and drag the exponent to 0.7 to model economies of scale instead of the source's simple doubling. Does the size-adjusted estimate go up or down compared to the linear \$20?
+goal: power < 18
+show: powerOn=1 b=0.7
+> At b=1 (the source's method), doubling weight doubles cost (10 -> 20). At b=0.7 (Beyond CEBoK), cost scales as 2^0.7 ≈ 1.62, giving about 16.2 — lower than the source's linear doubling. This exponent is not derivable from a single analog point.
+:::
+
+**Detailed comparison:**
 
 | Method | When Used | Advantages | Disadvantages |
 |---|---|---|---|
@@ -317,8 +558,11 @@ Q: A new electronic warfare system is being estimated. The baseline shows it wil
 :::`
     },
     {
-      id: 'trl', title: 'Technology Readiness Levels (TRLs)', summary: 'Maturity scale 1–9 and relevance to cost risk',
-      body: String.raw`**Technology Readiness Levels** (TRLs) are a standardized 1–9 scale (developed by NASA, widely adopted in DoD and civilian agencies) describing the maturity of a technology:
+      id: 'trl', title: 'Technology Readiness Levels (TRLs)', summary: 'Maturity scale and relevance to cost risk',
+      body: String.raw`**Technology Readiness Levels** (TRLs) were developed by NASA in the 1980s and are now widely adopted in DoD and civilian agencies to assess the maturity of technologies. When a new technology is in the development stage, it is not suitable for immediate application. Instead, new technologies are usually subjected to experimentation and refinement. Once the technology is proven, it can be given a much higher TRL.
+
+:::tip Beyond CEBoK
+The TRL scale ranges from 1 to 9:
 
 | TRL | Description |
 |---|---|
@@ -329,6 +573,7 @@ Q: A new electronic warfare system is being estimated. The baseline shows it wil
 | **TRL 7** | System prototype demonstration in an operational environment. |
 | **TRL 8** | Actual system completed and qualified through test and demonstration. |
 | **TRL 9** | Actual system proven through successful mission operations. |
+:::
 
 :::widget trl:::
 
@@ -369,7 +614,7 @@ Q: A key subsystem has been demonstrated as a prototype in a relevant environmen
 - TRL 5 (component validation in relevant environment); still significant risk
 * TRL 6 (system model/prototype in relevant environment); significant but lower risk; parametric methods start to become viable
 - TRL 8 (system qualified); ready for production at known cost
-> TRL 6 means the technology has been demonstrated at a higher fidelity but is not yet production-proven. This is a typical target for Milestone B (start of engineering and manufacturing development). Cost risk is still real but lower than TRL 4–5; parametric CERs and build-up methods can now be used alongside analogy.
+> TRL 6 means the technology has been demonstrated at a higher fidelity but is not yet production-proven. Cost risk is still real but lower than TRL 4–5; parametric CERs and build-up methods can now be used alongside analogy.
 :::
 
 :::check
@@ -395,11 +640,14 @@ Ask basic reasonableness questions:
 
 ### Cross-checks
 
-Compare the estimate against independent data:
-- **Parametric models** (published industry cost-estimating relationships)
-- **Historical analogs** (actual costs of similar prior programs)
-- **Independent estimates** (estimates by organizations outside the program)
-- **Bottom-up rebuild** (re-estimating one section using a different method to verify the result)
+Compare the estimate against independent data to verify reasonableness and completeness:
+- **Different methodologies**: Apply a different estimating method to key cost elements to verify results
+- **Different cost models**: Compare using proprietary models versus custom models (e.g., Excel) to ensure results are model-independent
+- **Parametric models**: Compare against published industry cost-estimating relationships
+- **Historical analogs**: Compare against actual costs of similar prior programs
+- **Independent estimates**: Compare against estimates by organizations outside the program
+
+**Benchmarks** must be based on **publicly available data** only. Proprietary data from another company may not be used for comparison.
 
 If the estimate differs significantly from an independent cross-check, the difference must be investigated and reconciled. Do the baselines differ? Are methods incompatible? Is one method more reliable given available data?
 
@@ -430,15 +678,27 @@ Q: An estimate is built on three major cost drivers: labor rates, material price
   cards: String.raw`
 ## Definition and Purpose
 Q: Definition of cost estimating
-A: The process of collecting and analyzing historical data and applying quantitative models, techniques, and databases to predict the future cost of an item, product, program, or task.
+A: The process of collecting and analyzing historical data and applying quantitative models, techniques, tools, and databases to predict the future dollar amount of an item, product, program, or task to facilitate the successful completion of a program, project, or process.
 Q: Definition of cost analysis
 A: The broader discipline that includes cost estimating plus evaluating and comparing costs to support decisions (alternatives, affordability, proposals, performance tracking).
 Q: Cost estimate vs. cost guarantee: key difference
 A: An estimate is a prediction based on available information at a point in time; it is not a guarantee. It should be defensible, reproducible, and documented — not necessarily "correct" in hindsight, since the future is inherently uncertain.
+Q: Three functions of cost estimating
+A: Translates system/functional requirements into budget requirements; determines and communicates a realistic view of the likely cost outcome; forms the basis of the plan to develop, field, and support the system.
+Q: Why must a cost estimate never become divorced from historical experience?
+A: Because it risks losing credibility. Estimators adjust for new materials, technology, and resources, but the foundation must remain grounded in historical data.
+Q: What happens when a program runs far over an ICE-based budget?
+A: Other programs' resources are diverted to cover the overrun, creating a ripple effect. Programs that run far enough over budget may be terminated, leaving capability gaps.
 Q: Core purpose of cost estimating and analysis
 A: Support budgeting, decision-making, program management, independent assessment, and affordability analysis throughout a program's life cycle.
 Q: Name three applications of cost estimates
 A: Budgeting; milestone/investment decisions; AoA and economic analysis; source selection and contract pricing; should-cost analysis; EVM performance tracking.
+
+## Context
+Q: What is PPBES and POM?
+A: PPBES (Programming, Planning, Budgeting, and Execution System) is DoD's budgeting process. POM (Program Objective Memorandum) is the submission requiring cost estimates. Estimates are revised during comptroller, OSD, and President's budget reviews.
+Q: When must a program have a validated cost estimate?
+A: At major milestone reviews and acquisition reviews. DoD Instructions 5000.2 and 5000.4-M mandate both a POE and CCA at these reviews to inform decisions and maintain management control.
 
 ## Organizations
 Q: What is CAPE?
@@ -447,36 +707,52 @@ Q: What is the GAO?
 A: Government Accountability Office. Audits federal cost estimates and publishes the Cost Estimating and Assessment Guide (best practices).
 Q: Why do programs require both a POE (Program Office Estimate) and an ICE (Independent Cost Estimate)?
 A: POE is developed by the program office (close to technical detail but subject to advocacy bias); ICE is independent (objective check). Both provide a cross-check against optimism and errors.
-Q: What does FFRC stand for?
+Q: What does FFRDC stand for?
 A: Federally Funded Research and Development Center (e.g., RAND, IDA, Aerospace Corporation, MITRE). Provides estimating support to government sponsors.
+Q: When is a cost group (I) positionally independent of the acquiring organization (A)?
+A: When I shares no common superior with A below the sponsor S (or a delegate B acting in S's place). If I and A share a lower-level boss, or I reports into A's own chain, independence fails.
 
 ## Skills
-Q: Why is objectivity and integrity the most critical skill for a cost estimator?
-A: To resist pressure to conform an estimate to a predetermined (lower) answer. Advocacy bias undermines credibility regardless of other skills or methods.
+Q: Related disciplines in cost estimating
+A: Mathematics (probability, statistics, regression); Economics (inflation, discounting, analysis); Accounting (tracking expenditures); Budgeting (resource allocation); Operations Research and Industrial Engineering (optimization, simulation); Computer Science (software estimation); Engineering (design parameters, risk); Marketing (presentations and defense of estimates).
 Q: What does a cost estimator need to understand about the system being estimated, and why?
 A: Enough engineering/technical knowledge to evaluate the reasonableness of the technical baseline and understand what drives cost in the system.
+Q: Is cost analysis the same as accounting or auditing?
+A: No. Cost analysis is neither accounting nor auditing; it uses financial and technical data to project future costs, rather than recording past transactions or verifying compliance.
 
-## Quality: The Four GAO Characteristics
-Q: GAO's four characteristics of a reliable cost estimate
-A: Comprehensive, Well-documented, Accurate, and Credible.
-Q: What does "Comprehensive" mean?
-A: The estimate captures the entire scope: full life cycle, all cost elements, no gaps or double-counting; includes a complete WBS and clearly defined ground rules and assumptions.
-Q: What does "Well-documented" mean?
-A: Someone unfamiliar with the program could recreate the estimate from the documentation. Sources, methods, assumptions, and calculations are traceable and reproducible.
-Q: What does "Accurate" mean?
-A: Based on valid, current data; properly adjusted (normalized, inflated); free of computational errors; unbiased (neither overly conservative nor optimistic).
-Q: What does "Credible" mean?
-A: Limitations, risk, and uncertainty are discussed; sensitivity analysis is performed; the estimate is cross-checked against independent estimates and differences are reconciled.
+## Quality: Six CEBoK Characteristics
+Q: Six characteristics of a high-quality cost estimate
+A: Accuracy, Comprehensiveness, Replicability, Auditability, Credibility, and Timeliness.
+Q: What is the most important quality of a cost estimate and why?
+A: Credibility is the single most important quality. An estimate must be accurate, replicable, and auditable in order to be credible, and credibility is what makes it defensible for decision-making.
+Q: What does "Accuracy" mean?
+A: Estimates are unbiased, neither unrealistically low nor overly conservative. Based on normalized data, valid inflation adjustments, CERs with good curve fits, and logical time-phasing.
+Q: What does "Comprehensiveness" mean?
+A: The estimate uses a WBS at appropriate detail to ensure all cost elements are included exactly once with no gaps or double-counting. All cost-driving GR&A are documented.
+Q: What does "Replicability" mean?
+A: The estimate is traceable to system specifications. Source data, CER statistics, detailed calculations, and methodology rationale are thoroughly documented so others can recreate it.
+Q: What does "Auditability" mean?
+A: A reviewer can follow the estimation process, repeat calculations, and arrive at the same answer. The estimate is transparent and verifiable.
+Q: What does "Timeliness" mean?
+A: Even a high-quality estimate provides no value if not delivered to decision makers on time. Timing is critical to effective decision support.
+
+## Benefits
+Q: What is "buying in" and why is it risky?
+A: Bidding far below the actual amount of effort to win a contract as the lowest bidder. As development proceeds, the true cost becomes apparent, and the manufacturer must absorb the overrun, leading to lost profit or bankruptcy.
+Q: What is "pricing out of the market"?
+A: Estimating too high, making the bid uncompetitive and unable to win work. Accurate estimates prevent both buying-in and pricing-out, ensuring profitability and competitive advantage.
 
 ## Challenges
-Q: Name four common challenges to cost estimating
-A: Immature or changing requirements; limited or poor-quality historical data; new/low-TRL technology; advocacy and optimism bias; schedule and budget instability; uncertainty often ignored; time and resource constraints.
-Q: Why is "uncertainty often ignored" a challenge?
-A: Decision-makers often want a single point estimate, but estimates are inherently ranges/distributions. Reporting only a single number masks uncertainty and leads to overconfidence.
+Q: Six named challenges to cost estimating (CEBoK 2.3)
+A: Decision Support (difficulty establishing CERs linked to design parameters); Quality (obtaining good data); Coordination (costs cut across organizational boundaries); Consistency (must align throughout program); Resource and Schedule Constraints (timely delivery with limited resources); Security/Access (proprietary/classified restrictions).
+Q: Why is data quality such a notoriously difficult challenge?
+A: Analysts often access only secondary data that have been adjusted multiple times from original sources. Additionally, inadequately documented estimates lose credibility and valuable information is lost when analysts leave.
+Q: What are the key limitations of cost analysis?
+A: Results are only as good as input data; it must conform to the program; it disregards political/non-cost impacts; it requires sound judgment; it supports but does not dictate decisions.
 
 ## Products
-Q: Three main cost estimating products
-A: Technical and schedule baseline description; the cost estimate (cost model and documentation).
+Q: Four main cost estimating products
+A: Technical and schedule baseline description; the cost estimate; the cost model; and estimate documentation.
 Q: What is a CARD?
 A: Cost Analysis Requirements Description. A DoD document that gives the common technical and programmatic baseline for all estimators on a program.
 Q: Technical baseline: what does it describe?
@@ -485,42 +761,70 @@ Q: Why must the technical baseline be treated as an explicit, documented set of 
 A: So that changes can be tracked, and the estimate's sensitivity to baseline changes is clear. If the baseline changes, the estimate must be revisited.
 Q: Definition of a cost model
 A: A structured combination of a WBS, cost estimating relationships (CERs), and supporting data used to generate the estimate. It should be traceable, flexible for sensitivity analysis, and documented.
+Q: Three factors that influence cost model structure
+A: Maturity level of the technical and programmatic definition; availability and maturity of relevant estimating methodologies; availability of historical data for developing new estimating methodologies.
 
 ## Estimate Types
 Q: ROM estimate
-A: Rough Order of Magnitude. A very early, low-fidelity estimate used for feasibility and screening. Wide uncertainty range.
+A: Rough Order of Magnitude. A very early, low-fidelity feasibility/screening estimate when little specific information is known. Wide uncertainty range.
 Q: LCCE
-A: Life Cycle Cost Estimate. Comprehensive estimate covering R&D, production, operations & support (O&S), and disposal across the entire program life.
-Q: POE vs. ICE
-A: POE (Program Office Estimate) is developed by the program's own estimators, close to technical detail. ICE (Independent Cost Estimate) is built by an independent organization to provide an objective check.
-Q: IGCE
-A: Independent Government Cost Estimate. The government's estimate of a contract cost, used in source selection and negotiations.
-Q: Should-cost estimate
-A: What a program should cost with efficient, economical operations. Used to identify cost reduction opportunities and evaluate contractor pricing.
+A: Life Cycle Cost Estimate. Comprehensive estimate covering R&D, production, operations & support (O&S), and disposal across the entire program life. Basis for milestone decisions.
+Q: ICE
+A: Independent Cost Estimate. Built by an organization independent of the program office using the same baseline but different methodology. Provides objective assessment and identifies budgetary excesses and shortfalls.
+Q: Budget Estimate
+A: Developed strictly for funding authorization. Wider margin for error than other types; ensures feasibility and establishes baseline definitions and costs.
+Q: EAC
+A: Estimate At Completion. Used for in-process programs with sufficient cost history. Relies on Earned Value Management techniques; critical for program certification under Nunn-McCurdy Act.
+Q: ICA
+A: Independent Cost Assessment. Independent estimate with risk incorporated, starting from external estimate and adjusting based on objective view. Ranges from full ICE to cursory sufficiency review.
+Q: EA
+A: Economic Analysis. Describes mission requirements and alternative courses of action; compares costs and benefits quantified monetarily. Also called cost-benefit analysis or Business Case Analysis.
+Q: AoA vs EA
+A: AoA (Analysis of Alternatives) evaluates costs and benefits including operational effectiveness/utility of different courses of action. EA focuses on benefits quantified monetarily (cost-benefit).
 Q: Why is an LCCE typically much larger than an acquisition-only estimate?
 A: LCCE includes Operating & Support (O&S) costs over the entire system life (often decades), which frequently constitute 60–80% of total life-cycle cost.
 
 ## Documentation
 Q: What does estimate documentation include?
 A: Ground rules and assumptions; technical and schedule baseline description; data sources and adjustments; methodology by cost element; results and time-phasing; sensitivity and risk/uncertainty analysis; comparison to independent estimates.
+Q: Report requirements for cost estimates
+A: Reports must be crisp and complete; easily understood by unfamiliar audiences; thorough on important details; and demonstrative of the competence behind the results. Proposals should include an executive volume summarizing technical aspects.
+Q: What is CAIV (Cost As an Independent Variable)?
+A: A discipline that sets aggressive yet realistic cost objectives when defining requirements and acquiring systems. It makes performance and schedule functions of available resources (cost), balancing three program parameters: cost, schedule, and performance.
 
 ## Process
-Q: CEBoK six-step estimating process
-A: (1) WBS development · (2) Program/system baseline development · (3) Data collection and analysis · (4) Cost element methodology · (5) Model development and validation · (6) Results and report generation.
+Q: CEBoK seven-step estimating process
+A: (1) WBS development · (2) Program/system baseline development · (3) Data collection · (4) Data analysis · (5) Cost element methodology · (6) Model development and validation · (7) Results and report generation.
 Q: When are ground rules and assumptions (GR&A) defined?
 A: During program/system baseline development (step 2), early in the process. This ensures they shape all later steps: methodology, data, and model.
 Q: What is a WBS?
 A: Work Breakdown Structure. A hierarchical, product-oriented decomposition of program scope into definable work elements (hardware, software, services, data).
 Q: What does it mean for a WBS to be "100% complete"?
-A: Every element of program scope is included exactly once; no gaps or double-counting. The WBS is independent of which contractor performs the work or which funding line pays for it.
+A: (Beyond CEBoK: MIL-STD-881/PMI "100% rule") Every element of program scope is included exactly once, with no gaps or double-counting. CEBoK phrases it as: describe components at the level needed to capture all elements of cost.
 Q: WBS Level 1, Level 2, Level 3
-A: Level 1 = entire system. Level 2 = major elements (e.g., prime mission product, SEPM, test, training, data, spares). Level 3+ = further decomposition.
+A: (Beyond CEBoK: MIL-STD-881 convention) Level 1 = entire system. Level 2 = major elements (e.g., prime mission product, SEPM, test, training, data, spares). Level 3+ = further decomposition.
 Q: DoD standard for WBS
 A: MIL-STD-881, with appendices for different system types (aircraft, ships, missiles, software, etc.).
+Q: What is a WBS dictionary?
+A: A document that lists and defines each WBS element, shows hierarchical relationships, describes resources and processes for each element, and links to technical definition documents. Updated regularly to reflect current program status.
+Q: WBS vs. Cost Element Structure (CES)
+A: WBS is product-oriented from an engineering standpoint. CES is the cost estimating view. A properly developed CES should encompass all WBS elements.
+
+## Data Collection and Normalization
+Q: Four-step data collection process
+A: (1) Understand the estimating task and required outcome. (2) Establish CES based on WBS and map existing data. (3) Understand data needs based on planned estimating techniques. (4) Develop and execute data collection plan with primary/backup sources.
+Q: What is compositing in data collection?
+A: A technique for aggregating WBS items when only higher-level data is available. Items are weighted by a characteristic (weight, quantity, size, or % new design) to create a composite value, ensuring no component is forgotten.
+Q: What is data normalization and why is it necessary?
+A: The process of making data consistent and comparable across different cost elements. Types include adjustments by cost/sizing units, mission application, platform environment, recurring/non-recurring, development state, and end-term homogeneity. Must be objective and not force fit.
 
 ## Cost Estimating Methods
-Q: Name the five major families of cost estimating methods
-A: Analogy (adjust known similar system); Parametric/CER (statistical relationship); Engineering build-up (detailed bottom-up); Extrapolation from actuals (same program phases); Expert opinion.
+Q: Three basic costing techniques
+A: Analogy (compare to similar item); Parametric/CER (mathematical relationship from historical data); Engineering build-up (estimate at lowest definable level).
+Q: Other cost estimating methods beyond the three basic techniques
+A: Expert opinion / Delphi (subjective opinion of SMEs); Extrapolation from actuals (using data from prototypes or completed units).
+Q: Double-counting warning when mixing estimating methods
+A: A high-level CER may already capture detail that would be included in a lower-level engineering build-up. Check for overlapping assumptions and cost drivers to avoid counting the same cost twice.
 Q: Analogy method: when used and why
 A: Early concept, immature design, limited data. Quick and requires little data, but depends on analogy quality and assumes similar technologies.
 Q: Parametric (CER) method: when used and why
@@ -542,7 +846,7 @@ A: Basic principles observed and reported.
 Q: TRL 4
 A: Component/breadboard validation in a laboratory environment.
 Q: TRL 6
-A: System/subsystem model or prototype demonstration in a relevant environment. Typical Milestone B target.
+A: System/subsystem model or prototype demonstration in a relevant environment.
 Q: TRL 7
 A: System prototype demonstration in an operational environment.
 Q: TRL 9
