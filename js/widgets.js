@@ -2662,5 +2662,204 @@ const Widgets = (() => {
     draw();
   };
 
+  // ======================================================================
+  // M10: two-sample t-test — DoD vs NAVAIR cost growth factor (Figs. 10.18-10.21)
+  // local t-distribution pdf (lgamma copy — wmath does not export one)
+  function tLgamma(z) {
+    const g = [676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - tLgamma(1 - z);
+    z -= 1; let x = 0.99999999999980993;
+    for (let i = 0; i < 8; i++) x += g[i] / (z + i + 1);
+    const t = z + 7.5;
+    return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+  }
+  function tpdf(t, df) {
+    const lc = tLgamma((df + 1) / 2) - tLgamma(df / 2) - 0.5 * Math.log(df * Math.PI);
+    return Math.exp(lc - (df + 1) / 2 * Math.log(1 + t * t / df));
+  }
+  reg['two-sample-t'] = box => {
+    title(box, 'Two-sample t-test', 'DoD vs NAVAIR cost growth factor — is the difference in means real?');
+    const v = controls(box, [
+      { k: 'xbar', label: 'X̄ (DoD mean CGF)', min: 0.8, max: 1.8, step: 0.01, v: 1.19 },
+      { k: 'ybar', label: 'Ȳ (NAVAIR mean CGF)', min: 0.8, max: 1.8, step: 0.01, v: 1.33 },
+      { k: 'sx2', label: 'Sx² (DoD variance)', min: 0.02, max: 0.4, step: 0.01, v: 0.12 },
+      { k: 'sy2', label: 'Sy² (NAVAIR variance)', min: 0.02, max: 0.4, step: 0.01, v: 0.09 },
+      { k: 'n', label: 'n = m (sample size per group)', min: 5, max: 40, step: 1, v: 20 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['area', 't-distribution'], ['band', 'rejection region (α=.05)'], ['c2', 'T statistic']]);
+    const ro = readout(box);
+    function draw() {
+      pb.innerHTML = '';
+      const n = v.n, m = v.n, df = n + m - 2;
+      const sp2 = ((n - 1) * v.sx2 + (m - 1) * v.sy2) / (n + m - 2);
+      const T = (v.xbar - v.ybar) / Math.sqrt(sp2 * (1 / n + 1 / m));
+      const crit = M.tinv(0.975, df);
+      const pval = 2 * (1 - M.tcdf(Math.abs(T), df));
+      const lim = Math.max(4, Math.abs(T) + 1, crit + 1);
+      const p = Plot.create(pb, { xmin: -lim, xmax: lim, ymin: 0, ymax: tpdf(0, df) * 1.15, xlabel: 't', ylabel: 'density', yfmt: () => '' });
+      p.axes();
+      const nseg = 100, lo = [], hi = [];
+      for (let i = 0; i <= nseg; i++) { const x = -lim + 2 * lim * i / nseg; lo.push([x, tpdf(x, df)]); }
+      p.fn(x => tpdf(x, df), 'series area', 120);
+      const leftband = [[-lim, 0]]; for (let i = 0; i <= nseg; i++) { const x = -lim + (-crit + lim) * i / nseg; leftband.push([x, tpdf(x, df)]); } leftband.push([-crit, 0]);
+      const rightband = [[crit, 0]]; for (let i = 0; i <= nseg; i++) { const x = crit + (lim - crit) * i / nseg; rightband.push([x, tpdf(x, df)]); } rightband.push([lim, 0]);
+      [leftband, rightband].forEach(seg => {
+        const d = 'M' + seg.map(q => p.x(q[0]).toFixed(1) + ',' + p.y(q[1]).toFixed(1)).join('L') + 'Z';
+        Plot.svgEl('path', { d, class: 'band' }, p.svg);
+      });
+      p.vline(-crit, 'marker'); p.vline(crit, 'marker');
+      p.vline(T, 'marker c2 hot');
+      const reject = Math.abs(T) > crit;
+      ro([
+        ['Pooled variance Sp² = [(n-1)Sx²+(m-1)Sy²]/(n+m-2)', f2(sp2, 2), 'c1t'],
+        ['T = (X̄-Ȳ)/(Sp·√(1/n+1/m))', f2(T, 2)],
+        ['df = n+m-2', df],
+        ['Critical value (α=.05, two-tailed)', '±' + f2(crit, 2)],
+        ['p-value', f2(pval, 3)],
+        ['Verdict', reject ? 'reject H0 — means differ' : 'fail to reject H0 — no significant difference', reject ? 'bad' : 'good']
+      ]);
+      publish(box, { sp2, T, df, crit, pval });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M10: Central Limit Theorem builder — sum of triangular distributions approaches normal (Fig. 10.11)
+  reg['clt-builder'] = box => {
+    title(box, 'CLT builder', 'sum enough skewed triangular WBS elements and the total looks normal');
+    const TRIS = [[0.5, 1.0, 3.0], [3.5, 4.5, 7.5], [6.5, 8.0, 12.0]];
+    const v = controls(box, [
+      { k: 'k', label: 'Number of elements summed', min: 1, max: 30, step: 1, v: 1 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['bar', 'simulated sum'], ['c1', 'normal overlay (same mean, sd)']]);
+    const ro = readout(box);
+    function draw() {
+      pb.innerHTML = '';
+      const N = 5000, r = M.rng(7), arr = [];
+      for (let i = 0; i < N; i++) {
+        let s = 0;
+        for (let j = 0; j < v.k; j++) { const [a, c, b] = TRIS[j % 3]; s += M.triInv(r(), a, c, b); }
+        arr.push(s);
+      }
+      const mu = mean(arr), s2 = sd(arr);
+      const skew = arr.reduce((acc, x) => acc + Math.pow((x - mu) / s2, 3), 0) / N;
+      const sorted = arr.slice().sort((a, b) => a - b);
+      const bins = 30, lo = sorted[0], hi = sorted[sorted.length - 1], w = (hi - lo) / bins || 1, cnt = new Array(bins).fill(0);
+      sorted.forEach(x => cnt[Math.min(bins - 1, Math.floor((x - lo) / w))]++);
+      const maxCnt = Math.max(...cnt);
+      const p = Plot.create(pb, { xmin: lo, xmax: hi, ymin: 0, ymax: maxCnt * 1.15, xlabel: 'sum', ylabel: 'frequency', yfmt: () => '' });
+      p.axes(); cnt.forEach((c, i) => p.rect(lo + i * w, 0, lo + (i + 1) * w, c, 'bar'));
+      const peak = N * w / (s2 * Math.sqrt(2 * Math.PI));
+      p.fn(x => peak * Math.exp(-0.5 * ((x - mu) / s2) ** 2), 'series c1', 120);
+      ro([
+        ['Elements summed (k)', v.k],
+        ['Mean of sum', f2(mu, 2)],
+        ['Std dev of sum', f2(s2, 2)],
+        ['Sample skewness', f2(skew, 3), Math.abs(skew) < 0.15 ? 'good' : ''],
+        ['Shape', Math.abs(skew) < 0.15 ? 'approximately normal (CLT)' : 'still visibly skewed']
+      ]);
+      publish(box, { k: v.k, mean: mu, sd: s2, skew });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M10: normal vs lognormal at varying CV (Fig. 10.24) — tests can't tell them apart below CV 25%
+  reg['normal-vs-lognormal'] = box => {
+    title(box, 'Normal vs lognormal', 'same mean and sd, different shapes — the gap only shows up at higher CV');
+    const v = controls(box, [
+      { k: 'cv', label: 'Coefficient of variation', min: 5, max: 60, step: 1, v: 10, fmt: x => x + '%' }
+    ], draw);
+    const bar = E('div', 'w-presets');
+    [['CV 10%', 10], ['CV 25%', 25], ['CV 50%', 50]].forEach(([lbl, cv]) => { const b = E('button', 'chip', lbl); b.onclick = () => box.w.set('cv', cv); bar.appendChild(b); });
+    box.appendChild(bar);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'normal'], ['c2', 'lognormal']]);
+    const ro = readout(box);
+    function draw() {
+      pb.innerHTML = '';
+      const mu = 10, sdv = mu * v.cv / 100;
+      const sg = Math.sqrt(Math.log(1 + (sdv / mu) ** 2));
+      const mln = Math.log(mu) - sg * sg / 2;
+      const npdf = x => Math.exp(-0.5 * ((x - mu) / sdv) ** 2) / (sdv * Math.sqrt(2 * Math.PI));
+      const lpdf = x => x <= 0 ? 0 : Math.exp(-((Math.log(x) - mln) ** 2) / (2 * sg * sg)) / (x * sg * Math.sqrt(2 * Math.PI));
+      const lo = Math.max(0, mu - 4 * sdv), hi = mu + 4 * sdv;
+      let ymax = 0; for (let i = 0; i <= 200; i++) { const x = lo + (hi - lo) * i / 200; ymax = Math.max(ymax, npdf(x), lpdf(x)); }
+      const p = Plot.create(pb, { xmin: lo, xmax: hi, ymin: 0, ymax: ymax * 1.1, xlabel: 'x', ylabel: 'density', yfmt: () => '' });
+      p.axes(); p.fn(npdf, 'series c1', 150); p.fn(lpdf, 'series c2', 150);
+      const distinguishable = v.cv >= 25;
+      ro([
+        ['Mean (fixed)', f2(mu, 1)],
+        ['Std dev = mean·CV', f2(sdv, 2)],
+        ['ln-space sigma', f2(sg, 3)],
+        ['Tests can distinguish normal vs lognormal?', distinguishable ? 'yes (CV ≥ 25%)' : 'no (CV < 25%)', distinguishable ? 'good' : 'bad'],
+        ['CEBoK note', 'below 25% CV, data passes both a normality and a lognormality test']
+      ]);
+      publish(box, { mean: mu, sd: sdv, sigmaLn: sg, distinguishable });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M10: confidence intervals for mu and sigma vs sample size (Figs. 10.27-10.29)
+  // chi-squared inverse via Wilson-Hilferty approximation (not exact — labeled as such)
+  function chi2invWH(p, df) {
+    const z = M.zinv(p), h = 2 / (9 * df);
+    const val = df * Math.pow(1 - h + z * Math.sqrt(h), 3);
+    return Math.max(val, 1e-6);
+  }
+  reg['ci-sigma'] = box => {
+    title(box, 'CI width vs sample size', 'the penalty for not knowing σ, and how hard σ itself is to pin down');
+    const v = controls(box, [
+      { k: 'n', label: 'Sample size n', min: 2, max: 100, step: 1, v: 6 }
+    ], draw);
+    const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R); box.appendChild(row);
+    legend(box, [['c1', 't-based (σ unknown)'], ['c2', 'z-based (σ known)'], ['band', 'σ 95% CI (χ²)']]);
+    const ro = readout(box);
+    function draw() {
+      L.innerHTML = ''; R.innerHTML = '';
+      const n = v.n, df = n - 1;
+      const nMax = 100, pts1 = [], pts2 = [];
+      for (let nn = 2; nn <= nMax; nn++) {
+        const d = nn - 1;
+        pts1.push([nn, M.tinv(0.975, d) / Math.sqrt(nn)]);
+        pts2.push([nn, M.zinv(0.975) / Math.sqrt(nn)]);
+      }
+      const ymax1 = Math.max(...pts1.map(q => q[1])) * 1.1;
+      const p1 = Plot.create(L, { w: 300, h: 230, xmin: 2, xmax: nMax, ymin: 0, ymax: ymax1, xlabel: 'n', ylabel: 'half-width factor (× s/√n or σ/√n)' });
+      p1.axes(); p1.line(pts1, 'series c1'); p1.line(pts2, 'series c2'); p1.vline(n, 'marker hot');
+      const sigLoPts = [], sigHiPts = [];
+      for (let nn = 2; nn <= nMax; nn++) {
+        const d = nn - 1;
+        const chiHi = chi2invWH(0.975, d), chiLo = chi2invWH(0.025, d);
+        sigLoPts.push([nn, Math.sqrt(d / chiHi)]);
+        sigHiPts.push([nn, Math.sqrt(d / chiLo)]);
+      }
+      const ymax2 = Math.max(...sigHiPts.map(q => q[1])) * 1.1;
+      const p2 = Plot.create(R, { w: 300, h: 230, xmin: 2, xmax: nMax, ymin: 0, ymax: ymax2, xlabel: 'n', ylabel: 'σ CI as multiple of s' });
+      p2.axes();
+      const band = sigLoPts.concat(sigHiPts.slice().reverse());
+      const d = 'M' + band.map(q => p2.x(q[0]).toFixed(1) + ',' + p2.y(q[1]).toFixed(1)).join('L') + 'Z';
+      Plot.svgEl('path', { d, class: 'band' }, p2.svg);
+      p2.hline(1, 'marker'); p2.vline(n, 'marker hot');
+      const tMult = M.tinv(0.975, df) / Math.sqrt(n), zMult = M.zinv(0.975) / Math.sqrt(n);
+      const ratio = tMult / zMult - 1;
+      const chiHi = chi2invWH(0.975, df), chiLo = chi2invWH(0.025, df);
+      const sigLo = Math.sqrt(df / chiHi), sigHi = Math.sqrt(df / chiLo);
+      ro([
+        ['df = n-1', df],
+        ['t(.975,df) half-width factor', f2(tMult, 3), 'c1t'],
+        ['z(.975) half-width factor (σ known)', f2(zMult, 3), 'c2t'],
+        ['Penalty of not knowing σ', pct(ratio, 1) + ' wider'],
+        ['σ 95% CI (× sample s), lower/upper', `${f2(sigLo, 3)} / ${f2(sigHi, 3)}`],
+        ['χ² inverse method', 'Wilson-Hilferty approximation (not exact)']
+      ]);
+      publish(box, { tMult, zMult, ratio, sigLo, sigHi });
+    }
+    draw();
+  };
+
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();

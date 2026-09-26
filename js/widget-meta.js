@@ -58,7 +58,11 @@
     'cer-pi': { controls: ['weight', 'u'], setters: [], outputs: ['est', 'mult', 'lo95', 'hi95', 'trial'] },
     'schedule-network': { controls: ['mode', 'k', 'cv', 'scenario'], setters: [], outputs: ['meanFinish', 'pctB', 'cpMean', 'sd'] },
     'conflation': { controls: ['disagree', 'method'], setters: [], outputs: ['sd', 'p10', 'p90', 'method'] },
-    'risk-cube': { controls: ['p1', 'p2', 'p3', 'p4', 'p5', 'c1', 'c2', 'c3', 'c4', 'c5'], setters: [], outputs: ['ev', 'sd', 'p80'] }
+    'risk-cube': { controls: ['p1', 'p2', 'p3', 'p4', 'p5', 'c1', 'c2', 'c3', 'c4', 'c5'], setters: [], outputs: ['ev', 'sd', 'p80'] },
+    'two-sample-t': { controls: ['xbar', 'ybar', 'sx2', 'sy2', 'n'], setters: [], outputs: ['sp2', 'T', 'df', 'crit', 'pval'] },
+    'clt-builder': { controls: ['k'], setters: [], outputs: ['k', 'mean', 'sd', 'skew'] },
+    'normal-vs-lognormal': { controls: ['cv'], setters: [], outputs: ['mean', 'sd', 'sigmaLn', 'distinguishable'] },
+    'ci-sigma': { controls: ['n'], setters: [], outputs: ['tMult', 'zMult', 'ratio', 'sigLo', 'sigHi'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);
