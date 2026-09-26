@@ -42,7 +42,11 @@
     'data-quality-ladder': { controls: [], setters: [], outputs: ['correct', 'order'] },
     'unit-chain': { controls: ['scenario'], setters: [], outputs: ['value', 'applied', 'correct'] },
     'context-sorter': { controls: [], setters: [], outputs: ['correct', 'total'] },
-    'scale-sorter': { controls: ['c'], setters: [], outputs: ['correct', 'total', 'c', 'f'] }
+    'scale-sorter': { controls: ['c'], setters: [], outputs: ['correct', 'total', 'c', 'f'] },
+    'outlier-regression': { controls: ['outlier'], setters: [], outputs: ['n', 'slope', 'intercept', 'r2', 'outlierZ'] },
+    'bin-explorer': { controls: ['width', 'start', 'view'], setters: [], outputs: ['n', 'mean', 'q1', 'median', 'q3', 'iqr', 'outlierCount'] },
+    'ml-classifier': { controls: ['k'], setters: [], outputs: ['weightProbAB', 'weightProbCD', 'powerProbAB', 'powerProbCD', 'nbProbAB', 'nbProbCD', 'knnClass', 'k'] },
+    'logistic-risk': { controls: ['size', 'dur', 'exp', 'team', 'cx', 'mkt'], setters: [], outputs: ['logOdds', 'p'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);

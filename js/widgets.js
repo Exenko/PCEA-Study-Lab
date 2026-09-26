@@ -1803,5 +1803,192 @@ const Widgets = (() => {
     drawDemo();
   };
 
+  // ======================================================================
+  // M6: outlier regression (Fig 6.3) — reconstructed data
+  reg['outlier-regression'] = box => {
+    title(box, 'One point, two stories', 'reconstructed data — toggle the outlier and watch the fit flip');
+    const XS = [18, 20, 55, 62, 72, 78, 85, 90, 93, 95, 96, 97, 100, 102, 105, 108, 110, 113, 115, 118, 120, 122, 125, 130, 135, 140, 145, 148, 150, 153];
+    const YS = [72.5, 37.7, 85.3, 161, 101.8, 175.8, 162.4, 183.8, 227.1, 243.3, 219.5, 183.1, 175.5, 128.1, 247.8, 265.7, 129.1, 248.8, 265, 168.3, 222.7, 264.3, 244, 227.2, 299.5, 282.6, 253, 245.5, 312.6, 305];
+    const OUT = [74, 690.1];
+    const v = controls(box, [
+      { k: 'outlier', label: 'Include the outlier', type: 'checkbox', v: 1 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    legend(box, [['c1', 'fitted line'], ['c2', 'outlier']]);
+    function draw() {
+      pb.innerHTML = '';
+      const xs = v.outlier ? XS.concat([OUT[0]]) : XS.slice();
+      const ys = v.outlier ? YS.concat([OUT[1]]) : YS.slice();
+      const fit = ols(xs, ys);
+      const allY = YS.concat([OUT[1]]);
+      const z = (OUT[1] - mean(allY)) / sd(allY); // CEBoK: SDs from the mean
+      const p = Plot.create(pb, { h: 260, xmin: 0, xmax: 170, ymin: 0, ymax: v.outlier ? 750 : 350, xlabel: 'weight', ylabel: 'cost' });
+      p.axes(); p.fn(x => fit.b0 + fit.b1 * x, 'series c1');
+      XS.forEach((x, i) => p.dot(x, YS[i], 'pt', 6));
+      if (v.outlier) p.dot(OUT[0], OUT[1], 'pt hot', 8);
+      ro([
+        ['Equation', `Ŷ = ${f2(fit.b0)} + ${f2(fit.b1, 3)}X`],
+        ['$R^2$', f2(fit.r2, 3), fit.r2 > 0.5 ? 'good' : 'bad'],
+        ['n', fit.n],
+        ['Outlier z (SDs from the mean)', v.outlier ? f2(Math.abs(z), 2) : '—', Math.abs(z) > 3 ? 'bad' : '']
+      ]);
+      publish(box, { n: fit.n, slope: fit.b1, intercept: fit.b0, r2: fit.r2, outlierZ: Math.abs(z) });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M6: bin explorer (Figs 6.11/6.13/6.14) — reconstructed gas-bill data
+  reg['bin-explorer'] = box => {
+    title(box, 'Bin explorer', 'reconstructed monthly gas-bill data — the same distribution, four different stories');
+    const DATA = [11, 11.25, 11.5, 11.75, 12, 12, 12, 13, 14, 15, 16, 16.5, 16.5, 26, 30, 33, 36, 37, 37, 72, 82, 92, 100, 103];
+    const v = controls(box, [
+      { k: 'width', label: 'Bin width ($)', min: 2, max: 40, step: 1, v: 15 },
+      { k: 'start', label: 'Bin start ($)', min: 0, max: 20, step: 1, v: 0 },
+      { k: 'view', label: 'View', type: 'select', v: 'hist', options: [['hist', 'Histogram'], ['box', 'Box plot']] }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    function draw() {
+      pb.innerHTML = '';
+      const s = [...DATA].sort((a, b) => a - b);
+      const m = mean(DATA);
+      const q1 = quant(s, 0.25), med = quant(s, 0.5), q3 = quant(s, 0.75), iqr = q3 - q1;
+      const loFence = q1 - 1.5 * iqr, hiFence = q3 + 1.5 * iqr;
+      const outliers = s.filter(x => x < loFence || x > hiFence);
+      const whiskLo = Math.max(s[0], Math.min(...s.filter(x => x >= loFence)));
+      const whiskHi = Math.min(s[s.length - 1], Math.max(...s.filter(x => x <= hiFence)));
+      if (v.view === 'box') {
+        const p = Plot.create(pb, { h: 160, xmin: 0, xmax: 120, ymin: 0, ymax: 1, yticks: 1, xlabel: 'monthly gas bill ($)', pad: { l: 20, r: 16, t: 20, b: 40 }, yfmt: () => '' });
+        p.axes();
+        p.rect(q1, 0.3, q3, 0.7, 'bar c1f');
+        p.seg(whiskLo, 0.5, q1, 0.5, 'marker'); p.seg(q3, 0.5, whiskHi, 0.5, 'marker');
+        p.vline(med, 'marker hot');
+        outliers.forEach(x => p.dot(x, 0.5, 'pt bad', 5));
+        p.dot(whiskLo, 0.5, 'pt', 4); p.dot(whiskHi, 0.5, 'pt', 4);
+      } else {
+        const lo = v.start, w = Math.max(1, v.width);
+        const nb = Math.ceil((s[s.length - 1] - lo) / w) + 1;
+        const cnt = new Array(Math.max(1, nb)).fill(0);
+        DATA.forEach(x => { const i = Math.floor((x - lo) / w); if (i >= 0 && i < cnt.length) cnt[i]++; });
+        const p = Plot.create(pb, { h: 240, xmin: lo, xmax: lo + cnt.length * w, ymin: 0, ymax: Math.max(...cnt) * 1.15 || 1, xlabel: 'monthly gas bill ($)', ylabel: 'frequency' });
+        p.axes(); cnt.forEach((c, i) => p.rect(lo + i * w, 0, lo + (i + 1) * w, c, 'bar'));
+        p.vline(m, 'marker c1');
+      }
+      ro([
+        ['n', DATA.length], ['Mean', '$' + f2(m, 2)], ['Min', '$' + s[0]],
+        ['Q1', '$' + f2(q1, 2)], ['Median', '$' + f2(med, 2)], ['Q3', '$' + f2(q3, 2)],
+        ['Bills < $11.15', DATA.filter(x => x < 11.15).length],
+        ['Outliers (1.5×IQR rule)', outliers.join(', ') || 'none']
+      ]);
+      publish(box, { n: DATA.length, mean: m, q1, median: med, q3, iqr, outlierCount: outliers.length });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M6: Naive Bayes / kNN classifier (Figs 6.20–6.32)
+  reg['ml-classifier'] = box => {
+    title(box, 'Naive Bayes vs. kNN', 'weight/power instrument classes — click the plane to test a new point');
+    const rnd = M.rng(42);
+    const gen = (n, mx, my, sx, sy, cls) => Array.from({ length: n }, () => ({ x: mx + sx * M.randn(rnd), y: my + sy * M.randn(rnd), cls }));
+    const AB = gen(10, 1100, 1600, 100, 100, 'AB');
+    const CD = gen(10, 900, 1400, 100, 100, 'CD');
+    const pts = AB.concat(CD);
+    const S_AB = { mx: 1100, sx: 100, my: 1600, sy: 100 }, S_CD = { mx: 900, sx: 100, my: 1400, sy: 100 };
+    let px = 1050, py = 1525;
+    const v = controls(box, [
+      { k: 'k', label: 'kNN neighbors (k)', min: 1, max: 15, step: 2, v: 3 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    legend(box, [['c1', 'Class A/B'], ['c3', 'Class C/D'], ['hot', 'new point']]);
+    let p;
+    function place(e) {
+      const [x, y] = p.evt(e);
+      px = Math.round(x); py = Math.round(y); draw();
+    }
+    function draw() {
+      pb.innerHTML = '';
+      p = Plot.create(pb, { h: 300, xmin: 600, xmax: 1400, ymin: 1100, ymax: 1900, xlabel: 'weight', ylabel: 'power' });
+      p.axes();
+      AB.forEach(q => p.dot(q.x, q.y, 'pt c1', 5));
+      CD.forEach(q => p.dot(q.x, q.y, 'pt c3', 5));
+      p.svg.addEventListener('pointerdown', place);
+      // Naive Bayes: one-tailed normal probability per feature (CEBoK method), product then normalized
+      const oneTail = z => 1 - M.Phi(Math.abs(z));
+      const zwAB = (px - S_AB.mx) / S_AB.sx, zwCD = (px - S_CD.mx) / S_CD.sx;
+      const zpAB = (py - S_AB.my) / S_AB.sy, zpCD = (py - S_CD.my) / S_CD.sy;
+      const pw_AB = oneTail(zwAB), pw_CD = oneTail(zwCD);
+      const pp_AB = oneTail(zpAB), pp_CD = oneTail(zpCD);
+      const prodAB = pw_AB * pp_AB, prodCD = pw_CD * pp_CD;
+      const total = prodAB + prodCD || 1;
+      const nbAB = prodAB / total, nbCD = prodCD / total;
+      // kNN by Euclidean distance in raw units
+      const withD = pts.map(q => ({ ...q, d: Math.hypot(q.x - px, q.y - py) })).sort((a, b) => a.d - b.d);
+      const k = Math.round(v.k);
+      const near = withD.slice(0, k);
+      const votesAB = near.filter(q => q.cls === 'AB').length, votesCD = k - votesAB;
+      const knnCls = votesAB >= votesCD ? 'AB' : 'CD';
+      near.forEach(q => p.seg(px, py, q.x, q.y, 'marker'));
+      p.dot(px, py, 'pt hot', 8);
+      ro([
+        ['New point', `weight ${f2(px, 0)}, power ${f2(py, 0)}`],
+        ['Weight prob. (A/B vs C/D)', `${pct(pw_AB, 2)} vs ${pct(pw_CD, 2)}`],
+        ['Power prob. (A/B vs C/D)', `${pct(pp_AB, 2)} vs ${pct(pp_CD, 2)}`],
+        ['Naive Bayes normalized', `A/B ${pct(nbAB, 2)}, C/D ${pct(nbCD, 2)}`, nbAB > nbCD ? 'c1t' : 'c2t'],
+        [`kNN (k=${k}) vote`, `${votesAB} A/B, ${votesCD} C/D → ${knnCls}`]
+      ]);
+      publish(box, { weightProbAB: pw_AB, weightProbCD: pw_CD, powerProbAB: pp_AB, powerProbCD: pp_CD, nbProbAB: nbAB, nbProbCD: nbCD, knnClass: knnCls, k });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M6: logistic regression risk model (Table 6.3/6.4)
+  reg['logistic-risk'] = box => {
+    title(box, 'Logistic risk model', 'project size, schedule, and team features → probability of high cost risk');
+    const COEF = { b0: -8.0, size: 0.9, dur: 0.5, exp: -0.8, team: 0.2, cx: 1.5, mkt: 0.05 };
+    const v = controls(box, [
+      { k: 'size', label: 'Project size ($M)', min: 0, max: 20, step: 0.5, v: 4 },
+      { k: 'dur', label: 'Duration (months)', min: 1, max: 30, step: 1, v: 10 },
+      { k: 'exp', label: 'Team experience (yrs)', min: 0, max: 15, step: 0.5, v: 6 },
+      { k: 'team', label: 'Team members', min: 1, max: 25, step: 1, v: 9 },
+      { k: 'cx', label: 'Complexity score', min: 0, max: 10, step: 0.5, v: 6 },
+      { k: 'mkt', label: 'Market volatility index', min: 0, max: 100, step: 1, v: 65 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    function draw() {
+      pb.innerHTML = '';
+      const terms = [
+        ['Intercept', COEF.b0],
+        ['Size', COEF.size * v.size],
+        ['Duration', COEF.dur * v.dur],
+        ['Experience', COEF.exp * v.exp],
+        ['Team members', COEF.team * v.team],
+        ['Complexity', COEF.cx * v.cx],
+        ['Market volatility', COEF.mkt * v.mkt]
+      ];
+      const logOdds = terms.reduce((s, t) => s + t[1], 0);
+      const P = 1 / (1 + Math.exp(-logOdds));
+      const xmax = Math.max(1, ...terms.map(t => Math.abs(t[1]))) * 1.2;
+      const p = Plot.create(pb, { h: 220, xmin: -xmax, xmax, ymin: 0, ymax: terms.length, yticks: terms.length, xlabel: 'contribution to log-odds', yfmt: () => '', pad: { l: 20, r: 16, t: 10, b: 40 } });
+      p.axes(); p.vline(0, 'marker');
+      terms.forEach((t, i) => {
+        const y0 = terms.length - i - 0.75, y1 = terms.length - i - 0.25;
+        p.rect(0, y0, t[1], y1, t[1] >= 0 ? 'bar c2f' : 'bar c1f');
+        p.text(t[1] >= 0 ? t[1] + 0.15 : t[1] - 0.15, (y0 + y1) / 2, `${t[0]}: ${f2(t[1], 2)}`, 'annot', t[1] >= 0 ? 'start' : 'end');
+      });
+      ro([
+        ['Log-odds', f2(logOdds, 2)],
+        ['P(high risk) = 1/(1+e^-logodds)', pct(P, 3), P > 0.5 ? 'bad' : 'good']
+      ]);
+      publish(box, { logOdds, p: P });
+    }
+    draw();
+  };
+
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();
