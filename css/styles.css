@@ -272,7 +272,9 @@ main { max-width: 1280px; margin: 0 auto; padding: 24px; }
 .opt:hover:not(:disabled) { border-color: var(--accent); }
 .opt.right { border-color: var(--good); background: var(--good-soft); }
 .opt.wrong { border-color: var(--bad); background: var(--bad-soft); opacity: .75; }
+.opt.on { border-color: var(--accent); background: var(--accent-soft); }
 .opt:disabled { cursor: default; }
+.w-note .opt, .w-controls .opt, .w-table .opt { display: inline-block; margin: 3px 4px 3px 0; padding: 6px 10px; font-size: .88rem; }
 .check-input { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .check-input input { flex: 1; min-width: 160px; padding: 9px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; background: var(--paper); color: var(--ink); font: 1rem var(--sans); }
 .check-input input:focus { outline: none; border-color: var(--accent); }

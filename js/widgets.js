@@ -1414,5 +1414,203 @@ const Widgets = (() => {
     draw();
   };
 
+  // M4: data quality ladder — order data types best to worst
+  reg['data-quality-ladder'] = box => {
+    title(box, 'Rank the data quality', 'drag isn\'t required — use the arrows to order best (top) to worst (bottom)');
+    const items = [
+      { k: 'actuals', t: 'Actuals for a completed program/contract', fb: 'Best: actuals reflect what was really spent, no estimating left to do.' },
+      { k: 'eac90', t: 'EAC for a contract >90% complete', fb: 'Next best: EACs improve as a contract nears completion — but some troubled programs delay re-baselining, so 90% complete is not always a clean line, so check before trusting it.' },
+      { k: 'scheduleB', t: 'Schedule B contract line item price (~EAC at 0% complete)', fb: 'Weaker: a line item price is really just the EAC at 0% complete — it does not reflect what was actually spent.' },
+      { k: 'historical', t: 'Historical / original budget data', fb: 'Worst: budget data is not actual spent cost, and it usually exists at too high a level to be useful.' }
+    ];
+    let order = ['scheduleB', 'historical', 'actuals', 'eac90'];
+    const list = E('div', 'w-table'); box.appendChild(list);
+    const fbBox = E('div', 'w-note'); box.appendChild(fbBox);
+    const ro = readout(box);
+    function byK(k) { return items.find(i => i.k === k); }
+    function move(i, d) {
+      const j = i + d;
+      if (j < 0 || j >= order.length) return;
+      [order[i], order[j]] = [order[j], order[i]];
+      draw();
+    }
+    function draw(checked) {
+      list.innerHTML = '';
+      const tbl = E('table');
+      order.forEach((k, i) => {
+        const tr = E('tr');
+        tr.innerHTML = `<td>${i + 1}</td><td>${Render.inline(byK(k).t)}</td><td></td>`;
+        const cell = tr.lastChild;
+        const up = E('button', 'opt', '↑'); up.type = 'button'; up.disabled = i === 0;
+        const dn = E('button', 'opt', '↓'); dn.type = 'button'; dn.disabled = i === order.length - 1;
+        up.addEventListener('click', () => move(i, -1));
+        dn.addEventListener('click', () => move(i, 1));
+        cell.append(up, dn);
+        tbl.appendChild(tr);
+      });
+      list.appendChild(tbl);
+      const correct = ['actuals', 'eac90', 'scheduleB', 'historical'];
+      const isRight = order.join() === correct.join();
+      if (checked) {
+        fbBox.innerHTML = correct.map((k, i) => `<div class="ro ${order[i] === k ? 'good' : 'bad'}"><b>${i + 1}.</b> ${Render.inline(byK(k).fb)}</div>`).join('');
+      } else fbBox.innerHTML = '';
+      ro([['Order matches CEBoK ranking', isRight ? 'yes' : 'not yet', isRight ? 'good' : 'bad']]);
+      publish(box, { correct: isRight, order: order.slice() });
+      return isRight;
+    }
+    const btn = E('button', 'opt', 'Check my order'); btn.type = 'button';
+    btn.addEventListener('click', () => draw(true));
+    box.appendChild(btn);
+    draw();
+  };
+
+  // M4: unit conversion chain — chain factors to normalize EUR/meter to USD/foot
+  reg['unit-chain'] = box => {
+    title(box, 'Chain the conversion factors', 'even NASA lost a $125M Mars orbiter in 1999 over a metric/English mix-up — get the chain right');
+    const v = controls(box, [
+      { k: 'scenario', label: 'Scenario', type: 'select', v: 'rate', options: [['rate', 'General data point: €5/meter'], ['cable', 'Optical cable type 1: €10/meter']] }
+    ], draw);
+    const steps = E('div', 'w-controls'); box.appendChild(steps);
+    const ro = readout(box);
+    const FACTORS = [
+      { k: 'rate', label: '× $1.13 USD/€ (2019-03-23 rate)', mul: 1.13, unit: 'USD/meter' },
+      { k: 'in', label: '÷ 39.37 inches/meter', mul: 1 / 39.37, unit: 'USD/inch' },
+      { k: 'ft', label: '× 12 inches/foot', mul: 12, unit: 'USD/foot' }
+    ];
+    let applied = [];
+    function base() { return v.scenario === 'cable' ? 10 : 5; }
+    function target() { return v.scenario === 'cable' ? 3.44 : 1.72; }
+    function draw() {
+      applied = [];
+      render();
+    }
+    function render() {
+      steps.innerHTML = '';
+      let val = base(), unit = 'EUR/meter';
+      applied.forEach(k => { const f = FACTORS.find(x => x.k === k); val *= f.mul; unit = f.unit; });
+      const rowLab = E('div', 'w-note', `Start: ${f2(base(), 0)} EUR/meter. Running value: <b>${f2(val, 3)} ${unit}</b>`);
+      steps.appendChild(rowLab);
+      const btnWrap = E('div'); btnWrap.style.marginTop = '6px';
+      FACTORS.forEach(f => {
+        const b = E('button', 'opt', f.label); b.type = 'button';
+        b.disabled = applied.includes(f.k);
+        b.addEventListener('click', () => { applied.push(f.k); render(); });
+        btnWrap.appendChild(b);
+      });
+      steps.appendChild(btnWrap);
+      const done = applied.length === FACTORS.length;
+      const right = done && Math.abs(val - target()) < 0.01;
+      ro([
+        ['Factors applied', applied.length + ' of 3'],
+        ['Result', done ? `$${f2(val, 2)}/foot` : '(apply all 3 factors)', done ? (right ? 'good' : 'bad') : ''],
+        ['Target (source)', `$${f2(target(), 2)}/foot`]
+      ]);
+      publish(box, { value: val, applied: applied.length, correct: !!right });
+    }
+    draw();
+  };
+
+  // M4: contextual completeness sorter — good vs poor context
+  reg['context-sorter'] = box => {
+    title(box, 'Sort by contextual completeness', 'tap each data point: Good or Poor context, then reveal');
+    const items = [
+      { k: 'ram', txt: 'Procurement of one 1998 Dodge Ram 1500 regular cab 4x4 truck: standard configuration, 40/60 split cloth seats, optional power package, optional tow package, manual transmission, $18,500 in March 1998, excluding $750 shipping/destination.', ans: 'good', fb: 'Good: quantity, model, all accessory packages, price, the FY98 dollar year, and what is excluded ($750 shipping) are all identified.' },
+      { k: 'xyz', txt: 'Fabricating sub-assembly "XYZ": 99.5 labor hours for the 1st unit, 89 hours for the 5th, 84 hours for the 10th, material cost constant at $2,350 (FY01) per assembly.', ans: 'good', fb: 'Good: specific activity/manufacturer, labor hours (not dollars, so labor rate can be applied later), material cost with its dollar year — enough to build a learning curve.' },
+      { k: 'om', txt: 'O&M utilities cost $36,500.', ans: 'poor', fb: 'Poor: unknown activity, unknown site/facility scope, unknown dollar year, unknown period (monthly vs. annual) — any of these gaps makes the data unusable.' },
+      { k: 'diagram', txt: 'A diagram showing what an object is and how it works.', ans: 'poor', fb: 'Poor: diagrams provide very little insight into cost data by themselves.' },
+      { k: 'website', txt: 'Unsubstantiated internet data on a technical spec.', ans: 'poor', fb: 'Poor: internet data must be carefully scrutinized before use; if unsubstantiated it is not a good resource.' }
+    ];
+    let picks = {};
+    const list = E('div'); box.appendChild(list);
+    const ro = readout(box);
+    function render(reveal) {
+      list.innerHTML = '';
+      items.forEach(it => {
+        const row = E('div', 'w-note');
+        const p = E('p', null, Render.inline(it.txt)); row.appendChild(p);
+        const wrap = E('div');
+        ['good', 'poor'].forEach(choice => {
+          const b = E('button', 'opt' + (picks[it.k] === choice ? ' ' + (reveal ? (choice === it.ans ? 'right' : 'wrong') : 'on') : ''), choice === 'good' ? 'Good context' : 'Poor context');
+          b.type = 'button';
+          b.addEventListener('click', () => { picks[it.k] = choice; render(false); });
+          wrap.appendChild(b);
+        });
+        row.appendChild(wrap);
+        if (reveal && picks[it.k]) row.appendChild(E('div', 'ro ' + (picks[it.k] === it.ans ? 'good' : 'bad'), Render.inline(it.fb)));
+        list.appendChild(row);
+      });
+    }
+    const btn = E('button', 'opt', 'Reveal answers'); btn.type = 'button';
+    btn.addEventListener('click', () => {
+      render(true);
+      const nCorrect = items.filter(it => picks[it.k] === it.ans).length;
+      ro([['Correct', nCorrect + ' of ' + items.length, nCorrect === items.length ? 'good' : '']]);
+      publish(box, { correct: nCorrect, total: items.length });
+    });
+    box.appendChild(btn);
+    render(false);
+    publish(box, { correct: 0, total: items.length });
+  };
+
+  // M4: scale of measurement sorter + Celsius/Fahrenheit interval demo
+  reg['scale-sorter'] = box => {
+    title(box, 'Classify the scale of measurement', 'nominal, ordinal, interval, or ratio?');
+    const SCALES = [['nominal', 'Nominal'], ['ordinal', 'Ordinal'], ['interval', 'Interval'], ['ratio', 'Ratio']];
+    const items = [
+      { k: 'rank', txt: 'Finishing rank: 1st, 2nd, 3rd', ans: 'ordinal', fb: 'Ordinal: only greater-than/less-than in order is meaningful, not the size of the gaps.' },
+      { k: 'year', txt: 'The year (e.g., 1995 to 2005)', ans: 'interval', fb: 'Interval: differences are meaningful (1995-2005 is twice as long as 1995-2000), but there is no true zero.' },
+      { k: 'celsius', txt: 'Temperature in degrees Celsius', ans: 'interval', fb: 'Interval: 30°C to 60°C is a 30-degree gap, but 60°C is not "twice as hot" as 30°C — that only holds on a ratio scale like Fahrenheit-independent absolute temperature.' },
+      { k: 'money', txt: '$2M compared to $1M (same year, same currency)', ans: 'ratio', fb: 'Ratio: $2M really is twice as much money as $1M once normalized to the same year and currency — true zero exists.' },
+      { k: 'risk', txt: 'Risk category: "high risk" vs. "low risk"', ans: 'nominal', fb: 'Nominal/qualitative: a categorical label, even though it may be disguised as ordinal.' },
+      { k: 'jersey', txt: 'Soccer jersey numbers (2 = fullback, 10 = midfielder, 15 = forward)', ans: 'interval', fb: 'Loosely interval: the numbers map to field position, so higher numbers sit further forward — they act like an interval scale, not a bare label.' },
+      { k: 'baseball', txt: 'Baseball uniform numbers', ans: 'nominal', fb: 'Nominal: a unique label only — it conveys no other information about the player.' }
+    ];
+    let picks = {};
+    const list = E('div'); box.appendChild(list);
+    const ro = readout(box);
+    function render(reveal) {
+      list.innerHTML = '';
+      items.forEach(it => {
+        const row = E('div', 'w-note');
+        row.appendChild(E('p', null, Render.inline(it.txt)));
+        const wrap = E('div');
+        SCALES.forEach(([sk, label]) => {
+          const b = E('button', 'opt' + (picks[it.k] === sk ? ' ' + (reveal ? (sk === it.ans ? 'right' : 'wrong') : 'on') : ''), label);
+          b.type = 'button';
+          b.addEventListener('click', () => { picks[it.k] = sk; render(false); });
+          wrap.appendChild(b);
+        });
+        row.appendChild(wrap);
+        if (reveal && picks[it.k]) row.appendChild(E('div', 'ro ' + (picks[it.k] === it.ans ? 'good' : 'bad'), Render.inline(it.fb)));
+        list.appendChild(row);
+      });
+    }
+    const btn = E('button', 'opt', 'Reveal answers'); btn.type = 'button';
+    btn.addEventListener('click', () => {
+      render(true);
+      const nCorrect = items.filter(it => picks[it.k] === it.ans).length;
+      ro([['Correct', nCorrect + ' of ' + items.length, nCorrect === items.length ? 'good' : '']]);
+      drawDemo();
+    });
+    box.appendChild(btn);
+    render(false);
+
+    // Celsius/Fahrenheit interval demo
+    title(box, 'Celsius/Fahrenheit demo', 'doubling C does not double F');
+    const v = controls(box, [{ k: 'c', label: 'Celsius', min: 0, max: 100, step: 1, v: 30 }], drawDemo);
+    const ro2 = readout(box);
+    function drawDemo() {
+      const f = v.c * 9 / 5 + 32;
+      const f2x = (v.c * 2) * 9 / 5 + 32;
+      ro2([
+        [`${f2(v.c, 0)}°C`, `${f2(f, 1)}°F`],
+        [`${f2(v.c * 2, 0)}°C (double the Celsius)`, `${f2(f2x, 1)}°F (not double the Fahrenheit)`],
+        ['Source example', '30°C = 86°F, 60°C = 140°F, but 2×86 ≠ 140']
+      ]);
+      publish(box, { correct: Object.keys(picks).filter(k => picks[k] === items.find(i => i.k === k).ans).length, total: items.length, c: v.c, f });
+    }
+    drawDemo();
+  };
+
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();

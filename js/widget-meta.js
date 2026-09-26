@@ -34,7 +34,11 @@
     'multi-driver': { controls: ['mode'], setters: [], outputs: ['r2', 'cv', 'mode'] },
     'site-activation': { controls: ['addNew', 'ws'], setters: [], outputs: ['intercept', 'slope', 'r2', 'pred'] },
     'cer-forms': { controls: ['form', 'a', 'b', 'x', 'log'], setters: [], outputs: ['form', 'a', 'b', 'y'] },
-    'calibration': { controls: ['x1', 'y2'], setters: [], outputs: ['shift', 'calIntercept'] }
+    'calibration': { controls: ['x1', 'y2'], setters: [], outputs: ['shift', 'calIntercept'] },
+    'data-quality-ladder': { controls: [], setters: [], outputs: ['correct', 'order'] },
+    'unit-chain': { controls: ['scenario'], setters: [], outputs: ['value', 'applied', 'correct'] },
+    'context-sorter': { controls: [], setters: [], outputs: ['correct', 'total'] },
+    'scale-sorter': { controls: ['c'], setters: [], outputs: ['correct', 'total', 'c', 'f'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);
