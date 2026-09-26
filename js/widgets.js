@@ -277,7 +277,7 @@ const Widgets = (() => {
   reg['regression'] = box => {
     title(box, 'Regression playground', 'click to add points, drag to move, right-click to delete');
     const presets = {
-      seeker: ['Seeker (guide)', [[4, 5], [7, 5], [8, 10], [12, 7], [16, 13]]],
+      seeker: ['Seeker (CEBoK)', [[4, 5], [7, 5], [8, 10], [12, 7], [16, 13]]],
       tight: ['Tight linear', [[2, 4.1], [4, 6.2], [6, 7.8], [8, 10.3], [10, 11.9], [12, 14.2], [14, 15.8], [16, 18.1]]],
       outlier: ['One bad point', [[2, 4.1], [4, 6.2], [6, 7.8], [8, 10.3], [10, 11.9], [12, 14.2], [14, 15.8], [16, 2]]],
       curved: ['Curved (try a transform)', [[1, 2], [2, 2.6], [4, 3.9], [6, 5.8], [8, 8.4], [10, 11.8], [12, 16], [14, 21], [16, 27]]],
@@ -2160,6 +2160,268 @@ const Widgets = (() => {
         [`CUMAV unit ${N} cost = total(${N}) − total(${N - 1})`, f2(cumavUnitN)]
       ]);
       publish(box, { unitTotal, cumavTotalN, unitUnitN, cumavUnitN });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M8: SST = SSR + SSE decomposition, blending mean-line to OLS fit
+  reg['r2-split'] = box => {
+    title(box, 'SST = SSR + SSE', 'drag the points, then blend from the mean line to the least-squares line');
+    let pts = (preset(box, 'data', null) || [[4, 5], [7, 5], [8, 10], [12, 7], [16, 13]]).map(p => p.slice());
+    const v = controls(box, [
+      { k: 'blend', label: 'Blend: mean line → OLS fit', min: 0, max: 1, step: 0.01, v: 1, fmt: x => (x * 100).toFixed(0) + '%' }
+    ], draw);
+    const top = E('div'), bot = E('div');
+    box.append(top, bot);
+    const ro = readout(box);
+    const p = Plot.create(top, { xmin: 0, xmax: 20, ymin: 0, ymax: 16, xlabel: 'X (cost driver)', ylabel: 'Y (cost)' });
+    const bp = Plot.create(bot, { h: 130, xmin: 0, xmax: 1, ymin: 0, ymax: 60, xticks: 0, xlabel: '', ylabel: 'sum of squares' });
+    let drag = -1;
+    const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
+    p.svg.addEventListener('pointerdown', e => {
+      const [x, y] = p.evt(e);
+      let best = -1, bd = 1.1;
+      pts.forEach((q, i) => { const d = Math.hypot((q[0] - x) / 20, (q[1] - y) / 16); if (d < bd) { bd = d; best = i; } });
+      drag = best; if (drag >= 0) p.svg.setPointerCapture(e.pointerId);
+    });
+    p.svg.addEventListener('pointermove', e => {
+      if (drag < 0) return;
+      const [x, y] = p.evt(e);
+      pts[drag] = [clamp(x, 0, 20), clamp(y, 0, 16)];
+      draw();
+    });
+    p.svg.addEventListener('pointerup', () => drag = -1);
+    p.svg.addEventListener('pointercancel', () => drag = -1);
+    function draw() {
+      p.clear(); p.axes(); bp.clear(); bp.axes();
+      if (pts.length < 3) { ro([['Need at least 3 points', '']]); publish(box, { sst: NaN, ssr: NaN, sse: NaN, r2: NaN, blend: v.blend }); return; }
+      const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]);
+      const r = ols(xs, ys);
+      const t = v.blend;
+      const slope = t * r.b1, intercept = (1 - t) * r.my + t * r.b0;
+      const yhat = xs.map(x => intercept + slope * x);
+      const sse = ys.reduce((s, y, i) => s + (y - yhat[i]) ** 2, 0);
+      const ssr = yhat.reduce((s, yh) => s + (yh - r.my) ** 2, 0);
+      p.hline(r.my, 'marker c2');
+      p.fn(x => intercept + slope * x, 'series c1');
+      pts.forEach((q, i) => { p.seg(q[0], q[1], q[0], yhat[i], 'marker'); p.dot(q[0], q[1], i === drag ? 'pt hot' : 'pt', 6); });
+      p.dot(r.mx, r.my, 'pt mean', 5);
+      const ymax = Math.max(16, ...ys) * 1.1; p.o.ymax = ymax;
+      bp.o.ymax = Math.max(60, r.sst) * 1.15;
+      bp.rect(0.15, 0, 0.4, r.sst, 'band');
+      bp.text(0.275, r.sst + bp.o.ymax * 0.03, 'SST', 'annot', 'middle');
+      bp.rect(0.6, 0, 0.85, ssr, 'series c2'); // stub base
+      bp.rect(0.6, ssr, 0.85, ssr + sse, 'sq');
+      bp.text(0.725, ssr + sse + bp.o.ymax * 0.03, 'SSR + SSE', 'annot', 'middle');
+      bp.text(0.725, ssr / 2, 'SSR', 'annot', 'middle');
+      bp.text(0.725, ssr + sse / 2, 'SSE', 'annot', 'middle');
+      const r2 = ssr / r.sst;
+      ro([
+        ['SST (data spread around ȳ, fixed)', f2(r.sst, 2)],
+        ['SSR (explained by the line)', f2(ssr, 2)],
+        ['SSE (left over as residual)', f2(sse, 2)],
+        ['SSR + SSE', f2(ssr + sse, 2), Math.abs(ssr + sse - r.sst) < 0.01 * r.sst ? 'good' : 'bad'],
+        ['R² = SSR/SST', f2(r2, 3)],
+        ['Exact at blend = 100% (OLS); off the line, SSR+SSE ≠ SST', '']
+      ]);
+      publish(box, { sst: r.sst, ssr, sse, r2, blend: t });
+    }
+    box.w.setters.data = arr => { pts = arr.map(p2 => p2.slice()); draw(); };
+    draw();
+  };
+
+  // ======================================================================
+  // M8: confidence and prediction bands
+  reg['ci-bands'] = box => {
+    title(box, 'Confidence vs. prediction bands', 'drag X₀, change the confidence level');
+    const xs = [4, 7, 8, 12, 16], ys = [5, 5, 10, 7, 13];
+    const r = ols(xs, ys);
+    const df = r.n - 2, mse = r.sse / df, see = Math.sqrt(mse);
+    const v = controls(box, [
+      { k: 'level', label: 'Confidence level', type: 'select', v: '0.95', options: [['0.68', '68%'], ['0.95', '95%'], ['0.99', '99%']] },
+      { k: 'x0', label: 'X₀', min: 1, max: 19, step: 0.1, v: 11 }
+    ], draw);
+    const top = E('div'); box.appendChild(top);
+    const ro = readout(box);
+    legend(box, [['c1', 'OLS fit'], ['band', '95%-style mean CI'], ['sq', 'prediction interval']]);
+    const p = Plot.create(top, { xmin: 0, xmax: 20, ymin: -6, ymax: 22, xlabel: 'X (cost driver)', ylabel: 'Y (cost)' });
+    function bandPath(loFn, hiFn, cls) {
+      const n = 60, up = [], dn = [];
+      for (let i = 0; i <= n; i++) { const x = 0.3 + (19.7 - 0.3) * i / n; up.push([p.x(x), p.y(hiFn(x))]); dn.push([p.x(x), p.y(loFn(x))]); }
+      const d = 'M' + up.concat(dn.reverse()).map(q => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join('L') + 'Z';
+      return Plot.svgEl('path', { d, class: cls }, p.svg);
+    }
+    function draw() {
+      p.clear(); p.axes();
+      const level = +v.level, x0 = v.x0;
+      const t = M.tinv(1 - (1 - level) / 2, df);
+      const meanHalf = x => t * see * Math.sqrt(1 / r.n + (x - r.mx) ** 2 / r.sxx);
+      const predHalf = x => t * see * Math.sqrt(1 + 1 / r.n + (x - r.mx) ** 2 / r.sxx);
+      const yhatFn = x => r.b0 + r.b1 * x;
+      bandPath(x => yhatFn(x) - predHalf(x), x => yhatFn(x) + predHalf(x), 'sq');
+      bandPath(x => yhatFn(x) - meanHalf(x), x => yhatFn(x) + meanHalf(x), 'band');
+      p.fn(yhatFn, 'series c1');
+      xs.forEach((x, i) => p.dot(x, ys[i], 'pt', 5));
+      p.vline(x0, 'marker hot');
+      const yhat0 = yhatFn(x0), mH = meanHalf(x0), pH = predHalf(x0);
+      p.dot(x0, yhat0, 'pt hot', 6);
+      const seB1 = see / Math.sqrt(r.sxx);
+      const slopeHalf = t * seB1;
+      ro([
+        ['t(.5+level/2, df=' + df + ')', f2(t, 3)],
+        ['ŷ at X₀', f2(yhat0)],
+        ['Mean-response CI', `(${f2(yhat0 - mH)}, ${f2(yhat0 + mH)})`],
+        ['Prediction interval', `(${f2(yhat0 - pH)}, ${f2(yhat0 + pH)})`],
+        ['Slope CI', `(${f2(r.b1 - slopeHalf, 2)}, ${f2(r.b1 + slopeHalf, 2)})`],
+        ['Bands are narrowest at X̄ = ' + f2(r.mx, 1), '']
+      ]);
+      publish(box, { yhat0, meanLo: yhat0 - mH, meanHi: yhat0 + mH, predLo: yhat0 - pH, predHi: yhat0 + pH, slopeLo: r.b1 - slopeHalf, slopeHi: r.b1 + slopeHalf, t, level, x0 });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M8: minding the intercept before a log-log transform (Fig. 8.31 "data bowing")
+  reg['intercept-bow'] = box => {
+    title(box, 'Minding the intercept', 'subtract a constant before the power fit, and watch the bow disappear');
+    const xs = [0.834, 0.305, 1.528, 2.524, 2.114, 4.904];
+    const ys = xs.map(x => 3 + 1 / x); // true model y = 3 + 1/x (CEBoK Fig. 8.31 pattern)
+    const v = controls(box, [
+      { k: 'c', label: 'Constant c subtracted from Y', min: 0, max: 3.2, step: 0.1, v: 0 }
+    ], draw);
+    const row = E('div', 'w-2col'); const L = E('div'), R = E('div'); row.append(L, R);
+    box.appendChild(row);
+    const ro = readout(box);
+    const p1 = Plot.create(L, { h: 240, xmin: 0, xmax: 5.5, ymin: -3, ymax: 13, xlabel: 'X', ylabel: 'Y (unit space)' });
+    const p2 = Plot.create(R, { h: 240, xmin: -1.3, xmax: 1.7, ymin: -2, ymax: 2.5, xlabel: 'ln X', ylabel: 'ln (Y − c)' });
+    function draw() {
+      p1.clear(); p1.axes(); p2.clear(); p2.axes();
+      const c = v.c;
+      const adj = ys.map(y => y - c);
+      const keep = adj.map(y => y > 0);
+      const lx = [], ly = [];
+      xs.forEach((x, i) => { if (keep[i]) { lx.push(Math.log(x)); ly.push(Math.log(adj[i])); } });
+      xs.forEach((x, i) => { p1.dot(x, ys[i], 'pt alt', 5); if (keep[i]) p1.dot(x, adj[i], 'pt', 5); });
+      if (lx.length >= 3) {
+        const r = ols(lx, ly);
+        const a = Math.exp(r.b0), b = r.b1;
+        p1.fn(x => a * Math.pow(x, b) + c, 'series c1');
+        p2.fn(x => r.b0 + r.b1 * x, 'series c1');
+        xs.forEach((x, i) => { if (keep[i]) p2.dot(Math.log(x), Math.log(adj[i]), 'pt', 5); });
+        const excluded = keep.filter(k => !k).length;
+        ro([
+          ['Fitted (adjusted) power law', `y − c = ${f2(a, 4)}·X^${f2(b, 4)}`],
+          ['Full model', `y = ${f2(a, 4)}·X^${f2(b, 4)} + ${f2(c, 2)}`],
+          ['R² (log space)', f2(r.r2, 4)],
+          ['At c = 0: matches CEBoK y = 4.2867X⁻⁰²⁴⁶⁷, R² = 0.9162', ''],
+          ['At c = 3: reduces to y − 3 = X⁻¹, R² = 1 (true model recovered)', ''],
+          excluded ? [`${excluded} point(s) went ≤ 0 after subtracting c — excluded from the log fit`, '', 'bad'] : ['All points positive after adjustment', '', 'good']
+        ]);
+        publish(box, { a, b, r2: r.r2, c });
+      } else {
+        ro([['c too large — fewer than 3 points remain positive', '']]);
+        publish(box, { a: NaN, b: NaN, r2: NaN, c });
+      }
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M8: nested-model selection (Fig. 8.37) — deterministic reconstruction, fixed seed
+  reg['nested-model'] = box => {
+    title(box, 'Nested model selection', 'drop the least-significant variable and compare adjusted R², SEE, and CV');
+    // Fixed-seed synthetic dataset (bounded local search, see repo history) whose full/x3-dropped
+    // models land close to CEBoK Fig. 8.37: adjR2 63.6%/64.0%, SEE .178/.177, CV 16.1%/15.9%.
+    const D = {
+      x1: [11.614, 9.979, 8.095, 3.914, 10.459, 9.18, 10.362, 3.92, 2.852, 9.116, 6.03, 2.361, 9.607, 9.891],
+      x2: [4.205, 7.065, 8.222, 6.078, 5.989, 4.333, 4.25, 5.268, 6.78, 8.134, 7.793, 9.614, 4.747, 9.511],
+      x3: [0.05, 4.667, 6.506, 8.398, 6.718, 6.429, 9.597, 9.143, 2.323, 10.454, 2.93, 8.206, 2.732, 1.199],
+      y: [2.1404, 1.7292, 2.3178, 1.3186, 1.7446, 1.5486, 1.6584, 1.2401, 1.2339, 1.7276, 1.5238, 1.2991, 1.7702, 2.0307]
+    };
+    function inv(A) {
+      const n = A.length, I = A.map((row, i) => row.map((_, j) => (i === j ? 1 : 0)));
+      const M = A.map((row, i) => row.concat(I[i]));
+      for (let i = 0; i < n; i++) {
+        let piv = i; for (let k = i + 1; k < n; k++) if (Math.abs(M[k][i]) > Math.abs(M[piv][i])) piv = k;
+        [M[i], M[piv]] = [M[piv], M[i]];
+        const d = M[i][i];
+        for (let j = 0; j < 2 * n; j++) M[i][j] /= d;
+        for (let k = 0; k < n; k++) if (k !== i) { const f = M[k][i]; for (let j = 0; j < 2 * n; j++) M[k][j] -= f * M[i][j]; }
+      }
+      return M.map(row => row.slice(n));
+    }
+    function lgamma(z) {
+      const g = [676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+      if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lgamma(1 - z);
+      z -= 1; let x = 0.99999999999980993;
+      for (let i = 0; i < 8; i++) x += g[i] / (z + i + 1);
+      const t = z + 7.5;
+      return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+    }
+    function cf(x, a, b) {
+      let c = 1, d = 1 - (a + b) * x / (a + 1); d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); let h = d;
+      for (let m = 1; m < 200; m++) {
+        const m2 = 2 * m;
+        let aa = m * (b - m) * x / ((a + m2 - 1) * (a + m2));
+        d = 1 + aa * d; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); c = 1 + aa / c; h *= d * c;
+        aa = -(a + m) * (a + b + m) * x / ((a + m2) * (a + m2 + 1));
+        d = 1 + aa * d; d = 1 / (Math.abs(d) < 1e-30 ? 1e-30 : d); c = 1 + aa / c;
+        const del = d * c; h *= del; if (Math.abs(del - 1) < 1e-10) break;
+      }
+      return h;
+    }
+    function ibeta(x, a, b) {
+      if (x <= 0) return 0; if (x >= 1) return 1;
+      const front = Math.exp(Math.log(x) * a + Math.log(1 - x) * b + lgamma(a + b) - lgamma(a) - lgamma(b));
+      if (x < (a + 1) / (a + b + 2)) return front * cf(x, a, b) / a;
+      return 1 - front * cf(1 - x, b, a) / b;
+    }
+    const Fp = (F, d1, d2) => (F <= 0 ? 1 : 1 - ibeta(d1 * F / (d1 * F + d2), d1 / 2, d2 / 2));
+    function mreg(vars) {
+      const n = D.y.length, k = vars.length + 1;
+      const X = []; for (let i = 0; i < n; i++) X.push([1, ...vars.map(nm => D[nm][i])]);
+      const XtX = Array.from({ length: k }, () => new Array(k).fill(0)), Xty = new Array(k).fill(0);
+      for (let i = 0; i < n; i++) for (let a = 0; a < k; a++) { Xty[a] += X[i][a] * D.y[i]; for (let b = 0; b < k; b++) XtX[a][b] += X[i][a] * X[i][b]; }
+      const Ainv = inv(XtX);
+      const beta = Ainv.map(row => row.reduce((s, v2, j) => s + v2 * Xty[j], 0));
+      const yhat = X.map(row => row.reduce((s, v2, j) => s + v2 * beta[j], 0));
+      const my = mean(D.y);
+      let sse = 0, sst = 0;
+      for (let i = 0; i < n; i++) { sse += (D.y[i] - yhat[i]) ** 2; sst += (D.y[i] - my) ** 2; }
+      const p = vars.length, r2 = 1 - sse / sst, adjr2 = 1 - (1 - r2) * (n - 1) / (n - p - 1);
+      const mse = sse / (n - k), see = Math.sqrt(mse), cv = see / my;
+      const F = (sst - sse) / p / mse, pF = Fp(F, p, n - k);
+      const se = Ainv.map((row, i) => Math.sqrt(Math.max(0, row[i] * mse)));
+      const tstat = beta.map((b, i) => b / se[i]);
+      const pval = tstat.map(t => 2 * (1 - M.tcdf(Math.abs(t), n - k)));
+      return { n, k, beta, se, tstat, pval, r2, adjr2, see, cv, F, pF };
+    }
+    const v = controls(box, [
+      { k: 'x1', label: 'Include x1', type: 'checkbox', v: 1 },
+      { k: 'x2', label: 'Include x2', type: 'checkbox', v: 1 },
+      { k: 'x3', label: 'Include x3', type: 'checkbox', v: 1 }
+    ], draw);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    function draw() {
+      const vars = ['x1', 'x2', 'x3'].filter(k => v[k]);
+      if (!vars.length) { tb.innerHTML = ''; ro([['Include at least one variable', '']]); publish(box, { adjr2: NaN, see: NaN, cv: NaN, F: NaN }); return; }
+      const m = mreg(vars);
+      const names = ['Intercept', ...vars];
+      let h = '<table><tr><th>Term</th><th>Coef</th><th>t</th><th>p</th></tr>';
+      names.forEach((nm, i) => { h += `<tr><td>${nm}</td><td>${f2(m.beta[i], 4)}</td><td>${f2(m.tstat[i])}</td><td>${f2(m.pval[i], 3)}</td></tr>`; });
+      h += '</table>';
+      tb.innerHTML = h;
+      ro([
+        ['Adjusted R²', pct(m.adjr2)],
+        ['SEE', f2(m.see, 3)],
+        ['CV = SEE/ȳ', pct(m.cv)],
+        ['F(' + vars.length + ',' + (m.n - m.k) + ')', f2(m.F)],
+        ['Significance F (p-value)', f2(m.pF, 4)],
+        [vars.length === 3 ? 'Full model — compare to dropping x3 (CEBoK: adjR² 63.6%→64.0%, SEE .178→.177, CV 16.1%→15.9%)' : 'Reduced model', '']
+      ]);
+      publish(box, { adjr2: m.adjr2, see: m.see, cv: m.cv, F: m.F });
     }
     draw();
   };

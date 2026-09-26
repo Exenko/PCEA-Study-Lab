@@ -49,6 +49,10 @@
     'logistic-risk': { controls: ['size', 'dur', 'exp', 'team', 'cx', 'mkt'], setters: [], outputs: ['logOdds', 'p'] },
     'lc-break': { controls: ['t1', 'lcs', 'n', 'L'], setters: [], outputs: ['aP', 'Q', 'unitNplus1'] },
     'retrograde': { controls: ['persW', 'persP', 'supW', 'supP', 'contW', 'contP', 'methW', 'methP', 'toolW', 'toolP', 't1', 'lcs', 'n'], setters: [], outputs: ['weightSum', 'wLearningLost', 'aP', 'Q'] },
+    'r2-split': { controls: ['blend'], setters: ['data'], outputs: ['sst', 'ssr', 'sse', 'r2', 'blend'] },
+    'ci-bands': { controls: ['level', 'x0'], setters: [], outputs: ['yhat0', 'meanLo', 'meanHi', 'predLo', 'predHi', 'slopeLo', 'slopeHi', 't', 'level', 'x0'] },
+    'intercept-bow': { controls: ['c'], setters: [], outputs: ['a', 'b', 'r2', 'c'] },
+    'nested-model': { controls: ['x1', 'x2', 'x3'], setters: [], outputs: ['adjr2', 'see', 'cv', 'F'] },
     'lot-table': { controls: ['t1', 'lcs', 'split'], setters: [], outputs: ['unit2', 'unit4', 'unit8', 'cum8', 'cauc8', 'lot2Total', 'lot2AUC', 'lot1Total'] },
     'lc-compare': { controls: ['t1', 'lcs', 'n'], setters: [], outputs: ['unitTotal', 'cumavTotalN', 'unitUnitN', 'cumavUnitN'] }
   };
