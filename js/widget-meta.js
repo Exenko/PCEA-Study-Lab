@@ -62,7 +62,11 @@
     'two-sample-t': { controls: ['xbar', 'ybar', 'sx2', 'sy2', 'n'], setters: [], outputs: ['sp2', 'T', 'df', 'crit', 'pval'] },
     'clt-builder': { controls: ['k'], setters: [], outputs: ['k', 'mean', 'sd', 'skew'] },
     'normal-vs-lognormal': { controls: ['cv'], setters: [], outputs: ['mean', 'sd', 'sigmaLn', 'distinguishable'] },
-    'ci-sigma': { controls: ['n'], setters: [], outputs: ['tMult', 'zMult', 'ratio', 'sigLo', 'sigHi'] }
+    'ci-sigma': { controls: ['n'], setters: [], outputs: ['tMult', 'zMult', 'ratio', 'sigLo', 'sigHi'] },
+    'skill-mix': { controls: ['r1', 'h1', 'r2', 'h2', 'r3', 'h3', 'r4', 'h4'], setters: [], outputs: ['totH', 'totCost', 'composite', 'avgRate'] },
+    'pfd-standard': { controls: ['measured', 'pace', 'pfd', 'newpfd', 'qty'], setters: [], outputs: ['std', 'grandOld', 'grandNew'] },
+    'mua-moving-average': { controls: ['window', 'weight', 'price'], setters: [], outputs: ['mua', 'rawCost'] },
+    'design-scrap': { controls: ['stock', 'price', 'rate'], setters: [], outputs: ['bought', 'scrapLb', 'scrapPct', 'matCost', 'machCost', 'totalCost'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);

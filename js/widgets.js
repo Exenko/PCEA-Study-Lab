@@ -2861,5 +2861,200 @@ const Widgets = (() => {
     draw();
   };
 
+  // ======================================================================
+  // M11: skill-mix — weighted (composite) rate vs unweighted average rate (Fig 11.4)
+  reg['skill-mix'] = box => {
+    title(box, 'Skill-mix composite rate', 'composite = weighted by hours; unweighted average ignores how the hours are actually spent');
+    const v = controls(box, [
+      { k: 'r1', label: 'Category 1 rate $/hr', min: 10, max: 80, step: 0.25, v: 25 },
+      { k: 'h1', label: 'Category 1 hours', min: 0, max: 2000, step: 10, v: 1000 },
+      { k: 'r2', label: 'Category 2 rate $/hr', min: 10, max: 80, step: 0.25, v: 30 },
+      { k: 'h2', label: 'Category 2 hours', min: 0, max: 2000, step: 10, v: 500 },
+      { k: 'r3', label: 'Category 3 rate $/hr', min: 10, max: 80, step: 0.25, v: 40 },
+      { k: 'h3', label: 'Category 3 hours', min: 0, max: 2000, step: 10, v: 250 },
+      { k: 'r4', label: 'Category 4 rate $/hr', min: 10, max: 80, step: 0.25, v: 50 },
+      { k: 'h4', label: 'Category 4 hours', min: 0, max: 2000, step: 10, v: 250 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'hours share by category']]);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function draw() {
+      const rates = [v.r1, v.r2, v.r3, v.r4], hrs = [v.h1, v.h2, v.h3, v.h4];
+      const totH = hrs.reduce((a, b) => a + b, 0);
+      const totCost = rates.reduce((a, r, i) => a + r * hrs[i], 0);
+      const composite = totH > 0 ? totCost / totH : 0;
+      const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+      pb.innerHTML = '';
+      const ymax = Math.max(...hrs, 1) * 1.2;
+      const p = Plot.create(pb, { h: 220, xmin: 0, xmax: 4, ymin: 0, ymax, xlabel: 'category', ylabel: 'hours', xticks: 4, xfmt: x => 'C' + Math.round(x) });
+      p.axes();
+      hrs.forEach((h, i) => {
+        p.rect(i + 0.15, 0, i + 0.85, h, 'bar c1f');
+        p.text(i + 0.5, h + ymax * 0.03, f2(h, 0), 'annot', 'middle');
+      });
+      ro([
+        ['Total hours', f2(totH, 0)],
+        ['Total labor cost', f2(totCost, 0)],
+        ['Composite (weighted) rate', f2(composite, 2), 'good'],
+        ['Unweighted average rate', f2(avgRate, 2)],
+        ['CEBoK Fig 11.4 rounds unweighted avg to', '$36.00']
+      ]);
+      note.textContent = 'Composite is lower because most hours (1000 of ' + f2(totH, 0) + ') fall in the cheapest category — the unweighted average treats every category as if it had equal hours, which overstates the true blended rate.';
+      publish(box, { totH, totCost, composite, avgRate });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M11: pfd-standard — Standard time = Measured x Pace / (1 - PF&D), Maynard formula (Table 11.2)
+  reg['pfd-standard'] = box => {
+    title(box, 'PF&D and standard time', 'Standard time = Measured time x Pace / (1 - PF&D)');
+    const v = controls(box, [
+      { k: 'measured', label: 'Measured time (hrs)', min: 0.1, max: 5, step: 0.05, v: 1 },
+      { k: 'pace', label: 'Pace', min: 0.5, max: 1.5, step: 0.01, v: 1 },
+      { k: 'pfd', label: 'PF&D', min: 0, max: 0.6, step: 0.01, v: 0.1, fmt: x => pct(x, 0) },
+      { k: 'newpfd', label: 'Table 11.2: new PF&D', min: 0, max: 0.6, step: 0.01, v: 0.25, fmt: x => pct(x, 0) },
+      { k: 'qty', label: 'Table 11.2: linear feet', min: 0, max: 2000, step: 10, v: 750 }
+    ], draw);
+    const ro = readout(box);
+    const ro2 = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const OPS = [['Fit', 2.5], ['Weld', 1.7], ['Grind', 0.8]];
+    function draw() {
+      const std = v.measured * v.pace / (1 - v.pfd);
+      ro([
+        ['Measured time', f2(v.measured, 2) + ' hr'],
+        ['Pace', f2(v.pace, 2)],
+        ['PF&D', pct(v.pfd, 0)],
+        ['Standard time', f2(std, 3) + ' hr', 'good']
+      ]);
+      const rows = [];
+      let grandOld = 0, grandNew = 0;
+      OPS.forEach(([name, stdHrsAt10]) => {
+        const measured = stdHrsAt10 * (1 - 0.10); // back out measured time at pace = 1.0
+        const newStd = measured / (1 - v.newpfd);
+        const naive = stdHrsAt10 * (1 + (v.newpfd - 0.10)); // naive x(1+PF&D) style adjustment for contrast
+        const oldTotal = stdHrsAt10 * v.qty;
+        const newTotal = newStd * v.qty;
+        grandOld += oldTotal; grandNew += newTotal;
+        rows.push([name + ': std @10% PF&D', f2(stdHrsAt10, 2) + ' hr/lf']);
+        rows.push([name + ': measured (back-calculated)', f2(measured, 2) + ' hr/lf']);
+        rows.push([name + ': new std @ ' + pct(v.newpfd, 0), f2(newStd, 2) + ' hr/lf', 'good']);
+        rows.push([name + ': naive x(1+PF&D) estimate (wrong)', f2(naive, 2) + ' hr/lf', 'bad']);
+        rows.push([name + ': total @ ' + f2(v.qty, 0) + ' lf', f2(newTotal, 0) + ' hr']);
+      });
+      rows.push(['Grand total @ 10% PF&D', f2(grandOld, 0) + ' hr']);
+      rows.push(['Grand total @ new PF&D', f2(grandNew, 0) + ' hr', 'good']);
+      ro2(rows);
+      note.textContent = 'The correct formula divides by (1 - PF&D), which grows faster than a naive "multiply by (1 + PF&D)" approximation as PF&D increases — the naive method understates the standard time.';
+      publish(box, { std, grandOld, grandNew });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M11: mua-moving-average — scrap-rate reconstruction + moving average, and raw material cost
+  reg['mua-moving-average'] = box => {
+    title(box, 'Material utilization (scrap rate) trend', 'reconstructed series (source figure unreadable) — last-5 mean fixed at 22.4%');
+    // Deterministic 20-point series, no learning trend, last-5 mean = 22.4% exactly.
+    // Values chosen by hand (not from the source image) purely to hit that anchor.
+    const SERIES = [26, 21, 24, 19, 27, 20, 25, 18, 23, 21, 26, 19, 24, 20, 27, 21, 25, 19, 22, 22].map(x => x / 100);
+    // last five: 21,25,19,22,22 -> mean 21.8; adjust to hit 22.4 exactly by construction below
+    const LAST5 = [24, 21, 23, 22, 22].map(x => x / 100); // mean = 22.4
+    const FULL = SERIES.slice(0, 15).concat(LAST5);
+    const v = controls(box, [
+      { k: 'window', label: 'Moving-average window', min: 3, max: 10, step: 1, v: 5 },
+      { k: 'weight', label: 'Panel weight (lb)', min: 1, max: 500, step: 1, v: 100 },
+      { k: 'price', label: '$/lb', min: 1, max: 500, step: 1, v: 200 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['pt', 'unit scrap rate'], ['c1', 'moving average']]);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function movingAvg(arr, w) {
+      const out = [];
+      for (let i = 0; i < arr.length; i++) {
+        const lo = Math.max(0, i - w + 1);
+        const slice = arr.slice(lo, i + 1);
+        out.push(slice.reduce((a, b) => a + b, 0) / slice.length);
+      }
+      return out;
+    }
+    function draw() {
+      pb.innerHTML = '';
+      const ma = movingAvg(FULL, v.window);
+      const ymax = Math.max(...FULL) * 1.2;
+      const p = Plot.create(pb, { h: 240, xmin: 0, xmax: 21, ymin: 0, ymax, xlabel: 'unit', ylabel: 'scrap rate' });
+      p.axes();
+      FULL.forEach((y, i) => p.dot(i + 1, y, 'pt', 4));
+      p.line(FULL.map((y, i) => [i + 1, ma[i]]), 'series c1');
+      const last5mean = LAST5.reduce((a, b) => a + b, 0) / LAST5.length;
+      const mua = last5mean;
+      const rawCost = v.weight * (1 + mua) * v.price;
+      ro([
+        ['Last-5-unit mean scrap rate (MUA)', pct(mua, 1), 'good'],
+        ['Window size', v.window],
+        ['Latest moving average', pct(ma[ma.length - 1], 1)],
+        ['Raw material weight needed', f2(v.weight * (1 + mua), 2) + ' lb'],
+        ['Raw material cost', '$' + f2(rawCost, 0), 'good'],
+        ['CEBoK printed value (arithmetic slip)', '$24,520']
+      ]);
+      note.textContent = 'Series is a deterministic reconstruction (the source figure image is unreadable), built only so the last five points average to 22.4% scrap — it is not the original data. CEBoK\'s printed raw-material cost of $24,520 differs slightly from the exact arithmetic ($24,480), a rounding/arithmetic slip in the source.';
+      publish(box, { mua, rawCost });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M11: design-scrap — stock choice vs machining & scrap (Fig 11.9), illustrative numbers
+  reg['design-scrap'] = box => {
+    title(box, 'Design for manufacture: stock choice vs. scrap', 'illustrative numbers, not exact CEBoK figures — same finished 3-in cover part, three stock options');
+    const v = controls(box, [
+      { k: 'stock', label: 'Stock option', type: 'select', v: 'plate4', options: [['plate4', '4-in plate (heavy machining)'], ['plate3', '3-in plate (less machining)'], ['nearnet', 'Near-net square plate (no machining)']] },
+      { k: 'price', label: '$/lb material', min: 1, max: 50, step: 0.5, v: 8 },
+      { k: 'rate', label: 'Machining $/hr', min: 10, max: 200, step: 5, v: 75 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    // Illustrative: finished part = 3-in thick, fixed finished weight = 30 lb.
+    const FINISHED = 30;
+    const OPTS = {
+      plate4: { label: '4-in plate', bought: 45, machHrs: 4.0 },
+      plate3: { label: '3-in plate', bought: 34, machHrs: 1.5 },
+      nearnet: { label: 'Near-net square', bought: 30.5, machHrs: 0.2 }
+    };
+    function draw() {
+      const o = OPTS[v.stock];
+      const scrapLb = o.bought - FINISHED;
+      const scrapPct = scrapLb / o.bought;
+      const matCost = o.bought * v.price;
+      const machCost = o.machHrs * v.rate;
+      const totalCost = matCost + machCost;
+      pb.innerHTML = '';
+      const p = Plot.create(pb, { h: 220, xmin: 0, xmax: 3, ymin: 0, ymax: Math.max(matCost, totalCost) * 1.2, xlabel: '', ylabel: '$', xticks: 3, xfmt: () => '' });
+      p.axes();
+      p.rect(0.6, 0, 1.4, matCost, 'bar c1f');
+      p.rect(0.6, matCost, 1.4, totalCost, 'bar c2f');
+      p.text(1, matCost / 2, 'material', 'annot', 'middle');
+      p.text(1, matCost + machCost / 2, 'machining', 'annot c2', 'middle');
+      ro([
+        ['Stock option', o.label],
+        ['Material bought', f2(o.bought, 1) + ' lb'],
+        ['Finished part weight', f2(FINISHED, 1) + ' lb'],
+        ['Scrap weight', f2(scrapLb, 1) + ' lb'],
+        ['Scrap %', pct(scrapPct, 0)],
+        ['Machining hours (relative)', f2(o.machHrs, 1) + ' hr'],
+        ['Material cost', '$' + f2(matCost, 0)],
+        ['Machining cost', '$' + f2(machCost, 0)],
+        ['Total cost', '$' + f2(totalCost, 0), 'good']
+      ]);
+      note.textContent = 'Numbers are illustrative (not exact CEBoK figures) — the point of Fig 11.9 is the tradeoff: buying stock closer to the finished shape cuts scrap and machining time, but near-net stock usually costs more per pound to buy.';
+      publish(box, { bought: o.bought, scrapLb, scrapPct, matCost, machCost, totalCost });
+    }
+    draw();
+  };
+
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();
