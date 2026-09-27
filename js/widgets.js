@@ -834,6 +834,225 @@ const Widgets = (() => {
     draw();
   };
 
+  // M14: FPIF scenarios (Fig. 14.8 example) — guess/reveal + free slider
+  reg['fpif-scenarios'] = box => {
+    title(box, 'FPIF worked example', 'TC $90M, TP $9M, ceiling $108M — guess the outcome, then check against a free slider');
+    const TC = 90, TP = 9, CP = 108, GS = 0.7; // gov share over target; under-target share implied 80/20 by source arithmetic
+    const TPRICE = TC + TP; // 99
+    const PTA = TC + (CP - TPRICE) / GS; // 90 + 9/0.7 = 102.857
+    const SCEN = {
+      s1: { fc: 85, label: 'Scenario 1: FC $85M (below target)' },
+      s2: { fc: 97, label: 'Scenario 2: FC $97M (above target, below PTA)' },
+      s3: { fc: 105, label: 'Scenario 3: FC $105M (above PTA)' }
+    };
+    function calc(fc) {
+      const cs = fc <= TC ? 0.2 : 0.3; // contractor share: under-target 20%, over-target 30% (source's implied ratios)
+      let profit = TP + cs * (TC - fc);
+      let price = fc + profit;
+      if (price > CP) { price = CP; profit = CP - fc; }
+      return { profit, price };
+    }
+    const v = controls(box, [
+      { k: 'scenario', label: 'Scenario', type: 'select', v: 's1', options: [['s1', SCEN.s1.label], ['s2', SCEN.s2.label], ['s3', SCEN.s3.label]] },
+      { k: 'guessPrice', label: 'Your guess: final price ($M)', type: 'number', v: 95 },
+      { k: 'guessProfit', label: 'Your guess: contractor profit ($M)', type: 'number', v: 10 },
+      { k: 'fc', label: 'Free slider: final cost ($M)', min: 80, max: 115, step: 0.5, v: 90 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'price'], ['c2', 'profit'], ['c3', 'ceiling'], ['c3', 'PTA']]);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const revealBtn = E('button', 'btn small'); revealBtn.textContent = 'Reveal';
+    let revealed = false, lastKey = null;
+    revealBtn.onclick = () => { revealed = true; draw(); };
+    box.appendChild(revealBtn);
+    function draw() {
+      const key = v.scenario + '|' + v.guessPrice + '|' + v.guessProfit;
+      if (key !== lastKey) { lastKey = key; revealed = false; }
+      pb.innerHTML = '';
+      const lo = 80, hi = 115;
+      const r = calc(v.fc);
+      const p = Plot.create(pb, { xmin: lo, xmax: hi, ymin: 0, ymax: CP * 1.1, xlabel: 'final cost ($M)', ylabel: '$M' });
+      p.axes();
+      p.fn(x => calc(x).price, 'series c1'); p.fn(x => calc(x).profit, 'series c2'); p.hline(CP, 'marker c3'); p.vline(PTA, 'marker c3');
+      p.text(PTA, CP * 1.04, 'PTA', 'annot', 'middle');
+      p.vline(v.fc, 'marker hot');
+      const s = SCEN[v.scenario], sr = calc(s.fc);
+      const rows = [
+        ['Target price (TC + TP)', '$' + f2(TPRICE, 0) + 'M'],
+        ['PTA = TC + (CP−TP)/gov share', '$' + f2(PTA, 2) + 'M'],
+        [s.label, ''],
+        ['Your guess: price / profit', '$' + f2(v.guessPrice, 1) + 'M / $' + f2(v.guessProfit, 1) + 'M']
+      ];
+      if (revealed) {
+        rows.push(['Actual price / profit', '$' + f2(sr.price, 1) + 'M / $' + f2(sr.profit, 1) + 'M', 'good']);
+        const okP = Math.abs(sr.price - v.guessPrice) < 0.5, okPr = Math.abs(sr.profit - v.guessProfit) < 0.5;
+        rows.push(['Guess check', (okP && okPr) ? 'both close' : (okP || okPr) ? 'partly close' : 'off', (okP && okPr) ? 'good' : 'bad']);
+      }
+      rows.push(['Free slider at FC $' + f2(v.fc, 1) + 'M — price / profit', '$' + f2(r.price, 1) + 'M / $' + f2(r.profit, 1) + 'M']);
+      ro(rows);
+      note.textContent = 'Source (L388-420) gives TC $90M, TP $9M (10%), target price $99M, ceiling $108M, PTA $102.86M, and scenario results (FC85→profit10/price95; FC97→profit6.9/price103.9; FC105→price capped 108/profit3). The source does not state the 80/20 under-target and 70/30 over-target share ratios in prose — they are recovered from its arithmetic and used here to drive the free slider.';
+      publish(box, { tpPrice: TPRICE, pta: PTA, price: r.price, profit: r.profit, scenarioPrice: sr.price, scenarioProfit: sr.profit });
+    }
+    draw();
+  };
+
+  // M14: CPAF scenarios (Fig. 14.9 example) — guess/reveal
+  reg['cpaf-scenarios'] = box => {
+    title(box, 'CPAF worked example', 'TC $90M, potential fee $9M, cost ceiling $108M, earned fee $8.2M in every scenario');
+    const TC = 90, CEIL = 108, FEE = 8.2;
+    const SCEN = {
+      s1: { fc: 85, label: 'Scenario 1: FC $85M (below target)' },
+      s2: { fc: 102, label: 'Scenario 2: FC $102M (above target)' },
+      s3: { fc: 115, label: 'Scenario 3: FC $115M (above cost ceiling)' }
+    };
+    function calc(fc) {
+      if (fc <= CEIL) return { price: fc + FEE, profit: FEE };
+      return { price: CEIL + FEE, profit: CEIL + FEE - fc };
+    }
+    const v = controls(box, [
+      { k: 'scenario', label: 'Scenario', type: 'select', v: 's1', options: [['s1', SCEN.s1.label], ['s2', SCEN.s2.label], ['s3', SCEN.s3.label]] },
+      { k: 'guessPrice', label: 'Your guess: final price ($M)', type: 'number', v: 93 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    legend(box, [['c1', 'price'], ['c2', 'contractor profit'], ['c3', 'cost ceiling']]);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const revealBtn = E('button', 'btn small'); revealBtn.textContent = 'Reveal';
+    let revealed = false, lastKey = null;
+    revealBtn.onclick = () => { revealed = true; draw(); };
+    box.appendChild(revealBtn);
+    function draw() {
+      const key = v.scenario + '|' + v.guessPrice;
+      if (key !== lastKey) { lastKey = key; revealed = false; }
+      pb.innerHTML = '';
+      const lo = 80, hi = 120;
+      const p = Plot.create(pb, { xmin: lo, xmax: hi, ymin: -5, ymax: CEIL * 1.1, xlabel: 'final cost ($M)', ylabel: '$M' });
+      p.axes(); p.hline(0, 'marker');
+      p.fn(x => calc(x).price, 'series c1'); p.fn(x => calc(x).profit, 'series c2'); p.vline(CEIL, 'marker c3');
+      p.text(CEIL, CEIL * 1.04, 'cost ceiling', 'annot', 'middle');
+      const s = SCEN[v.scenario], sr = calc(s.fc);
+      p.vline(s.fc, 'marker hot');
+      const rows = [
+        [s.label, ''],
+        ['Your guess: final price', '$' + f2(v.guessPrice, 1) + 'M']
+      ];
+      if (revealed) {
+        rows.push(['Actual price', '$' + f2(sr.price, 1) + 'M', 'good']);
+        rows.push(['Contractor profit', '$' + f2(sr.profit, 1) + 'M', sr.profit < FEE ? 'bad' : 'good']);
+        rows.push(['Guess check', Math.abs(sr.price - v.guessPrice) < 0.5 ? 'close' : 'off', Math.abs(sr.price - v.guessPrice) < 0.5 ? 'good' : 'bad']);
+        if (s.fc > CEIL) rows.push(['Note', 'Government pays costs only up to the cost ceiling; exceeding it needs written authorization. Profit is reduced by the amount above ceiling ($' + f2(s.fc - CEIL, 1) + 'M), not simply cost + fee.']);
+      }
+      ro(rows);
+      note.textContent = 'Source (L445-475, Fig. 14.9): earned award fee is $8.2M in all three scenarios (potential fee $9M/10%). FC85→price93.2; FC102→price110.2; FC115 exceeds the $108M cost ceiling, so price = ceiling + fee = $116.2M and contractor profit = 116.2 − 115 = $1.2M (reduced by $7M versus an unbounded cost-plus-fee result). Fee is judgmental, not formula-driven, in general CPAF use.';
+      publish(box, { price: sr.price, profit: sr.profit, guessOk: Math.abs(sr.price - v.guessPrice) < 0.5 });
+    }
+    draw();
+  };
+
+  // M14: contract type spectrum — cost-risk sharing across FFP/FPI(F)/CPIF/CPAF/CPFF
+  reg['contract-spectrum'] = box => {
+    title(box, 'Contract type spectrum', 'who bears cost risk, from FFP to CPFF (base case: Fig. 14.5)');
+    const TC = 10, TP = 1, TPRICE = TC + TP; // $11M, revenue-at-TC 9.09%
+    const CEIL_FPI = 12; // Fig 14.7
+    const MINFEE = 0.3, MAXFEE = 2.0; // CPIF
+    const v = controls(box, [
+      { k: 'type', label: 'Contract type', type: 'select', v: 'fpif', options: [['ffp', 'FFP'], ['fpif', 'FPI(F)'], ['cpif', 'CPIF'], ['cpaf', 'CPAF'], ['cpff', 'CPFF']] },
+      { k: 'gs', label: 'Gov/contractor share', min: 0.5, max: 0.9, step: 0.1, v: 0.8, fmt: x => `${Math.round(x * 100)}/${Math.round((1 - x) * 100)}` },
+      { k: 'overlay', label: 'Overlay all types (envelope)', type: 'checkbox', v: false },
+      { k: 'fc', label: 'Final cost ($M)', min: 4, max: 16, step: 0.25, v: TC }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function calcFor(type, gs, fc) {
+      const cs = 1 - gs;
+      if (type === 'ffp') { const price = TPRICE; return { price, profit: price - fc }; }
+      if (type === 'cpff') { const fee = TP; return { price: fc + fee, profit: fee }; }
+      if (type === 'fpif') {
+        let profit = TP + cs * (TC - fc), price = fc + profit;
+        if (price > CEIL_FPI) { price = CEIL_FPI; profit = CEIL_FPI - fc; }
+        return { price, profit };
+      }
+      if (type === 'cpif') {
+        const fee = Math.min(MAXFEE, Math.max(MINFEE, TP + cs * (TC - fc)));
+        return { price: fc + fee, profit: fee };
+      }
+      // cpaf: qualitative, flat band around target fee
+      return { price: fc + TP, profit: TP };
+    }
+    function draw() {
+      pb.innerHTML = '';
+      const lo = 4, hi = 16;
+      const p = Plot.create(pb, { xmin: lo, xmax: hi, ymin: -1, ymax: 3, xlabel: 'final cost ($M)', ylabel: 'contractor profit ($M)' });
+      p.axes(); p.hline(0, 'marker'); p.vline(TC, 'marker'); p.text(TC, 2.9, 'TC', 'annot', 'middle');
+      const TYPES = [['ffp', 'c3'], ['fpif', 'c1'], ['cpif', 'c2'], ['cpaf', 'band'], ['cpff', 'c4']];
+      if (v.overlay) {
+        TYPES.forEach(([t, cls]) => {
+          if (t === 'cpaf') { p.rect(lo, TP - 0.3, hi, TP + 0.3, 'band'); return; }
+          p.fn(x => calcFor(t, v.gs, x).profit, 'series ' + cls);
+        });
+        legend(box, TYPES.map(([t, cls]) => [cls, t.toUpperCase()]));
+      } else if (v.type === 'cpaf') {
+        p.rect(lo, TP - 0.3, hi, TP + 0.3, 'band'); p.text((lo + hi) / 2, TP + 0.45, 'fee band (judgmental, not formula-driven)', 'annot', 'middle');
+      } else {
+        p.fn(x => calcFor(v.type, v.gs, x).profit, 'series c1');
+      }
+      p.vline(v.fc, 'marker hot');
+      const r = calcFor(v.type, v.gs, v.fc);
+      const riskLabel = v.type === 'ffp' ? 'contractor bears 100% of each overrun dollar' :
+        v.type === 'cpff' ? 'government bears 100% of each overrun dollar (fee fixed)' :
+        v.type === 'cpaf' ? 'fee set by government evaluation, not a cost formula' :
+        `shared ${Math.round(v.gs * 100)}/${Math.round((1 - v.gs) * 100)} (gov/contractor) within incentive range`;
+      ro([
+        ['Base case: TC / TP / price', '$' + TC + 'M / $' + TP + 'M / $' + f2(TPRICE, 0) + 'M'],
+        ['Revenue at TC (TP/price)', pct(TP / TPRICE)],
+        ['Risk sharing', riskLabel],
+        ['At final cost $' + f2(v.fc, 2) + 'M — price / profit', '$' + f2(r.price, 2) + 'M / $' + f2(r.profit, 2) + 'M', r.profit < 0 ? 'bad' : 'good']
+      ]);
+      note.textContent = 'Base case is Fig. 14.5 (L249-251): TC $10M, TP $1M, price $11M, revenue at TC 9.09%. FFP = 0/100 shareline (contractor absorbs every dollar); CPFF = 100/0 (fee fixed at $1M, price moves dollar-for-dollar with cost). FPI ceiling $12M is Fig. 14.7; CPIF min/max fee $0.3M/$2.0M is L484-489 (3%/20% of TC). Default share 80/20 is illustrative; CEBoK (L335-339) notes 90/10 for high-risk work and up to 50/50 for maximum incentive. Per L1009-1024, CPFF and FFP bound the envelope of outcomes, with CPIF parallel to CPFF beyond its min/max fee and FPI parallel to FFP beyond the PTA. CPAF fee comes from a judgmental evaluation, not a formula, so it is shown as a flat band, not a function of cost.';
+      publish(box, { type: v.type, price: r.price, profit: r.profit, riskLabel });
+    }
+    draw();
+  };
+
+  // M14: BOE calculator — part A build-up (E = R*P), part B fee/margin converter
+  reg['boe-calc'] = box => {
+    title(box, 'Basis of estimate: build-up and fee/margin', 'Fig. 14.13 LOC build-up, and the fee/margin converter (L228-237)');
+    const v = controls(box, [
+      { k: 'loc', label: 'Lines of code', min: 100, max: 5000, step: 1, v: 1776 },
+      { k: 'hpl', label: 'Hours per LOC (productivity rate)', min: 0.1, max: 3, step: 0.01, v: 1.19 },
+      { k: 'rate', label: 'Labor rate ($/hr)', min: 10, max: 100, step: 1, v: 42 },
+      { k: 'feePct', label: 'Fee % (of cost)', min: 0, max: 40, step: 0.5, v: 10, fmt: x => x.toFixed(1) + '%' }
+    ], draw);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function draw() {
+      const hrs = Math.round(v.loc * v.hpl * 10) / 10; // CEBoK rounds hours to 0.1 before pricing
+      const dollars = hrs * v.rate;
+      const feeFrac = v.feePct / 100;
+      const marginFrac = feeFrac / (1 + feeFrac);
+      const price = dollars * (1 + feeFrac);
+      const profit = price - dollars;
+      tb.innerHTML = '<table><thead><tr><th>Step</th><th>Formula</th><th>Value</th></tr></thead><tbody>' +
+        `<tr><td>Hours (R×P)</td><td>${f2(v.loc, 0)} LOC × ${f2(v.hpl, 2)} hrs/LOC</td><td>${f2(hrs, 1)} hrs</td></tr>` +
+        `<tr><td>Direct dollars</td><td>${f2(hrs, 1)} hrs × $${f2(v.rate, 0)}/hr</td><td>$${f2(dollars, 0)}</td></tr>` +
+        `<tr><td>Fee (${pct(feeFrac)})</td><td>Fee% × cost</td><td>$${f2(profit, 0)}</td></tr>` +
+        `<tr><td>Price</td><td>cost + fee</td><td>$${f2(price, 0)}</td></tr></tbody></table>`;
+      ro([
+        ['E = R × P (hours)', f2(hrs, 1) + ' hrs'],
+        ['Direct dollars', '$' + f2(dollars, 0)],
+        ['Fee % → Margin % (Fee%/(1+Fee%))', pct(marginFrac)],
+        ['Margin % → Fee % (Margin%/(1−Margin%))', 'check: ' + pct(marginFrac / (1 - marginFrac))],
+        ['Revenue = Cost + Profit = Price', '$' + f2(price, 0)]
+      ]);
+      note.textContent = 'Part A defaults reproduce Fig. 14.13 (L602-613): 1,776 LOC × 1.19 hrs/LOC = 2,113.4 hrs × $42/hr = $88,763 direct dollars (build-up style, E = R×P). Part B follows L228-237: Margin% = Fee%/(1+Fee%), Fee% = Margin%/(1−Margin%); at the default 10% fee, margin is 9.09%, matching the base-case revenue-at-TC figure elsewhere in the module.';
+      publish(box, { hrs, dollars, feePct: v.feePct, marginPct: marginFrac * 100, price, profit });
+    }
+    draw();
+  };
+
   // ======================================================================
   // M15: EVM
   reg['evm'] = box => {
