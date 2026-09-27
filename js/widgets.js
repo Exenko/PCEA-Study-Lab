@@ -2862,6 +2862,186 @@ const Widgets = (() => {
   };
 
   // ======================================================================
+  // M12: sw-cost-drivers — PM = A * KSLOC^E * EM (COCOMO II), Tables 12.2-12.4
+  reg['sw-cost-drivers'] = box => {
+    title(box, 'Software cost drivers', 'PM = 2.94 x KSLOC^1.0997 x EM');
+    const presets = [
+      ['0', 'Size (Table 12.2)'],
+      ['1', 'Complexity EM (Table 12.3)'],
+      ['2', 'Capability EM (Table 12.4)']
+    ];
+    const v = controls(box, [
+      { k: 'preset', label: 'Scenario', type: 'select', v: '0', options: presets },
+      { k: 'kslc', label: 'Size (KSLOC)', min: 10, max: 200, step: 1, v: 100 },
+      { k: 'em', label: 'Effort multiplier (EM)', min: 0.3, max: 5.5, step: 0.01, v: 1.0 },
+      { k: 'rate', label: 'Rate ($/PM)', min: 5000, max: 25000, step: 500, v: 16000 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const A = 2.94, EXP = 1.0997;
+    const SCEN = {
+      '0': { xlabel: 'KSLOC', pts: [[50, 1, 16000, '217 PM -> $3,473,959'], [100, 1, 16000, '465 PM -> $7,445,045'], [150, 1, 16000, '726 PM -> $11,628,264 (source prints 11,628,624 - typo)']] },
+      '1': { xlabel: 'complexity EM', pts: [[100, 0.6, 16000, '279 PM -> $4,467,027 (low)'], [100, 1.0, 16000, '465 PM -> $7,445,045 (nominal)'], [100, 3.5, 16000, '1628 PM -> $26,057,657 (high)']] },
+      '2': { xlabel: 'capability EM', pts: [[100, 0.33, 20000, '154 PM -> $3,071,081 (best, $20K/PM)'], [100, 1.0, 16000, '465 PM -> $7,445,045 (avg, $16K/PM)'], [100, 5.22, 14000, '2429 PM -> $34,005,242 (junior, $14K/PM)']] }
+    };
+    function draw() {
+      const pm = A * Math.pow(v.kslc, EXP) * v.em;
+      const cost = pm * v.rate;
+      pb.innerHTML = '';
+      const scen = SCEN[v.preset];
+      const ymax = Math.max(...scen.pts.map(p => A * Math.pow(p[0], EXP) * p[1] * p[2]), cost) * 1.1;
+      const p = Plot.create(pb, { h: 240, xmin: 0, xmax: 3, ymin: 0, ymax, xlabel: '', ylabel: '$', xticks: 3, xfmt: () => '' });
+      p.axes();
+      scen.pts.forEach((pt, i) => {
+        const c = A * Math.pow(pt[0], EXP) * pt[1] * pt[2];
+        p.rect(i + 0.15, 0, i + 0.85, c, 'bar c1f');
+        p.text(i + 0.5, c + ymax * 0.03, '$' + f2(c, 0), 'annot', 'middle');
+      });
+      ro([
+        ['Effort (PM)', f2(pm, 1)],
+        ['Cost', '$' + f2(cost, 0), 'good'],
+        ['KSLOC', f2(v.kslc, 0)],
+        ['EM', f2(v.em, 2)],
+        ['Rate', '$' + f2(v.rate, 0) + '/PM']
+      ]);
+      note.innerHTML = scen.pts.map(p2 => p2[3]).join('<br>');
+      publish(box, { pm, cost, kslc: v.kslc, em: v.em });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M12: sw-schedule — Tdev = 3.67 * PM^(0.28+0.2(E-0.91)) * SCED%
+  reg['sw-schedule'] = box => {
+    title(box, 'Development schedule', 'Tdev = 3.67 x PM^(0.28 + 0.2(E - 0.91)) x SCED%');
+    const v = controls(box, [
+      { k: 'pm', label: 'Person-months (PM)', min: 10, max: 700, step: 1, v: 465 },
+      { k: 'E', label: 'Scale factor sum (E)', min: 0.91, max: 1.4, step: 0.001, v: 1.1433 },
+      { k: 'sced', label: 'SCED% (schedule compression)', min: 0.5, max: 1.5, step: 0.01, v: 1.0, fmt: x => pct(x, 0) },
+      { k: 'target', label: 'Target months (0 = off)', min: 0, max: 40, step: 1, v: 18 },
+      { k: 'ex', label: 'Show parametric example (PM 23.92, exp 0.262)', type: 'checkbox', v: 0 }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const B = 0.91, D = 0.28, C = 3.67;
+    function tdev(pm, e, sced) { return C * Math.pow(pm, D + 0.2 * (e - B)) * sced; }
+    function draw() {
+      const exp = D + 0.2 * (v.E - B);
+      const t = tdev(v.pm, v.E, v.sced);
+      const needSced = v.target > 0 ? v.target / (C * Math.pow(v.pm, exp)) : null;
+      pb.innerHTML = '';
+      const p = Plot.create(pb, { h: 240, xmin: 0, xmax: Math.max(700, v.pm * 1.2), ymin: 0, ymax: tdev(Math.max(700, v.pm * 1.2), v.E, v.sced) * 1.1, xlabel: 'PM', ylabel: 'Tdev (months)' });
+      p.axes(); p.fn(x => tdev(x, v.E, v.sced), 'series c1'); p.dot(v.pm, t, 'pt hot', 5);
+      const rows = [
+        ['Exponent', f2(exp, 4)],
+        ['Tdev at default (PM 465, E 1.1433, SCED 100%)', f2(tdev(465, 1.1433, 1.0), 2) + ' mo (source: 27.28)'],
+        ['Tdev at current inputs', f2(t, 2) + ' mo', 'good']
+      ];
+      if (v.target > 0) {
+        rows.push(['Required SCED% for ' + f2(v.target, 0) + '-month target', pct(needSced, 0), 'good']);
+        rows.push(['Compression (1 - SCED%)', pct(1 - needSced, 0)]);
+        rows.push(['Table example: 18-month target on 465 PM', 'SCED% = 0.66, 34% compression']);
+      }
+      if (v.ex) {
+        const exPm = 23.92, exExp = 0.262, exT = 3.67 * Math.pow(exPm, exExp);
+        rows.push(['Parametric example: PM ' + exPm + ', exponent ' + exExp, f2(exT, 2) + ' mo (source: 8.43)']);
+        rows.push(['Note', 'source states this exponent directly rather than via 0.28+0.2(E-0.91); using the general formula with E=1 gives a different result (~9.4 mo) — a documented inconsistency in the source text.']);
+      }
+      ro(rows);
+      note.textContent = 'SCED% below 1.0 compresses the schedule (and raises risk/cost); above 1.0 stretches it.';
+      publish(box, { tdev: t, exp, needSced: needSced == null ? 0 : needSced });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M12: sw-analogy — Fig 12.13 COTS setup analogy adjustments
+  reg['sw-analogy'] = box => {
+    title(box, 'Analogy: COTS set-up estimate', 'Fig. 12.13 — adjust a prior effort\'s hours by task');
+    const v = controls(box, [
+      { k: 'setupH', label: 'Set-up base hours', min: 0, max: 500, step: 10, v: 280 },
+      { k: 'setupAdj', label: 'Set-up adjustment %', min: -50, max: 50, step: 1, v: -20, fmt: x => (x > 0 ? '+' : '') + x + '%' },
+      { k: 'dataH', label: 'Data load base hours', min: 0, max: 200, step: 5, v: 80 },
+      { k: 'dataAdj', label: 'Data load adjustment %', min: -50, max: 50, step: 1, v: 0, fmt: x => (x > 0 ? '+' : '') + x + '%' },
+      { k: 'implH', label: 'Implementation base hours', min: 0, max: 200, step: 5, v: 100 },
+      { k: 'implAdj', label: 'Implementation adjustment %', min: -50, max: 50, step: 1, v: -15, fmt: x => (x > 0 ? '+' : '') + x + '%' },
+      { k: 'trainH', label: 'Training base hours', min: 0, max: 100, step: 5, v: 20 },
+      { k: 'trainAdj', label: 'Training adjustment %', min: -50, max: 50, step: 1, v: -15, fmt: x => (x > 0 ? '+' : '') + x + '%' },
+      { k: 'rate', label: 'Fully-burdened rate ($/yr)', min: 50000, max: 200000, step: 5000, v: 100000 },
+      { k: 'hrsYr', label: 'Standard hours/year', min: 1000, max: 2500, step: 10, v: 1920 }
+    ], draw);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    function draw() {
+      const rows = [
+        ['Set-up', v.setupH, v.setupAdj],
+        ['Data load', v.dataH, v.dataAdj],
+        ['Implementation', v.implH, v.implAdj],
+        ['Training', v.trainH, v.trainAdj]
+      ].map(([name, h, adj]) => [name, h, adj, h * (1 + adj / 100)]);
+      tb.innerHTML = '<table><tr><th>Task</th><th>Base hrs</th><th>Adj %</th><th>Adjusted hrs</th></tr>' +
+        rows.map(r => `<tr><td>${r[0]}</td><td>${f2(r[1], 0)}</td><td>${r[2] > 0 ? '+' : ''}${r[2]}%</td><td>${f2(r[3], 1)}</td></tr>`).join('') + '</table>';
+      const totalHrs = rows.reduce((a, r) => a + r[3], 0);
+      const cost = totalHrs / v.hrsYr * v.rate;
+      ro([
+        ['Total hours', f2(totalHrs, 0), 'good'],
+        ['Source total (Fig 12.13)', '406 hours'],
+        ['Cost', '$' + f2(cost, 0), 'good'],
+        ['Source cost', '$21,145']
+      ]);
+      publish(box, { totalHrs, cost });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M12: sloc-rollup — Fig 12.7 waterfall CSCI/CSC SLOC tree with roll-up cost/schedule
+  reg['sloc-rollup'] = box => {
+    title(box, 'SLOC roll-up (Fig. 12.7)', 'edit leaf SLOC; CSCI, system total, cost and schedule roll up');
+    const v = controls(box, [
+      { k: 'c1a', label: 'CSCI1 CSC1 — Develop orders (SLOC)', min: 0, max: 20000, step: 500, v: 5000 },
+      { k: 'c1b', label: 'CSCI1 CSC2 — Submit orders (SLOC)', min: 0, max: 20000, step: 500, v: 7500 },
+      { k: 'c2', label: 'CSCI2 — Verify order (SLOC)', min: 0, max: 10000, step: 500, v: 3000 },
+      { k: 'c3', label: 'CSCI3 — Approve order (SLOC)', min: 0, max: 10000, step: 500, v: 1000 },
+      { k: 'c4', label: 'CSCI4 — Status report (SLOC)', min: 0, max: 10000, step: 500, v: 2500 },
+      { k: 'rate', label: 'Rate ($/PM)', min: 5000, max: 25000, step: 500, v: 16000 }
+    ], draw);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const A = 2.94, EXP = 1.0405, EM = 0.38;
+    function draw() {
+      const csci1 = v.c1a + v.c1b;
+      const total = csci1 + v.c2 + v.c3 + v.c4;
+      const kslc = total / 1000;
+      const pm = A * Math.pow(kslc, EXP) * EM;
+      const cost = pm * v.rate;
+      const tdev = 3.67 * Math.pow(pm, 0.262);
+      tb.innerHTML = '<table>' +
+        `<tr><th>CSCI</th><th>SLOC</th></tr>` +
+        `<tr><td>CSCI1: Develop/submit orders (CSC1 + CSC2)</td><td>${f2(csci1, 0)}</td></tr>` +
+        `<tr><td>CSCI2: Verify order</td><td>${f2(v.c2, 0)}</td></tr>` +
+        `<tr><td>CSCI3: Approve order</td><td>${f2(v.c3, 0)}</td></tr>` +
+        `<tr><td>CSCI4: Status report</td><td>${f2(v.c4, 0)}</td></tr>` +
+        `<tr><td><b>Total custom SLOC</b></td><td><b>${f2(total, 0)}</b></td></tr>` +
+        `<tr><td colspan="2">+ COTS Package 1, COTS Package 2 (priced separately, picked up for integration)</td></tr>` +
+        '</table>';
+      ro([
+        ['Total custom SLOC', f2(total, 0) + ' (source: 19,000)', 'good'],
+        ['KSLOC', f2(kslc, 3)],
+        ['Effort (PM = 2.94 x KSLOC^1.0405 x 0.38)', f2(pm, 2) + ' PM (source: 23.92)', 'good'],
+        ['Cost', '$' + f2(cost, 0) + ' (source: $382,643)', 'good'],
+        ['Schedule (Tdev = 3.67 x PM^0.262)', f2(tdev, 2) + ' mo (source: 8.43)', 'good']
+      ]);
+      note.textContent = 'Default leaves reproduce CEBoK Fig. 12.7: CSCI1 5,000+7,500, CSCI2 3,000, CSCI3 1,000, CSCI4 2,500 = 19,000 custom SLOC, plus two COTS packages priced separately.';
+      publish(box, { total, pm, cost, tdev });
+    }
+    draw();
+  };
+
+  // ======================================================================
   // M11: skill-mix — weighted (composite) rate vs unweighted average rate (Fig 11.4)
   reg['skill-mix'] = box => {
     title(box, 'Skill-mix composite rate', 'composite = weighted by hours; unweighted average ignores how the hours are actually spent');

@@ -66,7 +66,11 @@
     'skill-mix': { controls: ['r1', 'h1', 'r2', 'h2', 'r3', 'h3', 'r4', 'h4'], setters: [], outputs: ['totH', 'totCost', 'composite', 'avgRate'] },
     'pfd-standard': { controls: ['measured', 'pace', 'pfd', 'newpfd', 'qty'], setters: [], outputs: ['std', 'grandOld', 'grandNew'] },
     'mua-moving-average': { controls: ['window', 'weight', 'price'], setters: [], outputs: ['mua', 'rawCost'] },
-    'design-scrap': { controls: ['stock', 'price', 'rate'], setters: [], outputs: ['bought', 'scrapLb', 'scrapPct', 'matCost', 'machCost', 'totalCost'] }
+    'design-scrap': { controls: ['stock', 'price', 'rate'], setters: [], outputs: ['bought', 'scrapLb', 'scrapPct', 'matCost', 'machCost', 'totalCost'] },
+    'sw-cost-drivers': { controls: ['preset', 'kslc', 'em', 'rate'], setters: [], outputs: ['pm', 'cost', 'kslc', 'em'] },
+    'sw-schedule': { controls: ['pm', 'E', 'sced', 'target', 'ex'], setters: [], outputs: ['tdev', 'exp', 'needSced'] },
+    'sw-analogy': { controls: ['setupH', 'setupAdj', 'dataH', 'dataAdj', 'implH', 'implAdj', 'trainH', 'trainAdj', 'rate', 'hrsYr'], setters: [], outputs: ['totalHrs', 'cost'] },
+    'sloc-rollup': { controls: ['c1a', 'c1b', 'c2', 'c3', 'c4', 'rate'], setters: [], outputs: ['total', 'pm', 'cost', 'tdev'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);
