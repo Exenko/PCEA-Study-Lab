@@ -70,7 +70,11 @@
     'sw-cost-drivers': { controls: ['preset', 'kslc', 'em', 'rate'], setters: [], outputs: ['pm', 'cost', 'kslc', 'em'] },
     'sw-schedule': { controls: ['pm', 'E', 'sced', 'target', 'ex'], setters: [], outputs: ['tdev', 'exp', 'needSced'] },
     'sw-analogy': { controls: ['setupH', 'setupAdj', 'dataH', 'dataAdj', 'implH', 'implAdj', 'trainH', 'trainAdj', 'rate', 'hrsYr'], setters: [], outputs: ['totalHrs', 'cost'] },
-    'sloc-rollup': { controls: ['c1a', 'c1b', 'c2', 'c3', 'c4', 'rate'], setters: [], outputs: ['total', 'pm', 'cost', 'tdev'] }
+    'sloc-rollup': { controls: ['c1a', 'c1b', 'c2', 'c3', 'c4', 'rate'], setters: [], outputs: ['total', 'pm', 'cost', 'tdev'] },
+    'real-nominal': { controls: ['n', 'i', 't'], setters: [], outputs: ['exact', 'approx', 'escalated', 'discounted'] },
+    'depreciation': { controls: ['method', 'cost', 'salvage', 'life', 'month'], setters: [], outputs: ['method', 'y1', 'y2', 'y3', 'bookEnd'] },
+    'mower-npv': { controls: ['scenario', 'metric', 'guess'], setters: [], outputs: ['npvOut', 'npvMower', 'npvUpgrade', 'npvStatusQuo', 'guessCorrect'] },
+    'benefits-matrix': { controls: ['wMission', 'wRisk', 'sA1m', 'sA1r', 'sA3m', 'sA3r'], setters: [], outputs: ['weightedScoreA1', 'weightedScoreA3', 'npvWinner', 'bcrWinner'] }
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = WidgetMeta; else root.WidgetMeta = WidgetMeta;
 })(typeof window !== 'undefined' ? window : this);

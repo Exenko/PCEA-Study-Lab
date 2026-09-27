@@ -3236,5 +3236,229 @@ const Widgets = (() => {
     draw();
   };
 
+  // ======================================================================
+  // M13: real-nominal — exact vs approximate real rate; escalation vs discounting of $100
+  reg['real-nominal'] = box => {
+    title(box, 'Real vs nominal rate', 'exact (1+n)/(1+i) − 1 vs the n − i shortcut');
+    const v = controls(box, [
+      { k: 'n', label: 'Nominal rate', min: 0, max: 0.15, step: 0.0025, v: 0.05, fmt: x => pct(x, 2) },
+      { k: 'i', label: 'Inflation rate', min: 0, max: 0.15, step: 0.0025, v: 0.03, fmt: x => pct(x, 2) },
+      { k: 't', label: 'Years (for the $100 illustration)', min: 1, max: 20, step: 1, v: 5 }
+    ], draw);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function draw() {
+      const exact = (1 + v.n) / (1 + v.i) - 1;
+      const approx = v.n - v.i;
+      const escalated = 100 * Math.pow(1 + v.i, v.t);
+      const discounted = escalated / Math.pow(1 + v.n, v.t);
+      const directReal = 100 / Math.pow(1 + exact, v.t);
+      ro([
+        ['Exact real rate', pct(exact, 2), 'good'],
+        ['Approx real rate (n − i)', pct(approx, 2)],
+        ['CEBoK example (5% nominal, 3% inflation)', pct((1.05 / 1.03 - 1), 2) + ' exact, ' + pct(0.02, 2) + ' approx'],
+        [`$100 escalated at inflation to year ${f2(v.t, 0)}`, '$' + f2(escalated, 2)],
+        ['…then discounted back at the nominal rate', '$' + f2(discounted, 2)],
+        ['$100 discounted directly at the real rate', '$' + f2(directReal, 2), 'good']
+      ]);
+      note.textContent = 'Escalating a cash flow at inflation and then discounting it at the nominal rate gives the same present value as discounting the un-escalated amount at the real rate (Fig. 13.2) — the two operations offset when done consistently.';
+      publish(box, { exact, approx, escalated, discounted });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M13: depreciation — SL (month-of-purchase partial year) / DDB / SYD
+  reg['depreciation'] = box => {
+    title(box, 'Depreciation methods', 'straight-line, double-declining-balance, sum-of-the-years-digits');
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const DEFAULTS = {
+      SL: { cost: 140000, salvage: 20000, life: 5, month: 4 },
+      DDB: { cost: 140000, salvage: 20000, life: 5, month: 4 },
+      SYD: { cost: 100000, salvage: 10000, life: 5, month: 1 }
+    };
+    let lastMethod = null;
+    const v = controls(box, [
+      { k: 'method', label: 'Method', type: 'select', v: 'SL', options: [['SL', 'Straight-line'], ['DDB', 'Double-declining balance'], ['SYD', 'Sum-of-the-years-digits']] },
+      { k: 'cost', label: 'Cost', min: 1000, max: 500000, step: 1000, v: 140000 },
+      { k: 'salvage', label: 'Salvage value', min: 0, max: 100000, step: 1000, v: 20000 },
+      { k: 'life', label: 'Life (years)', min: 2, max: 10, step: 1, v: 5 },
+      { k: 'month', label: 'Month of purchase', min: 1, max: 12, step: 1, v: 4, fmt: x => MONTHS[Math.round(x) - 1] }
+    ], draw);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function schedule() {
+      const rows = [];
+      if (v.method === 'SL') {
+        const annual = (v.cost - v.salvage) / v.life;
+        const frac1 = (12 - v.month + 1) / 12;
+        let bv = v.cost;
+        const dep1 = annual * frac1;
+        bv -= dep1; rows.push([dep1, bv]);
+        let remaining = v.cost - v.salvage - dep1;
+        while (remaining > 1e-6) {
+          const dep = Math.min(annual, remaining);
+          bv -= dep; remaining -= dep;
+          rows.push([dep, bv]);
+        }
+      } else if (v.method === 'DDB') {
+        const rate = 2 / v.life;
+        const frac1 = (12 - v.month + 1) / 12;
+        let bv = v.cost;
+        for (let y = 1; y <= v.life + 2 && bv > v.salvage + 1e-6; y++) {
+          const f = y === 1 ? frac1 : 1;
+          const dep = Math.min(bv * rate * f, bv - v.salvage);
+          bv -= dep; rows.push([dep, bv]);
+        }
+      } else {
+        const n = v.life, base = v.cost - v.salvage, sumd = n * (n + 1) / 2;
+        let bv = v.cost;
+        for (let y = 1; y <= n; y++) {
+          const dep = (n - y + 1) / sumd * base;
+          bv -= dep; rows.push([dep, bv]);
+        }
+      }
+      return rows;
+    }
+    function draw() {
+      if (v.method !== lastMethod) {
+        lastMethod = v.method;
+        box.w.setMany(DEFAULTS[v.method]);
+        return;
+      }
+      const rows = schedule();
+      tb.innerHTML = '<table><thead><tr><th>Year</th><th>Depreciation</th><th>Book value</th></tr></thead><tbody>' +
+        rows.map((r, i) => `<tr><td>${v.method === 'DDB' ? 2006 + i : i + 1}</td><td>$${f2(r[0], 0)}</td><td>$${f2(r[1], 0)}</td></tr>`).join('') +
+        '</tbody></table>';
+      pb.innerHTML = '';
+      const ymax = v.cost * 1.05;
+      const p = Plot.create(pb, { h: 200, xmin: 0, xmax: rows.length, ymin: 0, ymax, xlabel: 'year', ylabel: 'book value' });
+      p.axes();
+      const pts = [[0, v.cost]]; rows.forEach((r, i) => pts.push([i + 1, r[1]]));
+      p.line(pts, 'series c1'); pts.forEach(pt => p.dot(pt[0], pt[1], 'pt', 4));
+      ro([
+        ['Year 1 depreciation', '$' + f2(rows[0][0], 0), 'good'],
+        ['Year 2 depreciation', rows[1] ? '$' + f2(rows[1][0], 0) : '—'],
+        ['Year 3 depreciation', rows[2] ? '$' + f2(rows[2][0], 0) : '—'],
+        ['Ending book value', '$' + f2(rows[rows.length - 1][1], 0)]
+      ]);
+      note.textContent = v.method === 'SL'
+        ? 'CEBoK example: $140,000 cost, $20,000 salvage, 5-yr life, bought April 1 (nearest whole month) — first year gets 9/12 of the annual amount, and the leftover quarter-year lands in a 6th, stub year.'
+        : v.method === 'DDB'
+          ? 'DDB rate = 200%/life = 40%. Fig. 13.21: same $140,000/$20,000/5-yr, April purchase — the first year is also prorated 9/12, then full-year DDB applies; depreciation is capped so book value never drops below salvage (2006–2010: $42,000, $39,200, $23,520, $14,112, $1,168 capped).'
+          : 'CEBoK example: $100,000 cost, $10,000 salvage, 5-yr life. Sum-of-the-years digits = (n)(n+1)/2 = 15.';
+      publish(box, { method: v.method, y1: rows[0][0], y2: rows[1] ? rows[1][0] : 0, y3: rows[2] ? rows[2][0] : 0, bookEnd: rows[rows.length - 1][1] });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M13: mower-npv — Table 13.6 lawn-mower alternatives; guess the winner, then reveal
+  reg['mower-npv'] = box => {
+    title(box, 'Lawn-mower NPV (Table 13.6)', 'guess the winner under each metric and assumption, then reveal');
+    const NAMES = { outsource: 'Outsource mowing', mower: 'Buy new mower', upgrade: 'Upgrade current mower', statusquo: 'Status quo' };
+    const BASE = { outsource: 128, mower: 103, upgrade: -31, statusquo: -125 };
+    const ALTS = ['outsource', 'mower', 'upgrade', 'statusquo'];
+    const SCEN_TEXT = {
+      base: 'Base case (Table 13.6).',
+      fuel: '+10% fuel cost: outsourcing still wins on NPV; per the source, NPVs increased for both outsourcing and the new mower, and the gap between them widened. No new figures are given for this case.',
+      outsourceCost: '+10% cost of outsourcing: outsourcing still wins on NPV.',
+      rate: 'Labor valued at $25/hr instead of $20/hr: outsourcing still wins on NPV.'
+    };
+    const v = controls(box, [
+      { k: 'scenario', label: 'Assumption set', type: 'select', v: 'base', options: [['base', 'Base case'], ['fuel', '+10% fuel cost'], ['outsourceCost', '+10% outsourcing cost'], ['rate', '$25/hr labor rate']] },
+      { k: 'metric', label: 'Decision metric', type: 'select', v: 'npv', options: [['npv', 'NPV'], ['cbr', 'Cost/benefit ratio (C/BR)']] },
+      { k: 'guess', label: 'Your guess: which alternative wins?', type: 'select', v: 'outsource', options: ALTS.map(a => [a, NAMES[a]]) }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const revealBtn = E('button', 'btn small'); revealBtn.textContent = 'Reveal';
+    let revealed = false, lastKey = null;
+    revealBtn.onclick = () => { revealed = true; draw(); };
+    box.appendChild(revealBtn);
+    function draw() {
+      const key = v.scenario + '|' + v.metric + '|' + v.guess;
+      if (key !== lastKey) { lastKey = key; revealed = false; }
+      pb.innerHTML = '';
+      const ymax = Math.max(...ALTS.map(a => BASE[a])) * 1.15, ymin = Math.min(...ALTS.map(a => BASE[a])) * 1.15;
+      const p = Plot.create(pb, { h: 220, xmin: 0, xmax: 4, ymin, ymax, xlabel: '', ylabel: 'NPV ($, base case, per-year basis)', xticks: 4, xfmt: () => '' });
+      p.axes(); p.hline(0, 'marker');
+      ALTS.forEach((a, i) => {
+        const val = BASE[a];
+        p.rect(i + 0.15, 0, i + 0.85, val, val >= 0 ? 'bar c1f' : 'bar c3f');
+        p.text(i + 0.5, val + (val >= 0 ? 1 : -1) * (ymax - ymin) * 0.03, '$' + f2(val, 0), 'annot', 'middle');
+      });
+      const npvWinner = 'outsource';
+      const actualWinner = v.metric === 'npv' ? npvWinner : 'mower';
+      const correct = revealed && v.guess === actualWinner;
+      const rows = [
+        ['Assumption set', SCEN_TEXT[v.scenario]],
+        ['Your guess', NAMES[v.guess]]
+      ];
+      if (revealed) {
+        rows.push(['Actual winner (' + (v.metric === 'npv' ? 'NPV' : 'C/BR') + ')', NAMES[actualWinner], correct ? 'good' : 'bad']);
+        rows.push(['Your guess was', correct ? 'correct' : 'incorrect', correct ? 'good' : 'bad']);
+        if (v.metric === 'cbr' && v.scenario !== 'base') {
+          rows.push(['Caution', 'CEBoK reports the C/BR result for the base case only; this answer assumes it holds here.']);
+        }
+        if (v.metric === 'cbr') {
+          rows.push(['Source statement', 'By C/BR, the new mower would be favored by a narrow margin — it is more efficient (better ratio) but less effective (lower NPV) than outsourcing. No numeric C/BR values are given in the source excerpt.']);
+        } else {
+          rows.push(['Base-case NPV ranking (Table 13.6)', ALTS.slice().sort((a, b) => BASE[b] - BASE[a]).map(a => NAMES[a]).join(' > ')]);
+        }
+      }
+      ro(rows);
+      note.textContent = 'NPV bars reproduce CEBoK Table 13.6 exactly (outsource $128, new mower $103, upgrade −$31, status quo −$125, base case). The full 10-year cash-flow build (Tables 13.1–13.5) and the source\'s own C/BR figures aren\'t recoverable from the excerpted text, so this widget states only the source\'s qualitative sensitivity/C-BR conclusions rather than inventing numbers.';
+      publish(box, { npvOut: BASE.outsource, npvMower: BASE.mower, npvUpgrade: BASE.upgrade, npvStatusQuo: BASE.statusquo, guessCorrect: revealed ? (correct ? 1 : 0) : 0 });
+    }
+    draw();
+  };
+
+  // ======================================================================
+  // M13: benefits-matrix — weighted point-rating decision matrix; NPV vs B/CR winners can differ
+  reg['benefits-matrix'] = box => {
+    title(box, 'Benefits decision matrix', 'weighted scoring vs NPV vs B/CR — different methods, different winners');
+    const PUBLISHED = [
+      { name: 'Alt 1', npv: 34596762, score: 24.53, bcr: 7.1 },
+      { name: 'Alt 2', npv: 42157114, score: 24.73, bcr: 5.8 },
+      { name: 'Alt 3', npv: 68307235, score: 26.08, bcr: 3.8 },
+      { name: 'Alt 4', npv: 35604337, score: 23.15, bcr: 6.5 }
+    ];
+    const v = controls(box, [
+      { k: 'wMission', label: 'Weight: Mission impact', min: 1, max: 5, step: 0.5, v: 2 },
+      { k: 'wRisk', label: 'Weight: Risk reduction', min: 1, max: 5, step: 0.5, v: 1 },
+      { k: 'sA1m', label: 'Alt 1 mission score (1-10)', min: 1, max: 10, step: 0.5, v: 8 },
+      { k: 'sA1r', label: 'Alt 1 risk score (1-10)', min: 1, max: 10, step: 0.5, v: 5 },
+      { k: 'sA3m', label: 'Alt 3 mission score (1-10)', min: 1, max: 10, step: 0.5, v: 9 },
+      { k: 'sA3r', label: 'Alt 3 risk score (1-10)', min: 1, max: 10, step: 0.5, v: 6 }
+    ], draw);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function draw() {
+      const npvWinner = PUBLISHED.reduce((b, a) => a.npv > b.npv ? a : b, PUBLISHED[0]);
+      const bcrWinner = PUBLISHED.reduce((b, a) => a.bcr > b.bcr ? a : b, PUBLISHED[0]);
+      const scoreWinner = PUBLISHED.reduce((b, a) => a.score > b.score ? a : b, PUBLISHED[0]);
+      tb.innerHTML = '<table><thead><tr><th>Alternative</th><th>NPV</th><th>Weighted score</th><th>B/CR</th></tr></thead><tbody>' +
+        PUBLISHED.map(a => `<tr><td>${a.name}</td><td>$${f2(a.npv, 0)}</td><td>${f2(a.score, 2)}</td><td>${f2(a.bcr, 1)}</td></tr>`).join('') +
+        '</tbody></table>';
+      const weightedA1 = v.wMission * v.sA1m + v.wRisk * v.sA1r;
+      const weightedA3 = v.wMission * v.sA3m + v.wRisk * v.sA3r;
+      ro([
+        ['Winner by NPV', npvWinner.name, 'good'],
+        ['Winner by weighted score', scoreWinner.name, scoreWinner.name === npvWinner.name ? 'good' : ''],
+        ['Winner by B/CR', bcrWinner.name, bcrWinner.name !== npvWinner.name ? 'good' : ''],
+        ['Your weighted score, Alt 1', f2(weightedA1, 1)],
+        ['Your weighted score, Alt 3', f2(weightedA3, 1), weightedA3 > weightedA1 ? 'good' : '']
+      ]);
+      note.textContent = 'Table reproduces the published Alt 1–4 NPV / weighted-score / B-CR results (weight = 2 means twice as valued as weight = 1). By NPV and weighted score, Alt 3 wins; by B/CR, Alt 1 wins — the same paradox as Table 13.6\'s C/BR flip, on a different example. The criteria weights and scores above are an illustrative mechanism (the source doesn\'t give its own underlying per-criterion inputs) — move the sliders to see how the ranking can change.';
+      publish(box, { weightedScoreA1: weightedA1, weightedScoreA3: weightedA3, npvWinner: npvWinner.name, bcrWinner: bcrWinner.name });
+    }
+    draw();
+  };
+
   return { get: n => reg[n], names: () => Object.keys(reg), mount, _math: { ols, mean, sd, median } };
 })();
