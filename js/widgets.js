@@ -1090,6 +1090,203 @@ const Widgets = (() => {
     draw();
   };
 
+  // M15: EV measurement method picker (Fig. 15.11 rules) + LOE demo
+  reg['ev-method'] = box => {
+    title(box, 'Picking an EV measurement method', 'match the work package to milestones / % complete / 0-100 / 50-50 / LOE (Fig. 15.11, L403-428)');
+    const WP = {
+      wp1: { label: 'WP1: 6-month design effort, monthly drawing-package milestones', duration: 6, deliverable: 'drawings, monthly milestones', costTiming: 'spread over duration', correct: 'milestones' },
+      wp2: { label: 'WP2: one-day kickoff meeting', duration: 0.25, deliverable: 'meeting held', costTiming: 'incurred that day', correct: '0-100' },
+      wp3: { label: 'WP3: equipment purchase, cost hits at delivery', duration: 3, deliverable: 'equipment received', costTiming: 'all cost at delivery (purchase)', correct: '0-100' },
+      wp4: { label: 'WP4: 2-month test campaign, no intermediate milestones', duration: 2, deliverable: 'test report at end', costTiming: 'spread over duration', correct: '50-50' },
+      wp5: { label: 'WP5: multi-month procurement of subcontracted pieces, fixed total cost', duration: 8, deliverable: 'subcontract deliverables, hard to milestone', costTiming: 'pieces of fixed cost over months', correct: 'percent' },
+      wp6: { label: 'WP6: ongoing program management support staff, no specific deliverable', duration: 12, deliverable: 'none (time-related support)', costTiming: 'steady over duration', correct: 'loe' }
+    };
+    const METHNAME = { milestones: 'Milestones', percent: 'Percent complete', '0-100': '0/100', '50-50': '50/50', loe: 'Level of Effort' };
+    const WHY = {
+      wp1: 'Duration > 2 months with >=1 milestone/month is exactly the milestone rule (L403-406).',
+      wp2: 'A one-day meeting is a very short package (<1 month) with cost at the event — 0/100 (L414-418).',
+      wp3: 'Purchases price in fully at delivery even if the package spans months — 0/100 (L414-418).',
+      wp4: 'Duration <=2 months with no intermediate milestones is the 50/50 rule (L419-421).',
+      wp5: 'Procurement of pieces of a fixed total cost over several months is the named use case for percent complete (L407-410) — used sparingly since it is the most subjective method.',
+      wp6: 'No measurable output, time-related support — LOE (L422-428): BCWP is planned to equal BCWS, so no schedule variance is possible, but cost variance can still occur.'
+    };
+    const v = controls(box, [
+      { k: 'wp', label: 'Work package', type: 'select', v: 'wp1', options: Object.keys(WP).map(k => [k, WP[k].label]) },
+      { k: 'guess', label: 'Your method', type: 'select', v: 'milestones', options: [['milestones', 'Milestones'], ['percent', 'Percent complete'], ['0-100', '0/100'], ['50-50', '50/50'], ['loe', 'Level of Effort']] }
+    ], draw);
+    const cardEl = E('div', 'w-table'); box.appendChild(cardEl);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const revealBtn = E('button', 'btn small'); revealBtn.textContent = 'Reveal';
+    let revealed = false, lastKey = null;
+    revealBtn.onclick = () => { revealed = true; draw(); };
+    box.appendChild(revealBtn);
+    // Small LOE demo: planned == earned (straight-line), actuals run high -> SV=0, CV<0
+    const loeMonths = [1, 2, 3, 4, 5, 6];
+    const loePlanPerMo = 100, loeActualPerMo = 120;
+    const loeRows = loeMonths.map(m => {
+      const bcws = loePlanPerMo * m, bcwp = bcws, acwp = loeActualPerMo * m;
+      return { m, bcws, bcwp, acwp, sv: bcwp - bcws, cv: bcwp - acwp };
+    });
+    function draw() {
+      const key = v.wp + '|' + v.guess;
+      if (key !== lastKey) { lastKey = key; revealed = false; }
+      const wp = WP[v.wp];
+      cardEl.innerHTML = '<table><thead><tr><th>Attribute</th><th>Value</th></tr></thead><tbody>' +
+        `<tr><td>Duration</td><td>${wp.duration < 1 ? '<1 month' : f2(wp.duration, wp.duration % 1 ? 1 : 0) + ' month(s)'}</td></tr>` +
+        `<tr><td>Deliverable</td><td>${wp.deliverable}</td></tr>` +
+        `<tr><td>Cost timing</td><td>${wp.costTiming}</td></tr></tbody></table>`;
+      const rows = [
+        [wp.label, ''],
+        ['Your pick', METHNAME[v.guess]]
+      ];
+      if (revealed) {
+        const ok = v.guess === wp.correct;
+        rows.push(['Correct method', METHNAME[wp.correct], 'good']);
+        rows.push(['Check', ok ? 'match' : 'mismatch', ok ? 'good' : 'bad']);
+        rows.push(['Why', WHY[v.wp]]);
+      }
+      rows.push(['LOE demo (months 1-6): BCWS=BCWP (planned=earned)', loeRows.map(r => f2(r.bcws, 0)).join(', ')]);
+      rows.push(['LOE demo: ACWP (actual runs 20% high)', loeRows.map(r => f2(r.acwp, 0)).join(', ')]);
+      rows.push(['LOE demo: SV = EV - PV (always 0)', loeRows.map(r => f2(r.sv, 0)).join(', ')]);
+      rows.push(['LOE demo: CV = EV - AC (goes negative)', loeRows.map(r => f2(r.cv, 0)).join(', '), 'bad']);
+      ro(rows);
+      note.textContent = 'Rules from Fig. 15.11 (L403-428): Milestones best for >2-month packages with >=1 milestone/month; 0/100 for very short (<1 month) packages or ones where cost is not incurred until the end (purchases, one-day meetings, trips); 50/50 for <=2-month packages with no intermediate milestones; percent complete is most subjective and used sparingly, typically for procurement pieces of a fixed total cost; LOE is for time-related work with no measurable output, where performance is planned/earned straight-line so BCWP=BCWS (SV=0) but cost variance can still occur if actuals run high, as shown in the demo above.';
+      publish(box, { wp: v.wp, guess: v.guess, correct: wp.correct, isMatch: v.guess === wp.correct, loeSvAll0: loeRows.every(r => r.sv === 0), loeCvAtM6: loeRows[5].cv });
+    }
+    draw();
+  };
+
+  // M15: EVM anomaly spotter (Fig. 15.18)
+  reg['evm-anomaly'] = box => {
+    title(box, 'EVM anomaly spotter', 'diagnose the data row against Fig. 15.18 past-performance anomalies (L628-676)');
+    const CASES = {
+      c1: { label: 'Case 1', row: { bcws: 500, bcwp: 500, acwp: 500, bac: 1000, eac: 1000 }, ans: 'equal', why: 'BCWS = BCWP = ACWP: indicates EV is not really being used — for non-LOE tasks all three being identical suggests EVM is not being applied to that task (L631-634).' },
+      c2: { label: 'Case 2', row: { bcws: 400, bcwp: 300, acwp: 0, bac: 1000, eac: 950 }, ans: 'bcwpNoAcwp', why: 'BCWP > 0 but ACWP = 0: over performance / a lag between costs being incurred and filtering through accounting (e.g. a trip not yet invoiced) (L635-646).' },
+      c3: { label: 'Case 3', row: { bcws: 0, bcwp: 150, acwp: 140, bac: 1000, eac: 1000 }, ans: 'bcwpNoBcws', why: 'BCWP > 0 but BCWS = 0: performance depends on having a plan, so this should never occur cumulatively; in current-period data it can happen when a behind-schedule task is catching up and the BCWS was in a prior month (L647-652).' },
+      c4: { label: 'Case 4', row: { bcws: 300, bcwp: 0, acwp: 200, bac: 1000, eac: 1050 }, ans: 'acwpNoBcwp', why: 'ACWP > 0 but BCWP = 0: actuals normally land in the same month as performance; can be invoice lag, or cost incurred on effort that was not completed so EV could not be claimed (L653-659).' },
+      c5: { label: 'Case 5', row: { bcws: 1100, bcwp: 900, acwp: 950, bac: 1000, eac: 1050 }, ans: 'overBac', why: 'BCWP or BCWS > BAC: should not happen — there cannot be more than 100% planned or completed work (L660-661).' },
+      c6: { label: 'Case 6', row: { bcws: 400, bcwp: 400, acwp: 50, bac: 900, eac: 0 }, ans: 'bacNoEac', why: 'BAC > 0 and EAC = 0: may happen if an effort is expected to be down-scoped but the ECP has not yet been implemented in the EV data; with ACWP present it should not occur unless charges are pending a move to another WBS (L662-665).' },
+      c7: { label: 'Case 7', row: { bcws: 100, bcwp: 90, acwp: 110, bac: 0, eac: 500 }, ans: 'eacNoBac', why: 'EAC > 0 and BAC = 0: should only occur for new work awaiting a contract change to add BAC; the contractor may load an EAC against a $0 WBS task to capture the expected value (L666-669).' },
+      c8: { label: 'Case 8', row: { bcws: -50, bcwp: -40, acwp: -45, bac: 1000, eac: 1000 }, ans: 'allNeg', why: 'BCWS, BCWP, ACWP all negative: should only occur in current-period data (e.g. rate-adjustment WBS lines, error corrections, or work/cost transfers between WBS lines) (L670-674).' },
+      c9: { label: 'Case 9', row: { bcws: 500, bcwp: 500, acwp: 480, bac: -100, eac: 900 }, ans: 'negBacEac', why: 'BAC < 0 or EAC < 0: should never happen — it would imply the contractor gives money to the government for work performed (L675-676).' },
+      c10: { label: 'Case 10 (aquarium)', row: { bcws: 400, bcwp: 200, acwp: 300, bac: 800, eac: 1200 }, ans: 'none', why: 'No anomaly: all values are positive, within range of BAC, and BAC/EAC are both present — an ordinary, if underperforming, data row (L677-680).' }
+    };
+    const ANSWERS = [
+      ['equal', 'BCWS = BCWP = ACWP'], ['bcwpNoAcwp', 'BCWP > 0, ACWP = 0'], ['bcwpNoBcws', 'BCWP > 0, BCWS = 0'],
+      ['acwpNoBcwp', 'ACWP > 0, BCWP = 0'], ['overBac', 'BCWP or BCWS > BAC'], ['bacNoEac', 'BAC > 0, EAC = 0'],
+      ['eacNoBac', 'EAC > 0, BAC = 0'], ['allNeg', 'BCWS, BCWP, ACWP all negative'], ['negBacEac', 'BAC < 0 or EAC < 0'],
+      ['none', 'No anomaly']
+    ];
+    const v = controls(box, [
+      { k: 'caseId', label: 'Data row', type: 'select', v: 'c10', options: Object.keys(CASES).map(k => [k, CASES[k].label]) },
+      { k: 'guess', label: 'Which anomaly?', type: 'select', v: 'none', options: ANSWERS }
+    ], draw);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const revealBtn = E('button', 'btn small'); revealBtn.textContent = 'Reveal';
+    let revealed = false, lastKey = null;
+    revealBtn.onclick = () => { revealed = true; draw(); };
+    box.appendChild(revealBtn);
+    function draw() {
+      const key = v.caseId + '|' + v.guess;
+      if (key !== lastKey) { lastKey = key; revealed = false; }
+      const c = CASES[v.caseId], r = c.row;
+      tb.innerHTML = '<table><thead><tr><th>BCWS</th><th>BCWP</th><th>ACWP</th><th>BAC</th><th>EAC</th></tr></thead><tbody>' +
+        `<tr><td>${f2(r.bcws, 0)}</td><td>${f2(r.bcwp, 0)}</td><td>${f2(r.acwp, 0)}</td><td>${f2(r.bac, 0)}</td><td>${f2(r.eac, 0)}</td></tr></tbody></table>`;
+      const rows = [[c.label, ''], ['Your diagnosis', ANSWERS.find(a => a[0] === v.guess)[1]]];
+      if (revealed) {
+        const ok = v.guess === c.ans;
+        rows.push(['Correct diagnosis', ANSWERS.find(a => a[0] === c.ans)[1], 'good']);
+        rows.push(['Check', ok ? 'match' : 'mismatch', ok ? 'good' : 'bad']);
+        rows.push(['CEBoK explanation', c.why]);
+      }
+      ro(rows);
+      note.textContent = 'Nine anomalies from Fig. 15.18 (L628-676): all three equal; BCWP with no ACWP; BCWP with no BCWS; ACWP with no BCWP; BCWP or BCWS exceeding BAC; BAC present with EAC=0; EAC present with BAC=0; all values negative; BAC or EAC negative. Case 10 is the L677-680 aquarium row (BCWS 400/BCWP 200/ACWP 300/BAC 800/EAC 1200), included as a plain, non-anomalous baseline.';
+      publish(box, { caseId: v.caseId, guess: v.guess, correct: c.ans, isMatch: v.guess === c.ans });
+    }
+    draw();
+  };
+
+  // M15: EAC range calculator (aquarium example, L677+)
+  reg['eac-range'] = box => {
+    title(box, 'EAC range and TCPI', 'best/worst case EAC, TCPI to BAC and to LRE — default reproduces the aquarium example');
+    const v = controls(box, [
+      { k: 'bcws', label: 'BCWS', type: 'number', v: 400 },
+      { k: 'bcwp', label: 'BCWP', type: 'number', v: 200 },
+      { k: 'acwp', label: 'ACWP', type: 'number', v: 300 },
+      { k: 'bac', label: 'BAC', type: 'number', v: 800 },
+      { k: 'lre', label: 'LRE (latest revised estimate)', type: 'number', v: 1000 }
+    ], draw);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function draw() {
+      const { bcws, bcwp, acwp, bac, lre } = v;
+      const cv = bcwp - acwp, sv = bcwp - bcws;
+      const cpi = acwp !== 0 ? bcwp / acwp : NaN, spi = bcws !== 0 ? bcwp / bcws : NaN;
+      const bcwr = bac - bcwp;
+      const pctPlanned = bac !== 0 ? bcws / bac : NaN, pctComplete = bac !== 0 ? bcwp / bac : NaN, pctSpent = bac !== 0 ? acwp / bac : NaN;
+      const eacBest = cpi ? bac / cpi : NaN;
+      const denomWorst = cpi * spi;
+      const eacWorst = denomWorst ? acwp + bcwr / denomWorst : NaN;
+      const denomTcpiBac = bac - acwp, tcpiBac = denomTcpiBac !== 0 ? bcwr / denomTcpiBac : NaN;
+      const denomTcpiLre = lre - acwp, tcpiLre = denomTcpiLre !== 0 ? bcwr / denomTcpiLre : NaN;
+      const flag = isFinite(tcpiLre) && isFinite(cpi) && Math.abs(tcpiLre - cpi) > 0.05;
+      ro([
+        ['CV = BCWP - ACWP', f2(cv, 0), cv < 0 ? 'bad' : 'good'],
+        ['SV = BCWP - BCWS', f2(sv, 0), sv < 0 ? 'bad' : 'good'],
+        ['CPI = BCWP/ACWP', f2(cpi, 3), cpi < 1 ? 'bad' : 'good'],
+        ['SPI = BCWP/BCWS', f2(spi, 3), spi < 1 ? 'bad' : 'good'],
+        ['BCWR = BAC - BCWP', f2(bcwr, 0)],
+        ['% planned = BCWS/BAC', pct(pctPlanned, 1)],
+        ['% complete = BCWP/BAC', pct(pctComplete, 1)],
+        ['% spent = ACWP/BAC', pct(pctSpent, 1)],
+        ['Best-case EAC = BAC/CPI', f2(eacBest, 0), 'good'],
+        ['Worst-case EAC = ACWP + BCWR/(CPI*SPI)', f2(eacWorst, 0), 'bad'],
+        ['TCPI(BAC) = BCWR/(BAC-ACWP)', f2(tcpiBac, 3)],
+        ['TCPI(LRE) = BCWR/(LRE-ACWP)', f2(tcpiLre, 3), flag ? 'bad' : ''],
+        ['LRE reasonableness check', flag ? '|TCPI(LRE) - CPI| > 0.05 -- LRE may not be reasonable' : '|TCPI(LRE) - CPI| <= 0.05 -- consistent with current performance', flag ? 'bad' : 'good']
+      ]);
+      note.textContent = 'Default values (BCWS 400, BCWP 200, ACWP 300, BAC 800, LRE 1000) are the aquarium example. CV=-100, SV=-200, CPI=2/3=0.667, SPI=0.5, BCWR=600, %planned=50%, %complete=25%, %spent=37.5%, best-case EAC=800/0.667=1200, worst-case EAC=300+600/(0.667*0.5)=2100, TCPI(BAC)=600/500=1.2, TCPI(LRE)=600/700=0.857. Since |0.857-0.667|=0.19 exceeds the 0.05 tolerance, the LRE looks inconsistent with demonstrated performance (needs an unrealistic efficiency improvement to hit).';
+      publish(box, { cv, sv, cpi, spi, bcwr, pctPlanned, pctComplete, pctSpent, eacBest, eacWorst, tcpiBac, tcpiLre, flag });
+    }
+    draw();
+  };
+
+  // M15: rebaseline masking demo — cumulative vs since-rebaseline CPI/SPI
+  reg['rebaseline'] = box => {
+    title(box, 'Rebaseline masking', 'a rebaseline resets the cumulative history — since-rebaseline indices can look very different from all-time cumulative');
+    const v = controls(box, [
+      { k: 'rbBcws', label: 'At rebaseline: BCWS', type: 'number', v: 100 },
+      { k: 'rbBcwp', label: 'At rebaseline: BCWP', type: 'number', v: 100 },
+      { k: 'rbAcwp', label: 'At rebaseline: ACWP', type: 'number', v: 100 },
+      { k: 'bcws', label: 'Now (cumulative): BCWS', type: 'number', v: 150 },
+      { k: 'bcwp', label: 'Now (cumulative): BCWP', type: 'number', v: 145 },
+      { k: 'acwp', label: 'Now (cumulative): ACWP', type: 'number', v: 150 }
+    ], draw);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function draw() {
+      const { rbBcws, rbBcwp, rbAcwp, bcws, bcwp, acwp } = v;
+      const cumCpi = acwp !== 0 ? bcwp / acwp : NaN, cumSpi = bcws !== 0 ? bcwp / bcws : NaN;
+      const dBcwp = bcwp - rbBcwp, dAcwp = acwp - rbAcwp, dBcws = bcws - rbBcws;
+      const sinceCpi = dAcwp !== 0 ? dBcwp / dAcwp : NaN, sinceSpi = dBcws !== 0 ? dBcwp / dBcws : NaN;
+      const masking = isFinite(cumCpi) && isFinite(sinceCpi) && Math.abs(cumCpi - sinceCpi) > 0.02;
+      ro([
+        ['Cumulative CPI = BCWP/ACWP', f2(cumCpi, 3)],
+        ['Cumulative SPI = BCWP/BCWS', f2(cumSpi, 3)],
+        ['Since-rebaseline delta EV / delta AC / delta PV', `${f2(dBcwp, 0)} / ${f2(dAcwp, 0)} / ${f2(dBcws, 0)}`],
+        ['Since-rebaseline CPI = deltaBCWP/deltaACWP', f2(sinceCpi, 3)],
+        ['Since-rebaseline SPI = deltaBCWP/deltaBCWS', f2(sinceSpi, 3)],
+        ['Masking check', masking ? 'cumulative and since-rebaseline indices diverge -- pre-rebaseline history is masking current performance' : 'cumulative and since-rebaseline indices agree closely', masking ? 'bad' : 'good']
+      ]);
+      note.textContent = 'Rebaselining resets planned/earned/actual to a common point, wiping out prior variances from the cumulative history. With defaults (rebaseline at BCWS=BCWP=ACWP=100, now cumulative BCWS 150/BCWP 145/ACWP 150), cumulative CPI=145/150=0.967 and cumulative SPI=145/150=0.967 -- but those cumulative figures still include the pre-rebaseline period where everything was exactly on plan. The since-rebaseline view isolates only the work done after the reset: deltaBCWP=45, deltaACWP=50, deltaBCWS=50, giving since-rebaseline CPI=45/50=0.9 and SPI=45/50=0.9 -- both worse than the cumulative numbers suggest. A rebaseline can mask recent underperformance inside an all-time cumulative figure.';
+      publish(box, { cumCpi, cumSpi, dBcwp, dAcwp, dBcws, sinceCpi, sinceSpi, masking });
+    }
+    draw();
+  };
+
   // ======================================================================
   // M11: labor burdening
   reg['burden'] = box => {
