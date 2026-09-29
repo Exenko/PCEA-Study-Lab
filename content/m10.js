@@ -989,7 +989,7 @@ A: Chi-squared with 2 degrees of freedom.
 Q: Covariance formula
 A: $Cov(X,Y) = \sum(x_i - \bar x)(y_i - \bar y) / (n-1)$
 Q: Correlation coefficient formula
-A: $r = Cov(X,Y) / (s_X \sigma_Y)$, range [−1, +1]
+A: $r = Cov(X,Y) / (s_X \, s_Y)$, range [−1, +1]
 Q: Interpretation of r = +1, 0, −1
 A: +1: perfect positive relationship; 0: no linear relationship; −1: perfect negative relationship.
 Q: Relationship between r and R²

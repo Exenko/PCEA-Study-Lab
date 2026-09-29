@@ -42,7 +42,7 @@ The parametric approach provides:
 
 ### Statistical measures
 
-Regression analysis produces several statistics used to judge CER quality: the **t-statistic** and **F-statistic** (objective measures of a coefficient's or the model's validity), **R²** (explanatory power), and the **Coefficient of Variation (CV)** (used to derive error bands in cost risk analysis). Module 8 Regression Analysis and Module 10 Probability and Statistics cover the t/F/R² mechanics in detail; Module 9 Cost Risk Analysis covers how CV feeds risk bands.
+Regression analysis produces several statistics used to judge CER quality: the **t-statistic** and **F-statistic** (objective measures of a coefficient's or the model's validity), **R²** (explanatory power), and the **Coefficient of Variation (CV)** (used to derive error bands in cost risk analysis). Module 8 Regression Analysis and Module 9 Cost Risk Analysis explore these measures and their application in more detail.
 
 ### Data sources
 

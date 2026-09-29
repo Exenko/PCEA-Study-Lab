@@ -337,14 +337,14 @@ Q: For a civilian-pay appropriation where 100% of the money is spent in year one
 :::challenge escalation r=0.025 o1=0.5 o2=0.35 o3=0.15 amt=100 lock=r,o1,o2,o3,amt
 Q: 100 BY2025\$ of work will be appropriated in 2025 and outlaid 50% / 35% / 15% over three years at 2.5% inflation. Predict the TY\$ you must appropriate in 2025.
 predict: tyBY +- 0.5%
-> This exercise uses the **Army (arithmetic-mean) method**: weighted index = 0.50(1) + 0.35(1.025) + 0.15(1.025^2) = 1.0163, so about \$101.63 TY. CEBoK's worked examples instead use the Navy/Air Force **harmonic-mean** method (de-escalate each portion, sum, take the reciprocal) — the two methods differ because they assume different things about whose dollars the outlay percentages are stated in. Either way, the raw index for 2025 alone (1.0000) is not enough: money appropriated in 2025 is still spent at later, higher price levels.
+> This exercise uses CEBoK's Navy/Air Force **harmonic-mean** method (the widget default): weighted index = 1 / [0.50/1 + 0.35/1.025 + 0.15/1.025^2] = 1.0160, so about \$101.60 TY. The Army **arithmetic-mean** method, 0.50(1) + 0.35(1.025) + 0.15(1.025^2) = 1.0163, gives about \$101.63 — the two methods differ because they assume different things about whose dollars the outlay percentages are stated in. Either way, the raw index for 2025 alone (1.0000) is not enough: money appropriated in 2025 is still spent at later, higher price levels.
 :::
 
 :::challenge escalation r=0.025 o1=0.5 o2=0.35 o3=0.15 amt=100 lock=o1,o2,o3,amt
 Q: Keep the same outlay profile. Find the inflation rate at which the 2025 appropriation must be about **\$103** (within \$0.10).
 goal: tyBY ~ 103 +- 0.1
 show: r=0.0475
-> Practice data (illustrative, not from CEBoK). Using the Army method, the appropriation grows by about $0.65r$ (the 35% and 15% of outlays that fall in later years), so roughly 4.75% gives \$103. A longer outlay tail makes the weighted index more sensitive to the assumed inflation rate.
+> Practice data (illustrative, not from CEBoK). The appropriation grows by about $0.65r$ (the 35% and 15% of outlays that fall in later years), so roughly 4.75% gives \$103 with the widget's default Navy/Air Force (harmonic) method. (The Army arithmetic method would need about 4.57%.) A longer outlay tail makes the weighted index more sensitive to the assumed inflation rate.
 :::
 
 +++

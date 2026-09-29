@@ -390,7 +390,7 @@ A generic "Very Low ≈ <1.0 … Extra High ≈ 1.6–2.0+" multiplier scale, an
 :::
 
 :::tip Beyond CEBoK
-Cost driver selection is as important as size in a credible software estimate — CEBoK's own example shows a 100 KSLOC project ranging from about 154 PM (best team, low complexity) to well over 2,400 PM (junior team, high complexity) purely from driver choices.
+Cost driver selection is as important as size in a credible software estimate — CEBoK's own example shows a 100 KSLOC project ranging from about 279 PM (very low complexity) to 1,628 PM (very high complexity) from complexity alone, and from about 154 PM (best programmers) to 2,429 PM (junior programmers) from capability alone, each with the other drivers held nominal.
 :::
 
 :::widget sw-effort:::

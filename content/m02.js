@@ -38,8 +38,11 @@ Cost estimating draws on the **past** (historical cost and other data collected 
 ### Risk vs. Uncertainty
 
 - **Uncertainty**: natural statistical variability in an estimate given the data and method — describable with a distribution (e.g., ± prediction interval)
-- **Risk**: a specific, identifiable event or condition that, **if it happens**, has a (usually negative) effect on cost/schedule/performance. Characterized by **probability** and **consequence**.
-- **Opportunity**: an uncertain event with a positive effect
+- **Risk** (CEBoK's definition in this module): the **upward shift** applied to the cost estimate range because unadjusted estimates tend to be **systematically low**. It corrects an inherent bias and improves accuracy. Example: if costs come in on average 20% higher than the estimates, add 20% to the estimate — not atypical of historical cost growth.
+
+:::tip Beyond CEBoK
+In general risk management (and in Module 9), a **risk** is also described as a discrete event with a **probability** and a **consequence**, and an **opportunity** is an uncertain event with a positive effect.
+:::
 
 Both must be reflected in the final estimate. Report a **range or distribution** with a confidence level, not a bare point number.
 
@@ -55,12 +58,12 @@ Both must be reflected in the final estimate. Report a **range or distribution**
 - External factors (funding instability, inflation, regulatory change)
 
 :::check
-Q: A supplier might go out of business next year (30% chance), adding \$4M to cost. This is best described as…
-* A risk (an uncertain event with probability and consequence)
-- General estimating uncertainty
+Q: Historically, a program type's actual costs come in about 20% above its estimates. Per CEBoK Module 2, adding 20% to a new estimate of that type accounts for…
+* Risk (an upward shift correcting systematic underestimation)
+- Uncertainty (the precision of the estimate)
 - A sunk cost
 - An opportunity
-> A discrete event with probability and consequence = risk.
+> CEBoK: risk is the upward shift applied to the estimate range because unadjusted estimates tend to be systematically low. Uncertainty describes the range (precision) around the estimate.
 :::
 
 :::check
@@ -586,7 +589,7 @@ Q: Why does a build-up schedule estimate usually need Monte Carlo simulation, un
   cards: String.raw`
 ## Uncertainty & Risk
 Q: Uncertainty vs. risk in cost estimating
-A: Uncertainty: natural statistical variability in an estimate given the data/method (describable with a distribution). Risk: a specific identifiable event with probability and consequence.
+A: Uncertainty: natural statistical variability in an estimate given the data/method (describable with a distribution). Risk (CEBoK Module 2): the upward shift applied to the estimate range because unadjusted estimates tend to be systematically low (e.g., add 20% if costs historically run 20% high).
 Q: Why does a point estimate from "most likely" values usually fall below the mean?
 A: Cost distributions are right-skewed; overruns can be large but underruns are limited.
 Q: Opportunity (in risk/uncertainty terms)

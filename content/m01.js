@@ -366,7 +366,7 @@ Q: A life-cycle cost estimate for a 30-year system typically predicts costs far 
 - Government requirements always inflate costs
 * LCCE includes Operating & Support (O&S) costs over 30 years, which often dwarf R&D and production
 - Estimators pad the numbers to be safe
-> O&S costs — maintenance, operations, training, support — often constitute 60–80% of total life-cycle cost for long-lived systems. An acquisition-only estimate captures only R&D and production, missing the largest cost driver.
+> O&S costs — maintenance, operations, training, support — cover the whole service life. (Beyond CEBoK: they often constitute 60–80% of total life-cycle cost for long-lived systems.) An acquisition-only estimate captures only R&D and production, missing the largest cost driver.
 :::`
     },
     {
@@ -417,14 +417,14 @@ Common WBS conventions from MIL-STD-881 and PMI practice: Level 1 is the entire 
 
 The WBS is the backbone of the estimate: later steps (data collection, cost element methodology, model building) are all organized around it.
 
-Figure 1.4's MIL-HDBK-881A aircraft WBS shows this in practice: a top level (Aircraft System) breaking into Air Vehicle plus supporting elements (Systems Engineering/Program Management, System Test and Evaluation, Training, Data, Peculiar and Common Support Equipment, Operational Site Activation, Industrial Facilities, Initial Spares and Spare Parts), with Air Vehicle itself decomposing into items like Airframe, Propulsion, and mission-system software and equipment. Most top-level items are appropriate as an analogy for a commercial airliner; at the Air Vehicle level, Reconnaissance, Antisubmarine Warfare, and Armament are not relevant to commercial airliners and can be ignored.
+Figure 1.4's MIL-HDBK-881A aircraft WBS shows this in practice: a top level (Aircraft System) breaking into Air Vehicle plus supporting elements (Systems Engineering/Program Management, System Test and Evaluation, Training, Data, Peculiar and Common Support Equipment, Operational Site Activation, Industrial Facilities, Initial Spares and Spare Parts), with Air Vehicle itself decomposing into items like Airframe, Propulsion, and mission-system software and equipment. Most top-level items are appropriate as an analogy for a commercial airliner; at the Air Vehicle level, Reconnaissance, Antisubmarine Warfare, Armament, "and a few others" are not relevant to commercial airliners and can be ignored.
 
 :::widget wbs-tree:::
 
 :::challenge wbs-tree
 Q: Switch to the "Commercial airliner view." Reconnaissance, Antisubmarine Warfare, and Armament are hidden because they don't apply to an airliner. How many elements does the toggle hide?
 predict: hiddenCount +- 0
-> The source names exactly three Air Vehicle elements as not relevant for commercial airliners: Reconnaissance, Antisubmarine Warfare, and Armament.
+> The toggle hides the three elements CEBoK names: Reconnaissance, Antisubmarine Warfare, and Armament. CEBoK adds "and a few others" without naming them, so the widget hides only the named three.
 :::
 
 ### WBS Dictionary
@@ -782,7 +782,7 @@ A: Economic Analysis. Describes mission requirements and alternative courses of 
 Q: AoA vs EA
 A: AoA (Analysis of Alternatives) evaluates costs and benefits including operational effectiveness/utility of different courses of action. EA focuses on benefits quantified monetarily (cost-benefit).
 Q: Why is an LCCE typically much larger than an acquisition-only estimate?
-A: LCCE includes Operating & Support (O&S) costs over the entire system life (often decades), which frequently constitute 60–80% of total life-cycle cost.
+A: LCCE includes Operating & Support (O&S) costs over the entire system life (often decades), which are often the largest share of it (Beyond CEBoK: frequently 60–80% of total life-cycle cost).
 
 ## Documentation
 Q: What does estimate documentation include?

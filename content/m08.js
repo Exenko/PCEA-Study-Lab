@@ -147,7 +147,7 @@ X = {4, 7, 8, 12, 16}, Y = {5, 5, 10, 7, 13}, n = 5
 :::
 
 :::note CEBoK's printed numbers
-CEBoK's own worked example rounds $\bar X$ to 9 (it's actually 9.4), giving $\hat b = (427 - 5\cdot9\cdot8)/(529-5\cdot9^2) = 0.6$ and $\hat a = 8 - 0.6(9) = 2.5$, so $\hat Y = 2.5 + 0.6X$. CEBoK builds its worked examples on these rounded values: the slope's 95% CI comes out $0.6 \pm 3.18(0.3) = (-0.3, 1.4)$ (note that its own arithmetic, $0.6 \pm 0.9$, would actually give $(-0.3, 1.5)$), and the mean CI at X = 11 comes out $9 \pm 3.8 = (5.2, 12.8)$, restated as \$5.3M–\$12.9M.
+CEBoK's own worked example rounds $\bar X$ to 9 (it's actually 9.4), giving $\hat b = (427 - 5\cdot9\cdot8)/(529-5\cdot9^2) = 0.6$ (that printed fraction actually evaluates to 67/124 = 0.54; CEBoK carries 0.6 forward) and $\hat a = 8 - 0.6(9) = 2.5$, so $\hat Y = 2.5 + 0.6X$. CEBoK builds its worked examples on these rounded values: the slope's 95% CI comes out $0.6 \pm 3.18(0.3) = (-0.3, 1.4)$ (note that its own arithmetic, $0.6 \pm 0.9$, would actually give $(-0.3, 1.5)$), and the mean CI at X = 11 comes out $9 \pm 3.8 = (5.2, 12.8)$, restated as \$5.3M–\$12.9M.
 
 This app uses the **exact** values throughout: $\bar X = 9.4$, $b = 0.585$, $a = 2.50$, giving $\hat Y = 2.50 + 0.585X$. The conclusion is unchanged either way — the fit is **not significant** at α = 0.05, and both intervals include zero / span a wide range.
 :::
