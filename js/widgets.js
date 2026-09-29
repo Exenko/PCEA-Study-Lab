@@ -1287,6 +1287,228 @@ const Widgets = (() => {
     draw();
   };
 
+  // M16: CAIV design trade-off — pick the optimal design under thresholds/objectives and an exchange rate
+  reg['design-trade'] = box => {
+    title(box, 'Design trade-off', 'CAIV: pick the optimal design -- feasible (meets thresholds) and on the most-preferred curve of equal preference');
+    const SCEN = {
+      s1: {
+        label: 'Scenario 1', costMax: 95, perfMin: 50,
+        alts: [
+          { k: 'A', cost: 40, perf: 60 }, { k: 'B', cost: 70, perf: 91 }, { k: 'C', cost: 55, perf: 70 },
+          { k: 'D', cost: 20, perf: 35 }, { k: 'E', cost: 110, perf: 98 }
+        ]
+      },
+      s2: {
+        label: 'Scenario 2', costMax: 60, perfMin: 40,
+        alts: [
+          { k: 'A', cost: 30, perf: 50 }, { k: 'B', cost: 55, perf: 80 }, { k: 'C', cost: 45, perf: 60 },
+          { k: 'D', cost: 15, perf: 25 }, { k: 'E', cost: 90, perf: 92 }
+        ]
+      },
+      s3: {
+        label: 'Scenario 3', costMax: 85, perfMin: 60,
+        alts: [
+          { k: 'A', cost: 50, perf: 70 }, { k: 'B', cost: 80, perf: 96 }, { k: 'C', cost: 65, perf: 80 },
+          { k: 'D', cost: 35, perf: 45 }, { k: 'E', cost: 90, perf: 99 }
+        ]
+      }
+    };
+    const v = controls(box, [
+      { k: 'scenario', label: 'Scenario', type: 'select', v: 's1', options: Object.keys(SCEN).map(k => [k, SCEN[k].label]) },
+      { k: 'rate', label: 'Exchange rate (cost per unit performance)', min: 0.5, max: 3, step: 0.05, v: 1.5, fmt: x => f2(x, 2) },
+      { k: 'guess', label: 'Your pick', type: 'select', v: 'A', options: [['A', 'A'], ['B', 'B'], ['C', 'C'], ['D', 'D'], ['E', 'E']] }
+    ], draw);
+    const pb = E('div'); box.appendChild(pb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function draw() {
+      const sc = SCEN[v.scenario];
+      const feasible = sc.alts.filter(a => a.cost <= sc.costMax && a.perf >= sc.perfMin);
+      const scored = feasible.map(a => ({ ...a, score: v.rate * a.perf - a.cost }));
+      const best = scored.length ? scored.reduce((m, a) => (a.score > m.score ? a : m)) : null;
+      const maxCost = Math.max(...sc.alts.map(a => a.cost)) * 1.15;
+      const maxPerf = Math.max(...sc.alts.map(a => a.perf)) * 1.15;
+      pb.innerHTML = '';
+      const p = Plot.create(pb, { h: 280, xmin: 0, xmax: maxCost, ymin: 0, ymax: maxPerf, xlabel: 'cost (hypothetical)', ylabel: 'performance / utility (hypothetical)' });
+      p.axes();
+      p.vline(sc.costMax, 'marker hot'); p.text(sc.costMax, maxPerf * 0.98, 'cost threshold', 'annot', 'end');
+      p.hline(sc.perfMin, 'marker hot'); p.text(maxCost * 0.02, sc.perfMin, 'performance threshold', 'annot', 'start');
+      if (best) {
+        const y0 = 0, y1 = maxPerf;
+        p.line([[v.rate * y0 - best.score, y0], [v.rate * y1 - best.score, y1]], 'series c2');
+      }
+      sc.alts.forEach(a => {
+        const feas = a.cost <= sc.costMax && a.perf >= sc.perfMin;
+        const isBest = best && a.k === best.k;
+        p.dot(a.cost, a.perf, isBest ? 'pt hot' : feas ? 'pt' : 'pt bad', 6);
+        p.text(a.cost, a.perf, a.k + ' (hypothetical)', 'annot', 'start');
+      });
+      const guessOk = best && v.guess === best.k;
+      ro([
+        ['Feasible alternatives (meet both thresholds)', feasible.map(a => a.k).join(', ') || 'none'],
+        ['Scores at this exchange rate (score = rate x performance - cost)', scored.map(a => `${a.k}=${f2(a.score, 1)}`).join(', ')],
+        ['Optimal design', best ? best.k : '—', 'good'],
+        ['Your pick', v.guess, guessOk ? 'good' : 'bad'],
+        ['Check', guessOk ? 'match' : 'mismatch', guessOk ? 'good' : 'bad']
+      ]);
+      note.textContent = 'Each point is a hypothetical design alternative. Feasible means it meets both the cost threshold (at or below the dashed vertical line) and the performance threshold (at or above the dashed horizontal line). Curves of equal preference are straight lines whose slope is the exchange rate (cost traded per unit of performance); every point on one curve is equally preferred, and curves further up-left (more performance for less cost) are more preferred. The optimal design is the feasible alternative lying on the most-preferred curve -- the solid line above passes through it. Raising the exchange rate makes performance "cheaper" to buy, which can swing the optimal pick from a lower-cost/lower-performance alternative to a higher-cost/higher-performance one.';
+      publish(box, { scenario: v.scenario, rate: v.rate, guess: v.guess, best: best ? best.k : null, isMatch: !!guessOk });
+    }
+    draw();
+  };
+
+  // M16: ABC vs traditional cost views (Fig 16.4)
+  reg['abc-views'] = box => {
+    title(box, 'Traditional vs. activity views (Fig. 16.4)', 'same total cost, sliced by resource (traditional) or by activity (ABC)');
+    const TRAD = [
+      ['Personnel', 45000000], ['Software Licenses', 2000000], ['Workstations', 7500000], ['TDY', 250000],
+      ['Transportation', 95000], ['Rent/Leases', 250000], ['Utilities', 750000], ['Network Comms', 375000],
+      ['Maintenance', 1450000], ['Supplies', 40000], ['Misc. Equipment', 50000]
+    ];
+    const ACTV = [
+      ['Conduct Operations', 36640000], ['Acquire Equipment', 12250000], ['Support Operations', 4500000],
+      ['Develop Budget', 350000], ['Train Personnel', 575000], ['Maintain Records', 70000],
+      ['Operate Comm Center', 850000], ['Install/Maint Computers', 975000], ['Help Desk Support', 1550000]
+    ];
+    const tradTotal = TRAD.reduce((s, [, v]) => s + v, 0);
+    const actvTotal = ACTV.reduce((s, [, v]) => s + v, 0);
+    const v = controls(box, [
+      { k: 'view', label: 'View', type: 'select', v: 'trad', options: [['trad', 'Traditional (by resource)'], ['activity', 'Activity (ABC)']] }
+    ], draw);
+    const tb = E('div', 'w-table'); box.appendChild(tb);
+    const ro = readout(box);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    function draw() {
+      const rows = v.view === 'trad' ? TRAD : ACTV;
+      const total = v.view === 'trad' ? tradTotal : actvTotal;
+      const maxV = Math.max(...rows.map(([, x]) => x));
+      tb.innerHTML = '<table><thead><tr><th>' + (v.view === 'trad' ? 'Resource' : 'Activity') + '</th><th>Cost</th><th>Share</th></tr></thead><tbody>' +
+        rows.slice().sort((a, b) => b[1] - a[1]).map(([label, val]) => {
+          const share = val / total;
+          return `<tr><td>${label}</td><td>$${f2(val, 0)}</td><td><div class="share-bar" style="width:140px"><i style="width:${(val / maxV * 100).toFixed(1)}%"></i></div> ${pct(share, 1)}</td></tr>`;
+        }).join('') + '</tbody></table>';
+      const top = rows.slice().sort((a, b) => b[1] - a[1])[0];
+      ro([
+        ['Traditional total', '$' + f2(tradTotal, 0)],
+        ['Activity total', '$' + f2(actvTotal, 0)],
+        ['Totals equal', tradTotal === actvTotal ? 'yes, same underlying cost' : 'mismatch', tradTotal === actvTotal ? 'good' : 'bad'],
+        ['Largest line in this view', `${top[0]} ($${f2(top[1], 0)}, ${pct(top[1] / total, 1)})`]
+      ]);
+      note.textContent = 'Same $' + f2(tradTotal, 0) + ' total cost sliced two ways. The traditional (resource) view groups spending by what was bought -- personnel, licenses, workstations. The activity (ABC) view regroups the identical dollars by what the organization actually did with them -- conduct operations, acquire equipment, train personnel. The ABC view focuses on performing and supporting the mission, exposing overhead that a traditional GAAP-style resource view hides inside broad line items like Personnel or Workstations.';
+      publish(box, { view: v.view, tradTotal, actvTotal, topLabel: top[0], topShare: top[1] / total });
+    }
+    draw();
+  };
+
+  // M16: CAM-I Cross — ABC (vertical, "what") vs ABM (horizontal, "why")
+  reg['cam-i-cross'] = box => {
+    title(box, 'CAM-I Cross', 'ABC acts vertically (top-down); ABM acts horizontally (left-to-right)');
+    const NODES = {
+      resources: { txt: 'Resources', why: 'ABC (vertical, top-down): the starting point -- the things an organization spends money on.' },
+      rd: { txt: 'Resource drivers (first-stage assignment)', why: 'ABC assigns and measures resources to activities via resource drivers -- the first-stage assignment.' },
+      activities: { txt: 'Activities', why: 'The center of the cross: what the organization does, shared by both ABC (vertical) and ABM (horizontal).' },
+      ad: { txt: 'Activity drivers (second-stage assignment)', why: 'ABC assigns and measures activities to outputs (cost objects) via activity drivers -- the second-stage assignment.' },
+      objects: { txt: 'Cost objects', why: 'ABC (vertical): the outputs activities are assigned to. ABC focuses on what things cost and establishes the cost of activities and cost objects.' },
+      drivers: { txt: 'Cost drivers / root causes', why: 'ABM (horizontal, left-to-right): relates the cost of activities to their cost drivers -- the root causes of cost.' },
+      measures: { txt: 'Performance measures', why: 'ABM (horizontal): producing performance measures so managers can see how efficiently activities are performed and how to manage them.' }
+    };
+    box.appendChild(E('div', 'w-note', 'Click a box to see how it fits the cross. Vertical arm = ABC ("what things cost"). Horizontal arm = ABM ("why they cost that").'));
+    const grid = E('div', 'w-2col'); box.appendChild(grid);
+    const note = E('div', 'w-note'); box.appendChild(note);
+    const vBox = E('div'), hBox = E('div'); grid.append(vBox, hBox);
+    vBox.appendChild(E('div', null, '<b>ABC -- vertical (what)</b>'));
+    hBox.appendChild(E('div', null, '<b>ABM -- horizontal (why)</b>'));
+    const mkBtn = k => { const b = E('button', 'opt', NODES[k].txt); b.type = 'button'; b.onclick = () => { note.textContent = NODES[k].why; note.className = 'w-note'; }; return b; };
+    ['resources', 'rd', 'activities', 'ad', 'objects'].forEach(k => vBox.appendChild(mkBtn(k)));
+    ['drivers', 'activities', 'measures'].forEach(k => hBox.appendChild(mkBtn(k)));
+    box.appendChild(E('div', 'w-note', 'Note: the source names this diagram the "Consortium for Advanced Management International (CAM-I) Cross" here, though it uses "Advanced Manufacturing" for CAM-I elsewhere -- a source inconsistency, not something to memorize either way.'));
+
+    // small quiz: classify a term as ABC/what or ABM/why
+    const QUIZ = [
+      { k: 'q1', txt: 'Resource drivers (first-stage assignment)', ans: 'abc', fb: 'ABC / "what": resource drivers assign resources to activities -- the vertical, first-stage assignment.' },
+      { k: 'q2', txt: 'Cost drivers (root causes of cost)', ans: 'abm', fb: 'ABM / "why": cost drivers relate activity cost to its root causes -- the horizontal view.' },
+      { k: 'q3', txt: 'Activity drivers (second-stage assignment) to cost objects', ans: 'abc', fb: 'ABC / "what": activity drivers assign activities to cost objects -- the vertical, second-stage assignment.' },
+      { k: 'q4', txt: 'Performance measures', ans: 'abm', fb: 'ABM / "why": performance measures are the horizontal output, showing how efficiently activities are performed.' }
+    ];
+    let picks = {};
+    const qList = E('div'); box.appendChild(qList);
+    const ro = readout(box);
+    function drawQuiz(reveal) {
+      qList.innerHTML = '';
+      QUIZ.forEach(it => {
+        const row = E('div', 'w-note');
+        row.appendChild(E('p', null, Render.inline(it.txt)));
+        const wrap = E('div');
+        [['abc', 'ABC (what)'], ['abm', 'ABM (why)']].forEach(([ck, label]) => {
+          const b = E('button', 'opt' + (picks[it.k] === ck ? ' ' + (reveal ? (ck === it.ans ? 'right' : 'wrong') : 'on') : ''), label);
+          b.type = 'button';
+          b.onclick = () => { picks[it.k] = ck; drawQuiz(false); };
+          wrap.appendChild(b);
+        });
+        row.appendChild(wrap);
+        if (reveal && picks[it.k]) row.appendChild(E('div', 'ro ' + (picks[it.k] === it.ans ? 'good' : 'bad'), Render.inline(it.fb)));
+        qList.appendChild(row);
+      });
+    }
+    const btn = E('button', 'opt', 'Reveal quiz answers'); btn.type = 'button';
+    btn.onclick = () => {
+      drawQuiz(true);
+      const nCorrect = QUIZ.filter(it => picks[it.k] === it.ans).length;
+      ro([['Quiz correct', nCorrect + ' of ' + QUIZ.length, nCorrect === QUIZ.length ? 'good' : '']]);
+      publish(box, { correct: nCorrect, total: QUIZ.length });
+    };
+    box.appendChild(btn);
+    drawQuiz(false);
+    publish(box, { correct: 0, total: QUIZ.length });
+  };
+
+  // M16: Big TOC vs Little TOC/LCC sorter
+  reg['toc-sorter'] = box => {
+    title(box, 'Big TOC vs. Little TOC (LCC)', 'sort each cost into DoD Total Ownership Cost (organizational) or Defense System TOC / LCC (program). Little TOC is a subset of Big TOC, so program costs also roll up into the DoD-wide total; sort by the narrowest perspective that fits');
+    const items = [
+      { k: 'recruit', txt: 'Recruiting, training, retaining, and separating military and civilian personnel', ans: 'big', fb: 'Big TOC: DoD TOC explicitly covers "the costs to recruit, train, retain, separate and otherwise support military and civilian personnel."' },
+      { k: 'business', txt: 'Other costs of business operations of the DoD', ans: 'big', fb: 'Big TOC: DoD TOC includes "all other costs of business operations of the DoD" -- organization-wide, not tied to one program.' },
+      { k: 'realprop', txt: 'Owning and operating real property across the department', ans: 'big', fb: 'Big TOC: DoD TOC covers costs to "acquire, own, operate, and dispose of weapon and support systems, other equipment and real property" at the organizational level.' },
+      { k: 'readiness', txt: 'Meeting readiness, safety, and quality-of-life standards DoD-wide', ans: 'big', fb: 'Big TOC: the definition names "all standards in effect for readiness, safety, and quality of life" as part of DoD TOC.' },
+      { k: 'natgoals', txt: 'Resources needed to meet national goals in compliance with all applicable laws and policies', ans: 'big', fb: 'Big TOC: DoD TOC is "the sum of all financial resources necessary...to meet national goals in compliance with all laws, all policies applicable to DoD."' },
+      { k: 'rd', txt: 'R&D costs for this program', ans: 'little', fb: 'Little TOC / LCC: life cycle cost estimates span R&D, production, O&S, and disposal costs for the program.' },
+      { k: 'prod', txt: 'Production costs for this program', ans: 'little', fb: 'Little TOC / LCC: production is one of the four life-cycle phases LCC covers for the program.' },
+      { k: 'os', txt: 'Operating and support (O&S) costs for this program', ans: 'little', fb: 'Little TOC / LCC: O&S is one of the four life-cycle phases LCC covers for the program.' },
+      { k: 'disposal', txt: 'Disposal costs for this program', ans: 'little', fb: 'Little TOC / LCC: disposal is one of the four life-cycle phases LCC covers for the program.' },
+      { k: 'linked', txt: 'Indirect costs attributable to this program that would not occur if the program did not exist', ans: 'little', fb: 'Little TOC / LCC: LCC (per DoD 5000.4-M) includes not only acquisition program direct costs but also the linked indirect costs attributable to the program -- costs that would not occur if the program did not exist. These are already inside LCC, not an extra add-on.' }
+    ];
+    let picks = {};
+    const list = E('div'); box.appendChild(list);
+    const ro = readout(box);
+    function render(reveal) {
+      list.innerHTML = '';
+      items.forEach(it => {
+        const row = E('div', 'w-note');
+        row.appendChild(E('p', null, Render.inline(it.txt)));
+        const wrap = E('div');
+        [['big', 'Big TOC (organizational)'], ['little', 'Little TOC / LCC (program)']].forEach(([ck, label]) => {
+          const b = E('button', 'opt' + (picks[it.k] === ck ? ' ' + (reveal ? (ck === it.ans ? 'right' : 'wrong') : 'on') : ''), label);
+          b.type = 'button';
+          b.onclick = () => { picks[it.k] = ck; render(false); };
+          wrap.appendChild(b);
+        });
+        row.appendChild(wrap);
+        if (reveal && picks[it.k]) row.appendChild(E('div', 'ro ' + (picks[it.k] === it.ans ? 'good' : 'bad'), Render.inline(it.fb)));
+        list.appendChild(row);
+      });
+    }
+    const btn = E('button', 'opt', 'Reveal answers'); btn.type = 'button';
+    btn.onclick = () => {
+      render(true);
+      const nCorrect = items.filter(it => picks[it.k] === it.ans).length;
+      ro([['Correct', nCorrect + ' of ' + items.length, nCorrect === items.length ? 'good' : '']]);
+      publish(box, { correct: nCorrect, total: items.length });
+    };
+    box.appendChild(btn);
+    render(false);
+    publish(box, { correct: 0, total: items.length });
+  };
+
   // ======================================================================
   // M11: labor burdening
   reg['burden'] = box => {
