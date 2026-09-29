@@ -32,7 +32,6 @@ const Cards = (() => {
             <div class="deck-quick">
               <button class="chip" data-q="all">All modules</button>
               <button class="chip" data-q="none">None</button>
-              <button class="chip" data-q="guide">Detailed modules (6–8)</button>
               <button class="chip" data-q="due">Modules with cards due</button>
             </div>
           </div>
@@ -90,7 +89,7 @@ const Cards = (() => {
     root.querySelectorAll('[data-q]').forEach(b => b.onclick = () => {
       const q = b.dataset.q;
       PCEA.modules.forEach(m => {
-        d.mods[m.id] = q === 'all' ? true : q === 'none' ? false : q === 'guide' ? m.source === 'guide' : Learn.cardCounts(m).due > 0;
+        d.mods[m.id] = q === 'all' ? true : q === 'none' ? false : Learn.cardCounts(m).due > 0;
       });
       Store.save(); builder(root, {});
     });

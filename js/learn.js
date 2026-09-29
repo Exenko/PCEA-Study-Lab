@@ -16,9 +16,6 @@ const Learn = (() => {
       mastered: c.filter(x => ['strong', 'mastered'].includes(Scheduler.status(x.id).key)).length
     };
   }
-  const sourceBadge = m => m.source === 'guide'
-    ? '<span class="badge src-guide" title="Built from the detailed notes in your study guide">From your guide</span>'
-    : '<span class="badge src-auth" title="Your guide only has an outline for this module. Explanations were written from general CEBoK knowledge; check them against your course material.">Outline expanded &middot; verify</span>';
 
   // ---------- overview ----------
   function overview(root) {
@@ -70,7 +67,6 @@ const Learn = (() => {
         <div class="mod-num">Module ${m.num}</div>
         <h3>${m.title}</h3>
         <p>${m.blurb || ''}</p>
-        <div class="mod-meta">${sourceBadge(m)}</div>
         <div class="meter"><i style="width:${p.total ? p.done / p.total * 100 : 0}%"></i></div>
         <div class="mod-foot"><span>${p.done}/${p.total} sections</span><span>${cc.total} cards${cc.due ? ' &middot; <b>' + cc.due + ' due</b>' : ''}</span></div>`;
       grid.appendChild(a);
@@ -106,7 +102,6 @@ const Learn = (() => {
     main.innerHTML = `
       <div class="crumbs"><a href="#/learn">Modules</a> &rsaquo; Module ${m.num}</div>
       <h1>${m.title}</h1>
-      <div class="mod-meta">${sourceBadge(m)}</div>
       <div class="prose">${Render.md(m.intro || m.blurb || '')}</div>
       <h2>Sections</h2>
       <ol class="sec-list">${m.sections.map(s => `<li class="${secState(m, s).done ? 'done' : ''}"><a href="#/learn/${m.id}/${s.id}"><b>${s.title}</b><span>${s.summary || ''}</span></a></li>`).join('')}</ol>

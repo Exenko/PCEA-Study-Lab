@@ -177,16 +177,6 @@
   color: var(--accent);
 }
 
-/* source badges */
-.src-guide {
-  background: var(--accent-soft);
-  color: var(--accent);
-}
-.src-auth {
-  background: var(--mid-soft);
-  color: var(--mid);
-}
-
 /* ---------- panels, cards, widgets: elevated surfaces ---------- */
 .hero,
 .panel,
