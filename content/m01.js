@@ -215,8 +215,8 @@ Toggle common estimate flaws below and watch which of the six characteristics fa
 
 :::widget quality-check:::
 
-:::challenge quality-check
-Q: An estimator reused last year's CERs without checking whether they were normalized for inflation, and two WBS elements ended up double-counted. How many of the six characteristics fail?
+:::challenge quality-check badCER=1 omitDouble=1
+Q: An estimator reused last year's CERs, which turned out not to be normalized for inflation, and two WBS elements were double-counted. How many of the six characteristics fail?
 predict: failCount +- 0
 > Bad CERs breaks Accuracy; double-counted elements breaks Comprehensiveness; Credibility fails too because it needs Accuracy, Replicability, and Auditability all to hold, and Accuracy just failed. That is 3.
 :::
@@ -421,8 +421,8 @@ Figure 1.4's MIL-HDBK-881A aircraft WBS shows this in practice: a top level (Air
 
 :::widget wbs-tree:::
 
-:::challenge wbs-tree
-Q: Switch to the "Commercial airliner view." Reconnaissance, Antisubmarine Warfare, and Armament are hidden because they don't apply to an airliner. How many elements does the toggle hide?
+:::challenge wbs-tree commercial=1
+Q: The "Commercial airliner view" greys out the military aircraft elements that CEBoK says don't apply to an airliner. How many elements does it hide?
 predict: hiddenCount +- 0
 > The toggle hides the three elements CEBoK names: Reconnaissance, Antisubmarine Warfare, and Armament. CEBoK adds "and a few others" without naming them, so the widget hides only the named three.
 :::

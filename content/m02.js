@@ -419,7 +419,7 @@ Three levels of rigor, increasing in detail, fidelity, and persuasiveness:
 :::widget techniques-compare x=110 showAvg=1 showAnalogy=1 analogyPt=2 showParam=1 showCal=1 calPt=5:::
 
 :::challenge techniques-compare x=110 showAvg=0 showAnalogy=0 analogyPt=2 showParam=0 showCal=0 calPt=5 lock=x,analogyPt,calPt
-Q: All four legitimate techniques run on the *same* illustrative dataset. Toggle them on and off. Is the spread between estimates large enough that it should be investigated rather than averaged away?
+Q: All four legitimate techniques run on the *same* illustrative dataset. Turn all four on and watch the spread between their estimates grow past 20.
 goal: spread > 20
 show: showAvg=1 showAnalogy=1 showParam=1 showCal=1
 > Even with no bad data, an average, an analogy through one point, an OLS fit, and a CER calibrated through a different point disagree — a large spread signals to investigate (data quality, assumptions, technique fit), never to average.

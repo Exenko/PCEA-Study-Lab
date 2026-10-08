@@ -374,7 +374,7 @@ These are rough approximations for quick mental estimates. Use the heuristic or 
 :::widget lmp:::
 
 :::challenge lmp F=4 L=8 lcs=0.85 lock=F,L,lcs
-Q: For a lot of units 4 through 8 on an 85% curve, predict the true lot midpoint. Use the heuristic: the average of the arithmetic and geometric means.
+Q: For a lot of units 4 through 8 on an 85% curve, estimate the lot midpoint with the heuristic (the average of the arithmetic and geometric means). Your answer is checked against the exact LMP, within 2%.
 predict: exact +- 2%
 > Arithmetic mean 6, geometric mean $\sqrt{32} = 5.657$, heuristic 5.83. The exact LMP is 5.79, so the heuristic lands within 1%.
 :::

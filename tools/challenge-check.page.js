@@ -36,6 +36,7 @@
       } else if (c.type === 'predict') {
         const v = w.out[c.predict.out];
         if (!isFinite(v)) return fail(where + ': predicted output is not finite ' + outs(w));
+        if (v === 0) return fail(where + ': predicted output is 0 at presets; do the challenge args set up the scenario? ' + outs(w));
         pass(`${where} answer ${c.predict.out} = ${Challenge.fmt(v)}`);
       } else pass(where + ' choose');
     });

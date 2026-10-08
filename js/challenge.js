@@ -114,7 +114,7 @@
   function readGuess(s, actual) {
     const t = String(s).trim();
     const x = readNum(t);
-    if (!/%$/.test(t) && isFinite(actual) && Math.abs(actual) <= 1 && Math.abs(x) > 1 && Math.abs(x) <= 100) return x / 100;
+    if (!/%$/.test(t) && isFinite(actual) && actual !== 0 && Math.abs(actual) <= 1 && Math.abs(x) > 1 && Math.abs(x) <= 100) return x / 100;
     return x;
   }
   function fmtLike(v, actual) {
