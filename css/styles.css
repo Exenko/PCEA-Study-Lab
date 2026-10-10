@@ -281,6 +281,7 @@ main { max-width: 1280px; margin: 0 auto; padding: 24px; }
 .check-fb.good { color: var(--good); } .check-fb.bad { color: var(--bad); }
 .check-explain { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-family: var(--serif); color: var(--ink-2); }
 .check-explain p { margin: .3em 0; }
+.check-again { margin-top: .5rem; }
 .challenge .check-label { color: var(--c2); }
 .challenge .widget { margin: 12px 0 8px; background: var(--paper); }
 .ch-tools { margin-top: 8px; }

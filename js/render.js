@@ -128,11 +128,19 @@ const Render = (() => {
     list.querySelectorAll('.opt').forEach((b, i) => { b.disabled = true; if (opts[i].right) b.classList.add('right'); });
   }
 
+  // Rebuilds a finished check/challenge so it can be answered again; the saved first-try record is kept.
+  function againBtn(rebuild) {
+    const b = el('button', 'btn small ghost check-again', 'Try again');
+    b.hidden = true;
+    b.onclick = () => { const box = b.closest('.check'); box.replaceWith(rebuild()); };
+    return b;
+  }
+
   // ctx: { key, onChange }  -> checks report state through ctx
-  function buildCheck(d, ctx, idx) {
+  function buildCheck(d, ctx, idx, fresh) {
     const c = parseCheck(d.body);
     const id = ctx.key + '#' + (d.args || idx);
-    const saved = Store.data.checks[id];
+    const saved = fresh ? null : Store.data.checks[id];
     const box = el('div', 'check');
     box.dataset.checkId = id;
     box.appendChild(el('div', 'check-label', 'Check your understanding'));
@@ -141,9 +149,11 @@ const Render = (() => {
     fb.setAttribute('role', 'status');
     const exp = el('div', 'check-explain', c.explain.length ? md(c.explain.join('\n')) : '');
     exp.hidden = true;
+    const again = againBtn(() => buildCheck(d, ctx, idx, true));
 
     const finish = (first, revealed) => {
       box.classList.add('done');
+      again.hidden = false;
       exp.hidden = false;
       if (revealed) fb.innerHTML = 'Answer revealed.';
       record(id, first, {}, ctx);
@@ -152,7 +162,7 @@ const Render = (() => {
     if (c.opts.length) {
       const list = optionList(c.opts, fb, first => finish(first));
       box.appendChild(list);
-      if (saved && saved.done) { lockOptions(list, c.opts); box.classList.add('done'); exp.hidden = false; }
+      if (saved && saved.done) { lockOptions(list, c.opts); box.classList.add('done'); again.hidden = false; exp.hidden = false; }
     } else {
       const row = el('div', 'check-input');
       const inp = el('input');
@@ -185,10 +195,10 @@ const Render = (() => {
       box.appendChild(row);
       if (saved && saved.done) {
         inp.value = c.num ? String(c.num.v) : c.text[0];
-        inp.disabled = true; go.disabled = true; box.classList.add('done'); exp.hidden = false;
+        inp.disabled = true; go.disabled = true; box.classList.add('done'); again.hidden = false; exp.hidden = false;
       }
     }
-    box.append(fb, exp);
+    box.append(fb, exp, again);
     return box;
   }
 
@@ -201,10 +211,10 @@ const Render = (() => {
   }
 
   const CH_LABEL = { target: 'Challenge', predict: 'Predict, then check', choose: 'Explore, then answer' };
-  function buildChallenge(d, ctx, idx) {
+  function buildChallenge(d, ctx, idx, fresh) {
     const c = Challenge.parse(d.body);
     const id = ctx.key + '#c' + idx;
-    const saved = Store.data.checks[id];
+    const saved = fresh ? null : Store.data.checks[id];
     const box = el('div', 'check challenge');
     box.dataset.checkId = id;
     if (c.errors.length) {
@@ -212,6 +222,7 @@ const Render = (() => {
       box.appendChild(el('div', 'check-fb bad', 'Challenge error: ' + c.errors.join('; ')));
       return box;
     }
+    const again = againBtn(() => buildChallenge(d, ctx, idx, true));
     box.appendChild(el('div', 'check-label', CH_LABEL[c.type]));
     box.appendChild(el('div', 'check-q', md(c.q.join('\n'))));
     const wbox = el('div', 'widget');
@@ -222,7 +233,7 @@ const Render = (() => {
     const exp = el('div', 'check-explain', md(c.explain.join('\n')));
     exp.hidden = true;
     const isDone = () => box.classList.contains('done');
-    const markDone = () => { box.classList.add('done'); exp.hidden = false; };
+    const markDone = () => { box.classList.add('done'); again.hidden = false; exp.hidden = false; };
     const complete = (first, extra) => { markDone(); record(id, first, extra || {}, ctx); };
 
     if (c.type === 'target') {
@@ -286,7 +297,7 @@ const Render = (() => {
       box.appendChild(list);
       if (saved && saved.done) { lockOptions(list, c.opts); markDone(); }
     }
-    box.append(fb, exp);
+    box.append(fb, exp, again);
     return box;
   }
 
