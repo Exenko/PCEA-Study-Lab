@@ -351,11 +351,17 @@ const Render = (() => {
     return box;
   }
 
+  let dragSeq = 0;
+  const dragIdx = (e, tok) => {
+    const m = /^(.+):(\d+)$/.exec(e.dataTransfer.getData('text/plain'));
+    return m && m[1] === tok ? +m[2] : -1;
+  };
+
   // :::sort — tap an item then a bucket (or drag it), then commit. Graded outside primers: retry until right.
   function buildSort(d, ctx, idx) {
     const c = Primer.parseSort(d.body);
     const id = ctx.key + '#s' + (d.args || idx);
-    const box = el('div', 'check sort');
+    const box = el('div', 'check sort'), tok = 'd' + dragSeq++;
     if (c.errors.length) return blockError(box, 'Sort', c.errors);
     if (ctx.primer) ctx.sec.primer = { type: 'sort', spec: c }; else box.dataset.checkId = id;
     box.appendChild(el('div', 'check-label', ctx.primer ? 'Your guess' : 'Sort it'));
@@ -380,7 +386,7 @@ const Render = (() => {
     const chips = c.items.map((it, i) => {
       const b = el('button', 'sort-item', inline(it.text));
       b.draggable = true;
-      b.ondragstart = e => e.dataTransfer.setData('text/plain', String(i));
+      b.ondragstart = e => e.dataTransfer.setData('text/plain', tok + ':' + i);
       b.onclick = () => {
         if (locked) return;
         picked = picked === i ? null : i;
@@ -397,9 +403,16 @@ const Render = (() => {
       go.disabled = placed.includes(null);
     };
     const target = (node, bucket) => {
+      node.tabIndex = 0; node.setAttribute('role', 'button');
+      node.setAttribute('aria-label', bucket == null ? 'Return to pool' : 'Place in ' + bucket);
       node.onclick = e => { if (!locked && picked !== null && !e.target.closest('.sort-item')) place(picked, bucket); };
+      node.onkeydown = e => {
+        if (e.target !== node || (e.key !== 'Enter' && e.key !== ' ')) return;
+        e.preventDefault();
+        if (!locked && picked !== null) place(picked, bucket);
+      };
       node.ondragover = e => { if (!locked) e.preventDefault(); };
-      node.ondrop = e => { e.preventDefault(); if (!locked) place(+e.dataTransfer.getData('text/plain'), bucket); };
+      node.ondrop = e => { e.preventDefault(); const i = dragIdx(e, tok); if (!locked && i >= 0 && i < chips.length) place(i, bucket); };
     };
     zones.forEach(z => target(z, z.dataset.bucket));
     target(pool, null);
@@ -442,7 +455,7 @@ const Render = (() => {
   function buildOrder(d, ctx, idx) {
     const c = Primer.parseOrder(d.body);
     const id = ctx.key + '#o' + (d.args || idx);
-    const box = el('div', 'check order');
+    const box = el('div', 'check order'), tok = 'd' + dragSeq++;
     if (c.errors.length) return blockError(box, 'Order', c.errors);
     if (ctx.primer) ctx.sec.primer = { type: 'order', spec: c }; else box.dataset.checkId = id;
     box.appendChild(el('div', 'check-label', ctx.primer ? 'Your guess' : 'Put it in order'));
@@ -473,12 +486,12 @@ const Render = (() => {
       up.onclick = () => { move(i, -1); up.focus(); };
       dn.onclick = () => { move(i, 1); dn.focus(); };
       li.append(el('span', 'order-num'), el('span', 'order-text', inline(t)), up, dn);
-      li.ondragstart = e => e.dataTransfer.setData('text/plain', String(i));
+      li.ondragstart = e => e.dataTransfer.setData('text/plain', tok + ':' + i);
       li.ondragover = e => { if (!locked) e.preventDefault(); };
       li.ondrop = e => {
         e.preventDefault();
-        const from = +e.dataTransfer.getData('text/plain');
-        if (locked || from === i) return;
+        const from = dragIdx(e, tok);
+        if (locked || from === i || !seq.includes(from)) return;
         const to = seq.indexOf(i);
         seq.splice(seq.indexOf(from), 1);
         seq.splice(to, 0, from);
@@ -537,8 +550,8 @@ const Render = (() => {
       if (b.type === 'primer') step.appendChild(el('div', 'primer-label', 'Before you read'));
       else if (b.type === 'check') step.appendChild(ctx.primer ? buildPrimerCheck(b, ctx) : buildCheck(b, ctx, counter.n++));
       else if (b.type === 'challenge') step.appendChild(buildChallenge(b, ctx, counter.c++));
-      else if (b.type === 'sort') step.appendChild(buildSort(b, ctx, counter.s++));
-      else if (b.type === 'order') step.appendChild(buildOrder(b, ctx, counter.o++));
+      else if (b.type === 'sort') step.appendChild(buildSort(b, ctx, ctx.primer ? 0 : counter.s++));
+      else if (b.type === 'order') step.appendChild(buildOrder(b, ctx, ctx.primer ? 0 : counter.o++));
       else if (b.type === 'widget') step.appendChild(buildWidget(b));
       else step.appendChild(buildCallout(b));
     }
