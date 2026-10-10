@@ -9,7 +9,23 @@ This module sets up the vocabulary for the rest of the course: definitions, who 
   sections: [
     {
       id: 'definition', title: 'Cost estimating vs. cost analysis', summary: 'Definitions, purpose, and the key distinction',
-      body: String.raw`**Cost estimating** is the process of collecting and analyzing historical data and applying quantitative models, techniques, tools, and databases to **predict the future cost** of an item, product, program or task to facilitate the successful completion of a program, project, or process.
+      body: String.raw`:::primer:::
+Cost estimating and cost analysis sound like the same job. They aren't quite.
+
+:::sort
+Q: Which of these tasks are *estimating* (predicting a cost), and which go beyond it into *analysis*?
+buckets: Estimating | Analysis
+- Predict what a new system will cost to develop, from historical data = Estimating
+- Forecast the cost of a task with a quantitative model = Estimating
+- Compare the costs of two alternative designs = Analysis
+- Review a contractor's proposal = Analysis
+- Track spending against a baseline = Analysis
+> Estimating predicts a future cost. Cost analysis includes estimating, but also evaluates and compares costs to support decisions: analyzing alternatives, assessing affordability, reviewing proposals, and tracking performance against a baseline.
+:::
+
++++
+
+**Cost estimating** is the process of collecting and analyzing historical data and applying quantitative models, techniques, tools, and databases to **predict the future cost** of an item, product, program or task to facilitate the successful completion of a program, project, or process.
 
 Often, the cost estimator adjusts for new materials, new technology, a new software programming language, or new resource allocations. Still, the estimate must never become divorced from historical experience or it risks losing credibility.
 
@@ -19,6 +35,8 @@ Cost estimating has three primary functions:
 - **Grounds the plan**: forms the basis of the plan to develop, field, and support the system or program
 
 For commercial entities (contractors), the estimate underpins new business proposals and the bid/no-bid decision. For government entities, an Independent Cost Estimate (ICE) or the program estimate serves as the basis for budget submissions.
+
+{{primer}}
 
 **Cost analysis** is broader. It includes estimating, but also covers evaluating and comparing costs to support decisions: analyzing alternatives, assessing affordability, reviewing proposals, and tracking performance against a baseline.
 
@@ -83,7 +101,21 @@ Q: An estimate predicts the cost of a new system will be \$45M. Five years later
     },
     {
       id: 'context', title: 'Context: when and why estimates are needed', summary: 'Budgeting cycles, milestones, and phases',
-      body: String.raw`Cost estimating is critical throughout the program lifecycle. A reasonable, supportable, and responsive budget supports efficient execution and is founded on competent estimates.
+      body: String.raw`:::primer:::
+A program needs different kinds of cost estimates as it moves through its life cycle.
+
+:::order
+Q: Put these estimates in the order a program would first need them.
+1. Analysis of Alternatives (AoA) to choose among options before committing to a project
+2. Source selection estimates to compare competitors' approaches
+3. A cost study before full-scale production
+4. Estimate At Completion (EAC), once the program has enough actual cost history
+> Pre-acquisition starts with AoA and trade studies; systems acquisition brings source selection; cost studies come before full-scale production; and an EAC needs an in-process program with sufficient cost history.
+:::
+
++++
+
+Cost estimating is critical throughout the program lifecycle. A reasonable, supportable, and responsive budget supports efficient execution and is founded on competent estimates.
 
 ### Government Budget Cycles and Milestones
 
@@ -94,6 +126,8 @@ Major programs require **validated cost estimates** to continue through mileston
 As programs mature technically and schedules change, cost estimates must be **periodically updated** to maintain management insight into program status, control resources, and balance the budget.
 
 ### Estimate Types by Lifecycle Phase
+
+{{primer}}
 
 Different phases require different types of estimates:
 - **Pre-acquisition phase**: Analysis of Alternatives (AoA) and trade studies to select among alternatives before committing to a project
@@ -204,7 +238,20 @@ show: iParent=A
     },
     {
       id: 'quality', title: 'Six characteristics of high-quality cost estimates', summary: 'CEBoK framework for reliability and credibility',
-      body: String.raw`The characteristics of high-quality cost estimates are:
+      body: String.raw`:::primer:::
+An estimate can get every number right and still fail as an estimate.
+
+:::check
+Q: An estimate's numbers are accurate and fully documented, but it reaches decision makers a week after the budget decision was made. Is it a high-quality estimate?
+- Yes: accuracy and documentation are what make an estimate high quality
+* No: an estimate that arrives after the decision provides no value
+- Yes, as long as it can be reused in the next budget cycle
+> **Timeliness** is one of the six characteristics: even a high-quality estimate provides no value if it isn't delivered to decision makers on time.
+:::
+
++++
+
+The characteristics of high-quality cost estimates are:
 
 | Characteristic | Meaning |
 |---|---|
@@ -214,6 +261,8 @@ show: iParent=A
 | **Auditability** | A reviewer can follow the estimation process, repeat the calculations, and arrive at the same answer. The estimate is transparent and verifiable. |
 | **Credibility** | **The single most important quality.** Requires the estimate to be accurate, replicable, and auditable. Limitations, risk, and uncertainty are discussed; sensitivity and cross-checks are performed; differences are reconciled. |
 | **Timeliness** | Even a high-quality estimate provides no value if not delivered to decision makers on time. Timing is critical to decision support. |
+
+{{primer}}
 
 :::check
 Q: A cost estimate includes detailed labor and material breakdowns, but does not mention the source of historical cost data or the assumptions underlying the labor rates. Which quality is most at risk?
@@ -290,7 +339,24 @@ Q: A program is in early concept phase with a poorly defined technical baseline 
     },
     {
       id: 'products', title: 'The four cost estimating products', summary: 'Baseline, estimate, model, and documentation',
-      body: String.raw`An estimate is more than a single number. It consists of four primary deliverable products:
+      body: String.raw`:::primer:::
+A finished estimate is a package of several deliverables.
+
+:::sort
+Q: Which deliverable does each item belong to?
+buckets: Technical baseline | Cost estimate | Cost model | Documentation
+- The CARD: what the system is, quantities, and the milestone schedule = Technical baseline
+- Totals by WBS element, time-phased by year and funding category = Cost estimate
+- The spreadsheet that applies CERs to each WBS element = Cost model
+- Written GR&A, data sources, and the rationale for each method = Documentation
+> The four products are the technical and schedule baseline description, the cost estimate, the cost model, and the estimate documentation. Documentation is a deliverable in its own right, not an afterthought.
+:::
+
++++
+
+An estimate is more than a single number. It consists of four primary deliverable products:
+
+{{primer}}
 
 ### 1. Technical and Schedule Baseline Description
 
@@ -388,9 +454,28 @@ Q: A life-cycle cost estimate for a 30-year system typically predicts costs far 
     },
     {
       id: 'process', title: 'The cost estimating process', summary: 'CEBoK seven steps and the WBS framework',
-      body: String.raw`The CEBoK outlines a repeatable, generally sequential process for building cost estimates. This process is the skeleton for most of the rest of CEBoK (Modules 2–13 expand each step).
+      body: String.raw`:::primer:::
+CEBoK builds every estimate with the same seven steps.
+
+:::order
+Q: Put the seven steps in order.
+1. Develop the Work Breakdown Structure (WBS)
+2. Develop the program/system baseline
+3. Collect data
+4. Analyze data
+5. Select a methodology for each cost element
+6. Develop and validate the model
+7. Generate results and the report
+> The process is generally sequential: scope (the WBS) first, then the baseline and its ground rules, then data collection and analysis, then a method per WBS element, then the model and its validation, and finally results and documentation.
+:::
+
++++
+
+The CEBoK outlines a repeatable, generally sequential process for building cost estimates. This process is the skeleton for most of the rest of CEBoK (Modules 2–13 expand each step).
 
 ### The seven CEBoK steps
+
+{{primer}}
 
 1. **Work Breakdown Structure (WBS) development**: Decompose the program scope into discrete, definable work elements (hardware, software, services, data) that can each be estimated and tracked.
 
@@ -503,7 +588,21 @@ Data is the foundation of credible estimates. The **four-step data collection pr
     },
     {
       id: 'methods', title: 'Cost estimating methods and methodology selection', summary: 'Three basic techniques and when to use each',
-      body: String.raw`For each WBS element, the estimator selects the most appropriate method given available data and design maturity.
+      body: String.raw`:::primer:::
+How much you know about a design shapes how you can estimate it.
+
+:::sort
+Q: Which technique fits each situation best?
+buckets: Analogy | Parametric (CER) | Engineering build-up
+- Early concept, immature design, and one similar prior system = Analogy
+- Maturing design and a good database of similar historical systems = Parametric (CER)
+- Mature design with detailed specifications for each part = Engineering build-up
+> Analogy dominates early, when the design is immature and data is limited. Parametric CERs need good historical data. Engineering build-up becomes dominant as the design matures and detail increases.
+:::
+
++++
+
+For each WBS element, the estimator selects the most appropriate method given available data and design maturity.
 
 **Three basic costing techniques** are available:
 
@@ -538,6 +637,8 @@ goal: power < 18
 show: powerOn=1 b=0.7
 > At b=1 (the source's method), doubling weight doubles cost (10 -> 20). At b=0.7 (Beyond CEBoK), cost scales as 2^0.7 ≈ 1.62, giving about 16.2 — lower than the source's linear doubling. This exponent is not derivable from a single analog point.
 :::
+
+{{primer}}
 
 **Detailed comparison:**
 
@@ -576,7 +677,22 @@ Q: A new electronic warfare system is being estimated. The baseline shows it wil
     },
     {
       id: 'trl', title: 'Technology Readiness Levels (TRLs)', summary: 'Maturity scale and relevance to cost risk',
-      body: String.raw`**Technology Readiness Levels** (TRLs) were developed by NASA in the 1980s and are now widely adopted in DoD and civilian agencies to assess the maturity of technologies. When a new technology is in the development stage, it is not suitable for immediate application. Instead, new technologies are usually subjected to experimentation and refinement. Once the technology is proven, it can be given a much higher TRL.
+      body: String.raw`:::primer:::
+New technologies mature in stages before they are ready for use.
+
+:::order
+Q: Put these stages in order, from least to most mature.
+1. Basic principles observed in a lab
+2. A component breadboard validated in a lab
+3. A prototype demonstrated in a relevant environment
+4. A prototype demonstrated in an operational environment
+5. The actual system proven in mission operations
+> These are TRL 1-3, 4, 6, 7 and 9 on the scale below. Each stage moves the technology closer to real operating conditions.
+:::
+
++++
+
+**Technology Readiness Levels** (TRLs) were developed by NASA in the 1980s and are now widely adopted in DoD and civilian agencies to assess the maturity of technologies. When a new technology is in the development stage, it is not suitable for immediate application. Instead, new technologies are usually subjected to experimentation and refinement. Once the technology is proven, it can be given a much higher TRL.
 
 :::tip Beyond CEBoK
 The TRL scale ranges from 1 to 9:
@@ -591,6 +707,8 @@ The TRL scale ranges from 1 to 9:
 | **TRL 8** | Actual system completed and qualified through test and demonstration. |
 | **TRL 9** | Actual system proven through successful mission operations. |
 :::
+
+{{primer}}
 
 :::widget trl:::
 
@@ -645,7 +763,26 @@ Q: How should a low TRL affect your estimate?
     },
     {
       id: 'validation', title: 'Validation, cross-checks, and sensitivity', summary: 'Ensuring the model is defensible',
-      body: String.raw`Once a cost model is assembled, it must be validated before being presented as the basis for program decisions.
+      body: String.raw`:::primer:::
+Once a cost model is built, it has to be tested before anyone relies on it.
+
+:::sort
+Q: Which kind of validation is each activity?
+buckets: Sanity check | Cross-check | Sensitivity analysis
+- Ask whether software cost rises with lines of code = Sanity check
+- Look for obvious omissions or double-counted elements = Sanity check
+- Re-estimate a key cost element with a different method = Cross-check
+- Compare against an estimate by an organization outside the program = Cross-check
+- Ask how much the total rises if labor rates increase 10% = Sensitivity analysis
+- Find which cost elements have the largest confidence ranges = Sensitivity analysis
+> Sanity checks ask basic reasonableness questions. Cross-checks compare the estimate against independent methods, models, data, or estimates. Sensitivity analysis finds which inputs and assumptions most affect the total.
+:::
+
++++
+
+Once a cost model is assembled, it must be validated before being presented as the basis for program decisions.
+
+{{primer}}
 
 ### Sanity checks
 
