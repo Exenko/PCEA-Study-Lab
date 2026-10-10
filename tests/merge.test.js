@@ -22,14 +22,14 @@ const server = require(path.join(ROOT, 'server.js'));
 function rand(seed) { let s = seed; return () => { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; }; }
 function profile(r) {
   const d = { meta: {}, resets: {} };
-  for (const p of ['cards', 'checks', 'sections', 'days', 'shop']) {
+  for (const p of ['cards', 'checks', 'sections', 'days', 'shop', 'primers']) {
     d[p] = {};
     for (let i = 0; i < 4; i++) if (r() < 0.6) d[p]['k' + i] = { v: Math.floor(r() * 5), mod: Math.floor(r() * 10) };
     if (r() < 0.2) d.resets[p] = Math.floor(r() * 10);
   }
   return d;
 }
-const partsOnly = d => JSON.stringify(['cards', 'checks', 'sections', 'days', 'shop', 'resets'].map(p => d[p]));
+const partsOnly = d => JSON.stringify(['cards', 'checks', 'sections', 'days', 'shop', 'primers', 'resets'].map(p => d[p]));
 
 module.exports = [
   ['store has days and shop parts', () => {
@@ -85,5 +85,15 @@ module.exports = [
     const keys = Object.keys(Store.data.days);
     assert.strictEqual(keys.length, 1);
     assert.match(keys[0], /^\d{4}-\d{2}-\d{2}$/);
+  }],
+  ['store has a primers part', () => {
+    assert.deepStrictEqual(Store.normalize({}).primers, {});
+  }],
+  ['a newer cleared primer beats an older answer on both sides', () => {
+    const a = { primers: { 'm01/orgs': { type: 'sort', answer: ['A'], score: '1/1', mod: 5 } } };
+    const b = { primers: { 'm01/orgs': { cleared: true, mod: 9 } } };
+    for (const m of [Store.merge(a, b), Store.merge(b, a), server.merge(a, b), server.merge(b, a)]) {
+      assert.strictEqual(m.primers['m01/orgs'].cleared, true);
+    }
   }]
 ];

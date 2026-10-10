@@ -5,7 +5,7 @@
 // Records carry a "mod" timestamp so edits from several devices merge (newest record wins).
 const Store = (() => {
   const LEGACY = 'pcea-study-lab.v1', CUR = 'pcea.currentProfile', LOCAL = 'pcea.profile:', CACHE = 'pcea.cache:';
-  const PARTS = ['cards', 'checks', 'sections', 'days', 'shop'], SINGLES = ['settings', 'deck', 'lastSection', 'seenAch'];
+  const PARTS = ['cards', 'checks', 'sections', 'days', 'shop', 'primers'], SINGLES = ['settings', 'deck', 'lastSection', 'seenAch'];
   const NAME_RE = /^[A-Za-z0-9](?:[A-Za-z0-9 _-]{0,38}[A-Za-z0-9])?$/;
   const RESERVED = /^(con|prn|aux|nul|com\d|lpt\d)$/i;
 
@@ -18,7 +18,7 @@ const Store = (() => {
 
   function defaults() {
     return {
-      v: 2, cards: {}, checks: {}, sections: {}, days: {}, shop: {},
+      v: 2, cards: {}, checks: {}, sections: {}, days: {}, shop: {}, primers: {},
       settings: { hitsToLevel: 2, newPerSession: 20, stepMode: true, theme: null, leaderboard: false, firmName: null },
       deck: null, lastSection: null, seenAch: null, meta: {}, resets: {}
     };

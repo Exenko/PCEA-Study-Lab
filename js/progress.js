@@ -61,7 +61,7 @@ const Progress = (() => {
     };
     root.querySelector('#rstC').onclick = () => { if (confirm('Reset all flashcard progress (levels, stars, history)?')) { Store.reset('cards'); App.render(); } };
     Rewards.wire(root, () => App.render());
-    root.querySelector('#rstL').onclick = () => { if (confirm('Reset lesson progress (completed sections and answered questions)?')) { Store.reset('sections'); Store.reset('checks'); App.render(); } };
+    root.querySelector('#rstL').onclick = () => { if (confirm('Reset lesson progress (completed sections and answered questions)?')) { Store.reset('sections'); Store.reset('checks'); Store.reset('primers'); App.render(); } };
   }
   return { route };
 })();
