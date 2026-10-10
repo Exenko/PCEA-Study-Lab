@@ -9,7 +9,7 @@ Pilot scope: module M01 only (9 sections). Scale to other modules after studying
 ## Decisions
 
 - Primer = hook at the start of a section (not module-level, not a prerequisite check).
-- Built from existing directives (`check`, `challenge`, `widget`) plus two new interaction types: `sort` and `order`.
+- Built from existing directives (multiple-choice `check`, optional non-committable `widget`) plus two new interaction types: `sort` and `order`. Exactly one committable block (`check`, `sort` or `order`) per primer. Predict challenges are not used in primers (the `trl` widget has no outputs, and no M01 hook needs one).
 - Ungraded but must-attempt: one committed attempt, no wrong-answer state, never written to `checks`/stats/mastery/streaks.
 - Approach: primer is a tagged first step of `section.body` (not a separate data field).
 
@@ -24,13 +24,13 @@ A single-line `:::primer:::` at the start of a section's first step makes that s
 Program offices, contractors, CAPE, GAO. Some of these have a stake in the number coming out low.
 
 :::sort orgs
-Q: Who's an advocate for the program, and who's independent?
-buckets: Advocate | Independent
-- Program Office = Advocate
-- Prime contractor = Advocate
-- CAPE = Independent
-- GAO = Independent
-> Advocates want the program to proceed, which creates pressure toward optimistic estimates.
+Q: Which of these might feel pressure to show the program is affordable?
+buckets: Pressure to show affordability | Independent check
+- Program Office estimators = Pressure to show affordability
+- CAPE = Independent check
+- A service cost agency = Independent check
+- GAO = Independent check
+> The program office is closest to the technical detail but may be subject to advocacy bias. Independent organizations exist to counter it.
 :::
 
 +++
@@ -67,14 +67,14 @@ Recap content by type:
 - sort: all-correct line, or name up to 2 misplaced items with their correct bucket.
 - order: all-correct line, or "You had N of M steps in the right place" plus the first misplaced step.
 - check: "You picked X" plus whether it was right.
-- challenge (predict): "You guessed X; the actual value is Y."
+- If the stored answer no longer fits the block (content edited since), the recap renders nothing.
 
 ## Runtime behavior
 
 - **Detection:** `Render.section` checks whether the first step begins with `:::primer:::`; that step gets class `.primer`, a "Before you read" header, and its blocks render with `ctx.primer = true`.
-- **Commit-once:** in primer context, `check`, `sort`, `order`, and `challenge` accept a single committed attempt. After commit, show the learner's answer beside the correct one and the explanation. The block is marked done, so the existing `pending()` gate (js/learn.js) unlocks Continue.
-- **Widget-only primers are invalid:** a primer must contain at least one committable block.
-- **Storage:** `Store.data.primers[secKey] = {type, answer, score, at, mod}` where `secKey = m.id + '/' + s.id` and `score` is e.g. `"3/4"` (`"1/1"`/`"0/1"` for check and challenge). Nothing is written to `Store.data.checks`.
+- **Commit-once:** in primer context, `check`, `sort` and `order` accept a single committed attempt. After commit, show the learner's answer beside the correct one and the explanation. The block is marked done, so the existing `pending()` gate (js/learn.js) unlocks Continue.
+- **One committable block:** a primer contains exactly one `check` (multiple choice), `sort` or `order`; widgets may accompany it.
+- **Storage:** `Store.data.primers[secKey] = {type, answer, score, at, mod}` where `secKey = m.id + '/' + s.id` and `score` is e.g. `"3/4"` (`"1/1"`/`"0/1"` for check). Nothing is written to `Store.data.checks`, and `Store.markActive()` is not called. "Try again" overwrites the entry with `{cleared: true}` (not a delete) so the reset syncs across devices. Resetting lesson progress also resets `primers`.
 - **Sync:** `primers` is merged per key with newest-`mod`-wins in js/storage.js, the same as `checks`.
 - **Revisit:** if a primer answer exists, the primer renders in its answered state. A "Try again" link clears the stored entry and re-renders the primer unanswered.
 - **Full-page mode:** primer renders at the top, interactive, non-blocking.
@@ -92,7 +92,7 @@ Recap content by type:
 ## Validation rules
 
 - `:::primer:::` only in a section's first step.
-- Each primer contains at least one committable block (`check`, `challenge`, `sort`, `order`).
+- Each primer contains exactly one committable block (`check`, `sort`, `order`), no `challenge`, and its `check` is multiple choice.
 - Each `sort` answer names a declared bucket (when `buckets:` is given); at least 2 buckets.
 - `order` items numbered 1..n, at least 3 items.
 - `{{primer}}` only in sections that have a primer.
@@ -106,11 +106,11 @@ Accuracy rule: every primer answer must be traceable to that section's own body 
 | definition | Sort 4 scenarios into Estimating vs Analysis | sort | At the definitions |
 | context | Order the lifecycle milestones where estimates are required | order | Where milestones are introduced |
 | orgs | Sort organizations into Advocate vs Independent | sort | At "Why independence matters" |
-| quality | `quality-check` widget preset showing a flawed estimate + "what's wrong?" check | widget + check | Where the matching characteristic is introduced |
+| quality | Check: the numbers are right but the estimate reached decision makers after the decision; is it still high quality? (No: Timeliness) | check | After the characteristics table |
 | products | Sort artifacts into the 4 products | sort | At the product list |
 | process | Order the 7 process steps | order | Before the step-by-step walkthrough |
 | methods | Sort programs at different design maturity into Analogy / Parametric / Build-up | sort | At methodology selection |
-| trl | Predict challenge on a `trl` widget preset: uncertainty at low TRL | challenge | At "low TRL -> higher uncertainty" |
+| trl | Order five maturity stages (lab principles -> lab breadboard -> prototype in relevant environment -> prototype in operational environment -> proven in missions) | order | After the TRL table |
 | validation | Sort activities into Sanity check / Cross-check / Sensitivity | sort | At the first of the three |
 
 Existing widgets in context (`lifecycle-estimates`) and process (`wbs-tree`) stay later in their sections.
