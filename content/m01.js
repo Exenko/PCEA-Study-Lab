@@ -121,7 +121,22 @@ Q: Why do programs need a validated cost estimate at major milestones?
     },
     {
       id: 'orgs', title: 'Who estimates: organizations and skills', summary: 'Government, contractors, and oversight bodies',
-      body: String.raw`Cost estimating is performed by multiple, independent organizations to provide checks and balances:
+      body: String.raw`:::primer:::
+Several kinds of organizations estimate the cost of the same program.
+
+:::sort
+Q: Which of these might feel pressure to show the program is affordable?
+buckets: Pressure to show affordability | Independent check
+- Program Office estimators = Pressure to show affordability
+- CAPE = Independent check
+- A service cost agency = Independent check
+- GAO = Independent check
+> The program office is closest to the technical detail but may be subject to advocacy bias: an incentive to show affordability. CAPE and the service cost agencies build estimates outside the program's chain of command, and GAO audits federal estimates against best practices.
+:::
+
++++
+
+Cost estimating is performed by multiple, independent organizations to provide checks and balances:
 
 | Organization | Role |
 |---|---|
@@ -133,6 +148,8 @@ Q: Why do programs need a validated cost estimate at major milestones?
 | **Manufacturers** | Track operating costs to manage and reduce them; vital for competitive advantage and profitability. |
 | **FFRDCs and support organizations** (IDA, RAND, Aerospace, MITRE) | Provide estimating and analysis support to government sponsors. |
 | **Consultants** | Provide specialized estimating support to any of the above groups. |
+
+{{primer}}
 
 :::key
 Multiple independent organizations exist specifically to **counter advocacy bias and optimism** — a recurring theme throughout PCEA.

@@ -5,6 +5,10 @@
 //   :::tip|warn|key|example [Title] ... :::   callout
 //   :::widget name [k=v ...] [lock=a,b]:::  interactive widget
 //   :::challenge widget [k=v ...] [lock=a,b] ... :::   guided challenge (see js/challenge.js)
+//   :::sort [id] ... :::      sort items into buckets (see js/primer.js)
+//   :::order [id] ... :::     put items in sequence (see js/primer.js)
+//   :::primer:::              first line of a section's first step: that step is a "Before you read" primer
+//   {{primer}}                in later prose: recap of the learner's primer answer
 const Render = (() => {
   const OPEN = '\uE000', CLOSE = '\uE001';
 
@@ -301,28 +305,261 @@ const Render = (() => {
     return box;
   }
 
+  // Primer blocks commit once (no retry, no wrong-answer stats); answers go to Store.data.primers, never checks.
+  function settle(box, exp, ctx) {
+    box.classList.add('done');
+    exp.hidden = false;
+    const again = el('button', 'btn small ghost primer-again', 'Try again');
+    again.onclick = () => { Primer.clear(Store.data, ctx.key); Store.save(); App.render(); };
+    box.appendChild(again);
+  }
+  function commit(box, exp, ctx, type, answer, score) {
+    Primer.save(Store.data, ctx.key, type, answer, score);
+    Store.save();
+    settle(box, exp, ctx);
+    ctx.onPrimer();
+    ctx.onChange && ctx.onChange();
+  }
+
+  function buildPrimerCheck(d, ctx) {
+    const c = parseCheck(d.body);
+    ctx.sec.primer = { type: 'check', spec: c };
+    const box = el('div', 'check');
+    box.appendChild(el('div', 'check-label', 'Your guess'));
+    box.appendChild(el('div', 'check-q', md(c.q.join('\n'))));
+    const exp = el('div', 'check-explain', md(c.explain.join('\n')));
+    exp.hidden = true;
+    const list = el('div', 'check-opts');
+    const show = pick => list.querySelectorAll('.opt').forEach((b, i) => {
+      b.disabled = true;
+      if (c.opts[i].right) b.classList.add('right'); else if (i === pick) b.classList.add('wrong');
+    });
+    c.opts.forEach((o, i) => {
+      const b = el('button', 'opt', inline(o.text));
+      b.onclick = () => { show(i); commit(box, exp, ctx, 'check', i, o.right ? '1/1' : '0/1'); };
+      list.appendChild(b);
+    });
+    box.append(list, exp);
+    const saved = Primer.answered(Store.data, ctx.key);
+    if (saved && saved.type === 'check' && Primer.fits('check', c, saved.answer)) { show(saved.answer); settle(box, exp, ctx); }
+    return box;
+  }
+
+  function blockError(box, label, errors) {
+    box.classList.add('done');
+    box.appendChild(el('div', 'check-fb bad', label + ' error: ' + errors.join('; ')));
+    return box;
+  }
+
+  // :::sort — tap an item then a bucket (or drag it), then commit. Graded outside primers: retry until right.
+  function buildSort(d, ctx, idx) {
+    const c = Primer.parseSort(d.body);
+    const id = ctx.key + '#s' + (d.args || idx);
+    const box = el('div', 'check sort');
+    if (c.errors.length) return blockError(box, 'Sort', c.errors);
+    if (ctx.primer) ctx.sec.primer = { type: 'sort', spec: c }; else box.dataset.checkId = id;
+    box.appendChild(el('div', 'check-label', ctx.primer ? 'Your guess' : 'Sort it'));
+    box.appendChild(el('div', 'check-q', md(c.q.join('\n'))));
+    const pool = el('div', 'sort-pool');
+    const grid = el('div', 'sort-buckets');
+    const zones = c.buckets.map(name => {
+      const z = el('div', 'sort-bucket');
+      z.dataset.bucket = name;
+      z.append(el('div', 'sort-bucket-name', inline(name)), el('div', 'sort-drop'));
+      grid.appendChild(z);
+      return z;
+    });
+    const go = el('button', 'btn small', 'Commit');
+    go.disabled = true;
+    const fb = el('div', 'check-fb');
+    fb.setAttribute('role', 'status');
+    const exp = el('div', 'check-explain', md(c.explain.join('\n')));
+    exp.hidden = true;
+    const placed = c.items.map(() => null);
+    let picked = null, locked = false, attempts = 0;
+    const chips = c.items.map((it, i) => {
+      const b = el('button', 'sort-item', inline(it.text));
+      b.draggable = true;
+      b.ondragstart = e => e.dataTransfer.setData('text/plain', String(i));
+      b.onclick = () => {
+        if (locked) return;
+        picked = picked === i ? null : i;
+        chips.forEach((x, k) => x.classList.toggle('on', k === picked));
+      };
+      return b;
+    });
+    Primer.shuffle(c.items.length, id).forEach(i => pool.appendChild(chips[i]));
+    const place = (i, bucket) => {
+      placed[i] = bucket;
+      (bucket == null ? pool : zones.find(z => z.dataset.bucket === bucket).querySelector('.sort-drop')).appendChild(chips[i]);
+      chips[i].classList.remove('on', 'wrong');
+      picked = null;
+      go.disabled = placed.includes(null);
+    };
+    const target = (node, bucket) => {
+      node.onclick = e => { if (!locked && picked !== null && !e.target.closest('.sort-item')) place(picked, bucket); };
+      node.ondragover = e => { if (!locked) e.preventDefault(); };
+      node.ondrop = e => { e.preventDefault(); if (!locked) place(+e.dataTransfer.getData('text/plain'), bucket); };
+    };
+    zones.forEach(z => target(z, z.dataset.bucket));
+    target(pool, null);
+    const reveal = ans => {
+      locked = true; go.hidden = true;
+      chips.forEach((ch, i) => {
+        const ok = ans[i] === c.items[i].bucket;
+        ch.disabled = true; ch.draggable = false;
+        ch.classList.remove('on', 'wrong');
+        ch.classList.add(ok ? 'right' : 'wrong');
+        if (!ok) ch.appendChild(el('span', 'sort-fix', '&rarr; ' + inline(c.items[i].bucket)));
+      });
+    };
+    go.onclick = () => {
+      const s = Primer.scoreSort(c, placed);
+      if (ctx.primer) { reveal(placed); commit(box, exp, ctx, 'sort', placed.slice(), s.right + '/' + s.total); return; }
+      attempts++;
+      if (s.right === s.total) {
+        reveal(placed);
+        fb.innerHTML = '<b>Correct.</b>'; fb.className = 'check-fb good';
+        box.classList.add('done'); exp.hidden = false;
+        record(id, attempts === 1, {}, ctx);
+        return;
+      }
+      chips.forEach((ch, i) => ch.classList.toggle('wrong', placed[i] !== c.items[i].bucket));
+      fb.innerHTML = 'Not quite: the red items are in the wrong bucket. Move them and commit again.';
+      fb.className = 'check-fb bad';
+    };
+    box.append(pool, grid, go, fb, exp);
+    const saved = ctx.primer ? Primer.answered(Store.data, ctx.key) : null;
+    if (ctx.primer && saved && saved.type === 'sort' && Primer.fits('sort', c, saved.answer)) {
+      saved.answer.forEach((b, i) => place(i, b)); reveal(saved.answer); settle(box, exp, ctx);
+    } else if (!ctx.primer && Store.data.checks[id] && Store.data.checks[id].done) {
+      c.items.forEach((it, i) => place(i, it.bucket)); reveal(placed); box.classList.add('done'); exp.hidden = false;
+    }
+    return box;
+  }
+
+  // :::order — drag rows or use the up/down buttons, then commit. Graded outside primers: retry until right.
+  function buildOrder(d, ctx, idx) {
+    const c = Primer.parseOrder(d.body);
+    const id = ctx.key + '#o' + (d.args || idx);
+    const box = el('div', 'check order');
+    if (c.errors.length) return blockError(box, 'Order', c.errors);
+    if (ctx.primer) ctx.sec.primer = { type: 'order', spec: c }; else box.dataset.checkId = id;
+    box.appendChild(el('div', 'check-label', ctx.primer ? 'Your guess' : 'Put it in order'));
+    box.appendChild(el('div', 'check-q', md(c.q.join('\n'))));
+    const list = el('ol', 'order-list');
+    const go = el('button', 'btn small', 'Commit');
+    const fb = el('div', 'check-fb');
+    fb.setAttribute('role', 'status');
+    const exp = el('div', 'check-explain', md(c.explain.join('\n')));
+    exp.hidden = true;
+    let seq = Primer.orderStart(c.items.length, id), locked = false, attempts = 0;
+    const draw = () => seq.forEach((v, p) => {
+      rows[v].querySelector('.order-num').textContent = (p + 1) + '.';
+      rows[v].classList.remove('wrong');
+      list.appendChild(rows[v]);
+    });
+    const move = (i, dir) => {
+      const p = seq.indexOf(i), q = p + dir;
+      if (locked || q < 0 || q >= seq.length) return;
+      [seq[p], seq[q]] = [seq[q], seq[p]];
+      draw();
+    };
+    const rows = c.items.map((t, i) => {
+      const li = el('li', 'order-item');
+      li.draggable = true;
+      const up = el('button', 'order-move', '&uarr;'), dn = el('button', 'order-move', '&darr;');
+      up.setAttribute('aria-label', 'Move up'); dn.setAttribute('aria-label', 'Move down');
+      up.onclick = () => { move(i, -1); up.focus(); };
+      dn.onclick = () => { move(i, 1); dn.focus(); };
+      li.append(el('span', 'order-num'), el('span', 'order-text', inline(t)), up, dn);
+      li.ondragstart = e => e.dataTransfer.setData('text/plain', String(i));
+      li.ondragover = e => { if (!locked) e.preventDefault(); };
+      li.ondrop = e => {
+        e.preventDefault();
+        const from = +e.dataTransfer.getData('text/plain');
+        if (locked || from === i) return;
+        const to = seq.indexOf(i);
+        seq.splice(seq.indexOf(from), 1);
+        seq.splice(to, 0, from);
+        draw();
+      };
+      return li;
+    });
+    const reveal = ans => {
+      locked = true; go.hidden = true;
+      seq = ans.slice(); draw();
+      seq.forEach((v, p) => {
+        const row = rows[v], ok = v === p;
+        row.draggable = false;
+        row.querySelectorAll('.order-move').forEach(b => { b.disabled = true; });
+        row.classList.add(ok ? 'right' : 'wrong');
+        if (!ok) row.querySelector('.order-text').appendChild(el('span', 'order-fix', `actually step ${v + 1}`));
+      });
+    };
+    go.onclick = () => {
+      const s = Primer.scoreOrder(c, seq);
+      if (ctx.primer) { const a = seq.slice(); reveal(a); commit(box, exp, ctx, 'order', a, s.right + '/' + s.total); return; }
+      attempts++;
+      if (s.right === s.total) {
+        reveal(seq);
+        fb.innerHTML = '<b>Correct.</b>'; fb.className = 'check-fb good';
+        box.classList.add('done'); exp.hidden = false;
+        record(id, attempts === 1, {}, ctx);
+        return;
+      }
+      seq.forEach((v, p) => rows[v].classList.toggle('wrong', v !== p));
+      fb.innerHTML = 'Not quite: the red steps are out of place. Rearrange and commit again.';
+      fb.className = 'check-fb bad';
+    };
+    draw();
+    box.append(list, go, fb, exp);
+    const saved = ctx.primer ? Primer.answered(Store.data, ctx.key) : null;
+    if (ctx.primer && saved && saved.type === 'order' && Primer.fits('order', c, saved.answer)) {
+      reveal(saved.answer); settle(box, exp, ctx);
+    } else if (!ctx.primer && Store.data.checks[id] && Store.data.checks[id].done) {
+      reveal(c.items.map((_, i) => i)); box.classList.add('done'); exp.hidden = false;
+    }
+    return box;
+  }
+
   function buildWidget(d) {
     const box = el('div', 'widget');
     Widgets.mount(box, d.args);
     return box;
   }
 
+  const RECAP = /\{\{primer\}\}/g;
   function buildStep(text, ctx, counter) {
-    const step = el('div', 'step');
+    const step = el('div', ctx.primer ? 'step primer' : 'step');
     for (const b of splitDirectives(text)) {
-      if (b.kind === 'md') { if (b.text.trim()) step.appendChild(el('div', 'prose', md(b.text))); continue; }
-      if (b.type === 'check') step.appendChild(buildCheck(b, ctx, counter.n++));
+      if (b.kind === 'md') { if (b.text.trim()) step.appendChild(el('div', 'prose', md(b.text).replace(RECAP, '<span class="primer-recap"></span>'))); continue; }
+      if (b.type === 'primer') step.appendChild(el('div', 'primer-label', 'Before you read'));
+      else if (b.type === 'check') step.appendChild(ctx.primer ? buildPrimerCheck(b, ctx) : buildCheck(b, ctx, counter.n++));
       else if (b.type === 'challenge') step.appendChild(buildChallenge(b, ctx, counter.c++));
+      else if (b.type === 'sort') step.appendChild(buildSort(b, ctx, counter.s++));
+      else if (b.type === 'order') step.appendChild(buildOrder(b, ctx, counter.o++));
       else if (b.type === 'widget') step.appendChild(buildWidget(b));
       else step.appendChild(buildCallout(b));
     }
     return step;
   }
 
-  // Returns array of step elements for a section body.
+  // Returns array of step elements for a section body. A first step starting with :::primer::: is the primer.
   function section(body, ctx) {
-    const counter = { n: 0, c: 0 };
-    return body.split(/^\+\+\+\s*$/m).map(t => buildStep(t, ctx, counter));
+    const counter = { n: 0, c: 0, s: 0, o: 0 };
+    const sec = { primer: null };
+    const steps = [];
+    const fill = () => {
+      const e = sec.primer && Primer.answered(Store.data, ctx.key);
+      const text = e && e.type === sec.primer.type ? Primer.recap(sec.primer.type, sec.primer.spec, e.answer) : '';
+      const html = text ? '<b>Your guess:</b> ' + inline(text) : '';
+      steps.forEach(st => st.querySelectorAll('.primer-recap').forEach(sp => { sp.innerHTML = html; }));
+    };
+    const pctx = Object.assign({}, ctx, { primer: true, sec, onPrimer: fill });
+    body.split(/^\+\+\+\s*$/m).forEach((t, i) => steps.push(buildStep(t, i === 0 && /^\s*:::primer:::/.test(t) ? pctx : ctx, counter)));
+    fill();
+    return steps;
   }
 
   return { md, inline, section, el, split: splitDirectives };

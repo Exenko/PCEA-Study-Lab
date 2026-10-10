@@ -633,3 +633,27 @@ a.offer:hover, a.camp:hover { border-color: var(--accent); box-shadow: var(--sha
 .plot .ci-hit { stroke: var(--c1); stroke-width: 2.2; }
 .plot .ci-miss { stroke: var(--bad); stroke-width: 2.8; }
 .sw.bad { background: var(--bad) !important; }
+
+/* lesson primers, sort and order blocks */
+.step.primer { padding: 14px 16px 6px; border-radius: 12px; background: color-mix(in srgb, var(--accent-soft) 35%, var(--paper)); }
+.primer-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--accent); margin-bottom: 4px; }
+.primer-recap { display: block; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; font-family: var(--sans); font-size: .95rem; }
+.primer-recap:empty, p:has(> .primer-recap:empty:only-child) { display: none; }
+.primer-again { margin-top: 10px; }
+.sort-pool { display: flex; flex-wrap: wrap; gap: 8px; min-height: 48px; margin: 10px 0; padding: 8px; border: 1.5px dashed var(--line-2); border-radius: 10px; }
+.sort-buckets { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 10px; }
+.sort-bucket { border: 1.5px solid var(--line-2); border-radius: 10px; padding: 8px; background: var(--paper); cursor: pointer; }
+.sort-bucket-name { font-weight: 700; font-size: .88rem; margin-bottom: 6px; }
+.sort-drop { display: flex; flex-direction: column; gap: 6px; min-height: 40px; }
+.sort-item, .order-item { text-align: left; border: 1.5px solid var(--line-2); background: var(--paper); color: var(--ink); padding: 8px 12px; border-radius: 8px; font: .95rem var(--sans); cursor: grab; }
+.sort-item.on { border-color: var(--accent); background: var(--accent-soft); }
+.sort-item.right, .order-item.right { border-color: var(--good); background: var(--good-soft); }
+.sort-item.wrong, .order-item.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.sort-item:disabled { cursor: default; color: var(--ink); }
+.sort-fix, .order-fix { display: block; font-size: .82rem; color: var(--bad); margin-top: 2px; }
+.order-list { list-style: none; padding: 0; margin: 10px 0; display: grid; gap: 6px; }
+.order-item { display: flex; align-items: center; gap: 6px; }
+.order-num { color: var(--muted); min-width: 1.6em; }
+.order-text { flex: 1; }
+.order-move { border: 1px solid var(--line-2); background: var(--paper); color: var(--ink); border-radius: 6px; width: 34px; height: 34px; cursor: pointer; }
+.order-move:disabled { opacity: .35; cursor: default; }
