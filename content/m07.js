@@ -148,13 +148,13 @@ predict: cavN +- 1%
 
 +++
 
-### CUMAV with lot data (same underlying 85% curve, T1 = \$1,000)
+### CUMAV with lot data (same underlying 85% curve, T1 = 100)
 
 Lots of 2, 3, and 5 units cost \$170.00, \$172.84, and \$239.98. CAUC through the second lot (5 cumulative units): $(170.00+172.84)/5 = 68.57$. The first three lots total \$582.82; since the total of all 20 units is \$990.72 (same perfect data as the unit example), the fourth lot (units 11–20) costs $990.72 - 582.82 = 407.90$.
 
-### ULC with unit vs. lot data (same data, different theory)
+### ULC with unit vs. lot data (same T1 and slope, different theory)
 
-With **unit data**, ULC gives unit 20 = \$49.54 (coincidentally the same number as the CUMAV *average*, because the data is perfect) but a **total** of the first 20 units of **\$1,240.18** — noticeably higher than CUMAV's total of \$990.72, because CUMAV's average smooths in the cheaper later units while ULC sums each unit's own (higher, early-weighted) cost. Average cost per unit: $1240.18/20 = 62.0$.
+With **unit data**, ULC gives unit 20 = \$49.54 (coincidentally the same number as the CUMAV *average*, because the data is perfect) but a **total** of the first 20 units of **\$1,240.18** — noticeably higher than CUMAV's total of \$990.72, because ULC's 85% applies to each unit's cost, while CUMAV's 85% applies to the cumulative average; for the same T1 and slope the unit-theory data are higher (CEBoK notes its ULC example data were "significantly higher" than the CUMAV data). Average cost per unit: $1240.18/20 = 62.0$.
 
 :::note Rounding
 CEBoK prints the CUMAV total as both 990.72 and 990.69, depending on how $b$ is rounded. With the exact $b$ the totals are 990.79 (CUMAV) and 1240.23 (ULC), which is what the widget shows. The differences are rounding only.
@@ -163,12 +163,12 @@ CEBoK prints the CUMAV total as both 990.72 and 990.69, depending on how $b$ is 
 With **lot data**, ULC needs lot midpoints. The heuristic gives an initial $b = -0.2402$; regressing again with refined LMPs gives $b = -0.2345$ (85%, matching the true curve). Because the fit isn't exact with approximated LMPs, the actual total of the first 10 units, \$711.61, differs slightly from the model's predicted \$709.78.
 
 :::check
-Q: Same perfect 85%, T1=1000 data set. Which is larger: the ULC total of the first 20 units, or the CUMAV total?
+Q: 85% curve, T1 = 100: Which is larger: the ULC total of the first 20 units, or the CUMAV total?
 * ULC total (\$1,240.18) is larger than the CUMAV total (\$990.72)
 - CUMAV total is larger
 - They are always identical
 - Cannot be determined
-> ULC sums each unit's own (higher, early-weighted) actual cost; CUMAV's average-based total smooths the same data to a lower figure.
+> ULC's 85% applies to each unit's cost, while CUMAV's 85% applies to the cumulative average; for the same T1 and slope the unit-theory data are higher (CEBoK notes its ULC example data were "significantly higher" than the CUMAV data), so the ULC total is larger.
 :::`
     },
     {
@@ -686,8 +686,8 @@ Q: Fig 7.4: total and average of units 4–8 (5-unit lot)
 A: Total = \$3,312.93; average (AUC) = \$662.59
 Q: CUMAV, T1=100, 85%: cost of the 20th unit alone (totals-difference method)
 A: $100(20^{0.7655} - 19^{0.7655}) = 38.15$
-Q: ULC vs CUMAV, same perfect 85% data, T1=1000: total cost of first 20 units
-A: ULC total = \$1,240.18; CUMAV total = \$990.72. ULC sums each unit's own (higher) cost; CUMAV's average smooths it down.
+Q: ULC vs CUMAV, 85% curve, T1=100: total cost of first 20 units
+A: ULC total = \$1,240.18; CUMAV total = \$990.72. ULC's 85% applies to each unit's cost, while CUMAV's 85% applies to the cumulative average; for the same T1 and slope the unit-theory data are higher, so the ULC total is larger.
 Q: ULC unit data, same example: average cost of 20 units
 A: 1240.18 / 20 = 62.0
 Q: CUMAV lot data example: lot costs 170.00/172.84/239.98 for lots of 2/3/5 units. CAUC through lot 2?

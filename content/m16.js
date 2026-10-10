@@ -312,7 +312,7 @@ CEBoK's own Testable Topics table calls out "curves of equal preference" and "pi
 :::tip Beyond CEBoK
 Plot design alternatives in **cost vs. performance** space. A **curve of equal preference** (an indifference curve) connects every combination of cost and performance that the decision maker values **equally** — moving along one curve trades performance for cost (or vice versa) at the **exchange rate** (the curve's slope) without changing overall preference.
 
-- Curves farther from the origin (more performance for the same cost, or less cost for the same performance) are **more preferred**.
+- Curves toward higher performance and lower cost (more performance for the same cost, or less cost for the same performance) are **more preferred**.
 - The **optimal design** is the feasible alternative that lands on the **most-preferred** curve of equal preference, while still respecting the official cost and performance **thresholds** (the outer bound) and **objectives** (the goal value).
 - A design that is cheaper but on a *less*-preferred curve than an affordable, higher-performing alternative is not "optimal" just because it costs less.
 :::
@@ -607,7 +607,7 @@ Q: On the CAM-I Cross, what does the horizontal (left-to-right) axis represent?
 
 ### Better historical cost data
 
-ABC-derived costs more accurately reflect the true cost of activities and products, improving the quality of historical data used to build **Cost Estimating Relationships (CERs, Module 9)**.
+ABC-derived costs more accurately reflect the true cost of activities and products, improving the quality of historical data used to build **Cost Estimating Relationships (CERs, Module 3)**.
 
 **Problem**: Traditional volume-allocated overhead can distort historical unit costs. If you use distorted historical data to build a CER, the resulting regression carries the distortion forward into future estimates.
 

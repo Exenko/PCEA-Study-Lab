@@ -275,7 +275,7 @@ Q: An F-distribution has denominator df $n = 6$. What is its mean?
 - **Lognormal** = exponential transform of Normal ($\ln X$ is normal)
 - **Triangular** and **Beta** both model bounded three-point estimates; Beta is more flexible but harder to fit
 - **Beta(1,1)** = **Uniform(0,1)** exactly
-- **Rayleigh**($a=1$) = **chi-squared** with 2 degrees of freedom; more generally, $\sqrt{X^2+Y^2}$ for independent $X,Y \sim N(0,\sigma^2)$ is Rayleigh — used in time-phasing R&D cost curves
+- **Rayleigh**($a=1$) squared = **chi-squared** with 2 degrees of freedom (Rayleigh(1) itself is chi with 2 df); more generally, $\sqrt{X^2+Y^2}$ for independent $X,Y \sim N(0,\sigma^2)$ is Rayleigh — used in time-phasing R&D cost curves
 
 See the distribution explorer to watch mean, median, mode separate as skew changes:
 
@@ -442,7 +442,7 @@ CEBoK rounds the pooled variance to 0.11; with that value the arithmetic gives $
 :::check
 Q: DoD vs. NAVAIR test: $\bar X = 1.19$, $\bar Y = 1.33$, $S_p^2 = 0.11$, $n=m=20$. What is the test statistic $T$?
 = -1.32 ±0.02
-> $T = (1.19-1.33)/\sqrt{0.11(1/20+1/20)} = -0.14/0.1049 pprox -1.33$ (CEBoK prints $-1.32$).
+> $T = (1.19-1.33)/\sqrt{0.11(1/20+1/20)} = -0.14/0.1049 \approx -1.33$ (CEBoK prints $-1.32$).
 :::
 
 :::check
@@ -503,8 +503,10 @@ show: method=t
 **One-sample t**: Tests if sample mean differs from a hypothesized value.
 $$t = \frac{\bar x - \mu_0}{s/\sqrt n}$$
 
-**Two-sample t**: Tests if means of two independent samples differ.
-$$t = \frac{\bar x_1 - \bar x_2}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}$$
+**Two-sample t**: Tests if means of two independent samples differ (assuming equal variances).
+$$t = \frac{\bar x_1 - \bar x_2}{s_p\sqrt{1/n_1 + 1/n_2}} \quad \text{where} \quad s_p^2 = \frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}, \quad df = n_1+n_2-2$$
+
+When variances are unequal, the **Welch test** uses $\sqrt{s_1^2/n_1 + s_2^2/n_2}$ in the denominator and adjusted (non-integer) degrees of freedom.
 
 **Paired t**: When observations are matched (e.g., before/after), test the mean of the differences.
 
@@ -787,7 +789,7 @@ Q: Two WBS elements are bivariate normal with $\rho$ close to $-1$. What happens
 
 **Chi-squared**: one parameter (df $=n$); mean $=n$, variance $=2n$; approaches normal as $n\to\infty$. Used in goodness-of-fit testing.
 
-**Rayleigh**: one parameter $a$; mean $=a\sqrt{\pi/2}$, variance $=(2-\pi/2)a^2$. Rayleigh($a=1$) = chi-squared with 2 df. Used in time-phasing R&D cost/EAC curves.
+**Rayleigh**: one parameter $a$; mean $=a\sqrt{\pi/2}$, variance $=(2-\pi/2)a^2$. Rayleigh($a=1$)² is chi-squared with 2 df. Used in time-phasing R&D cost/EAC curves.
 
 **Beta** (formal): shape parameters $\alpha,\beta > 0$ on support $(0,1)$; mean $=\alpha/(\alpha+\beta)$; $\text{Beta}(\alpha,\beta)$ is symmetric to $\text{Beta}(\beta,\alpha)$; $\text{Beta}(1,1) = \text{Uniform}(0,1)$.
 
@@ -972,7 +974,7 @@ Q: Triangular distribution mean
 A: $(a + m + b)/3$
 R: yes
 Q: Triangular distribution variance formula
-A: $(a^2 + b^2 + c^2 - ab - ac - bc)/18$
+A: $(a^2 + b^2 + m^2 - ab - am - bm)/18$
 R: yes
 Q: When is triangular used in cost estimating?
 A: Expert elicitation: only three intuitive inputs needed (best/worst/most likely).
@@ -991,7 +993,7 @@ A: Mean = p; Variance = p(1 − p)
 Q: Bernoulli use in cost risk
 A: Models binary risk events (technology matures: yes/no).
 Q: Relationships between distributions
-A: Binomial = sum of n Bernoulli trials; Normal = limit of many distributions (CLT); t → Normal as df → ∞; F = ratio of two chi-squareds; Lognormal = exp(Normal); Beta(1,1) = Uniform(0,1); Rayleigh(1) = chi-squared(2 df).
+A: Binomial = sum of n Bernoulli trials; Normal = limit of many distributions (CLT); t → Normal as df → ∞; F = ratio of two chi-squareds; Lognormal = exp(Normal); Beta(1,1) = Uniform(0,1); Rayleigh(1)² is chi-squared(2 df).
 Q: F-distribution: mean and variance
 A: Mean = $n/(n-2)$ for $n>2$; Variance = $2n^2(m+n-2) / [m(n-2)^2(n-4)]$ for $n>4$ (m, n = numerator/denominator df).
 Q: F-distribution definition

@@ -91,7 +91,7 @@ The base year is the year to which all dollars are normalized. It is set to inde
 | Adjusts for | **Price-level change** (inflation) | **Time value of money** (opportunity cost) |
 | Purpose | Convert BY dollars to TY dollars (or vice versa) for budget planning | Convert future cash flows to a common point in time (present value) for economic comparison |
 | Rate used | Inflation rate | Discount rate, generally tied to a rate of return, usually greater than inflation |
-| Dollars used with | Nominal discount rates are applied to Current Year dollar amounts | Real discount rates are applied to Constant Year dollar amounts |
+| Dollars used with | Indices convert Constant Year dollars to Current Year / Then Year dollars | Nominal discount rates with Current Year dollars; real discount rates with Constant Year dollars |
 
 Discounting is covered in detail in Module 13 Economic Analysis; it lets estimators compare the present-value cost of alternatives.
 
@@ -676,7 +676,7 @@ A: The process of applying an inflation index to convert costs from constant-yea
 R: yes
 Q: Index in the base year
 A: 1.000 (by definition, the reference point).
-Q: Why do programs spanning many years underrun if not escalated?
+Q: Why are programs spanning many years underfunded if not escalated?
 A: Constant-dollar estimates don't account for inflation that will occur over the program span. Without escalation, actual spending will exceed the budget.
 Q: Current Year (CY) dollars refer to which type of spending: expenditures or obligations?
 A: Expenditures. Then Year (TY) dollars refer to obligations.
@@ -802,7 +802,7 @@ A: Cost(TY) = Cost(BY) × [Index(FY2025) / Index(FY2020)]
 Q: Converting then-year FY2024 dollars back to constant FY2020 dollars
 A: Cost(BY) = Cost(TY) × [Index(FY2020) / Index(FY2024)]
 Q: Procedure for multi-year BY→TY conversion
-A: Time-phase the total cost by outlay year; escalate each year's BY amount by that year's raw index; sum the TY amounts.
+A: Time-phase the total cost by outlay year; escalate each year's BY amount by that year's weighted index; sum the TY amounts.
 Q: Escalation for \$50M in constant FY2020 dollars, index 1.120 in FY2024, base 1.000
 A: \$50M × (1.120/1.000) = \$56M
 Q: Deflation for \$84M in then-year FY2024 dollars, index 1.120 for FY2024, base 1.000 for FY2020
@@ -842,7 +842,7 @@ A: Inflation compounds year over year like interest. Simple arithmetic (r × n) 
 
 ## Special Topics and Pitfalls
 Q: Mid-point method
-A: For costs incurred over a period whose exact profile is unknown (e.g., Jan 2019–Dec 2021), use the index at the midpoint of the period (around Jan 2020) for escalation, not start or end year. Only for historical data — a forward estimate should be time-phased year by year instead.
+A: For costs incurred over a period whose exact profile is unknown (e.g., Jan 2019–Dec 2021), use the index at the midpoint of the period (about July 2020) for escalation, not start or end year. Only for historical data — a forward estimate should be time-phased year by year instead.
 R: yes
 Q: Time-phasing definition
 A: Relating percent spent (cost) to percent elapsed (duration) for past programs, then using an analogy or average to spread a future estimate before escalating each year's portion separately.

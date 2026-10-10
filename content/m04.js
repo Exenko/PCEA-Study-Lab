@@ -254,8 +254,8 @@ Q: "O&M utilities cost \$36,500" is a poor data point mainly because…
 |---|---|
 | **Availability** | Does the data exist at all, at the WBS level I need? |
 | **Accessibility** | Can I get it? (proprietary data, classification, organizational barriers) |
-| **Validity** | Is it accurate, complete, and relevant to my system? |
-| **Constraints** | Time, budget, and security or proprietary limits on use |
+| **Validity** | Is it relatively current and applicable (from comparable systems)? |
+| **Constraints** | Time and the underlying estimate requirements (e.g., a ROM vs. a cross-check) |
 
 These four considerations determine whether data can realistically be obtained and used in an estimate.
 
@@ -515,7 +515,7 @@ show: units=1 infl=1 qty=1
 :::challenge normalize units=1 infl=1 lock=units,infl,qty
 Q: Point 1 was recorded as \$4,317.55K in 2014 dollars. Convert it to \$M and escalate it to BY2026 at 2.5% a year (12 years). What is it worth?
 predict: byValue +- 1%
-> $4.31755 \times 1.025^{12} = 4.31755 \times 1.3449 \approx 5.81$, so about \$5.81M. Moving to a later base year multiplies by the index ratio; moving to an earlier one divides.
+> $4.31755 \times 1.025^{12} = 4.31755 \times 1.3449 \approx 5.81$, so about \$5.81M. Moving to a later base year multiplies by the growth factor here (equivalently, divides by the old year's index on the new base, as in the \$52,247 example).
 :::`
     },
     {
@@ -691,7 +691,7 @@ A: A standard WBS that keeps data providers and estimators in sync; its elements
 
 ## Considerations and Pitfalls
 Q: Four data quality considerations
-A: Availability (does it exist?), accessibility (can I get it?), validity (is it accurate/relevant?), constraints (time, budget, security limits).
+A: Availability (does it exist?), accessibility (can I get it?), validity (is it relatively current and applicable?), constraints (time and the underlying estimate requirements).
 Q: Common data pitfalls
 A: Accepting data at face value, inconsistent definitions, hidden content differences, mixed dollar types, budgets used as actuals, too few/non-homogeneous points, stale data, no source record.
 Q: Why not use budgets as actuals?
@@ -699,7 +699,7 @@ A: Budgets are plans, not what was actually spent. Mixing them with actuals misr
 
 ## Data Collection Process
 Q: Data collection process steps (in order)
-A: 1) Understand the total picture · 2) Define estimate structure (WBS) · 3) Identify data needs (by technique) · 4) Develop a data collection plan.
+A: 1) Understand the total picture · 2) Define estimate structure (CES) · 3) Identify data needs (by technique) · 4) Develop a data collection plan.
 Q: What is a data collection plan?
 A: A documented plan specifying what data is needed, from which sources, using what methods, the schedule, and how data quality will be verified.
 R: yes
@@ -708,7 +708,7 @@ A: A documented plan improves consistency, ensures traceability, and helps manag
 Q: Data needed for CER development
 A: Cost for many analogous systems + candidate driver values + context to normalize. Data must be homogeneous and consistently defined.
 Q: What is the WBS and why does it matter for data collection?
-A: Work Breakdown Structure defines the framework the estimate is built around. Data collection should be organized around the WBS so collected data maps directly to cost elements.
+A: Work Breakdown Structure defines the framework the estimate is built around. Data should map to the estimate's cost element structure (CES), which is related to but not the same as a contract WBS.
 Q: CES vs. contract WBS
 A: The CES (Cost Element Structure) is not the same as a contract WBS. The CES is all-inclusive, spans the entire subject and timeframe being estimated, and is bounded/tailored to the customer's needs.
 Q: Cost driver examples
@@ -780,7 +780,7 @@ R: yes
 Q: Why must recurring and non-recurring costs be separated before learning curve analysis?
 A: (Beyond CEBoK) Learning curves apply only to recurring costs; mixing non-recurring (fixed, no learning) with recurring distorts the apparent learning rate. CEBoK itself cites added fidelity and accounting for production quantity/time-phasing anomalies as the reasons for the split.
 Q: Effect of mixing recurring and non-recurring costs in unit cost data
-A: (Beyond CEBoK) Makes the unit cost trend appear flatter (less learning) than it actually is, because non-recurring costs are spread across more units at higher quantities.
+A: (Beyond CEBoK) Makes the unit cost trend appear steeper (more apparent learning) than it actually is, because per-unit non-recurring cost shrinks as quantity grows, creating a false impression of accelerated learning.
 Q: When is non-recurring cost "absorbed" by quantity?
 A: (Beyond CEBoK) As quantity increases, the per-unit non-recurring cost decreases, but that's an accounting effect, not true learning. Separating them reveals the real learning curve.
 Q: Fixed vs. variable cost

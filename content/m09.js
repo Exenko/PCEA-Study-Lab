@@ -321,7 +321,7 @@ Q: True or False: The mean of a sum of cost elements equals the sum of their ind
     },
     {
       id: 'correlation', title: 'Correlation and Total Variance', summary: 'How correlation widens the total distribution; the four correlation methods',
-      body: String.raw`When summing multiple cost elements, **correlation between elements dramatically affects the total spread** — but not the mean. Correlation increases dispersion, shifts the risk-adjusted mean, and is difficult to model.
+      body: String.raw`When summing multiple cost elements, **correlation between elements dramatically affects the total spread** — but not the mean. Correlation increases dispersion and is difficult to model. (CEBoK also says it shifts the mean; for a simple sum the mean is unchanged, and what moves are the upper percentiles.)
 
 ### The Variance Formula
 
@@ -473,7 +473,7 @@ Q: A triangular element has Low 80, ML 100, High 150. Mean?
 Q: Can you get the 80th percentile of total cost by adding each element's 80th percentile?
 - Yes, percentiles always add
 * No; only means add; use the simulated total distribution
-- Only if perfectly correlated
+- Only if the elements are independent
 > Summing percentiles gives a number that is too high when correlation < 1. The S-curve is your true measure.
 :::`
     },
@@ -541,8 +541,8 @@ Q: A risk has 30\% chance of adding \$10M. Its expected value = ?
 
 :::check
 Q: A risk cube item has $P_x = 0.4$ and $C_x = \$5M$. Using the corrected formula, what is its variance (in \$M²)?
-= 12
-> $\text{Var} = P_x(1-P_x)C_x^2 = 0.4(0.6)(25) = 12$. (CEBoK's printed formula omits the square on $C_x$.)
+= 6
+> $\text{Var} = P_x(1-P_x)C_x^2 = 0.4(0.6)(25) = 0.24(25) = 6$. (CEBoK's printed formula omits the square on $C_x$.)
 :::
 
 :::check

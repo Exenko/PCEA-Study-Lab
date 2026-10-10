@@ -710,8 +710,8 @@ R: yes
 Q: What is the GAO?
 A: Government Accountability Office. Audits federal cost estimates and publishes the Cost Estimating and Assessment Guide (best practices).
 R: yes
-Q: Why do programs require both a POE (Program Office Estimate) and an ICE (Independent Cost Estimate)?
-A: POE is developed by the program office (close to technical detail but subject to advocacy bias); ICE is independent (objective check). Both provide a cross-check against optimism and errors.
+Q: Why do programs require both a POE (Program Office Estimate) and a CCA (DoD Component Cost Analysis)?
+A: POE is developed by the program office (close to technical detail but subject to advocacy bias); CCA is an independent cost analysis (objective check). Both provide a cross-check against optimism and errors.
 Q: What does FFRDC stand for?
 A: Federally Funded Research and Development Center (e.g., RAND, IDA, Aerospace Corporation, MITRE). Provides estimating support to government sponsors.
 R: yes
@@ -750,7 +750,7 @@ R: yes
 
 ## Benefits
 Q: What is "buying in" and why is it risky?
-A: Bidding far below the actual amount of effort to win a contract as the lowest bidder. As development proceeds, the true cost becomes apparent, and the manufacturer must absorb the overrun, leading to lost profit or bankruptcy.
+A: Bidding far below the actual amount of effort to win a contract as the lowest bidder. As development proceeds, the true cost becomes apparent, and either the customer or the manufacturer must pay for the overrun, leading to lost profit or bankruptcy.
 R: yes
 Q: What is "pricing out of the market"?
 A: Estimating too high, making the bid uncompetitive and unable to win work. Accurate estimates prevent both buying-in and pricing-out, ensuring profitability and competitive advantage.
@@ -866,7 +866,7 @@ A: Limited or no data; new technology. Leverages judgment but is biased and subj
 Q: General progression: analogy → parametric → engineering build-up
 A: Analogy dominates early (immature design); parametric spans the middle; build-up dominates late (mature, detailed design).
 Q: How does TRL affect method selection?
-A: Low TRL (1–3) → analogy, expert opinion only. Mid TRL (4–6) → parametric possible with caution. High TRL (7+) → parametric CERs and engineering build-up viable.
+A: Low TRL (1–3) → analogy, expert opinion only. TRL 4-5 → limited parametric, analogy, expert judgment; TRL 6+ → parametric CERs and engineering build-up become viable.
 
 ## TRL (Technology Readiness Level)
 Q: What does TRL measure?

@@ -721,7 +721,7 @@ When benefits have no common denominator like dollars, build a decision matrix u
 | Alternative 4 | \$35,604,337 | 23.15 | 6.5 |
 | Alternative 5 | — | — | Not Feasible |
 
-Alternative 4 has the **highest** benefit score but is also the most expensive relative to that score, driven mainly by its durability rating — the decision maker must judge whether that extra expense is justified. Document the benefits analysis with: identification/definition of each benefit, categorization, measurement method, ranking results, and participating personnel.
+Alternative 3 has the **highest** benefit score but is also the most expensive, disproportionately so, driven mainly by its durability rating (CEBoK's text calls it "Alternative 4" because it is row 4 of Fig 13.19) — the decision maker must judge whether that extra expense is justified. Document the benefits analysis with: identification/definition of each benefit, categorization, measurement method, ranking results, and participating personnel.
 
 :::widget benefits-matrix:::
 

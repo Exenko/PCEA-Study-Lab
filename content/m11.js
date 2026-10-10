@@ -6,7 +6,7 @@ PCEA.addModule({
 
 **Core workflow**: decompose into elements → estimate each via rates, standards, quantity factors (learning) and material takeoff → time-phase and adjust for risk.
 
-This module connects Modules 7 (learning curves), 6 (data analysis), and 4 (estimating methods). Unlike R&D estimating, manufacturing costs are heavily **quantity-driven** (learning curve effects), **labor-standard-driven** (time standards, rates), and **material-driven** (bill of materials, scrap).`,
+This module connects Modules 7 (learning curves), 6 (data analysis), and 2 (estimating methods). Unlike R&D estimating, manufacturing costs are heavily **quantity-driven** (learning curve effects), **labor-standard-driven** (time standards, rates), and **material-driven** (bill of materials, scrap).`,
   sections: [
     {
       id: 'process', title: 'Hardware lifecycle and functional cost elements', summary: 'Acquisition reviews, prototype types, manufacturing operations, cost elements',
@@ -430,7 +430,7 @@ Learning applies to **recurring touch labor** that improves with repetition unde
 - **Material cost per unit**: a physical/engineering quantity (same raw material needed regardless of repetition), though scrap rates may improve slightly and bulk discounts are a separate mechanism
 - **Non-recurring costs**: setup, tooling, facilities are one-time
 - **Prototype/engineering units**: different task, different process maturity
-- **Support labor** (QC, planning): often estimated as a **factor of touch labor**, so it inherits the learning
+- **Support labor** (QC, planning): not given its own learning curve; when estimated as a factor of touch labor it simply moves with touch labor's learning
 
 +++
 
@@ -485,7 +485,7 @@ Q: Contract funds set aside for production upgrades to accommodate unforeseen te
 
 First production unit = 500 standard hours, 85% unit curve, $b = \ln(0.85)/\ln(2) = -0.2345$:
 
-$$T_{50} = 500 \times 50^{-0.2345} \approx 500 \times 0.3759 \approx 188 \text{ hours}$$
+$$T_{50} = 500 \times 50^{-0.2345} \approx 500 \times 0.3995 \approx 200 \text{ hours}$$
 
 This hours estimate is then multiplied by the fully burdened labor rate and summed across all units, excluding setup, tooling, and material costs (estimated separately).
 
@@ -955,7 +955,7 @@ A: Standards are roughly the mature/steady-state production rate; realization/ef
 
 ## Learning in Manufacturing
 Q: Which recurring manufacturing costs follow learning curves?
-A: Touch labor (assembly, fabrication); NOT material (fixed per unit), NOT non-recurring (setup, tooling), NOT support labor (estimated as % of touch labor, which inherits learning).
+A: Touch labor (assembly, fabrication); NOT material (fixed per unit), NOT non-recurring (setup, tooling), NOT support labor (gets no separate curve; when factored off touch labor it follows touch labor).
 Q: Why does material cost NOT follow learning curves?
 A: Material consumption is a physical/engineering quantity (part requires the same raw material regardless of repetition); scrap may improve but this is separate from the learning curve mechanism.
 Q: Major vs. minor assembly example

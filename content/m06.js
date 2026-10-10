@@ -350,7 +350,7 @@ Three scatter plots of cost against three candidate drivers: **Variable 1** show
 :::
 
 :::key There is no real threshold for R2
-People often cite a minimum "acceptable" $R^2$, but if a regression is statistically significant, **any** $R^2$ is meaningful because it represents a reduction in the variability of the prediction. $t$- and $F$-statistics, not $R^2$ alone, establish significance. $R^2$ is domain-dependent: it tends to run low in the physical sciences (measurement error is nearly the only source of variability) and higher in the behavioral/medical sciences (irreducible variability in organisms and behavior); cost estimating's $R^2$ values tend to fall somewhere between the two.
+People often cite a minimum "acceptable" $R^2$, but if a regression is statistically significant, **any** $R^2$ is meaningful because it represents a reduction in the variability of the prediction. $t$- and $F$-statistics, not $R^2$ alone, establish significance. $R^2$ is domain-dependent: it tends to run high in the physical sciences (where measurement error is nearly the only source of variability) and lower in the behavioral/medical sciences (due to irreducible variability in organisms and behavior); cost estimating's $R^2$ values tend to fall somewhere between the two.
 :::
 
 ### Histograms (univariate)
@@ -358,7 +358,7 @@ People often cite a minimum "acceptable" $R^2$, but if a regression is statistic
 - **Bin choice changes the picture.** Too few bins hide the shape; too many create noise. Try several.
 
 :::example Fig 6.11: condominium gas bills
-The same univariate cost data (monthly natural gas bills, simple average \$34.19) looks very different depending on bin choice. Letting the software auto-pick bins crams almost everything into one bar and hides the distribution. Manually setting \$15 bins (labeled by their lower bound, e.g. "30" = \$15.00–\$29.99) reveals a skew-right shape with apparent outliers on the right — but the \$15 floor also hides that there is really only **one bill under \$11.15**, obscuring a void near zero that would argue against a true exponential shape. Always experiment with bin width before settling on a final display — it's a trade-off between texture (more bins) and smoothness (fewer bins).
+The same univariate cost data (monthly natural gas bills, simple average \$34.19) looks very different depending on bin choice. Letting the software auto-pick bins crams almost everything into one bar and hides the distribution. Manually setting \$15 bins (labeled by their upper bound, e.g. "30" = \$15.00–\$29.99) reveals a skew-right shape with apparent outliers on the right — but the \$15 floor also hides that there is really only **one bill under \$11.15**, obscuring a void near zero that would argue against a true exponential shape. Always experiment with bin width before settling on a final display — it's a trade-off between texture (more bins) and smoothness (fewer bins).
 :::
 
 :::widget bin-explorer:::
@@ -920,7 +920,7 @@ A: Heat map: grid of colored cells across two axis variables, color = a third va
 Q: Waterfall chart use case
 A: Isolate a starting value, a series of increases/decreases, and an ending value — e.g. an EAC's change by CLIN, or a multi-year inventory forecast.
 Q: Is there a real threshold for a "good" R2 in cost estimating?
-A: No — if a regression is statistically significant (check t/F stats), any R2 is meaningful. R2 tends to be low in physical sciences, higher in behavioral/medical sciences; cost estimating falls in between.
+A: No — if a regression is statistically significant (check t/F stats), any R2 is meaningful. R2 tends to be high in physical sciences, lower in behavioral/medical sciences; cost estimating falls in between.
 
 ## Machine learning: supervised, unsupervised, reinforcement
 Q: Three primary ML technique categories

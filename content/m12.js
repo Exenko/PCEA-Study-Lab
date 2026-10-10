@@ -558,7 +558,7 @@ Used when the customer has general objectives but not specific requirements: a c
 
 **Modeling evolutionary:** treat each phase as its own waterfall effort, but adjust design/code/test levels because earlier-phase software isn't expected to be fully analyzed/designed/coded/tested — later phases build on (reuse/modify) prior code plus new functionality; requirements for later phases aren't fully known at estimate time, so assessments must be made and estimates refined each cycle.
 
-In the mail-order example, the third consultant develops the CMS and integrates COTS in Phase 1 (prototype only, static screens, no database link); Phase 2 links the interface to the order database and adds validation and email/status notifications; Phase 3 adds automated notifications and search-by-field. Each phase mixes new code, adapted prior-phase code (treated similarly to COTS/reuse), and integration/test effort.
+In the mail-order example, the third consultant develops the CMS and integrates COTS in Phase 1 (prototype only, static screens, no database link); Phase 2 revises the interface and links it to the customer order database; testing it prompts a request for automated email status updates. Phase 3 adds those automatic email notifications and search-by-field. Each phase mixes new code, adapted prior-phase code (treated similarly to COTS/reuse), and integration/test effort.
 
 ### Spiral model (Boehm, 1988)
 

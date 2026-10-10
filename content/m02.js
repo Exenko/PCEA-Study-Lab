@@ -94,7 +94,7 @@ $$Cost_{new} = Cost_{analogy} \times \frac{Parameter_{new}}{Parameter_{analogy}}
 **Example**: An existing engine (F-100) actually cost \$5.2M and produced 12,000 lb of thrust. A new engine (F-200) needs 16,000 lb of thrust. The thrust ratio is $16{,}000/12{,}000 = 1.33$, so:
 $$Cost_{new} = 1.33 \times \$5.2M \approx \$6.9M$$
 
-Equivalently, compute a **rate** from the known point ($\$5.2M / 12{,}000\ lb = \$443K/lb$) and multiply by the new system's thrust ($16{,}000\ lb$) — both views give the same \$6.9M.
+Equivalently, compute a **rate** from the known point ($\$5.2M / 12{,}000\ lb = \$433K/lb$; CEBoK prints \$443K/lb, a typo) and multiply by the new system's thrust ($16{,}000\ lb$) — both views give the same \$6.9M.
 
 There should be a mathematical, scientific, or logical reason for the ratio's adjustment parameter — is there really a reason cost is directly proportional to thrust for an engine? Relationships tied to **physical properties** are often easier to justify than performance measures: linear feet for cabling of the same cross-section, surface area for a wing or hull of identical thickness/composition, mass or volume for a solid component.
 
@@ -475,8 +475,8 @@ Q: Prime mission equipment cost = \$200M. An illustrative SEITPM factor of 12% i
 
 ### Key Principle
 
-- **Early** (concept phase): **top-down** — analogy, parametric. Quick, works with little detail, inherently captures integration and unknowns.
-- **Late** (EMD/production): **bottom-up** — build-up, actuals. Detailed, defensible, but needs mature design and explicit risk reserves.
+- **Early** (concept phase): **top-down** — analogy, parametric. Quick, works with little detail. Top-down estimates carry wide ranges because historical data may not reflect the new system's unique risks.
+- **Late** (production): **bottom-up** — build-up, actuals. Detailed, defensible, but needs mature design and explicit risk reserves.
 - **Credibility grows** as real data replaces assumptions.
 
 ### When to Re-estimate
@@ -611,7 +611,7 @@ R: yes
 Q: Why does an adjusted analogy assume the line passes through the origin?
 A: The analogy is a single data point; one point can't determine a line's slope, so the line is assumed to pass through the origin.
 Q: F-100/F-200 engine analogy example
-A: F-100 cost $5.2M at 12,000 lb thrust; F-200 needs 16,000 lb. Ratio = 16,000/12,000 = 1.33; $1.33 \times \$5.2M \approx \$6.9M$ (same result via the $443K/lb rate).
+A: F-100 cost $5.2M at 12,000 lb thrust; F-200 needs 16,000 lb. Ratio = 16,000/12,000 = 1.33; $1.33 \times \$5.2M \approx \$6.9M$ (same result via the $433K/lb rate).
 Q: What makes an analogy adjustment defensible?
 A: A mathematical, scientific, or logical reason for the ratio parameter; adjustments tied to physical properties (mass, volume, surface area, linear feet) are easier to justify than performance measures.
 Q: Analogy uncertainty and risk
@@ -721,7 +721,7 @@ R: yes
 Q: Technique progression across the program life cycle
 A: Early (concept): top-down analogy/parametric. Mid (EMD): parametric transitioning to build-up. Late (production): build-up and actuals.
 Q: Early estimate confidence ranges
-A: Analogy/parametric estimates carry wide ranges; inherently include integration and unknown-unknowns.
+A: Top-down analogy/parametric estimates carry wide ranges because historical data from past programs reflects their integration effects, but may not reflect the new system's unique unknown-unknowns and risks.
 Q: Late estimate confidence ranges
 A: Build-up estimates can support tighter ranges but must still add risk/growth allowances for unknowns.
 Q: When to re-estimate

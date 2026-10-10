@@ -187,7 +187,7 @@ $$PMB = \text{Distributed Budget} + \text{Undistributed Budget (UB)}$$
 - **Distributed Budget**: time-phased budgets assigned to control accounts
 - **Undistributed Budget (UB)**: budget for authorized work not yet assigned to control accounts — temporary, and most contracts try to distribute it within 60 days
 
-**Management Reserve (MR)** sits **outside** the PMB, set aside by the PM for in-scope work not originally planned (realized risk) and contingencies for unforeseeable problems — **never** for scope changes (those require contract mods). Typical MR ranges from **7–9%**, running as low as **2–4%** for low-risk projects or cost-plus contracts, and as high as **15% or more** for high-risk projects or FFP contracts. MR is **not time-phased** and is **not part of BAC**.
+**Management Reserve (MR)** sits **outside** the PMB, set aside by the PM for in-scope work not originally planned (realized risk) and contingencies for unforeseeable problems — **not** for out-of-scope changes (those require contract mods), though CEBoK allows MR to cover a small scope-increase change when an ECP would be cost-prohibitive. Typical MR ranges from **7–9%**, running as low as **2–4%** for low-risk projects or cost-plus contracts, and as high as **15% or more** for high-risk projects or FFP contracts. MR is **not time-phased** and is **not part of BAC**.
 
 $$CBB = PMB + MR \quad \text{(Contract Budget Base)}$$
 
@@ -262,11 +262,11 @@ Q: Why can Level of Effort generate a Cost Variance but never a Schedule Varianc
 :::
 
 :::check
-Q: A 10-week work package has no natural interim milestones. Best EV technique?
+Q: An 8-week work package has no natural interim milestones. Best EV technique?
 * 50/50 or another X%/Y% split
 - 0/100
 - Percent complete only
-> Roughly two months (about 8-10 weeks) with no intermediate milestones is the textbook case for a 50/50 (or other X/Y) split.
+> About two months or less with no intermediate milestones is the textbook case for a 50/50 (or other X/Y) split.
 :::`
     },
     {
@@ -365,7 +365,7 @@ Perfect EV data with no variances at all is improbable — it usually signals a 
 
 ### Management Reserve trends
 
-MR should **not** be used to cover unfavorable cost overruns without review — though there are legitimate exceptions: using MR balance to cover an overrun near completion on a low-risk or cost-plus contract (rather than processing new funding), covering a small in-scope change when an ECP is not cost-effective, or offsetting an overrun on an FFP contract so reported profit reflects the true estimate. Graphing SV, CV, and MR balance together shows how MR use tracks with performance; comparing **% MR remaining** to **% PMB remaining** is a useful unit-free check.
+MR should **not** be used to cover unfavorable cost overruns without review — though there are legitimate exceptions: using MR balance to cover an overrun near completion on a low-risk or cost-plus contract (rather than processing new funding), covering a small scope-increase change when an ECP is not cost-effective, or offsetting an overrun on an FFP contract so reported profit reflects the true estimate. Graphing SV, CV, and MR balance together shows how MR use tracks with performance; comparing **% MR remaining** to **% PMB remaining** is a useful unit-free check.
 
 +++
 
@@ -753,7 +753,7 @@ Q: (Not testable per CEBoK) A "front-loaded" baseline problem specifically means
 * Too much budget and too little planned work in the early months, leaving later months underbudgeted
 - Aggressive early claiming of EV beyond what was actually earned
 - A baseline that hasn't been updated in a long time
-> Front-loading is a budget-vs-work-planned mismatch across the schedule, distinct from rubber baselining (retroactive BCWS changes) or an out-of-date baseline (stale change control).
+> Front-loading is a budget-vs-work-planned mismatch across the schedule, distinct from rubber baselining (baseline changed so often that near-term planned work keeps sliding out) or an out-of-date baseline (stale change control).
 :::
 
 :::check
@@ -1016,7 +1016,7 @@ A: Remember: CV = EV − AC (cost), SV = EV − PV (schedule); NEVER the reverse
 Q: Common mistake: using current-period data for EACs
 A: Use cumulative data for EACs (smooths noise); use current-period for trend-spotting.
 Q: Common mistake: including MR in BAC
-A: BAC = sum of distributed + undistributed budgets only. MR is outside PMB/BAC. Including MR overstates % complete.
+A: BAC = sum of distributed + undistributed budgets only. MR is outside PMB/BAC. Including MR understates % complete.
 Q: Common mistake: picking a single EAC formula
 A: Always compute multiple independent EACs (CPI forecast, CPI x SPI forecast, bottom-up/LRE) and reconcile. No single formula is correct.
 Q: Common mistake: ignoring TCPI

@@ -57,7 +57,7 @@ Q: What distinguishes $b_1$ from $\beta_1$?
 - **Factors** ($y = bx$): the intercept is assumed to be zero. They should generally be avoided and replaced with the linear regression methods in this module.
 - **OLS linear regression** ($y = a + bx + \epsilon$): one dependent, one independent variable, minimizing SSE. Can also fit non-linear shapes (power, log, exponential) by transforming them into linear form first.
 - **OLS multivariate linear regression** ($y = a + b_1x_1 + \dots + b_kx_k + \epsilon$): one dependent variable, multiple independent variables. Introduces the risk of multicollinearity.
-- **Non-OLS models**: Weighted Least Squares (WLS), Mean Absolute Percentage Error (MAPE), Zero (Mean) Percentage Error (ZMPE). These minimize an error other than SSE and matter when OLS residuals aren't homoscedastic.
+- **Non-OLS models**: Weighted Least Squares (WLS), Mean Absolute Percentage Error (MAPE), Zero-Percentage-Bias Minimum Percentage Error (ZMPE). These minimize an error other than SSE and matter when OLS residuals aren't homoscedastic.
 
 ### Software and OLS
 

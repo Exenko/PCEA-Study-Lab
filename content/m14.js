@@ -50,7 +50,7 @@ Q: What is the government's independent benchmark for evaluating a contractor's 
 **Government evaluates:** technical approach, cost/price analysis, comparison to IGCE and prior experience.
 
 :::tip Beyond CEBoK
-Above a dollar threshold set by the Truthful Cost or Pricing Data Act (TINA, sometimes still called TCPD), certified cost or pricing data may be required unless an exception applies (e.g., adequate price competition). CEBoK does not test the specific FAR dollar threshold or TINA by name - know that *some* dollar threshold exists and drives whether cost analysis (vs. price analysis alone) is required; the current number is not exam content.
+Above a dollar threshold set by the Truth in Negotiations Act (TINA), now codified as Truthful Cost or Pricing Data (TCPD), certified cost or pricing data may be required unless an exception applies (e.g., adequate price competition). CEBoK does not test the specific FAR dollar threshold or TINA by name - know that *some* dollar threshold exists and drives whether cost analysis (vs. price analysis alone) is required; the current number is not exam content.
 :::`
     },
     {
@@ -214,7 +214,7 @@ All three scenarios share: TC = \$90M, TP = "10%" of TC = \$9M (so target price 
 
 **Scenario 2 - overrun, FC = \$97M** (above TC, below PTA), 70/30 share: adjusted profit = \$9M − 0.30 × \$7M = \$9M − \$2.1M = **\$6.9M**. The contractor still covers its costs but earns less than target.
 
-**Scenario 3 - overrun beyond PTA, FC = \$105M** (PTA = \$102.86M): price is capped at the ceiling, \$108M. $AP = FP - FC = 108 - 105 = \$3M$ (equivalently, $AP = TP + S(TC-FC) - (FC-PTA) = 9 + 0.30(90-105) - (105-102.86) \approx \$3M$).
+**Scenario 3 - overrun beyond PTA, FC = \$105M** (PTA = \$102.86M): price is capped at the ceiling, \$108M. $AP = FP - FC = 108 - 105 = \$3M$ (equivalently, $AP = TP + S(TC - PTA) - (FC - PTA) = 9 + 0.30(90 - 102.86) - (105 - 102.86) = 9 - 3.86 - 2.14 = \$3M$).
 
 :::note Source note
 CEBoK's text renders the target profit as "\$10%" (a typo for "10%," i.e., \$9M) in this example. The scenario share ratios (80/20 underrun, 70/30 overrun) are used in the figure's math but are not spelled out in the surrounding prose - treat the numbers above, not the prose, as authoritative.
@@ -223,7 +223,7 @@ CEBoK's text renders the target profit as "\$10%" (a typo for "10%," i.e., \$9M)
 :::check
 Q: In the \$90M FPIF example, Scenario 1 (FC = \$85M, TC = \$90M, TP = \$9M, 80/20 underrun share): adjusted profit?
 = 10 ±0.1
-> AP = TP + GS(TC-FC)... via FP = 99 + 0.80(85-90) = 95; AP = FP - FC = 95 - 85 = \$10M.
+> AP = TP + S(TC-FC): 9 + 0.20(5) = 10; via FP = 99 + 0.80(85-90) = 95; AP = FP - FC = 95 - 85 = \$10M.
 :::
 
 :::check
@@ -447,8 +447,8 @@ Q: A BOE scales an ODC using a "help desk staff per 500 users" factor. This is a
 :::
 
 :::check
-Q: BOE Fig. 14.13: 1,776 LOC x 1.19 hrs/LOC x \$42/hr. Total dollars? (nearest whole dollar)
-= 88763
+Q: BOE Fig. 14.13: 1,776 LOC x 1.19 hrs/LOC x \$42/hr. Total dollars? (round hours to one decimal first, as CEBoK does)
+= 88763 ±2
 > 1,776 x 1.19 = 2,113.4 hrs; 2,113.4 x 42 = \$88,763.
 :::`
     },
