@@ -702,6 +702,7 @@ Q: Data collection process steps (in order)
 A: 1) Understand the total picture · 2) Define estimate structure (WBS) · 3) Identify data needs (by technique) · 4) Develop a data collection plan.
 Q: What is a data collection plan?
 A: A documented plan specifying what data is needed, from which sources, using what methods, the schedule, and how data quality will be verified.
+R: yes
 Q: Why develop a data collection plan?
 A: A documented plan improves consistency, ensures traceability, and helps manage limited time/resources available for the estimate.
 Q: Data needed for CER development
@@ -716,10 +717,12 @@ Q: SME caution
 A: Reputable cost estimators scrupulously avoid portraying expert opinion as data. SME expertise is best used to interpret or re-create historical data, not replace it.
 Q: TRL (Technology Readiness Level)
 A: A standardized scale for assessing technology maturity; per CEBoK's Testable Topics list, it's testable but less emphasized.
+R: yes
 
 ## Data Sources
 Q: What is CSDR?
 A: Cost and Software Data Reporting: the DoD system for contractor actual cost data (CCDR/"1921" forms, FlexFiles) and software data (SRDR).
+R: yes
 Q: Major data sources (non-DoD and DoD)
 A: Contractor records, government databases (e.g., CADE), program office records, SME interviews, published literature, prior estimates. In DoD: requirements docs (ICD/CDD/CPD), CARD, technical databases, CSDR, CPR, FPRAs, DCAA/DCMA, FFRDCs, budgets, SARs, contracts, technical docs.
 Q: IPMDAR / FlexFiles (Beyond CEBoK)
@@ -738,24 +741,30 @@ Q: Purpose of normalization
 A: Adjust data so all points are on a consistent, comparable basis before analysis. Differences should reflect true cost behavior, not artifacts of inconsistent definitions.
 Q: Cost (inflation) normalization
 A: Convert all dollars to a common base year using inflation indices so purchasing power is consistent. This price-level adjustment is called escalation.
+R: yes
 Q: Escalation worked example (from CEBoK)
 A: \$50,000 (CY1994, AN/ARC-164 radio) escalated to BY2000 using AF index 0.957: \$50,000 / 0.957 ≈ \$52,247 (BY2000). Dividing moves cost to a later base year.
 Q: Quantity normalization
 A: Adjust costs to a common point on the learning curve (e.g., T1 or unit 100) so unit costs at different production quantities are comparable. Mechanics covered in Module 7.
+R: yes
 Q: Cost per labor hour normalization
 A: Confirm whether a labor rate is fully burdened/loaded or just touch labor, and whether it includes a fee, before comparing rates across sources.
 Q: Sizing normalization
 A: Convert all weights to one standard (kg/oz/tons; metric ≠ long tons for ships) and all lengths to one standard before computing rates like cost per foot/ton/pound.
+R: yes
 Q: Unit conversion example (EUR/meter to USD/foot)
 A: €5/meter x \$1.13/€ / 39.37 in/meter x 12 in/foot ≈ \$1.72/foot. The same method converts optical cable pricing (e.g., €10/meter ≈ \$3.44/foot).
 Q: The Mars orbiter unit-mismatch anecdote
 A: In 1999 NASA lost a \$125M Mars orbiter because navigation data mixed English and Metric units, causing a crash.
+R: yes
 Q: Content normalization
 A: Map data to a common WBS/LRU-SRU-sub-component decomposition and add/remove scope so the "same" element contains the same work across all data points.
+R: yes
 Q: Content normalization example (copier/fax)
 A: Don't directly compare a plain copier to a copier-fax combo; account for the missing/extra fax capability (e.g., the average cost premium of copier-fax units) before comparing.
 Q: State of development normalization
 A: Account for the system's stage in the development cycle (concept/EMD/prototype vs. full-rate production, akin to a Beta-test phase) and learning-curve impact; can be isolated further by item or lot quantity.
+R: yes
 Q: Units of measure normalization
 A: Ensure consistent units (all weights in pounds, all costs in millions, all labor in hours) before combining or comparing values.
 Q: Key groupings (normalization)
@@ -764,8 +773,10 @@ A: Group data by mission application (e.g., emitters, submersibles, bombers, fig
 ## Non-recurring vs. Recurring
 Q: Non-recurring cost definition
 A: Development costs incurred once: proof of concept, factory line setup, production molds, upgrades/improvements, and original purchase of hardware/software.
+R: yes
 Q: Recurring cost definition
 A: Maintenance and production costs incurred repeatedly: hardware built during the program, capitalized non-recurring H/W-S/W, developed software installs, and spares (a continuous expense).
+R: yes
 Q: Why must recurring and non-recurring costs be separated before learning curve analysis?
 A: (Beyond CEBoK) Learning curves apply only to recurring costs; mixing non-recurring (fixed, no learning) with recurring distorts the apparent learning rate. CEBoK itself cites added fidelity and accounting for production quantity/time-phasing anomalies as the reasons for the split.
 Q: Effect of mixing recurring and non-recurring costs in unit cost data

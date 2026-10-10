@@ -663,10 +663,13 @@ Q: Acquisition process order
 A: Requirements → planning → solicitation → proposals → evaluation → negotiation → award → administration.
 Q: IGCE (Independent Government Cost Estimate)
 A: The government's independently developed estimate used to evaluate proposals and set negotiation objectives.
+R: yes
 Q: What does a BOE (Basis of Estimate) document?
 A: How each proposal element was estimated: scope, method, source data, assumptions, calculations, and rationale (the 5W+H).
+R: yes
 Q: The 5W+H of BOE content
 A: Who performed the work · What tasks · Where it took place · When it took place · Why the data was used · How it was normalized/adjusted.
+R: yes
 Q: The three cost-estimating equations of a BOE
 A: Analogy: E = A×F, F=Pe/Pa (risk in F/Pe). Related/Indirect: E=F×C, F=Ci/Cd (risk in F, flows through C). Build-up: E=R×P (risk in P).
 Q: Preferred variant of each BOE equation
@@ -675,10 +678,13 @@ A: Add a y-intercept b (E = A×F+b, E=C×F+b, E=R×P+b), with F/R/P and b justif
 ## Fee, Profit, and Margin
 Q: Fee (Return On Cost / ROC)
 A: The amount paid to the contractor over and above cost, in dollars or % of cost; synonymous with contractor profit absent a ceiling breach.
+R: yes
 Q: Margin (Return on Sales / ROS)
 A: Profit expressed as a percentage of cost + profit together (i.e., of revenue/price), not just of cost.
+R: yes
 Q: Revenue equation
 A: Revenue = Cost + Profit = Price.
+R: yes
 Q: Margin % to Fee % conversion
 A: Margin % = Fee % / (1 + Fee %); Fee % = Margin % / (1 − Margin %).
 Q: Base case (Fig. 14.5): TC \$10M, TP \$1M. Price and revenue at TC?
@@ -705,14 +711,18 @@ Q: Can an incentive contract use multiple share ratios?
 A: Yes - one ratio can apply to underruns and a different ratio to overruns.
 Q: FP with Economic Price Adjustment (FP-EPA)
 A: Fixed price adjusted for increases/decreases in specific item prices, specified labor/material costs, or contractually-specified cost indexes.
+R: yes
 Q: Fixed Price Level of Effort (FP LOE)
 A: Fixed labor rates with government-dictated hours; used when the work doesn't suit a completion-type contract.
+R: yes
 Q: Fixed Price Award Fee (FPAF)
 A: A fixed-price contract with a subjective award fee paid on top, used when performance can't be objectively measured.
+R: yes
 Q: Incentive fee vs. award fee
 A: Incentive fee = quantitative, formula-driven; award fee = qualitative, subjectively judged.
 Q: FPI Successive Targets contract
 A: Specifies target cost/profit, shareline(s), a later production point for negotiating firm targets, and a ceiling price; becomes FFP or FPIF once negotiated.
+R: yes
 Q: Indefinite delivery contract types
 A: Definite quantity (set amount, fixed period); Requirements (fills all actual needs of designated activities); IDIQ (flexible number within stated limits).
 Q: Task order vs. delivery order
@@ -721,20 +731,24 @@ Q: Letter contract dollar limit
 A: The authorized amount must not exceed 50% of the estimated cost of the definitive contract.
 Q: T&M and LH contracts
 A: Time & Materials and Labor Hour; contractor bills fixed labor rates times actual hours (+ materials for T&M). No positive cost-control incentive.
+R: yes
 
 ## FPIF
 Q: FPIF elements
 A: Target Cost (TC), Target Profit (TP), Target Price (TPr = TC + TP), Share Ratio, Ceiling Price (CP).
 Q: FPIF adjusted profit formula
 A: AP = TP + S(TC − FC); FP = FC + AP, capped at CP.
+R: yes
 Q: Underrun effect on FPIF profit
 A: If FC < TC, the contractor share of the savings increases profit above target (contractor rewarded).
 Q: Overrun effect on FPIF profit
 A: If FC > TC, the contractor share of the overrun decreases profit below target (contractor penalized).
 Q: Point of Total Assumption (PTA) definition
 A: The actual cost at which the FPIF price reaches the ceiling; beyond it the contractor absorbs 100% of further cost.
+R: yes
 Q: PTA formula
 A: PTA = TC + (CP − Target Price) / Government Share
+R: yes
 Q: Why PTA denominator uses Government Share
 A: The gap between target price and ceiling is closed at the government's cents-on-the-dollar rate; once that share is exhausted, the contractor pays all.
 Q: FPIF: TC = 100, TP = 10, CP = 120, share 70/30. PTA?
@@ -757,14 +771,18 @@ Q: CPIF elements
 A: Target Cost (TC), Target Fee (TF), Minimum Fee, Maximum Fee, Share Ratio (Govt/Contractor).
 Q: CPIF adjusted fee formula
 A: Fee = TF + (contractor share) × (TC − AC), bounded by [min fee, max fee].
+R: yes
 Q: Total payment in CPIF, and how it differs from FPIF
 A: Actual Cost + Final Fee; unlike FPIF, there is no ceiling on total reimbursement, only on the fee.
 Q: Range of Incentive Effectiveness (RIE)
 A: The range of actual costs over which the share ratio is "live" (fee varies with cost between min and max).
+R: yes
 Q: RIE high endpoint formula
 A: RIE_high = (TF − mF) / CS_over + TC
+R: yes
 Q: RIE low endpoint formula
 A: RIE_low = TC − (MF − TF) / CS_under
+R: yes
 Q: RIE worked example: TC 90, mF 1, MF 10, TF 9, share 70/30 both sides
 A: RIE_high = (9−1)/0.30 + 90 ≈ 116.67; RIE_low = 90 − (10−9)/0.30 ≈ 86.67.
 Q: CPIF: TC 100, TF 8, share 80/20, min 3, max 12. AC 105. Fee?
@@ -789,6 +807,7 @@ A: Chronic overruns erode the contractor-government relationship and can cost th
 ## CPAF
 Q: CPAF (Cost Plus Award Fee)
 A: Cost + base fee + award fee, where award fee is earned via subjective evaluation by an Award Fee Board against an Award Fee Plan.
+R: yes
 Q: What kind of ceiling does a CPAF contract have?
 A: A cost ceiling (not a price ceiling) - government covers allowable cost only up to that limit.
 Q: CEBoK's CPAF example (TC \$90M, cost ceiling \$108M, award fee \$8.2M held constant): Scenario 3, FC \$115M
@@ -797,6 +816,7 @@ Q: When is CPAF used?
 A: When performance is hard to quantify objectively (quality, responsiveness, management) and cost is also hard to forecast.
 Q: Indefinite Delivery/Indefinite Quantity (IDIQ)
 A: A contract vehicle for a flexible quantity of supplies/services within stated limits over a period; work ordered via task/delivery orders.
+R: yes
 
 ## BOE & Proposal
 Q: BOE worked example (Fig. 14.13): 1,776 LOC x 1.19 hrs/LOC x \$42/hr
@@ -809,6 +829,7 @@ Q: Less-preferred BOE estimating methods
 A: Company standard bidding systems, expert opinion, commercial/catalog/market price.
 Q: FAR's definition of cost or pricing data
 A: More than historical accounting data - all facts reasonably expected to contribute to the soundness of future-cost estimates and the validity of already-incurred cost determinations.
+R: yes
 Q: Estimate quality characteristics
 A: Right content vs. WBS/technical baseline, accepted methodology, unbiased, comprehensive but not redundant, documented ground rules, replicable.
 Q: Estimate validity guideline
@@ -821,6 +842,7 @@ Q: CEBoK's four steps of cost/price comparative analysis
 A: 1 Technical understanding · 2 BOE review · 3 Independent assessment (ICE/ICA) · 4 Comparative analysis (explain deltas over a threshold, e.g. 20%).
 Q: Cherry picking (BOE error)
 A: Choosing only one program from a set of reasonable analogies to get a desired (usually low) answer, instead of justifying the choice.
+R: yes
 Q: What does agreement between two independent estimating methods indicate?
 A: A strong cross-check of the proposal, per CEBoK.
 Q: When is price analysis conducted?
@@ -837,8 +859,10 @@ A: Comparative analysis results support decisions like Cost As an Independent Va
 ## Uniform Contract Format & CAS
 Q: UCF Section L
 A: Instructions, Conditions, & Notices to Offerors (how to prepare and submit proposals, including BOEs).
+R: yes
 Q: UCF Section M
 A: Evaluation Factors for Award (criteria by which govt evaluates proposals).
+R: yes
 Q: UCF Section B and C
 A: B = Supplies/Services and Prices. C = Specification/SOW/SOO/ORD.
 Q: Uniform Contract Format, full parts and sections

@@ -862,30 +862,38 @@ Q: Typical step-up factor range between prototype tiers (ADM->EDM, EDM->producti
 A: About 1.2 to 2.0 in each step.
 Q: PRR / MRR
 A: Production Readiness Review (also called Manufacturing Readiness Review): formal examination of whether design is production-ready, production engineering issues resolved, and production planning is adequate.
+R: yes
 Q: TRR
 A: Test Readiness Review: gateway to system integration and test.
+R: yes
 
 ## Production Setup
 Q: CAD/CAM/CAE
 A: Computer-Aided Design (drafting), Computer-Aided Manufacturing (physical model production), Computer-Aided Engineering (analysis, simulation, planning, diagnosis).
+R: yes
 Q: MGSE / EGSE / AGE
 A: Mechanical Ground Support Equipment + Electrical Ground Support Equipment = Aerospace Ground Equipment.
+R: yes
 Q: Double analogy (setup cost estimating)
 A: Scaling a setup estimate by content AND automation, where the automation factor is obtained from a second program pair that showed a similar automation improvement.
+R: yes
 Q: FCCOM / COFC
 A: Facilities Capital Cost Of Money (= Cost Of Facilities Capital): imputed cost from applying a rate to facilities capital employed in contract performance; not an interest charge, compensates for capital investment.
+R: yes
 Q: Soft tooling vs. rate tooling
 A: Soft tooling = one-time-use prototype tooling (e.g., silicone-injected molds). Rate tooling = tooling for increased-quantity production (steel/aluminum-injected molds).
 Q: Tool/equipment recapitalization cycle
 A: Computer workstations ~3-5 years; mechanical crane assemblies ~10 years.
 Q: IPT
 A: Integrated Product Team: interdisciplinary team for review/decision-making in complex programs; make-or-buy decision typically falls to the IPT lead.
+R: yes
 
 ## Labor Rates and Burdening
 Q: Burdening structure (order and base)
 A: Direct Labor → + Fringe (% of DL) → + Overhead (% of L+F) → + G&A (% of total cost) → + Fee (% of total).
 Q: What is a "fully burdened rate" or "wrap rate"?
 A: The cost per hour of labor charged to a program, including all burdens (fringe, overhead, G&A, fee).
+R: yes
 Q: DL \$40/hr, overhead 110%, G&A 12%, fee 8%. Wrap rate?
 A: 40 × (1 + 1.10) × (1 + 0.12) × (1 + 0.08) = 40 × 2.10 × 1.12 × 1.08 ≈ \$101.61
 Q: Why does each burden % apply to a different base?
@@ -894,6 +902,7 @@ Q: Approximate fringe rate as % of direct salary
 A: About 50% of direct salary cost, heavily influenced by union benefit packages (health care, pension).
 Q: What is an FPRA?
 A: Forward Pricing Rate Agreement (FAR 15.801): pre-negotiated labor and indirect rates/factors made available for a specified period, used in contractor proposal pricing.
+R: yes
 Q: FPRA vs. FPA
 A: FPRA covers rates/factors not easily tied to a specific contract/task. FPA sets a pricing methodology with a large-volume contractor that can determine a complete final order price (e.g., spares).
 Q: Two companies bidding the same total price can still differ in what metric (Fig. 11.3)?
@@ -906,6 +915,7 @@ A: Module 5 (Escalation).
 ## Composite Rates
 Q: Composite (blended) labor rate formula
 A: $\dfrac{\sum(\text{Rate}_i \times \text{Hours}_i)}{\sum \text{Hours}_i}$ = total cost / total hours (hours-weighted average, not simple average).
+R: yes
 Q: CEBoK Fig. 11.4 composite vs. unweighted average rate
 A: Composite = \$31.25/hr (weighted); unweighted average of the four rates = \$36.25 (CEBoK states \$36); composite is lower because junior engineers logged more hours.
 Q: When is a composite rate used?
@@ -916,22 +926,28 @@ A: Shift toward higher-skill labor raises the composite rate even if individual 
 ## Time Standards
 Q: Time standard definition
 A: The standard duration to perform a specific task, developed via observed (not estimated) time and motion studies.
+R: yes
 Q: Techniques for developing time standards (per CEBoK)
 A: Stopwatch time studies, computerized data collection, standard data, formulas, work sampling, predetermined time systems.
 Q: Standard time formula (Maynard)
 A: Standard Time = (Measured Time × Pace) / (1 − PF&D).
+R: yes
 Q: PF&D
 A: Personal, Fatigue, and Delay allowance; can run as high as 25%.
+R: yes
 Q: Pace factor
 A: Rating of worker speed vs. normal: 90% = slower, 100% = normal, 110% = faster; usually set by an industrial engineer.
+R: yes
 Q: Beyond CEBoK: multiplicative allowance convention
 A: Some systems (MTM, MOST) use Standard Time = Measured × Pace × (1 + Allowance) instead of dividing by (1 − Allowance); gives a different result for the same stated %, e.g. 25% is ×1.25 vs ÷0.75 (×1.333).
 Q: Table 11.2 worked result: new standard hours (Fit/Weld/Grind) and total
 A: Fit 3.0, Weld 2.04, Grind 0.96 hr per linear foot; total 6.0 hr/lf × 750 linear feet = 4,500 total hours.
 Q: Realization factor FR
 A: FR = Actual / Standard (variance factor, like Cost Growth Factor); >1 means more hours needed.
+R: yes
 Q: Efficiency factor FE
 A: FE = Standard / Actual (like an EVM performance index; also called PTS, Performance to Standards); >1 means efficient/faster.
+R: yes
 Q: Estimated actual hours (divisor convention): standard = 2.5 hr, efficiency = 0.83
 A: 2.5 / 0.83 = 3.01 hours (workers 20% slower than standard).
 Q: Relationship between realization factor and learning curves
@@ -946,12 +962,14 @@ Q: Major vs. minor assembly example
 A: Major: final integration of a fighter jet airframe. Minor: a bomber's auxiliary power unit subsystem assembly (much lower integration cost).
 Q: P3I
 A: Pre-Planned Product Improvement: contract funds set aside for production upgrades to accommodate unforeseen technology improvements identified after contract award.
+R: yes
 Q: Three approaches to a mid-run anomaly (e.g., new environmental regulation)
 A: (1) treat post-imposition units as a separate production run with a new curve; (2) normalize the new units' data and continue the same curve; (3) treat the added steps as new work with a second overlapping curve.
 Q: Production break effects on learning
 A: Long breaks can cause complete loss of learning (turnover, process drift, unavailable machines/materials); short breaks may allow continuation.
 Q: Rate theory equation
 A: $Y = aX^b R^c$, where R = production rate and c is regression coefficient; watch for multicollinearity between X and R.
+R: yes
 Q: New work added mid-production (equation)
 A: $Y_X = a_1 X^{b_1} + a_2(X - X_{last})^{b_2}$ (new component starts its own curve).
 
@@ -964,12 +982,14 @@ Q: Challenges of exotic/composite materials (cost estimating)
 A: Higher raw cost, harder to machine (tool wear, scrap), longer lead times; must adjust labor/tooling standards, not borrow from metal-fabrication analogs.
 Q: Scrap rate / MUA definition
 A: Scrap expressed as a % of the delivered (end-item) material, not the raw input — CEBoK compares this to the fee-vs-margin distinction. On government contracts called Material Usage Allowance (MUA).
+R: yes
 Q: MUA worked example: 100 lb panel, 22.4% MUA, \$200/lb raw material
 A: 100 × (1 + 0.224) × 200 = \$24,480 (CEBoK's source prints \$24,520, an apparent arithmetic slip).
 Q: MUA moving-average method
 A: A five-unit moving average smooths natural scrap-rate variation while still reflecting the most recent data.
 Q: MTOL
 A: Material Take-off List: CAD/CAM-generated list of parts/quantities/dimensions/materials corresponding to a drawing; supports material buildup and 3D walk-throughs for manufacturability checks.
+R: yes
 Q: Fig. 11.9 design-vs-scrap example
 A: 4" plate machined to 3" cover = most machining/scrap; 3" plate to same cover = less; square plate needing no machining = no scrap, most cost-effective.
 Q: Material cost and learning curves (relationship)
@@ -980,10 +1000,12 @@ A: All main content is testable; less-emphasized topics N/A; the Related & Advan
 ## Make-or-Buy
 Q: Make-or-buy decision: what is it?
 A: Choosing whether to produce a component/subassembly in-house or purchase from a supplier; typically the IPT lead's call.
+R: yes
 Q: Key decision drivers for make-or-buy
 A: Cost (fully burdened in-house vs. supplier quote), capacity, core competency, quality/schedule risk, sunk tooling/facility investment, strategic sourcing.
 Q: Breakeven quantity formula (make-or-buy)
 A: Q = Incremental Tooling Cost / (Buy Price − Make Cost/Unit)
+R: yes
 Q: Incremental tooling \$40,000, buy price \$102, make cost \$90/unit: breakeven?
 A: 40,000 / (102 − 90) = 3,333 units; above this, make is cheaper; below, buy is cheaper.
 Q: Why is lowest unit price not always the make-or-buy driver?
@@ -994,14 +1016,18 @@ A: Buy items → purchased part cost line from supplier quote; make items → fu
 ## Advanced Topics (not testable per CEBoK)
 Q: DD Form 1921-1
 A: Functional Cost-Hour Report: tracks recurring, nonrecurring, and total costs by top-level labor element (engineering, tooling, manufacturing, QC) and cost element (direct labor, material, overhead).
+R: yes
 Q: Six Sigma origin and method
 A: Developed by Bill Smith at Motorola (mid-1980s); DMAIC phases: Define, Measure, Analyze, Improve, Control; heavy emphasis on Voice of the Customer (VOC).
+R: yes
 Q: Lean manufacturing ship-in-water analogy
 A: Inventory ("water") hides production problems; lowering inventory surfaces inefficiencies (unreliable vendors, excess scrap, capacity imbalances).
 Q: Kanban
 A: "Kan" = visual, "ban" = card; a pull signaling system tied to actual customer demand, using cards/markers/empty bins.
+R: yes
 Q: Poka-yoke
 A: Japanese for fail-safe/mistake-proof; limits how an operation can be performed to force correct completion.
+R: yes
 Q: 5S elements (as CEBoK's source pairs them)
 A: Seiri/Sorting, Seiton/Straighten (Set in Order), Seiketsu/Sweeping-Shining, Seiso/Standardizing, Shitsuke/Sustaining — note the Seiketsu/Seiso pairing looks swapped versus the common Sort-Set-Shine-Standardize-Sustain convention.
 Q: Agile manufacturing key characteristic for cost estimators

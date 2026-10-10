@@ -2,6 +2,7 @@
 //   ## Tag name      -> sets the section tag for following cards
 //   Q: question      -> starts a card (may continue on following lines)
 //   A: answer        -> answer (may continue on following lines)
+//   R: yes           -> card also makes sense answer-first (reverse study)
 window.PCEA = {
   modules: [],
   addModule(m) {
@@ -34,6 +35,7 @@ function parseCards(modId, text) {
     const line = raw.replace(/\s+$/, '');
     if (/^##\s+/.test(line)) { push(); tag = line.replace(/^##\s+/, '').trim(); continue; }
     if (/^Q:\s?/.test(line)) { push(); cur = { module: modId, tag, q: line.replace(/^Q:\s?/, ''), a: '' }; field = 'q'; continue; }
+    if (/^R:\s*yes$/i.test(line) && cur) { cur.rev = true; field = null; continue; }
     if (/^A:\s?/.test(line) && cur) { cur.a = line.replace(/^A:\s?/, ''); field = 'a'; continue; }
     if (cur && field) cur[field] += '\n' + line.trim();
   }

@@ -622,12 +622,15 @@ Even though "minding the intercept" (the missing-intercept / data-bowing fix cov
 ## Model
 Q: Population regression model
 A: $Y = \beta_0 + \beta_1X + \epsilon$
+R: yes
 Q: Estimated regression equation
 A: $\hat{Y} = b_0 + b_1X$ (b's are sample estimates of the true β's)
+R: yes
 Q: Five OLS assumptions
 A: Linearity; independence of errors from X; homoscedasticity (constant variance); normality of errors (mean 0); no perfect multicollinearity.
 Q: What is a CER?
 A: Cost Estimating Relationship: an equation relating cost to one or more cost drivers, usually built with regression.
+R: yes
 Q: Why square the errors in least squares?
 A: So positive and negative errors don't cancel.
 Q: The five bivariate questions
@@ -638,18 +641,23 @@ Q: Why plot a trend line before trusting software regression output?
 A: Spots outliers/undue influence, reveals missed curvature, confirms constants transformed correctly (natural form on a trend line).
 Q: Proxy variable
 A: An independent variable not believed to actually drive cost, but that stands in for one that does.
+R: yes
 Q: Firemen/fire example
 A: Firemen present correlates with fire damage, but fire size (not in the data) drives both — firemen are a proxy, not the cause.
 
 ## Fitting
 Q: Slope formula (deviation form)
 A: $b_1 = \dfrac{\sum(X-\bar X)(Y-\bar Y)}{\sum (X-\bar X)^2}$
+R: yes
 Q: Slope formula using correlation
 A: $b_1 = r \cdot s_y / s_x$
+R: yes
 Q: Slope formula (computational)
 A: $b_1 = \dfrac{n\sum XY - \sum X\sum Y}{n\sum X^2 - (\sum X)^2}$
+R: yes
 Q: Intercept formula
 A: $b_0 = \bar Y - b_1\bar X$
+R: yes
 Q: The OLS line always passes through which point?
 A: $(\bar X, \bar Y)$
 Q: Seeker example (X={4,7,8,12,16}, Y={5,5,10,7,13}): fitted line?
@@ -658,22 +666,30 @@ A: $\hat Y = 2.50 + 0.585X$ (exact values; CEBoK's own worked example rounds $\b
 ## ANOVA
 Q: SST formula and df
 A: $\sum(Y_i-\bar Y)^2$; df = n − 1
+R: yes
 Q: SSR formula and df
 A: $\sum(\hat Y_i - \bar Y)^2$; df = k
+R: yes
 Q: SSE formula and df
 A: $\sum(Y_i - \hat Y_i)^2$; df = n − k − 1
+R: yes
 Q: Fundamental ANOVA identity
 A: SST = SSR + SSE (total = explained + unexplained)
+R: yes
 Q: MSR and MSE
 A: MSR = SSR/k; MSE = SSE/(n − k − 1)
+R: yes
 Q: $R^2$ formula
 A: $R^2 = SSR/SST = 1 - SSE/SST$
+R: yes
 Q: What does $R^2$ measure, and what doesn't it tell you?
 A: The proportion of Y's variation explained by X. It does NOT indicate statistical significance.
 Q: Adjusted $R^2$ formula and purpose
 A: $1 - \frac{SSE/(n-k-1)}{SST/(n-1)}$. Penalizes useless variables; use to compare models with different numbers of variables.
+R: yes
 Q: Correlation coefficient r from $R^2$
 A: $r = \pm\sqrt{R^2}$, with the same sign as the slope.
+R: yes
 Q: Typical $R^2$ expectations
 A: > 0.9 excellent; > 0.7 respectable; lower can still be useful if significant.
 Q: Toy problem MSE and MSR (exact values)
@@ -690,10 +706,12 @@ A: Factor of about 0.71, a 29% reduction, from R2 = 0.62.
 ## SEE and CV
 Q: SEE formula
 A: $SEE = \sqrt{MSE} = \sqrt{SSE/(n-k-1)}$
+R: yes
 Q: What does SEE represent?
 A: The estimated standard deviation of the error term, in Y's units. Lower is better.
 Q: Regression CV formula
 A: $CV = SEE/\bar Y \times 100\%$
+R: yes
 Q: Desired regression CV threshold
 A: < 15% is respectable (higher can be acceptable).
 Q: Rule of thumb linking CV, n and the width of a 68% CI
@@ -702,10 +720,12 @@ A: CI width (%) ≈ $CV/\sqrt n$. E.g., CV 30% and ±5% → n = 36.
 ## Significance
 Q: t-statistic for a coefficient
 A: $t = b_1 / SE(b_1)$, df = n − k − 1
+R: yes
 Q: Hypotheses for the slope t-test
 A: $H_0: \beta_1 = 0$ (no relationship) vs. $H_1: \beta_1 \ne 0$
 Q: F-statistic
 A: $F = MSR/MSE$
+R: yes
 Q: What does the F-test test?
 A: Whether the model as a whole is significant ($H_0$: all slope coefficients = 0).
 Q: Relationship between t and F in simple (1-variable) regression
@@ -714,6 +734,7 @@ Q: Decision rule using p-values
 A: If p < α (typically 0.05), reject $H_0$: significant.
 Q: Definition of p-value (regression)
 A: The probability of observing a relationship this strong by chance if the true coefficient were zero.
+R: yes
 Q: p-value significance levels
 A: < 0.01 highly significant; < 0.05 significant; < 0.10 marginal; ≥ 0.10 not significant.
 Q: Order of checks when evaluating a regression
@@ -728,6 +749,7 @@ A: Validate against an independent data set: a randomly held-out second half of 
 ## Residuals
 Q: Residual definition
 A: $e_i = Y_i - \hat Y_i$ (actual − predicted)
+R: yes
 Q: What does a good residual plot look like?
 A: A random rectangular band around zero with constant spread and no pattern.
 Q: Curved / arched residual pattern means…
@@ -742,16 +764,20 @@ A: Constant error variance (OLS assumption met) vs. non-constant variance (viola
 ## Intervals
 Q: Confidence interval: what does it bound?
 A: The true MEAN of Y at $X_0$.
+R: yes
 Q: Prediction interval: what does it bound?
 A: The NEXT INDIVIDUAL observation of Y at $X_0$.
+R: yes
 Q: Which is wider, CI or PI, and why?
 A: The PI. It adds individual residual variation (the "1 +" under the root).
 Q: Where are regression intervals narrowest?
 A: At $\bar X$. They widen hyperbolically away from it.
 Q: SE of mean prediction (CI)
 A: $SEE\sqrt{\frac1n + \frac{(X_0-\bar X)^2}{\sum(X_i-\bar X)^2}}$
+R: yes
 Q: SE for prediction interval
 A: $SEE\sqrt{1 + \frac1n + \frac{(X_0-\bar X)^2}{\sum(X_i-\bar X)^2}}$
+R: yes
 Q: Large-sample critical values for 68/95/99% intervals
 A: ≈ 1.0, 1.96, 2.58
 Q: When to use a CI vs. a PI in cost work
@@ -788,10 +814,12 @@ Q: Meaning of a coefficient in multivariate regression
 A: The partial effect of that variable with the others held constant.
 Q: Multicollinearity definition
 A: High correlation among the independent variables.
+R: yes
 Q: Effects of multicollinearity
 A: Inflated standard errors, lower t-stats, non-significant or wrong-sign coefficients, unstable estimates.
 Q: VIF formula
 A: $VIF_j = 1/(1 - R_j^2)$, where $R_j^2$ comes from regressing $X_j$ on the other X's.
+R: yes
 Q: VIF thresholds
 A: < 5 OK; 5–10 investigate; > 10 severe.
 Q: Symptoms of multicollinearity
@@ -806,10 +834,12 @@ Q: CEBoK's VIF threshold
 A: VIF > 10 is severe enough to take a second look and rerun without that variable.
 Q: Weighted Least Squares (WLS)
 A: Minimizes $\sum w_i(y_i-f(x_i))^2$; common choice $w_i = 1/\sigma_i^2$. Fixes heteroscedasticity (funnel residuals).
+R: yes
 Q: Additive vs. multiplicative error
 A: OLS assumes additive: $y=ax^b+\epsilon$. Some processes have multiplicative error: $y=(ax^b)\cdot\epsilon$ — needs MUPE/ZMPE, not plain OLS.
 Q: Ridge regression: purpose and tradeoff
 A: Adds a ridge constant k to each variable's variance so none must be dropped despite high correlation; reduces SEE but biases coefficients and hurts interpretability.
+R: yes
 Q: Bivariate normal geometry: true slope and intercept
 A: $b=\rho\sigma_Y/\sigma_X$; $a=\mu_Y-\rho(\sigma_Y/\sigma_X)\mu_X$. Sample formulas substitute $\bar X,\bar Y,s,r$ for $\mu,\sigma,\rho$.
 

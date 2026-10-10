@@ -4,16 +4,23 @@ const Cards = (() => {
   let session = null, keyHandler = null;
 
   function deck() {
-    if (!Store.data.deck) Store.data.deck = { mods: {}, off: {}, starred: false, weak: false };
-    return Store.data.deck;
+    if (!Store.data.deck) Store.data.deck = { on: {}, starred: false, weak: false };
+    const d = Store.data.deck;
+    if (!d.on) {
+      d.on = {};
+      PCEA.modules.forEach(m => { if ((d.mods || {})[m.id]) tagsOf(m).forEach(t => { if (!(d.off || {})[tagKey(m.id, t)]) d.on[tagKey(m.id, t)] = true; }); });
+      delete d.mods; delete d.off;
+    }
+    return d;
   }
   const tagKey = (mid, tag) => mid + '|' + tag;
   function tagsOf(m) { return [...new Set(m.cardList.map(c => c.tag))]; }
+  function setModule(m, on) { tagsOf(m).forEach(t => { if (on) deck().on[tagKey(m.id, t)] = true; else delete deck().on[tagKey(m.id, t)]; }); }
 
   function selected() {
     const d = deck();
     return PCEA.allCards().filter(c =>
-      d.mods[c.module] && !d.off[tagKey(c.module, c.tag)] &&
+      d.on[tagKey(c.module, c.tag)] &&
       (!d.starred || (Store.data.cards[c.id] || {}).star) &&
       (!d.weak || Scheduler.isWeak(c.id)));
   }
@@ -21,8 +28,11 @@ const Cards = (() => {
   // ---------- deck builder ----------
   function builder(root, query) {
     const d = deck();
-    if (query.m) { d.mods = {}; d.off = {}; query.m.split(',').forEach(id => d.mods[id] = true); Store.save(); history.replaceState(null, '', '#/cards'); }
-    if (!Object.values(d.mods).some(Boolean)) PCEA.modules.forEach(m => d.mods[m.id] = true);
+    if (query.m) {
+      const ids = query.m.split(',');
+      d.on = {}; PCEA.modules.forEach(m => { if (ids.includes(m.id)) setModule(m, true); });
+      Store.save(); history.replaceState(null, '', '#/cards');
+    }
 
     root.innerHTML = `
       <div class="deck">
@@ -43,6 +53,13 @@ const Cards = (() => {
             <div class="deck-sum"></div>
             <label class="tog"><input type="checkbox" id="fStar"> Starred cards only</label>
             <label class="tog"><input type="checkbox" id="fWeak"> Weak cards only</label>
+            <label class="tog">Show first
+              <select id="fDir">
+                <option value="q">Term / question</option>
+                <option value="a">Definition / answer</option>
+                <option value="mix">Mix it up</option>
+              </select></label>
+            <p class="muted small">Only cards that work both ways are flipped; the rest stay question-first.</p>
             <div class="modes">
               <button class="mode" data-mode="smart"><b>Smart review</b><span>Cards that are due, plus new ones. Cards you miss come back in the same session.</span></button>
               <button class="mode" data-mode="practice"><b>Practice (weighted)</b><span>Goes on as long as you want. Weak cards come up most often, strong cards now and then.</span></button>
@@ -67,36 +84,46 @@ const Cards = (() => {
       const tags = tagsOf(m);
       row.innerHTML = `
         <div class="deck-mod-row">
-          <label><input type="checkbox" class="mchk" ${d.mods[m.id] ? 'checked' : ''}> <span class="n">${m.num}</span> ${m.title}</label>
+          <label><input type="checkbox" class="mchk"> <span class="n">${m.num}</span> ${m.title}</label>
           <span class="deck-stats">${cc.total} cards${cc.due ? ` &middot; <b>${cc.due} due</b>` : ''}${cc.fresh ? ` &middot; ${cc.fresh} new` : ''}</span>
           <button class="exp" title="Choose topics">${tags.length} topics &#9662;</button>
         </div>
         <div class="deck-tags" hidden>${tags.map(t => {
           const n = m.cardList.filter(c => c.tag === t).length;
-          return `<label class="tag"><input type="checkbox" data-tag="${t.replace(/"/g, '&quot;')}" ${!d.off[tagKey(m.id, t)] ? 'checked' : ''}> ${t} <em>${n}</em></label>`;
+          return `<label class="tag"><input type="checkbox" data-tag="${t.replace(/"/g, '&quot;')}" ${d.on[tagKey(m.id, t)] ? 'checked' : ''}> ${t} <em>${n}</em></label>`;
         }).join('')}</div>`;
-      row.querySelector('.mchk').onchange = e => { d.mods[m.id] = e.target.checked; Store.save(); summary(); };
-      const tagBox = row.querySelector('.deck-tags');
+      const tagBox = row.querySelector('.deck-tags'), mchk = row.querySelector('.mchk');
+      const syncMod = () => {
+        const n = tags.filter(t => deck().on[tagKey(m.id, t)]).length;
+        mchk.checked = n === tags.length; mchk.indeterminate = n > 0 && n < tags.length;
+      };
+      syncMod();
+      mchk.onchange = () => {
+        setModule(m, mchk.checked);
+        tagBox.querySelectorAll('input').forEach(i => i.checked = mchk.checked);
+        Store.save(); syncMod(); summary();
+      };
       row.querySelector('.exp').onclick = () => tagBox.hidden = !tagBox.hidden;
       tagBox.querySelectorAll('input').forEach(i => i.onchange = () => {
         const k = tagKey(m.id, i.dataset.tag);
-        if (i.checked) delete d.off[k]; else d.off[k] = true;
-        Store.save(); summary();
+        if (i.checked) deck().on[k] = true; else delete deck().on[k];
+        Store.save(); syncMod(); summary();
       });
       list.appendChild(row);
     });
 
     root.querySelectorAll('[data-q]').forEach(b => b.onclick = () => {
       const q = b.dataset.q;
-      PCEA.modules.forEach(m => {
-        d.mods[m.id] = q === 'all' ? true : q === 'none' ? false : Learn.cardCounts(m).due > 0;
-      });
+      PCEA.modules.forEach(m => setModule(m, q === 'all' ? true : q === 'none' ? false : Learn.cardCounts(m).due > 0));
       Store.save(); builder(root, {});
     });
     const fStar = root.querySelector('#fStar'), fWeak = root.querySelector('#fWeak');
     fStar.checked = d.starred; fWeak.checked = d.weak;
-    fStar.onchange = () => { d.starred = fStar.checked; Store.save(); summary(); };
-    fWeak.onchange = () => { d.weak = fWeak.checked; Store.save(); summary(); };
+    fStar.onchange = () => { deck().starred = fStar.checked; Store.save(); summary(); };
+    fWeak.onchange = () => { deck().weak = fWeak.checked; Store.save(); summary(); };
+    const fDir = root.querySelector('#fDir');
+    fDir.value = d.dir || 'q';
+    fDir.onchange = () => { deck().dir = fDir.value; Store.save(); };
     root.querySelector('#sX').onchange = e => { Store.settings.hitsToLevel = Math.max(1, Math.min(6, +e.target.value || 2)); Store.save(); };
     root.querySelector('#sNew').onchange = e => { Store.settings.newPerSession = Math.max(1, +e.target.value || 20); Store.save(); summary(); };
     root.querySelectorAll('.mode').forEach(b => b.onclick = () => start(b.dataset.mode));
@@ -145,16 +172,18 @@ const Cards = (() => {
       if (!c) return finished();
       flipped = false;
       const m = PCEA.module(c.module), st = Scheduler.status(c.id), s = Scheduler.get(c.id) || {};
+      const dir = deck().dir || 'q', rev = !!c.rev && (dir === 'a' || (dir === 'mix' && Math.random() < 0.5));
+      const front = rev ? c.a : c.q, back = rev ? c.q : c.a;
       stage.innerHTML = `
         <div class="fcard" tabindex="0">
           <div class="face front">
             <div class="fmeta"><span>M${m.num} &middot; ${c.tag}</span><span class="lvl ${st.key}">${st.label}${s.lvl ? ' &middot; L' + s.lvl : ''}</span></div>
-            <div class="fbody">${Render.md(c.q)}</div>
+            <div class="fbody">${Render.md(front)}</div>
             <div class="fhint">Click or press Space to flip</div>
           </div>
           <div class="face back">
-            <div class="fmeta"><span>Answer</span><button class="star ${s.star ? 'on' : ''}" title="Star (S)">&#9733;</button></div>
-            <div class="fbody">${Render.md(c.a)}</div>
+            <div class="fmeta"><span>${rev ? 'Term / question' : 'Answer'}</span><button class="star ${s.star ? 'on' : ''}" title="Star (S)">&#9733;</button></div>
+            <div class="fbody">${Render.md(back)}</div>
           </div>
         </div>`;
       const card = stage.querySelector('.fcard');

@@ -660,16 +660,20 @@ Total expenditure over 2006-2008 was \$15M, but the yearly split is unknown. If 
 ## Concepts
 Q: Constant (base-year) dollars
 A: Dollars at the price level of one fixed reference year, with inflation removed. Used for analysis and comparison.
+R: yes
 Q: Then-year (TY) dollars
 A: Actual dollars adjusted to account for outlay profiles, covering escalation of expenditures over a multi-year period. Used in budget submissions; refer to obligations, not expenditures.
+R: yes
 Q: The base-year estimating paradigm
 A: Estimate in constant base-year dollars for comparability and to isolate real cost drivers; convert to then-year dollars for budgets using indices and time-phasing.
 Q: Purchasing power
 A: What a dollar can buy. Decreases over time under inflation, so the same nominal dollar amount buys less in later years.
+R: yes
 Q: Why does cost estimating use BY dollars?
 A: Inflation-free comparison; historical data from different years can be analyzed on the same basis; CERs reflect real cost drivers, not inflation artifacts.
 Q: Escalation in cost estimating
 A: The process of applying an inflation index to convert costs from constant-year dollars to then-year dollars (or vice versa) for budget or historical comparison. De-escalation removes the effect.
+R: yes
 Q: Index in the base year
 A: 1.000 (by definition, the reference point).
 Q: Why do programs spanning many years underrun if not escalated?
@@ -678,12 +682,15 @@ Q: Current Year (CY) dollars refer to which type of spending: expenditures or ob
 A: Expenditures. Then Year (TY) dollars refer to obligations.
 Q: The "table's year"
 A: The Base Year of a specific index table — not necessarily the same as the Base Year of the CER, the estimate, or another index table.
+R: yes
 
 ## Escalation vs. Discounting
 Q: Escalation definition
 A: Adjusting for price-level change (inflation); converts BY dollars to TY dollars or vice versa.
+R: yes
 Q: Discounting definition
 A: Adjusting for time value of money (opportunity cost); converts future cash flows to a common point in time (present value) for comparison.
+R: yes
 Q: Can escalation and discounting both apply to the same cash flow?
 A: Yes, but they serve different purposes. Escalation is for budget realism; discounting is for economic analysis (e.g., NPV).
 Q: Why must you not confuse escalation with discounting?
@@ -698,12 +705,15 @@ A: 1.05 / 1.03 = 1.0194, a 1.94% real return — approximately, but not exactly,
 ## Index Numbers and Types
 Q: Raw index definition
 A: The price level in a single year relative to the base year (1.000). Used for Constant Year to Constant Year conversions of expenditures.
+R: yes
 Q: When to use raw index
 A: Converting Constant/Current Year dollars to another Constant/Current Year (CY►CY); actual historical expenditures.
 Q: Escalation factor formula
 A: (Index of target year) / (Index of base year). Multiply a BY cost by this to get TY; divide to go TY to BY.
+R: yes
 Q: Weighted index definition (Navy/Air Force method)
 A: The reciprocal of the sum of each outlay-year's portion divided by its raw index — equivalent to a weighted harmonic mean of the raw indices by outlay profile.
+R: yes
 Q: Weighted index definition (Army method)
 A: A weighted arithmetic mean of the raw indices by outlay profile, assuming the outlay profile is stated in year-one (Base Year) dollars. The Army calls this a "composite index."
 Q: Navy/Air Force vs. Army weighted-index methods — key difference
@@ -712,6 +722,7 @@ Q: When to use weighted index
 A: Converting Constant/Current Year dollars to Then Year budget authority (CY◄►TY), accounting for multi-year outlay/obligation profiles.
 Q: Outlay profile
 A: The historical percentage of an appropriation's dollars expected to be expended in each year, with year one being the year of appropriation. Percentages sum to 1.0.
+R: yes
 Q: Deriving the weighted index from an outlay profile — the four steps
 A: (1) Find the portion spent in each out-year; (2) divide each portion by its year's raw index (de-escalate); (3) sum the de-escalated values; (4) take the reciprocal.
 Q: Weighted-index worked example: outlay 40/30/20/10, de-escalated contributions 0.400/0.273/0.165/0.075
@@ -730,10 +741,12 @@ Q: RDT&EN as "two-year money"
 A: RDT&EN funds may be obligated over two years, followed by a five-year expiration window during which any remaining funds must still be expended.
 Q: Budget Year Multiplier
 A: The quotient of two weighted indices (a year's weighted index ÷ the table's Base Year weighted index); converts Then Year directly to Then Year. Only the Navy publishes it; handled like a raw index but relative to the table's Then Year.
+R: yes
 Q: Army's terms for raw and weighted indices
 A: Raw index = "compound index"; weighted index = "composite index" (this conflicts with the rest of this module's use of "composite").
 Q: Composite index definition
 A: A weighted average of the inflation indices for the sub-appropriations or commodities that fund a cost, using a weighted arithmetic mean of the cost shares.
+R: yes
 Q: When to use composite index
 A: When a cost is funded by more than one appropriation/commodity and a single blended escalation rate is needed.
 Q: Key difference: weighted vs. composite
@@ -754,6 +767,7 @@ Q: Gasoline example: \$1.15 (Jan 1998) to \$1.44 (Sep 2001)
 A: Inflation rate 25.2%; index 1.252; annualized (44-month span) ≈ 6.3%. Projecting that rate to 2008 would predict only ~\$2.21/gal, far below the actual peak above \$4 — a caution against constant-rate projection.
 Q: What does "197T" mean on a DoD inflation chart?
 A: The three-month fiscal-year correction period (Jul-Aug-Sep 1976) bridging the switch from a July-June to an October-September federal fiscal year.
+R: yes
 Q: Navy 1981-2001 example: military pay vs. RDT&EN inflation
 A: Military pay rose by a factor of ~2.12 (3.8%/yr annualized); RDT&EN rose by a factor of ~1.77 (2.9%/yr annualized) over the same 20 years.
 Q: Chaining raw indices example
@@ -762,12 +776,15 @@ A: Raw index 1982/1981 = 1.1371; raw index 1985/1982 = 1.1140; chained raw index
 ## Conversion Procedures
 Q: BY to TY conversion formula (general)
 A: Cost(TY) = Cost(BY) × [Index(TY) / Index(BY)]
+R: yes
 Q: TY to BY conversion formula (deflating)
 A: Cost(BY) = Cost(TY) × [Index(BY) / Index(TY)] = Cost(TY) / Escalation Factor
+R: yes
 Q: The table's-year waystation rule
 A: Convert starting dollars TO the table's year by dividing (raw index if starting CY, weighted if starting TY); then convert FROM the table's year to the ending year by multiplying (raw index if ending CY, weighted if ending TY).
 Q: "To over From" method
 A: Divide by the index of the FROM row (raw if from Constant Year, weighted if from Then Year); multiply by the index of the TO row (raw if to Constant Year, weighted if to Then Year).
+R: yes
 Q: Rule for multiplying vs. dividing by an index table
 A: Going FROM the table's year TO any other year: multiply. Going FROM any other year TO the table's year: divide.
 Q: Escalation Example A (CY►CY, Navy civilian pay): \$100K CY07 → CY10 (÷0.918) → CY18 (×1.200)
@@ -794,24 +811,30 @@ A: \$84M × (1.000/1.120) = \$75M (in FY2020 constant dollars)
 ## Rebasing
 Q: Rebasing an inflation table
 A: Divide every index value by the index value of the new base year (in the original table). The new base year becomes 1.000.
+R: yes
 Q: Rebasing formula
 A: Index'(t) = Index(t) / Index(new base year)
+R: yes
 Q: After rebasing, do escalation factors between other years change?
 A: No. Relative escalation between any two years is unchanged because both numerator and denominator are divided by the same factor.
 
 ## Doubling Time and Compound Escalation
 Q: Doubling time formula (exact)
 A: n = ln(2) / ln(1 + x/100), where x is the per-period inflation rate as a percent.
+R: yes
 Q: Rule of 70 (CEBoK's primary doubling-time approximation)
 A: n ≈ 70 / x. Derived by rounding ln(2) = 0.693 up to 0.7. Example: 5% → 70/5 = 14 years.
+R: yes
 Q: Rule of 72 (secondary/alternate form of the doubling-time rule)
 A: n ≈ 72 / x. 72 is a convenient alternate to 70 because it's evenly divisible by more single-digit percentages.
+R: yes
 Q: Doubling time at 5% annual inflation (Rule of 70)
 A: 70/5 = 14 years
 Q: Doubling time at 7% annual inflation (Rule of 70)
 A: 70/7 ≈ 10 years
 Q: Compound escalation over n years at rate r
 A: Index(n) = (1 + r)^n. Do NOT use simple arithmetic (1 + r×n), which understates.
+R: yes
 Q: Compound index after 3 years at 2.5% compounded
 A: (1.025)^3 = 1.0769
 Q: Why compound, not simple, escalation over multiple years?
@@ -820,10 +843,13 @@ A: Inflation compounds year over year like interest. Simple arithmetic (r × n) 
 ## Special Topics and Pitfalls
 Q: Mid-point method
 A: For costs incurred over a period whose exact profile is unknown (e.g., Jan 2019–Dec 2021), use the index at the midpoint of the period (around Jan 2020) for escalation, not start or end year. Only for historical data — a forward estimate should be time-phased year by year instead.
+R: yes
 Q: Time-phasing definition
 A: Relating percent spent (cost) to percent elapsed (duration) for past programs, then using an analogy or average to spread a future estimate before escalating each year's portion separately.
+R: yes
 Q: Rayleigh curve for time-phasing
 A: A development-program spending profile: spending rises, peaks mid-program, then tails off. One of several fitted distributions (with beta, trapezoid, etc.) used to model time-phasing.
+R: yes
 Q: Custom inflation index when needed
 A: When official indices don't match a program's unique cost mix (specialized commodity or labor, non-standard outlay profile, or a known contractor's own escalation rate).
 Q: Creating a custom composite index
@@ -860,6 +886,7 @@ Q: What is a raw-index column in an inflation table?
 A: Price level in each year relative to the base year, indexed by year of expenditure/outlay.
 Q: Escalation rate in an inflation table
 A: Year-over-year percentage change: (Index(t) − Index(t−1)) / Index(t−1) × 100%
+R: yes
 Q: Appropriation-category inflation table
 A: A published (OSD/DoD) table with raw and weighted indices for a specific "color of money" (e.g., Procurement, RDT&E) and fiscal year.
 Q: DoD inflation tables organized by

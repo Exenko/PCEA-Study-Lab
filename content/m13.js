@@ -783,10 +783,12 @@ Q: A ranking flips only if cost grows 60%, far beyond historical experience. The
 ## Process Steps
 Q: The 7 steps of economic analysis, in order
 A: 1 Define objective · 2 Assumptions & ground rules · 3 Identify alternatives · 4 Cost & benefit estimates · 5 Compare & rank · 6 Test sensitivity · 7 Formulate recommendation
+R: yes
 Q: What makes a good EA objective?
 A: States the need without presupposing a solution (e.g., "move X tons/month" not "buy trucks").
 Q: What is the status quo alternative?
 A: The baseline "do nothing" option against which all others are measured.
+R: yes
 Q: Treatment of sunk costs in an EA
 A: Excluded. Only future, differential costs that vary between alternatives matter.
 Q: What are ground rules and why matter?
@@ -801,10 +803,13 @@ Q: Name 3 common alternative pairs
 A: Repair vs. replace, buy vs. lease, manual vs. automate, make vs. buy, centralize vs. decentralize.
 Q: Shortest life period-of-analysis method
 A: Use the shortest alternative's period of analysis; estimate a residual value for the other alternatives' remaining benefits.
+R: yes
 Q: Common denominator life method
 A: Assume systems keep replacing themselves until all alternatives end at the same time; technically the least common multiple of the individual periods (e.g., 3/4/6-yr lives → 12-yr period).
+R: yes
 Q: Uniform Annual Cost (UAC) period-of-analysis method
 A: Economically adjusts for unequal lives and uses the longest period of analysis among the alternatives.
+R: yes
 Q: Rule on mixing constant and current year dollars
 A: Never mix them within the same EA.
 Q: How is the EA Base Year (BY) usually chosen?
@@ -813,6 +818,7 @@ Q: Costs to exclude from an EA
 A: Societal costs (per OMB A-94) and sunk costs (document them in assumptions, but don't include them in the estimate).
 Q: Wash costs
 A: Costs realized equally by every alternative; optional to include/exclude, but exclusion affects multiplicative measures like C/BR (not NPV) — document the choice either way.
+R: yes
 Q: Cost savings vs. cost avoidance
 A: Cost savings = reduced future budget requirement (in the cost estimate); cost avoidance = eliminates additional future costs that would otherwise occur (either section).
 Q: Residual value vs. terminal value vs. salvage value
@@ -821,8 +827,10 @@ A: Residual = value before end of economic life; terminal = value at end of econ
 ## Discounting Fundamentals
 Q: Present value formula (end-of-year)
 A: $PV = CF_0 + \sum_{n=1}^{N} \dfrac{CF_n}{(1+r)^n}$
+R: yes
 Q: Discount factor formula
 A: $DF_n = \dfrac{1}{(1+r)^n}$ (end-of-year); $DF_n^{mid} = \dfrac{1}{(1+r)^{n-0.5}}$ (mid-year)
+R: yes
 Q: Why use discounting in EA?
 A: Time value of money: a dollar available now can be invested to earn returns, so it is worth more than a dollar received later.
 Q: When do you use mid-year vs. end-of-year discount factors?
@@ -833,8 +841,10 @@ Q: Why must you match discount rate type to dollar type?
 A: Real rate is for constant dollars; nominal rate is for then-year dollars. Mismatching is a common error.
 Q: Fisher equation (exact)
 A: $(1 + r_{nominal}) = (1 + r_{real})(1 + i)$, where $i$ = inflation rate.
+R: yes
 Q: What does OMB Circular A-94 specify?
 A: Federal guidance on discount rates (real and nominal, by maturity), updated annually; prescribes rates for government cost-effectiveness and lease-purchase analysis.
+R: yes
 Q: CEBoK's own escalation vs. discounting example: nominal rate 5%, inflation 3%. Real rate?
 A: $1.05/1.03 = 1.0194$, a 1.94% real return (not simply $5\%-3\%=2\%$, though close).
 Q: Escalation vs. discounting
@@ -843,18 +853,23 @@ A: Escalation applies inflation's effects to a cost stream; discounting converts
 ## Comparison Techniques
 Q: Net Present Value (NPV)
 A: $NPV = PV(Benefits) - PV(Costs)$; choose the highest; favorable if > 0.
+R: yes
 Q: When is PV of cost alone sufficient to rank alternatives?
 A: When benefits are equal across alternatives (cost-minimization comparison).
 Q: Benefit-cost ratio (BCR)
 A: $BCR = \dfrac{PV(Benefits)}{PV(Costs)}$; BCR > 1.0 is favorable.
+R: yes
 Q: Savings-to-investment ratio (SIR)
 A: $SIR = \dfrac{PV(Savings)}{PV(Investment)}$; SIR > 1.0 is favorable.
+R: yes
 Q: When to use EUAC / Uniform Annual Cost
 A: For comparing alternatives with unequal economic lives; puts PV on a per-year basis.
 Q: Annuity PV factor formula and its use
 A: $\sum_{n=1}^{N} \dfrac{1}{(1+r)^n} = \dfrac{1-(1+r)^{-N}}{r}$; multiply annual amount by factor to get PV of uniform stream.
+R: yes
 Q: Payback period
 A: Time (usually in years) until cumulative savings/benefits equal the initial investment.
+R: yes
 Q: Is simple payback period discounted or undiscounted?
 A: Usually undiscounted. Discounted payback accounts for time value and is always longer.
 Q: Why is NPV preferred over BCR/ROI for ranking mutually exclusive alternatives?
@@ -871,6 +886,7 @@ Q: SIR + payback rule of thumb for "economical"
 A: SIR > 1.0 AND payback period < 10 years.
 Q: IRR (Internal Rate of Return) definition
 A: The discount rate $r$ that makes $0 = \sum CF_t/(1+r)^t$, i.e., NPV = 0.
+R: yes
 Q: How do IRR and payback period both reach NPV = 0, and how do they differ?
 A: Both drive NPV to zero; IRR varies the discount rate to do it, payback varies the time horizon.
 Q: Four categories of sensitivity analysis assumptions to test
@@ -915,10 +931,13 @@ A: Relevant US legislation (e.g., Clinger-Cohen Act) and names of cost products 
 ## Depreciation
 Q: Depreciation definition and purpose
 A: Allocation of an asset's cost over its useful life for accounting and tax purposes; not a cash flow itself.
+R: yes
 Q: Depreciable base formula
 A: Cost − Salvage (residual) value
+R: yes
 Q: Straight-line depreciation formula
 A: $D_n = \dfrac{\text{Cost} - \text{Salvage}}{N}$ per year
+R: yes
 Q: CEBoK's straight-line example: \$140K cost, \$20K salvage, 5-yr life, placed in service April 1 (9/12 first year)
 A: 2006 = $(140{,}000-20{,}000)/5 \times 9/12 = 18{,}000$; 2007 and 2008 = \$24,000/year each
 Q: Double-declining balance (DDB): what is the rate for a 5-year asset?
@@ -929,8 +948,10 @@ Q: Why is DDB called an "accelerated" method?
 A: It takes more depreciation in early years, providing larger tax deductions when the asset is newest.
 Q: 150% declining balance rate formula
 A: Straight-line rate × 150% (vs. × 200% for double/200% declining balance)
+R: yes
 Q: Sum-of-years'-digits (SYD) general formula
 A: $SYD = (N+1)(N/2)$; e.g., for 500 years, $SYD = (501)(250) = 125{,}250$
+R: yes
 Q: SYD Year 1 fraction for a 5-year asset
 A: Remaining life (5) / SYD (15) = 5/15
 Q: SYD Year 1 depreciation for \$100K asset, \$10K residual (CEBoK's SYD example)
@@ -943,12 +964,15 @@ Q: Which method allocates MORE depreciation to LATER years?
 A: Sinking fund depreciation — the exception, along with straight-line's flat schedule, to the usual front-loaded pattern.
 Q: Fixed percentage depreciation method
 A: Annual depreciation is a fixed percentage of the beginning-of-year book value; picking too low a rate leaves book value well above salvage, too high a rate drives later years to zero depreciation.
+R: yes
 
 ## Special Topics
 Q: Functional Economic Analysis (FEA)
 A: EA applied to business-process decisions, emphasizing full cost accounting (overhead, indirect) and function-wide impact.
+R: yes
 Q: Analysis of Alternatives (AoA)
 A: Broader acquisition study evaluating operational effectiveness, cost, and risk of materiel solutions; EA is a core input but AoA also weighs non-cost factors.
+R: yes
 Q: Lease vs. purchase comparison
 A: Compare PV(Lease payments) vs. PV(Purchase + O&S − Residual Value); attention to discount rate type (often prescribed Treasury rates), tax effects, residual value.
 Q: Three types of benefits in benefits analysis
@@ -959,8 +983,10 @@ Q: Why would cost-effectiveness analysis be used?
 A: When benefits cannot be monetized; compare PV of cost per unit of non-monetary effectiveness measure (e.g., cost per operational hour).
 Q: Commercial Activities / A-76 studies
 A: Outsourcing/privatization studies governed by OMB Circular A-76; the EA within them is smaller/less detailed and usually skips a formal benefits estimate, assuming either performer can do the work equally well.
+R: yes
 Q: Weighted point rating in a benefits decision matrix
 A: Assign each benefit a value and a weight (weight 2 = twice the value of weight 1); multiply and sum for a composite benefit score per alternative.
+R: yes
 Q: Benefit score to ratio conversion in a benefits matrix
 A: Divide alternative's NPV (cost + monetary benefits only) by its benefit score for C/BR (lowest best), or invert for B/CR (highest best).
 Q: Why can ROI have more than one valid solution for a project?
@@ -973,6 +999,7 @@ Q: Purpose of sensitivity analysis (Step 6)
 A: Test whether the ranking of alternatives changes when key assumptions (discount rate, cost, life, benefits) vary; find break-even points.
 Q: What is a break-even point in sensitivity analysis?
 A: The value of an assumption at which two alternatives have equal cost (or at which NPV = 0); the ranking flips.
+R: yes
 Q: What makes a recommendation robust?
 A: The ranking holds across plausible ranges of key assumptions; small changes in assumptions do not flip the winner.
 Q: If ranking flips only at extreme assumption values, the recommendation is…

@@ -593,14 +593,19 @@ Q: Core principle of learning curves
 A: Each doubling of quantity reduces cost by a constant percentage (set by the LCS).
 Q: Basic learning curve equation
 A: $Y = aX^b$. a = T1 (theoretical first unit), b = $\log_2(LCS)$ (negative), X = unit/quantity.
+R: yes
 Q: Formula: b from LCS
 A: $b = \dfrac{\ln(LCS)}{\ln 2}$
+R: yes
 Q: Formula: LCS from b
 A: $LCS = 2^b$
+R: yes
 Q: Learning curve in log space
 A: $\ln Y = \ln a + b \ln X$, a straight line with slope b and intercept ln(a).
+R: yes
 Q: Doubling principle
 A: Cost at 2X = LCS × cost at X
+R: yes
 Q: Why is b always negative?
 A: Cost decreases as quantity increases (LCS < 1, so log2(LCS) < 0).
 Q: b for an 85% curve
@@ -619,8 +624,10 @@ A: $200 \times 0.8^2 = 128$
 ## Theories
 Q: CUMAV theory: what does Y represent?
 A: The cumulative average unit cost (CAUC) of units 1 through X. Also called the Wright curve.
+R: yes
 Q: Unit (ULC) theory: what does Y represent?
 A: The cost of the Xth unit itself. Also called the Crawford curve.
+R: yes
 Q: Which theory is generally preferred, and why?
 A: Unit theory (ULC). It uses the actual observed variable and keeps variation transparent. CUMAV smooths and makes statistics look artificially good.
 Q: Same nominal LCS: which theory shows steeper cost improvement?
@@ -629,12 +636,14 @@ Q: Same data: which theory yields the higher LCS?
 A: CUMAV (the fit is flatter).
 Q: Another name for CUMAV / for unit curves
 A: Wright curves / Crawford curves
+R: yes
 Q: CEBoK rule of thumb for choosing CUMAV vs. ULC by fit
 A: For data with CV greater than about 2%, CUMAV will likely have the better statistical fit, even if ULC is the true process.
 Q: Three objections to CUMAV
 A: Uses a synthetic (not observed) variable; obscures true error/variation of the observed cost; produces artificially favorable fit statistics.
 Q: Other names for the learning curve concept
 A: Cost Improvement Curve (CIC), cost/quantity relationship, manufacturing progress function, experience curve, product improvement function.
+R: yes
 Q: Who originated CUMAV theory, and on what data?
 A: T.P. Wright, 1936, using manufacturing data for small two-seater aircraft.
 Q: Who originated ULC theory, and where?
@@ -645,16 +654,22 @@ A: UC_i = unit cost of unit i; CAUC_k = cumulative average unit cost through uni
 ## Formulas
 Q: CUMAV total cost of first X units
 A: $aX^{b+1}$ (exponent b+1)
+R: yes
 Q: CUMAV cost of lot F through L
 A: $aL^{b+1} - a(F-1)^{b+1}$
+R: yes
 Q: ULC total cost of first X units
 A: $\sum_{i=1}^{X} a\,i^b$ (no closed form; sum the units)
+R: yes
 Q: Convert CAUC to the unit cost of unit X
 A: $Y_X = X\bar{Y}_X - (X-1)\bar{Y}_{X-1}$
+R: yes
 Q: Convert unit costs to CAUC
 A: $\bar{Y}_X = \sum_{i=1}^{X} Y_i / X$
+R: yes
 Q: Lot average unit cost (AUC)
 A: Total lot cost / (L − F + 1)
+R: yes
 Q: Individual unit uses exponent ___; total cost uses ___
 A: b; b+1
 Q: T1 from a log-space regression intercept α
@@ -687,8 +702,10 @@ A: Actual = $711.61; model-predicted = $709.78 (small gap from LMP approximation
 ## Process
 Q: The 7-step learning curve process
 A: 1 Collect & normalize · 2 Plot in unit space · 3 Prepare data (CAUC / LMPs, logs) · 4 Plot in log space · 5 Regress (α, β) · 6 Transform back (a = e^α, b = β, LCS = 2^b) · 7 Apply
+R: yes
 Q: What is a T1 adder?
 A: A separate first-unit adjustment when unit 1 falls well above the curve (common with ships and prototypes).
+R: yes
 Q: Is T1 the actual cost of unit 1?
 A: Not necessarily. It is the regression-derived theoretical first unit.
 Q: Minimum and preferred data points for a learning curve
@@ -713,10 +730,12 @@ A: Approximating discrete sums with definite integrals.
 ## Lot midpoint
 Q: Definition of lot midpoint (LMP)
 A: The unit number whose cost on the unit learning curve equals the lot's average unit cost.
+R: yes
 Q: When is the LMP required?
 A: For unit (ULC) theory with lot data.
 Q: LMP heuristic formula
 A: $\frac12\left[\sqrt{FL} + \frac{F+L}{2}\right]$, the average of the geometric and arithmetic means.
+R: yes
 Q: Arithmetic mean vs. true LMP
 A: The arithmetic mean always overestimates the LMP, so it underestimates lot cost.
 Q: Geometric mean vs. true LMP
@@ -727,6 +746,7 @@ Q: Heuristic LMP for units 4–8
 A: ½(5.657 + 6) = 5.83 (true value ≈ 5.79 at 85%)
 Q: Refined LMP formula (needs b)
 A: $\left[\frac{(L+\frac12)^{b+1} - (F-\frac12)^{b+1}}{(b+1)N}\right]^{1/b}$
+R: yes
 Q: Roughly where is the true LMP of a large first lot?
 A: About N/3 (≈0.34N for 100 units at 85%); small first lots are closer to N/2.
 Q: CEBoK LMP rules of thumb (mental math)
@@ -737,20 +757,24 @@ Q: Three possible effects of a production break
 A: No change (short break), partial learning loss (typical), complete loss / return to T1 (long break, turnover).
 Q: Break-unit cost formula
 A: $a' = aN^b + L(a - aN^b) = La + (1-L)aN^b$, where L = fraction of learning lost, N = break-unit number.
+R: yes
 Q: Break formula extremes: L=1 and L=0
 A: L=1 (complete loss): a' = a (back to T1). L=0 (no loss): a' = aN^b (as if no break occurred).
 Q: Effective unit number Q after a break
 A: $Q = (a'/a)^{1/b}$; then resume with $Y = a(Q + (X-N))^b$.
+R: yes
 Q: T1=100, 90% curve (b=−0.152), break after unit 4, 50% loss: break-unit (unit 5) cost?
 A: $a' = 0.5(100) + 0.5(100)(5^{-0.152}) = 89.15$
 Q: Same break example: effective unit Q, and unit 6 cost
 A: Q = (89.15/100)^(1/−0.152) = 2.128; unit 6 = 100(2.128+1)^−0.152 = 84.081
 Q: Anderlohr's Retrograde Method (1969): what does it assess?
 A: Percent learning lost after a break, via a weighted average across 5 expert-scored categories, weights summing to 100%.
+R: yes
 Q: The 5 categories in the Retrograde Method
 A: Personnel learning, supervisory learning, continuity of productivity, methods, special tooling.
 Q: Rate theory equation
 A: $Y = aX^bR^c$, where R = annualized production rate, c = its regression coefficient.
+R: yes
 Q: Who originated rate theory, and when?
 A: The RAND Corporation, 1974.
 Q: Is the rate term usually statistically significant?
@@ -759,6 +783,7 @@ Q: Two checks required with rate theory
 A: The rate term must be statistically significant; check multicollinearity between X and R.
 Q: New work effects equation
 A: $Y_X = a_1X^{b_1} + a_2(X - L)^{b_2}$. New work starts its own curve at the last unit L of the original work.
+R: yes
 Q: Meta-learning curve rule of thumb
 A: Meta-LCS ≈ complement of the change in underlying LCS (e.g., 80%→70% is a 10-pt change, so meta-LCS ≈ 90%).
 Q: Why are log-t distributions relevant to learning curve prediction intervals?
@@ -767,6 +792,7 @@ Q: CUMAV iterative method: main benefit over standard CUMAV with lot data
 A: Treats each lot independently, so it handles missing/concurrent lots, gives more realistic goodness-of-fit, and outliers are easier to spot.
 Q: QAIV (Quantity As an Independent Variable)
 A: A CER approach that includes quantity as an independent variable to estimate the whole production run/lot directly, instead of T1 + a separate learning curve.
+R: yes
 Q: Alternative to a fitted curve for estimating far-down-the-curve "follow units"
 A: A steady-state should-cost estimate for the follow unit, run back up the curve to earlier units.
 

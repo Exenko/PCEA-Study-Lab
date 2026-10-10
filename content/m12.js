@@ -861,8 +861,10 @@ Q: Key differences: software cost vs. hardware cost
 A: Software is nearly 100% labor, copies are free, no production learning curve. Maintenance can significantly exceed development cost. Nearly infinitely malleable (requirements creep).
 Q: What is CSCI?
 A: Computer Software Configuration Item: a software element in the WBS managed as a unit; may be broken into CSCs, and further into CSUs.
+R: yes
 Q: What is CSC?
 A: Computer Software Component: a subdivision of a CSCI.
+R: yes
 Q: The seven system engineering steps for software (CEBoK)
 A: (1) System requirements & design, (2) Software requirements analysis, (3) Preliminary & detailed design, (4) Code and unit test, (5) Unit integration and test, (6) Software system test, (7) System test.
 Q: Why is unit testing considered a development step, not a test-phase step?
@@ -873,12 +875,14 @@ Q: Similarities: software and hardware estimating
 A: Both follow a lifecycle; both use analogy, parametric, and build-up techniques; drivers fall into the same three categories: size, complexity, capability.
 Q: SIT&E (WBS term)
 A: Systems Integration Test and Engineering.
+R: yes
 
 ## Size Metrics
 Q: Primary driver of software effort
 A: Size (SLOC or function points).
 Q: SLOC: definition and counting pitfall
 A: Executable instructions and data declarations, excluding comments/blanks/continuation lines. No standardized estimating rules; counting conventions must match between historical data and new estimate.
+R: yes
 Q: Why SLOC varies by language
 A: The same logic can take very different line counts in different languages; raw SLOC comparison across languages is misleading.
 Q: SLOC advantage
@@ -889,32 +893,40 @@ Q: Reused vs. adapted/customized vs. verbatim code
 A: Verbatim/reused = copied with no modification. Adapted/customized/modified = needs some redesign, recode, retest. New = requires full design, code, test.
 Q: Equivalent SLOC (ESLOC)
 A: New + Modified × AAF + Reused × AAF. Converts a mix of new/modified/reused code to equivalent new-code effort.
+R: yes
 Q: Why isn't reused code counted as zero cost?
 A: Reused code still requires understanding, integration, regression testing, and verification; it always carries a small but nonzero AAF.
 Q: COCOMO adaptation adjustment factor (AAF)
 A: 0.4 × (% design modified) + 0.3 × (% code modified) + 0.3 × (% integration/test effort); weights should sum to 100%.
+R: yes
 Q: How to read: DM=15%, CM=25%, IM=20%
 A: Design 15% modified, code 25% modified, integration/test 20% effort needed.
 Q: Function Points: definition
 A: A language-independent size measure based on delivered functionality (inputs, outputs, files) as seen by the user, per IFPUG's Functional User Requirements.
+R: yes
 Q: Five-step FP counting process (CEBoK)
 A: (1) Determine type of FP count, (2) identify scope/boundaries, (3) count data and transaction function types, (4) calculate UFP and VAF, (5) calculate AFP.
 Q: Five IFPUG function point components
 A: External Inputs (EI), External Outputs (EO), External Inquiries (EQ), Internal Logical Files (ILF), External Interface Files (EIF).
+R: yes
 Q: How are function point types weighted?
 A: Each type at each complexity level (Low/Avg/High) has a weight: EI 3/4/6, EO 4/5/7, EQ 3/4/6, ILF 7/10/15, EIF 5/7/10.
 Q: UFP
 A: Unadjusted Function Points: sum of all weighted function type counts.
+R: yes
 Q: Value Adjustment Factor (VAF)
 A: VAF = 0.65 + 0.01 × (sum of 14 GSC ratings). Adjusts UFP for system complexity.
+R: yes
 Q: General System Characteristics (GSCs)
 A: 14 characteristics (communication, performance, reusability, etc.) each rated 0–5 to set VAF.
+R: yes
 Q: FP advantages
 A: Available early (from requirements), usable throughout the lifecycle, language/technology-agnostic, unaffected by programmer skill or style.
 Q: FP disadvantages
 A: Requires trained analysts (CPM rules), more effort than SLOC to count, doesn't measure non-functional requirements (addressed by SNAP).
 Q: SNAP
 A: Software Non-functional Assessment Process (IFPUG): measures non-functional requirements that plain function points miss.
+R: yes
 Q: Capers Jones requirements growth range
 A: From under 1% (small end-user systems) to 64% (very large military systems), from initial estimate to delivery.
 
@@ -949,18 +961,21 @@ A: CEBoK's Table 12.4 prints \$16,000 in every row's formula, but the stated tot
 ## Effort Equation
 Q: General parametric effort equation form
 A: Effort = a × Size^b × EAF
+R: yes
 Q: Meaning of a in the effort equation
 A: Productivity/calibration constant; COCOMO II uses a = 2.94 for early-design estimates.
 Q: Meaning of b (E) in the effort equation
 A: Scale exponent: how fast effort grows relative to size. For software, b > 1.0 (diseconomies of scale); COCOMO II nominal early-design E = 1.0997.
 Q: Meaning of EAF
 A: Effort Adjustment Factor: product of multipliers for complexity, capability, schedule, reliability, etc.
+R: yes
 Q: What does b = 1.0 mean?
 A: Linear: effort doubles when size doubles (rare for software).
 Q: Typical range of b for software
 A: 1.05 to 1.15 (diseconomy of scale).
 Q: Diseconomies of scale: definition
 A: Effort grows faster than size (b > 1.0). Doubling size multiplies effort by more than double.
+R: yes
 Q: Why software exhibits diseconomies of scale
 A: Coordination overhead, interface management, and integration complexity grow disproportionately as systems grow.
 Q: Hardware vs. software scale effects
@@ -971,6 +986,7 @@ A: Effort multiplied by 2^1.1 ≈ 2.14, more than double.
 ## Schedule and PDSS
 Q: COCOMO II schedule equation
 A: Tdev = C × (PM_NS)^(D + 0.2(E - B)) × SCED%, with C = 3.67, B = 0.91, D = 0.28.
+R: yes
 Q: Mail-order schedule example result
 A: 100,000 SLOC, PM = 465, E = 1.1433, SCED% = 1.0 → Tdev ≈ 27.28 months.
 Q: Mail-order schedule compression example
@@ -981,8 +997,10 @@ Q: Can you compress software schedule below the nominal level?
 A: Yes, but with costs: more staff (communication overhead), higher defect rates, rework, and often little actual calendar reduction — and it should be reflected in the cost estimate too.
 Q: Post-Deployment Software Support (PDSS)
 A: Support during Operations & Support (O&S) phase; includes but is not limited to maintenance (e.g., also help desk/trouble tickets, often not captured by cost models).
+R: yes
 Q: Three types of software maintenance
 A: Corrective (fix bugs), Adaptive (accommodate new requirements), Perfective (improve speed/reliability/functionality).
+R: yes
 Q: Maintenance as "mini-development"
 A: Treat maintenance like a small development effort: isolate, redesign, recode, retest the affected code, running the model in development mode with the same cost drivers.
 
@@ -993,16 +1011,20 @@ Q: Linear vs. OO programming paradigm
 A: Linear builds systems largely custom, instruction by instruction. OO builds from reusable, interchangeable objects, reducing from-scratch development over time.
 Q: Waterfall model
 A: Sequential phases, each finished before the next. Predictable, easy to estimate/plan, but inflexible and defects found late are costly.
+R: yes
 Q: Waterfall mail-order example: total custom SLOC
 A: 19,000 SLOC (CSCI 1: 5,000+7,500; CSCI 2: 3,000; CSCI 3: 1,000; CSCI 4: 2,500) plus 2 COTS packages.
 Q: Incremental model
 A: Delivery in successive builds; requirements known up front but delivered in stages. Each build can be estimated independently, with productivity adjustments for team learning.
+R: yes
 Q: Incremental mail-order example (Fig 12.9)
 A: Run 1 = COTS 1-3 + 500 SLOC glue code; Run 2 = COTS module 1 + 500 SLOC CM code; Run 3 = COTS module 3 + 500 SLOC CM code; Run 4 = total-system requirements/design/test across increments.
 Q: Evolutionary model
 A: Requirements refined as builds are fielded via prototype cycles. Later scope uncertain; estimates must be wide and refined each cycle.
+R: yes
 Q: Spiral model (Boehm)
 A: Iterative, risk-driven cycles: define objectives/alternatives/constraints → evaluate alternatives/assess risk → develop (ending in IOC/FOC/FCA/PCA) → plan next cycle.
+R: yes
 Q: Estimating advantage of Waterfall
 A: Single confident fixed estimate at program start (scope fully known upfront).
 Q: Estimating challenge of Spiral
@@ -1015,6 +1037,7 @@ A: CEBoK's incremental lifecycle chart (Fig 12.8) appears in the source only as 
 ## Techniques
 Q: Analogy: definition
 A: Compare new software to similar historical project with known cost; adjust for size, complexity, capability differences.
+R: yes
 Q: Analogy mail-order example result
 A: 406 total hours (224 setup + 80 data load + 85 implementation + 17 training) × \$100,000/yr ÷ 1,920 hrs/yr = \$21,145.
 Q: Analogy: when most credible
@@ -1025,6 +1048,7 @@ Q: Parametric mail-order schedule example
 A: Tdev = 3.67 × 23.92^0.262 × 1.0 = 8.43 months (E=1 for this single small CSCI).
 Q: Parametric: definition
 A: Uses a CER calibrated to historical data, relating size and cost drivers to effort.
+R: yes
 Q: Primary estimation techniques for software
 A: Analogy and parametric. Use both as cross-checks.
 Q: What does disagreement between analogy and parametric suggest?
@@ -1043,8 +1067,10 @@ Q: Quality challenge: common metrics
 A: Defect counts/density (per 100 FP or 1,000 SLOC), cohesion/coupling, requirements satisfaction %, test coverage, documentation adequacy, MTTD, McCabe cyclomatic complexity.
 Q: McCabe's cyclomatic complexity
 A: The number of linearly independent paths through a program module; a recognized software quality measure.
+R: yes
 Q: COTS ~80% rule
 A: If COTS can deliver about 80% of required functionality with little/no customization, buying is usually the better option than custom development.
+R: yes
 Q: COTS challenge
 A: No code visibility, hard to customize, integration complexity varies by architecture, beta-version risk, licensing/upgrade costs; still requires requirements, design, and test effort.
 Q: Calibration challenge
@@ -1063,31 +1089,41 @@ Q: OO programming benefits (CEBoK list)
 A: Reuse/rapid prototyping from standard objects, better quality with easier-to-locate defects, reduced admin/design effort, modular/message-based (no system-wide change to add capability).
 Q: Object points: origin and adopter
 A: Developed by Banker, Kauffman, and Kumar for banking-system sizing; later adopted by Boehm in one of his models.
+R: yes
 Q: Object points: pros and cons
 A: Pro: user-interface-oriented, less subjective than SLOC. Con: not widely used, can't be counted until end of design, limited historical data.
 Q: AIS (Automated Information Systems)
 A: IT-heavy acquisition category, not hardware-intensive; estimates are largely software estimates; often cutting-edge/rapidly changing technology.
+R: yes
 Q: ERP (Enterprise Resource Planning)
 A: Business system on a single common database with modular design; estimating adds gap analysis, business process re-engineering, and COTS integration beyond custom-code estimation.
+R: yes
 Q: Debated ERP cost drivers
 A: Dollars spent on the ERP package and number of requirements are common candidates, but some experts argue human factors (user acceptance/resistance) matter more.
 
 ## Key Formulas
 Q: Effort equation
 A: $Effort = a \times Size^b \times EAF$
+R: yes
 Q: COCOMO II effort equation
 A: $PM = A \times Size^E \times \prod EM_i$, A = 2.94, Size in KSLOC.
+R: yes
 Q: AAF
 A: $0.4(\text{\% Design}) + 0.3(\text{\% Code}) + 0.3(\text{\% Test})$
+R: yes
 Q: ESLOC
 A: $New + Modified \times AAF + Reused \times AAF$
+R: yes
 Q: VAF
 A: $0.65 + 0.01 \times \sum (14\ GSC\ ratings)$
+R: yes
 Q: AFP
 A: $UFP \times VAF$
+R: yes
 Q: Effort multiplier when size doubles
 A: $2^b$ (when b > 1, multiplier > 2)
 Q: Growth-adjusted size
 A: $Initial\ Size \times (1 + Growth\ Factor)$
+R: yes
 `
 });

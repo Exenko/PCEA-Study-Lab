@@ -594,16 +594,20 @@ Q: Why does a point estimate from "most likely" values usually fall below the me
 A: Cost distributions are right-skewed; overruns can be large but underruns are limited.
 Q: Opportunity (in risk/uncertainty terms)
 A: An uncertain event with a positive effect on cost or schedule.
+R: yes
 Q: Common sources of cost growth
 A: Requirements creep, immature technology (low TRL), optimistic assumptions, poor analogy selection, inadequate data, external factors (inflation, funding instability).
 Q: Right-skewed cost distribution
 A: Mean > mode; possible large overruns, but limited underruns. Point estimate from most-likely falls below mean.
+R: yes
 
 ## Analogy
 Q: Definition of analogy technique
 A: Estimate a new system from one (or a few) similar historical systems, adjusted for differences in size, complexity, technology.
+R: yes
 Q: Analogy scaling formula
 A: $Cost_{new} = Cost_{analogy} \times (Parameter_{new}/Parameter_{analogy})$; a ratio equivalent to a linear equation through the origin.
+R: yes
 Q: Why does an adjusted analogy assume the line passes through the origin?
 A: The analogy is a single data point; one point can't determine a line's slope, so the line is assumed to pass through the origin.
 Q: F-100/F-200 engine analogy example
@@ -616,44 +620,57 @@ Q: Analogy pros and cons
 A: Pros: fast, cheap, based on real data, works early, easy to defend with similar systems. Cons: one (or few) data point(s), subjective adjustments, a good analog may not exist, inherently estimates outside the data range.
 Q: Analogy power-law exponent (Beyond CEBoK)
 A: Some analysts scale by $Cost_{new} = Cost_{analogy} \times (Param_{new}/Param_{analogy})^b$; not the source's linear-ratio method — a single analog point can't determine the exponent $b$ either.
+R: yes
 
 ## Parametric
 Q: Definition of parametric technique
 A: Use statistical relationships (CERs) built from many historical data points relating cost to measurable parameters.
+R: yes
 Q: Cost Estimating Relationship (CER)
 A: A statistical equation $Cost = f(parameters)$ derived from regression on historical data.
+R: yes
 Q: Linear CER form
 A: $Cost = a + bX$; constant intercept and slope. a = fixed cost, b = cost per unit of X.
+R: yes
 Q: Power CER form
 A: $Cost = aX^b$; proportional relationship. Preferred for technical cost drivers (weight, power, lines of code).
+R: yes
 Q: CER validity requirements
 A: Good $R^2$ and t/F statistics; operationally reasonable (makes physical sense); derived from comparable, homogeneous data.
 Q: Parametric pros and cons
 A: Pros: statistically defensible, objective, repeatable, quantifies uncertainty, fast. Cons: needs sufficient normalized data, risk of extrapolation outside data range.
 Q: Extrapolation risk
 A: Applying a CER far outside the range of historical data used to build it produces unreliable predictions.
+R: yes
 
 ## Build-up
 Q: Definition of build-up (engineering / bottom-up)
 A: Estimate at the lowest WBS level (labor hours × rates, materials, ODC) and sum to total.
+R: yes
 Q: Build-up formula
 A: $Cost = \sum (Hours_i \times Rate_i) + \sum Materials_i + ODC$
+R: yes
 Q: Labor cost element calculation
 A: Hours × burdened hourly rate; include all overhead, fringe, and indirect costs in the rate.
 Q: Other direct costs (ODC)
 A: Tooling, test, travel, and special equipment; direct to the task but not labor or material.
+R: yes
 Q: Build-up pros and cons
 A: Pros: detailed, precise, highly traceable, good for negotiation. Cons: slow, needs mature design, small errors compound, misses unknowns.
 Q: Build-up and unknown-unknowns
 A: A bottom-up estimate is built only from known, defined tasks; it systematically excludes unforeseen problems and integration risks unless an explicit reserve is added.
 Q: Management reserve
 A: An explicit allowance added on top of a build-up estimate to cover unknowns, unidentified scope, and risk — essential for realism.
+R: yes
 Q: Build-up standards
 A: Developed from time-and-motion studies in an optimal, controlled production environment; capture how long a task takes.
+R: yes
 Q: Variance (realization) factor
 A: A factor calculated from a company's actual historical performance against the standard, used to convert standard hours into realistic estimated hours.
+R: yes
 Q: Touch vs. non-touch (support) labor
 A: Touch labor directly handles/works the product (e.g., assembling a circuit card); non-touch/support labor (QA, sustaining engineering) is often estimated as a factor of touch labor.
+R: yes
 Q: JSF inlet nacelle build-up example
 A: Standard = 2,000 touch hours; 20% variance factor -> 2,400 touch hours; +48% support factor -> 1,152 support hours; total = 3,552 hours.
 Q: Build-up uncertainty and risk
@@ -662,18 +679,22 @@ A: Uncertainty in design specifications, performance-to-standard, and unit costs
 ## Other Techniques
 Q: Expert opinion / engineering judgment
 A: A subject matter expert (or experts) estimates directly; use only as a last resort or to corroborate/adjust objective data. Always dig into what data the opinion is based on and document it.
+R: yes
 Q: Expert opinion elicitation methods
 A: One-on-one interviews (with iteration); round-table discussion (experts stay until consensus, documenting risk); Delphi technique (anonymous answers, iterated to convergence).
 Q: Delphi technique
 A: A group of experts answers anonymously to avoid one person dominating; results are summarized and recirculated, iterating toward convergence on a number or tighter range (an Operations Research technique).
+R: yes
 Q: Expert opinion uncertainty and risk
 A: People understate both variance (spread) and randomness; faulty recollection of anecdotal experience tends to understate effort.
 Q: Expert opinion bias types (Beyond CEBoK)
 A: Availability heuristic, Dunning-Kruger (overconfidence), planning fallacy (underestimating duration/difficulty).
 Q: Extrapolation from actuals
 A: An umbrella term using actual costs from past/current items to predict future costs of the same item; variants include averages, learning curves, and EVM-based EAC.
+R: yes
 Q: Should-cost estimating (Beyond CEBoK)
 A: A related, build-up-like technique focused on what a system should cost under efficient operations, used to find cost-reduction opportunities; not one of the source's "other" techniques.
+R: yes
 Q: Factor/ratio (SEITPM) estimating
 A: Cost as a percentage/ratio of another element; SEITPM (Systems Engineering, Integration & Test, Program Management) is commonly estimated as a percentage of prime mission equipment (hardware and software) cost.
 
@@ -694,6 +715,7 @@ Q: What to do when two techniques give divergent results
 A: Investigate the cause (data quality, assumptions, scope, technique misapplication); do not average them.
 Q: Documentation's "acid test"
 A: Replicability — another analyst should be able to recreate the estimate from the documentation alone.
+R: yes
 
 ## Life Cycle
 Q: Technique progression across the program life cycle
@@ -714,12 +736,14 @@ A: Parametric on operating tempo (flight hours, operating hours), analogy to sim
 ## Related Topics
 Q: Below-the-line (BTL) factors
 A: Cost-on-cost CERs: unitless, often a percentage, typically modeling SEITPM as a percentage of prime mission equipment; may not be statistically based.
+R: yes
 Q: BTL factors vs. burdens like OH/G&A
 A: Similar in application, but BTL factors are less deterministic; they should vary by system/program and ideally be derived statistically from history.
 Q: Below-the-line factor formula (Beyond CEBoK)
 A: Contract pricing burdens (Module 14): $Price = Base \times (1 + OH) \times (1 + G\&A) \times (1 + Fee)$, applied multiplicatively in sequence — not part of this module's BTL/cost-on-cost CER definition.
 Q: SEITPM
 A: Systems Engineering, Integration & Test, and Program Management, taken together; commonly estimated as a factor of prime mission equipment (hardware and software) cost.
+R: yes
 Q: O&S cost elements
 A: Personnel, consumable/repairable materials, organizational/intermediate/depot maintenance (hardware and software), facilities, sustainment.
 Q: O&S as share of life-cycle cost

@@ -559,10 +559,13 @@ Q: A multivariate CER has a high $R^2$ (0.95) but neither coefficient is signifi
 ## Fundamentals
 Q: Parametric estimating (definition)
 A: Estimating cost from technical/programmatic/cost characteristics using statistical relationships (CERs) derived from historical data (PEH definition).
+R: yes
 Q: Cost Estimating Relationship (CER) (definition)
 A: A mathematical expression relating cost (Y) to one or more cost drivers (X₁, X₂, ...) — the output of parametric estimating.
+R: yes
 Q: General form of a CER
 A: $\hat{Y} = f(X_1, X_2, ..., X_k)$ (point estimate of cost as a function of drivers)
+R: yes
 Q: The three primary cost estimating techniques
 A: Analogy, Parametric Estimating, Engineering Build-Up (expert opinion is used alongside them but isn't one of the three).
 Q: Which technique provides no objective test of validity?
@@ -583,18 +586,25 @@ A: Correlation without causal logic is spurious and won't hold for new systems.
 ## CER Forms
 Q: Linear CER functional form
 A: $Y = a + bX$ (constant marginal cost per unit of driver)
+R: yes
 Q: Power CER functional form
 A: $Y = aX^b$ (linearized: $\ln Y = \ln a + b\ln X$ for regression)
+R: yes
 Q: Power CER (linearized form for OLS)
 A: $\ln Y = \ln a + b\ln X$ (log-log regression)
+R: yes
 Q: Exponential CER functional form
 A: $Y = ae^{bX}$ (linearized: $\ln Y = \ln a + bX$ for regression)
+R: yes
 Q: Exponential CER (linearized form for OLS)
 A: $\ln Y = \ln a + bX$ (semi-log regression)
+R: yes
 Q: Logarithmic CER functional form
 A: $Y = a + b\ln X$ (diminishing returns, one-sided curvature)
+R: yes
 Q: Generalized polynomial CER functional form (less common)
 A: $Y = a + b_1X_1 + b_2X_2 + ... + b_nX_n$ (already linear in each $X_i$; multiple additive drivers)
+R: yes
 Q: How do you linearize a power CER for regression?
 A: Take natural log of both sides: $\ln Y = \ln a + b\ln X$. Then regress $\ln Y$ on $\ln X$ using OLS.
 Q: How to choose which CER functional form to use
@@ -603,6 +613,7 @@ A: Plot data in unit space; straight line → linear; curve that straightens in 
 ## Cost Drivers
 Q: Cost driver (definition)
 A: An independent variable (e.g., weight, power, lines of code) that logically drives cost, used to predict cost in a CER.
+R: yes
 Q: Five criteria for a good cost driver
 A: (Beyond CEBoK checklist) Logical/causal link to cost, measurable/quantifiable, available early, statistically significant, sensitive to design changes.
 Q: Why must a cost driver be "available early"?
@@ -622,20 +633,26 @@ A: (Beyond CEBoK examples) Square footage, number of units/beds/positions.
 ## Cost Passengers
 Q: Cost passenger (definition)
 A: A major WBS/system component with one of the highest dollar values in the system, identified using Pareto charts.
+R: yes
 Q: Why don't cost passengers always represent the biggest cost-savings opportunity?
 A: Passengers show where cost is concentrated, but cost drivers (the design decisions/requirements) are what actually control how that cost can be influenced.
 Q: Pea-pod analogy for cost drivers vs. cost passengers
 A: The pod (passenger) wraps and is shaped by the peas (driver) inside it — like a ship's hull or aircraft's airframe, a passenger shaped by the crew/mission equipment it carries (the driver).
+R: yes
 
 ## Rates, Factors, and Ratios
 Q: Rate (as used in CER-style estimating)
 A: Cost per parameter, expressed in dollars (e.g., a labor rate in \$/hour, or cost per LOC/function point).
+R: yes
 Q: Factor (as used in CER-style estimating)
 A: Cost-on-cost, unitless, usually a percentage; the cost of one element predicts another's (e.g., SE/PM as 20% of prime mission equipment).
+R: yes
 Q: Ratio (as used in CER-style estimating)
 A: Parameter on parameter (e.g., an industry-average 1,200 LOC per integrated COTS package).
+R: yes
 Q: SE/PM (in factor estimating)
 A: Systems Engineering / Program Management — a factor commonly estimated as a percentage (e.g., 20%) of prime mission equipment cost.
+R: yes
 Q: A COTS integration ratio was assumed at 1,200 LOC/package; actuals later show 1,500 LOC/package. What are the analyst's options?
 A: Re-run the CER with the augmented data set, re-calibrate to pass through the new point, change methodology, or leave the model unchanged if 1,500 is within expected statistical variation.
 
@@ -656,10 +673,12 @@ Q: Step 4 of parametric process: Parametric Model Development (key activities)
 A: Combine CERs across the WBS, add other cost techniques as needed, account for correlation between elements, update/re-calibrate as new actuals arrive, document fully.
 Q: What is calibration of a CER?
 A: Resetting the y-intercept (constant term) so the CER passes through a desired point — used to correct an analogy, adjust to a specific data set, or support a CAIV/Target Costing trade. (Secondary sense: tuning a commercial model's inputs/parameters to match historical actuals.)
+R: yes
 Q: How far can a calibrated CER generally be applied from its calibration point?
 A: Generally within about one standard deviation of x from the point of departure.
 Q: What is validation of a parametric model?
 A: Testing the model against data not used to build it (held out during CER development) to confirm predictive accuracy.
+R: yes
 Q: (Beyond CEBoK rule of thumb) Minimum and preferred number of data points for a CER
 A: (Beyond CEBoK rule of thumb) Minimum 3; 8+ preferred for statistical confidence — not a number given in this module's source.
 
@@ -682,6 +701,7 @@ Q: (Beyond CEBoK rule of thumb) What R² threshold is typical for a defensible C
 A: (Beyond CEBoK rule of thumb) 0.70 or higher is a common rule of thumb; this module's source doesn't set a fixed threshold.
 Q: Range of applicability (definition)
 A: The minimum and maximum driver values in the dataset used to fit the CER.
+R: yes
 Q: Using a CER inside its range of applicability is called ___; outside is called ___
 A: Interpolation; extrapolation.
 Q: Why is extrapolation risky, and why does it happen often in practice?
@@ -722,18 +742,22 @@ A: The intercept is irrelevant outside the CER's valid range; it should never be
 ## Sensitivity & Response (Advanced, not testable)
 Q: Sensitivity analysis (definition)
 A: (Advanced, not testable) Varying one CER input at a time, holding others at base case, to see how output cost changes; identifies which drivers matter most.
+R: yes
 Q: What does Monte Carlo simulation do differently from one-at-a-time sensitivity analysis?
 A: (Advanced, not testable) It varies two or more inputs simultaneously and computes a correlation coefficient (-1 to +1) for each input against the cost output.
 Q: "Tornado chart" — is this CEBoK's term?
 A: (Advanced, not testable) Not exactly — the source describes a chart that visualizes relative importance via rank correlation; "tornado chart" is common industry usage for this kind of swing-ranked bar chart.
 Q: Cost Response Curve (CRC) (definition)
 A: (Advanced, not testable) A single equation encapsulating an entire cost model, relating total/phase cost to one parameter; portable and fast, but never more accurate than the underlying cost model.
+R: yes
 Q: CEBoK's own CRC example (Fig 3.14)
 A: (Advanced, not testable) An O&S-phase CRC built by running the cost model at 1-knot increments of maximum ship speed from 21 to 27 knots and fitting a curve to the resulting costs.
 Q: Weight Estimating Relationship (WER) (definition)
 A: (Advanced, not testable) A parametric relationship estimating an item's weight from a driving variable — e.g., estimating outfitting/furnishings weight from a ship's crew size.
+R: yes
 Q: Schedule Estimating Relationship (SER) (definition)
 A: (Advanced, not testable) A parametric relationship predicting how long a task will take.
+R: yes
 
 ## Risk vs. Uncertainty (Advanced, not testable)
 Q: Uncertainty (in parametric estimates)
@@ -770,7 +794,9 @@ A: Extrapolation; the relationship's validity outside the data range is unverifi
 ## Key Formulas & Definitions
 Q: OLS linear regression computational formulas
 A: (Beyond CEBoK formula; see Module 8) $b = \frac{\sum(X_i-\bar{X})(Y_i-\bar{Y})}{\sum(X_i-\bar{X})^2}$ and $a = \bar{Y} - b\bar{X}$
+R: yes
 Q: Elasticity (in a power-form CER)
 A: (Beyond CEBoK term) The exponent $b$ in $Y=aX^b$; represents percent change in cost per 1% change in the driver.
+R: yes
 `
 });

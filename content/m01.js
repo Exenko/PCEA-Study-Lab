@@ -679,8 +679,10 @@ Q: An estimate is built on three major cost drivers: labor rates, material price
 ## Definition and Purpose
 Q: Definition of cost estimating
 A: The process of collecting and analyzing historical data and applying quantitative models, techniques, tools, and databases to predict the future dollar amount of an item, product, program, or task to facilitate the successful completion of a program, project, or process.
+R: yes
 Q: Definition of cost analysis
 A: The broader discipline that includes cost estimating plus evaluating and comparing costs to support decisions (alternatives, affordability, proposals, performance tracking).
+R: yes
 Q: Cost estimate vs. cost guarantee: key difference
 A: An estimate is a prediction based on available information at a point in time; it is not a guarantee. It should be defensible, reproducible, and documented — not necessarily "correct" in hindsight, since the future is inherently uncertain.
 Q: Three functions of cost estimating
@@ -697,18 +699,22 @@ A: Budgeting; milestone/investment decisions; AoA and economic analysis; source 
 ## Context
 Q: What is PPBES and POM?
 A: PPBES (Programming, Planning, Budgeting, and Execution System) is DoD's budgeting process. POM (Program Objective Memorandum) is the submission requiring cost estimates. Estimates are revised during comptroller, OSD, and President's budget reviews.
+R: yes
 Q: When must a program have a validated cost estimate?
 A: At major milestone reviews and acquisition reviews. DoD Instructions 5000.2 and 5000.4-M mandate both a POE and CCA at these reviews to inform decisions and maintain management control.
 
 ## Organizations
 Q: What is CAPE?
 A: Office of Cost Assessment and Program Evaluation (DoD). Produces independent cost estimates and cost policy guidance.
+R: yes
 Q: What is the GAO?
 A: Government Accountability Office. Audits federal cost estimates and publishes the Cost Estimating and Assessment Guide (best practices).
+R: yes
 Q: Why do programs require both a POE (Program Office Estimate) and an ICE (Independent Cost Estimate)?
 A: POE is developed by the program office (close to technical detail but subject to advocacy bias); ICE is independent (objective check). Both provide a cross-check against optimism and errors.
 Q: What does FFRDC stand for?
 A: Federally Funded Research and Development Center (e.g., RAND, IDA, Aerospace Corporation, MITRE). Provides estimating support to government sponsors.
+R: yes
 Q: When is a cost group (I) positionally independent of the acquiring organization (A)?
 A: When I shares no common superior with A below the sponsor S (or a delegate B acting in S's place). If I and A share a lower-level boss, or I reports into A's own chain, independence fails.
 
@@ -723,24 +729,32 @@ A: No. Cost analysis is neither accounting nor auditing; it uses financial and t
 ## Quality: Six CEBoK Characteristics
 Q: Six characteristics of a high-quality cost estimate
 A: Accuracy, Comprehensiveness, Replicability, Auditability, Credibility, and Timeliness.
+R: yes
 Q: What is the most important quality of a cost estimate and why?
 A: Credibility is the single most important quality. An estimate must be accurate, replicable, and auditable in order to be credible, and credibility is what makes it defensible for decision-making.
 Q: What does "Accuracy" mean?
 A: Estimates are unbiased, neither unrealistically low nor overly conservative. Based on normalized data, valid inflation adjustments, CERs with good curve fits, and logical time-phasing.
+R: yes
 Q: What does "Comprehensiveness" mean?
 A: The estimate uses a WBS at appropriate detail to ensure all cost elements are included exactly once with no gaps or double-counting. All cost-driving GR&A are documented.
+R: yes
 Q: What does "Replicability" mean?
 A: The estimate is traceable to system specifications. Source data, CER statistics, detailed calculations, and methodology rationale are thoroughly documented so others can recreate it.
+R: yes
 Q: What does "Auditability" mean?
 A: A reviewer can follow the estimation process, repeat calculations, and arrive at the same answer. The estimate is transparent and verifiable.
+R: yes
 Q: What does "Timeliness" mean?
 A: Even a high-quality estimate provides no value if not delivered to decision makers on time. Timing is critical to effective decision support.
+R: yes
 
 ## Benefits
 Q: What is "buying in" and why is it risky?
 A: Bidding far below the actual amount of effort to win a contract as the lowest bidder. As development proceeds, the true cost becomes apparent, and the manufacturer must absorb the overrun, leading to lost profit or bankruptcy.
+R: yes
 Q: What is "pricing out of the market"?
 A: Estimating too high, making the bid uncompetitive and unable to win work. Accurate estimates prevent both buying-in and pricing-out, ensuring profitability and competitive advantage.
+R: yes
 
 ## Challenges
 Q: Six named challenges to cost estimating (CEBoK 2.3)
@@ -755,30 +769,39 @@ Q: Four main cost estimating products
 A: Technical and schedule baseline description; the cost estimate; the cost model; and estimate documentation.
 Q: What is a CARD?
 A: Cost Analysis Requirements Description. A DoD document that gives the common technical and programmatic baseline for all estimators on a program.
+R: yes
 Q: Technical baseline: what does it describe?
 A: What the system is (technical characteristics, performance, design maturity); what the program will do (acquisition strategy, quantities, testing); when things happen (schedule, production rates).
 Q: Why must the technical baseline be treated as an explicit, documented set of assumptions?
 A: So that changes can be tracked, and the estimate's sensitivity to baseline changes is clear. If the baseline changes, the estimate must be revisited.
 Q: Definition of a cost model
 A: A structured combination of a WBS, cost estimating relationships (CERs), and supporting data used to generate the estimate. It should be traceable, flexible for sensitivity analysis, and documented.
+R: yes
 Q: Three factors that influence cost model structure
 A: Maturity level of the technical and programmatic definition; availability and maturity of relevant estimating methodologies; availability of historical data for developing new estimating methodologies.
 
 ## Estimate Types
 Q: ROM estimate
 A: Rough Order of Magnitude. A very early, low-fidelity feasibility/screening estimate when little specific information is known. Wide uncertainty range.
+R: yes
 Q: LCCE
 A: Life Cycle Cost Estimate. Comprehensive estimate covering R&D, production, operations & support (O&S), and disposal across the entire program life. Basis for milestone decisions.
+R: yes
 Q: ICE
 A: Independent Cost Estimate. Built by an organization independent of the program office using the same baseline but different methodology. Provides objective assessment and identifies budgetary excesses and shortfalls.
+R: yes
 Q: Budget Estimate
 A: Developed strictly for funding authorization. Wider margin for error than other types; ensures feasibility and establishes baseline definitions and costs.
+R: yes
 Q: EAC
 A: Estimate At Completion. Used for in-process programs with sufficient cost history. Relies on Earned Value Management techniques; critical for program certification under Nunn-McCurdy Act.
+R: yes
 Q: ICA
 A: Independent Cost Assessment. Independent estimate with risk incorporated, starting from external estimate and adjusting based on objective view. Ranges from full ICE to cursory sufficiency review.
+R: yes
 Q: EA
 A: Economic Analysis. Describes mission requirements and alternative courses of action; compares costs and benefits quantified monetarily. Also called cost-benefit analysis or Business Case Analysis.
+R: yes
 Q: AoA vs EA
 A: AoA (Analysis of Alternatives) evaluates costs and benefits including operational effectiveness/utility of different courses of action. EA focuses on benefits quantified monetarily (cost-benefit).
 Q: Why is an LCCE typically much larger than an acquisition-only estimate?
@@ -791,22 +814,27 @@ Q: Report requirements for cost estimates
 A: Reports must be crisp and complete; easily understood by unfamiliar audiences; thorough on important details; and demonstrative of the competence behind the results. Proposals should include an executive volume summarizing technical aspects.
 Q: What is CAIV (Cost As an Independent Variable)?
 A: A discipline that sets aggressive yet realistic cost objectives when defining requirements and acquiring systems. It makes performance and schedule functions of available resources (cost), balancing three program parameters: cost, schedule, and performance.
+R: yes
 
 ## Process
 Q: CEBoK seven-step estimating process
 A: (1) WBS development · (2) Program/system baseline development · (3) Data collection · (4) Data analysis · (5) Cost element methodology · (6) Model development and validation · (7) Results and report generation.
+R: yes
 Q: When are ground rules and assumptions (GR&A) defined?
 A: During program/system baseline development (step 2), early in the process. This ensures they shape all later steps: methodology, data, and model.
 Q: What is a WBS?
 A: Work Breakdown Structure. A hierarchical, product-oriented decomposition of program scope into definable work elements (hardware, software, services, data).
+R: yes
 Q: What does it mean for a WBS to be "100% complete"?
 A: (Beyond CEBoK: MIL-STD-881/PMI "100% rule") Every element of program scope is included exactly once, with no gaps or double-counting. CEBoK phrases it as: describe components at the level needed to capture all elements of cost.
 Q: WBS Level 1, Level 2, Level 3
 A: (Beyond CEBoK: MIL-STD-881 convention) Level 1 = entire system. Level 2 = major elements (e.g., prime mission product, SEPM, test, training, data, spares). Level 3+ = further decomposition.
 Q: DoD standard for WBS
 A: MIL-STD-881, with appendices for different system types (aircraft, ships, missiles, software, etc.).
+R: yes
 Q: What is a WBS dictionary?
 A: A document that lists and defines each WBS element, shows hierarchical relationships, describes resources and processes for each element, and links to technical definition documents. Updated regularly to reflect current program status.
+R: yes
 Q: WBS vs. Cost Element Structure (CES)
 A: WBS is product-oriented from an engineering standpoint. CES is the cost estimating view. A properly developed CES should encompass all WBS elements.
 
@@ -815,8 +843,10 @@ Q: Four-step data collection process
 A: (1) Understand the estimating task and required outcome. (2) Establish CES based on WBS and map existing data. (3) Understand data needs based on planned estimating techniques. (4) Develop and execute data collection plan with primary/backup sources.
 Q: What is compositing in data collection?
 A: A technique for aggregating WBS items when only higher-level data is available. Items are weighted by a characteristic (weight, quantity, size, or % new design) to create a composite value, ensuring no component is forgotten.
+R: yes
 Q: What is data normalization and why is it necessary?
 A: The process of making data consistent and comparable across different cost elements. Types include adjustments by cost/sizing units, mission application, platform environment, recurring/non-recurring, development state, and end-term homogeneity. Must be objective and not force fit.
+R: yes
 
 ## Cost Estimating Methods
 Q: Three basic costing techniques
@@ -841,16 +871,22 @@ A: Low TRL (1–3) → analogy, expert opinion only. Mid TRL (4–6) → paramet
 ## TRL (Technology Readiness Level)
 Q: What does TRL measure?
 A: Technology Readiness Level. A 1–9 scale measuring technology maturity, from basic research (1–3) through operational deployment (7–9).
+R: yes
 Q: TRL 1
 A: Basic principles observed and reported.
+R: yes
 Q: TRL 4
 A: Component/breadboard validation in a laboratory environment.
+R: yes
 Q: TRL 6
 A: System/subsystem model or prototype demonstration in a relevant environment.
+R: yes
 Q: TRL 7
 A: System prototype demonstration in an operational environment.
+R: yes
 Q: TRL 9
 A: Actual system proven through successful mission operations.
+R: yes
 Q: How does low TRL affect cost risk and uncertainty?
 A: Lower TRL means higher cost and schedule uncertainty and historically greater cost growth. Implies limited historical/parametric data (forcing reliance on weaker methods) and need for wider risk margins.
 Q: Low TRL and cost estimation: what adjustment is appropriate?
@@ -861,6 +897,7 @@ Q: Purpose of sensitivity analysis
 A: Identify which inputs and assumptions most affect the total estimate; inform risk management, data collection priorities, and program trades.
 Q: What is a cross-check in cost estimating?
 A: Comparing the estimate against independent data (parametric models, historical analogs, independent estimates, bottom-up rebuild) to verify reasonableness.
+R: yes
 Q: When the estimate differs significantly from a cross-check, what should the estimator do?
 A: Investigate and reconcile the difference. Differences in baseline, method, or data quality must be understood and documented so decision-makers know why estimates differ.
 Q: Sanity check for a cost model

@@ -939,24 +939,33 @@ Q: If the SMEs are believed to share a similar assessment of the risk, which con
 ## Definitions
 Q: Risk (in cost analysis)
 A: An uncertain future event that, if it occurs, has negative effect on cost/schedule/performance; characterized by probability and consequence.
+R: yes
 Q: Uncertainty
 A: Inherent, irreducible variability in a future outcome; exists even with no specific bad event happening (e.g., labor rate variation).
+R: yes
 Q: Cost Risk Analysis
 A: Combining uncertainty (in inputs/CERs) with discrete risk events to produce a probability distribution of total program cost.
+R: yes
 Q: Cost growth vs. cost risk
 A: Cost growth is the past increase in cost from initial estimate to final actual; cost risk is future, predicted cost growth.
 Q: The four components of Cost Growth / Cost Risk
 A: Cost Estimating, Schedule/Technical, Requirements, and Threat (growth or risk). Requirements and Threat are normally implicit when risk is assessed.
+R: yes
 Q: Schedule/Technical (S/T) risk
 A: Difficulty conquering problems posed by the design in the CARD or specs, e.g. an infeasible, tight schedule.
+R: yes
 Q: Requirements risk
 A: Unforeseen design shifts from shortfalls in requirements/spec documentation; design's inability to meet the mission or misinterpretation of the solution.
+R: yes
 Q: Threat risk
 A: Defense/intelligence risk from new threats revealed in a System Threat Assessment Report (STAR).
+R: yes
 Q: Opportunities (vs. risk)
 A: Factors that could result in a positive outcome, such as finishing early or reducing cost exposure.
+R: yes
 Q: Cost Growth Factor
 A: $\dfrac{\text{Actual Cost}}{\text{Estimated Cost}}$ — ratio of actual to estimated cost on completed programs.
+R: yes
 Q: Fraction of programs at/below their cost estimate (historical study)
 A: Only 16% — point estimates sit at a much lower percentile than often assumed.
 Q: Point estimate from a linear CER or analogy is interpreted as...
@@ -975,6 +984,7 @@ Q: Historical vs. Expert-opinion basis for a risk model
 A: Historical applies growth/CV from similar completed programs; Expert-opinion elicits SME judgment (scored matrix mapped to CGF, or direct three-point/triangular assessment).
 Q: Three components of a cost risk model
 A: Inputs (scoring + dollar basis), Structure (organization + probability model), Execution (computation + cross-checks).
+R: yes
 Q: Three scoring methods, in preference order
 A: Ratio (objective criteria, distance meaningful) > Interval (distance meaningful, no objective criteria) > Ordinal (relative only).
 Q: Three dollar-basis methods, in preference order
@@ -983,36 +993,45 @@ Q: Four ways to assign cost to risk
 A: RERs (Cost Impact = f(Risk Score), preferred), Direct Assessment of Distribution Parameters, Factors (linear RER subset), Rates (flat \$/point).
 Q: What is a functional relationship in a risk model?
 A: One element computed from another (e.g., SEPM = 15\% of hardware). It passes uncertainty through and creates perfect (functional) correlation.
+R: yes
 Q: Why is it unsafe to combine input and output risk methods on the same driver?
 A: The output method's predicted cost risk has already been reflected as cost growth in the historical data the input method uses — double counting results.
 
 ## Distributions
 Q: Normal distribution: three conditions
 A: Most likely value = mean; equally likely above/below mean; more likely closer to mean (68% within 1 std dev). Allows negative values; symmetric (must be shifted to move the mean).
+R: yes
 Q: Lognormal distribution: conditions
 A: Unbounded above, finite lower bound; positively skewed; ln(variable) is normal. Natural result of non-linear CERs; ~indistinguishable from Normal when CV<25%.
+R: yes
 Q: Triangular distribution: conditions
 A: Min/max pre-determined; mode between them; values near min/max as likely as near the mode; can be skewed or symmetric. Modes of multiple triangular variables are not additive.
+R: yes
 Q: Beta distribution: conditions
 A: Min/max pre-determined; shape set by two positive shaping parameters. Can be symmetric or skewed; solves negative-value issues normal distributions can have.
+R: yes
 Q: Bernoulli distribution: use case
 A: Discrete, probability p for value 1 and (1-p) for 0. Used in likelihood/consequence (risk cube) models; a nonzero result is a risk occurring.
+R: yes
 Q: Which distribution should NOT be used to characterize total (summed) cost?
 A: Triangular — the sum of triangular lower-level elements is not itself triangular.
 Q: When is Normal likely to fit total cost? When is Lognormal likely?
 A: Normal: many independent/weakly correlated, weakly skewed elements. Lognormal: more skewed or correlated elements. Many totals test as both.
 Q: Convolved cost distribution
 A: A simulated total distribution that doesn't resemble any specific named probability distribution.
+R: yes
 
 ## Triangular Distribution
 Q: Triangular distribution parameters
 A: $a$ = low (minimum), $c$ = most likely (mode), $b$ = high (maximum).
 Q: Triangular mean formula
 A: $\dfrac{a+c+b}{3}$
+R: yes
 Q: Triangular mode
 A: $c$ (the "most likely" input value by definition; NOT computed).
 Q: Triangular variance formula
 A: $\dfrac{a^2+b^2+c^2-ab-ac-bc}{18}$
+R: yes
 Q: When is Mean > Mode for a triangular distribution?
 A: When the high tail is longer than the low tail (right-skewed): $b - c > c - a$. Typical for cost distributions.
 Q: For right-skewed triangular distribution, what is the order?
@@ -1025,6 +1044,7 @@ Q: Same triangular: standard deviation?
 A: $\sigma = 17.0$
 Q: Triangular median formula (when $c \le (a+b)/2$)
 A: $b - \sqrt{\dfrac{(b-a)(b-c)}{2}}$
+R: yes
 
 ## Summing vs. Adding
 Q: Means are additive (always true or conditional)?
@@ -1039,6 +1059,7 @@ A: Sum of modes = 200. Sum of means = 226.67 (the correct mean of the total). Di
 ## Correlation
 Q: Variance of sum of two variables
 A: $\text{Var}(X+Y) = \sigma_X^2 + \sigma_Y^2 + 2\rho_{XY}\sigma_X\sigma_Y$
+R: yes
 Q: Variance of sum (n variables)
 A: $\sum_i \sigma_i^2 + 2\sum_{i<j}\rho_{ij}\sigma_i\sigma_j$
 Q: Uncorrelated elements ($\rho=0$): how do variances combine?
@@ -1057,22 +1078,27 @@ Q: Same two elements, perfectly correlated: total $\sigma$?
 A: $10 + 10 = 20$
 Q: Functional correlation
 A: Correlation arising automatically between source and derivative variables via CER/functional dependency (e.g. PM cost as a % of software cost).
+R: yes
 Q: Relational correlation
 A: A framework using the geometry of regression/bivariate normal variables to assign or judge assumed correlation reasonableness.
+R: yes
 Q: Injected correlation
 A: Correlation imposed by asking SMEs to quantify a likely value; hard for SMEs to estimate accurately, and hard to cross-check.
+R: yes
 Q: "No correlation" assumption: consequence
 A: Assumes all elements independent, which likely produces an inaccurate (too-narrow) estimate.
 
 ## Monte Carlo and S-Curves
 Q: Monte Carlo simulation: what is one iteration?
 A: Draw one value from each element's distribution (respecting correlation), sum to get one total-cost sample.
+R: yes
 Q: What makes Monte Carlo "Monte Carlo"?
 A: Repeated random sampling (thousands of iterations) to build an empirical output distribution.
 Q: PDF vs. CDF
 A: PDF = probability density (the "height" at each cost value, area under = probability). CDF = cumulative prob: $P(X \le x)$ for each cost $x$.
 Q: What is the S-curve?
 A: The CDF of total cost, plotted with cost on x-axis, cumulative probability (confidence level) on y-axis. Characteristic S shape.
+R: yes
 Q: How do decision-makers use the S-curve?
 A: Pick desired confidence level on y-axis, read across to find the corresponding cost on x-axis. That is the budget needed.
 Q: Typical position of the point estimate on the S-curve?
@@ -1089,18 +1115,24 @@ Q: Historical model example (BMDO/MDA/DNI CAIG): CE risk, S/T risk, and total
 A: CE risk 8.7% + S/T risk 25% = total risk of 33.7% added to the Initial Point Estimate.
 Q: Hardware risk scoring categories (6)
 A: Technology Advancement, Engineering Development, Reliability, Producibility, Alternative Item, Schedule.
+R: yes
 Q: Software risk scoring categories (7)
 A: Technology Approach, Design Engineering, Coding, Integrated Software (SLOC), Testing, Alternatives, Schedule.
+R: yes
 Q: SEI taxonomy: three major risk classes
 A: Product Engineering (technical work), Development Environment (methods/procedures/tools), Program Constraints (contractual/organizational factors).
+R: yes
 Q: Expert-based risk assessment timeline (SEI method)
 A: ~1 week for the questionnaire, ~80 days for the risk assessment, ~10 days for delivery of results.
 Q: Three-point estimate in expert elicitation
 A: Low (optimistic), Most Likely (mode), High (pessimistic) — parameterizes triangular or beta distribution.
+R: yes
 Q: Expert anchoring bias
 A: Experts anchor on current point estimate and give artificially narrow ranges.
+R: yes
 Q: Expert optimism bias
 A: Experts underestimate the high side.
+R: yes
 Q: Treat stated low/high as which percentiles?
 A: Roughly the 10th/90th (or 15th/85th) percentiles, not absolute limits.
 Q: Risk Cube: expected value and total cost risk formulas
@@ -1117,6 +1149,7 @@ Q: Management Reserve vs. Risk/Contingency funds
 A: Management reserve is money held back to challenge account managers (% of contract value); risk/contingency funds are extra funds beyond the point estimate for risk. Not interchangeable.
 Q: Expected value of a risk
 A: Probability $\times$ cost impact.
+R: yes
 Q: Why summing expected values of risks is insufficient
 A: It gives the mean but not the spread. With few risks, actual outcome is often 0 or the full impact (lumpy).
 
@@ -1127,6 +1160,7 @@ Q: Log-space CER uncertainty distribution
 A: Lognormal in dollars (right-skewed); the log-space SEE is $\sigma$ of ln(cost).
 Q: Risk-adjusted estimate
 A: Point estimate plus a risk/contingency reserve, selected from S-curve at a specific confidence level (percentile).
+R: yes
 Q: Typical confidence level of the point estimate
 A: Below 50\% for right-skewed total distributions (sum of most-likely values is lower than the mean).
 Q: Common management funding confidence levels
@@ -1135,12 +1169,14 @@ Q: Is there a universally mandated confidence level?
 A: No. Selecting confidence level is a management/policy decision, not purely statistical.
 Q: Contingency / Reserve formula
 A: (Cost at chosen confidence level) − (Point estimate or baseline)
+R: yes
 Q: What should accompany every point estimate?
 A: Confidence level / S-curve position. Never present a single cost number without stating what percentile it represents.
 Q: Why is a prediction interval wider than a confidence interval?
 A: The PI includes both the error in the regression coefficients and the error of the individual prediction; the CI only bounds the true mean.
 Q: CER Prediction Interval formula
 A: $\hat{Y} \pm t_{\alpha/2,df}\cdot SEE\sqrt{1+\tfrac{1}{n}+\tfrac{(X-\bar X)^2}{\sum X^2-n\bar X^2}}$
+R: yes
 Q: Fig 9.36 CER example: point estimate for weight=4.5
 A: $\hat Y = 6.571+7.714(4.5)=41.29$
 Q: Fig 9.36 CER example: the PI's SEE multiplier
@@ -1151,6 +1187,7 @@ Q: Nonlinear CER prediction intervals: extra step
 A: Fit and compute the PI in log space, then transform the result back to unit (dollar) space.
 Q: Multivariate CER prediction interval formula
 A: $Z^T\beta \pm t_{\alpha/2,n-k}\cdot\sigma\sqrt{1+Z^T(X^TX)^{-1}Z}$
+R: yes
 
 ## Schedule Risk
 Q: Two parallel independent tasks (means 10 and 8, CV~20%, normal): effect on overall finish time mean
@@ -1167,6 +1204,7 @@ Q: Extreme Value alone: K-S test result on RAND data
 A: Fails — K-S statistic 0.161 exceeds the critical value 0.113, due to the cluster of points at SGF=1.00.
 Q: Hybrid schedule distribution
 A: Extreme Value fit to non-1.00 data points, plus a separate 20.3% probability mass at SGF = 1.00.
+R: yes
 Q: Schedule correction factors (cost growth model)
 A: 1.11 if a program expected on time is found to be stretching (multiply cost); 0.9 if the risk method is schedule-blind and on-time finish is credible (decrement cost).
 
@@ -1179,16 +1217,20 @@ Q: Correlation between risk-reduction and development phase growth (DoD study)
 A: 0.75
 Q: EVM CPI formula
 A: $\text{CPI} = \dfrac{\text{Earned Value}}{\text{Actual Cost of Work Performed}}$
+R: yes
 Q: EVM-based Final CPI prediction model
 A: $\text{Final CPI} = 0.438 + 0.057(\%\text{Complete}) + 0.497(\text{Current CPI})$
+R: yes
 Q: Size-based CGF prediction equation (RAND RDT&E)
 A: $\text{Predicted CGF} = 1.8\times(\text{MS II Baseline Size, \$M})^{-0.3}+1.1$
+R: yes
 Q: Program size vs. cost growth relationship
 A: Smaller programs show higher relative cost growth (roughly CGF ~ 1/Size); dispersion around the prediction is wider at smaller sizes.
 
 ## Conflation of Expert Judgments
 Q: Conflation
 A: The process of merging multiple experts' probability distributions for the same risk item into one distribution.
+R: yes
 Q: Incorrect conflation approach
 A: Averaging a random draw from each expert's distribution per Monte Carlo trial — understates dispersion among the experts.
 Q: Correct conflation when experts reflect a similar assessment

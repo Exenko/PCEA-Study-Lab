@@ -769,12 +769,16 @@ Q: Which outlier test divides the gap between a suspect point and its nearest ne
 ## Data types
 Q: Univariate data
 A: A single variable (e.g., historical cost growth factors). Analyzed with descriptive stats; shown with histograms, bar charts, box plots. Rare in cost estimating.
+R: yes
 Q: Bivariate data
 A: One independent variable (X) and one dependent variable (Y), e.g., software cost vs. lines of code. Shown with scatter plots.
+R: yes
 Q: Multivariate data
 A: Several independent variables and one dependent variable, e.g., ship supply cost vs. crew size AND hours underway.
+R: yes
 Q: Time series data
 A: Bivariate data with **time** as the independent variable.
+R: yes
 Q: Three special considerations for time series data
 A: **Paradigm shifts** (sudden change), **cycles** (repeating periodic trends), **autocorrelation** (value correlated with prior periods).
 Q: What will regression NOT detect in time series data?
@@ -785,8 +789,10 @@ A: Data originates in the PAST, is described in the PRESENT, and is used to esti
 ## Central tendency
 Q: Formula for the sample mean
 A: $\bar{x} = \dfrac{\sum x_i}{n}$
+R: yes
 Q: Mean mental math trick
 A: $\bar{x} = c + \dfrac{\sum(x_i - c)}{n}$. Pick a convenient $c$ near the middle, average the deviations, add back.
+R: yes
 Q: Why is the mean called the "balancing point"?
 A: The sum of deviations from the mean always equals zero.
 Q: How do you find the median of an even-sized data set?
@@ -803,14 +809,17 @@ A: $\bar{x}$ (sample), $\mu$ (population)
 ## Dispersion
 Q: Sample variance formula (definitional)
 A: $s^2 = \dfrac{\sum (x_i - \bar{x})^2}{n-1}$
+R: yes
 Q: Sample variance, computational form
 A: $s^2 = \dfrac{\sum x_i^2 - n\bar{x}^2}{n-1}$
+R: yes
 Q: Why divide by $n-1$ in the sample variance?
 A: Degrees of freedom: once the mean is known, the last data point is determined by the others.
 Q: Why is standard deviation easier to interpret than variance?
 A: It is in the same units as the data (variance is in squared units).
 Q: Coefficient of Variation formula
 A: $CV = \dfrac{s}{\bar{x}} \times 100\%$
+R: yes
 Q: CV threshold desired for cost estimating
 A: CV < 15%. Around 5% means the mean alone describes the data well.
 Q: What does CV > 15% suggest?
@@ -845,6 +854,7 @@ Q: Main pitfall when making histograms
 A: Bin selection. Too few bins hide detail; too many create noise. Experiment with bin sizes.
 Q: Box plot five-number summary
 A: Minimum, Q1 (25th), median (50th), Q3 (75th), maximum.
+R: yes
 Q: What does the box in a box plot contain?
 A: The middle 50% of the data (Q1 to Q3); the line inside is the median.
 Q: Best use of a bar chart
@@ -853,8 +863,10 @@ A: Comparing categorical data or statistics (e.g., means ± std dev) across grou
 ## Functions
 Q: Power function and its linear form
 A: $y = ax^b$ → $\ln y = \ln a + b \ln x$ (linear in log-log space)
+R: yes
 Q: Exponential function and its linear form
 A: $y = ae^{bx}$ → $\ln y = \ln a + bx$ (linear in semi-log space)
+R: yes
 Q: In log-log space, the slope of a power function equals…
 A: The exponent $b$.
 Q: Which space straightens each function? Linear / power / exponential
@@ -865,14 +877,19 @@ A: $y = ax^b + c$ and $y = ae^{bx} + c$. Real data usually needs a non-zero $c$;
 ## Pitfalls and biases
 Q: Availability heuristic
 A: Overweighting memorable events.
+R: yes
 Q: Conservatism bias
 A: Under-revising beliefs when new data arrives.
+R: yes
 Q: Planning fallacy
 A: Underestimating how long a task will take.
+R: yes
 Q: Optimism bias
 A: Underestimating risk and cost.
+R: yes
 Q: Dunning-Kruger effect
 A: Overestimating one's own expertise.
+R: yes
 Q: Remedy for expert opinion biases
 A: Validate with data analysis, cross-checks, and documentation.
 Q: Ship support example: what did graphing reveal?
@@ -881,6 +898,7 @@ A: 6% of lead ship was more appropriate than the expert's 4% estimate.
 ## Skew, kurtosis, and outlier examples
 Q: Pearson's median skewness formula
 A: $3(\text{Mean} - \text{Median}) / \text{Standard Deviation}$
+R: yes
 Q: Excess kurtosis: mesokurtic / leptokurtic / platykurtic
 A: Mesokurtic = 0 (normal baseline). Leptokurtic > 0 (fatter tails, sharper peak, e.g. Laplace). Platykurtic < 0 (thinner tails, flatter peak, e.g. uniform).
 Q: Why report "excess" kurtosis rather than raw kurtosis?
@@ -913,16 +931,20 @@ Q: Five common classification algorithms (CEBoK)
 A: Naive Bayes, decision trees, random forests, k-Nearest Neighbors, logistic regression.
 Q: Bayes' theorem
 A: $P(A|B) = P(B|A) \cdot P(A) / P(B)$ — testable but less emphasized.
+R: yes
 Q: Naive Bayes worked example: new point weight 1050 (0.5 SD from A/B, 1.5 SD from C/D), power 1525 (0.75 SD from A/B, 1.25 SD from C/D)
 A: Weight probabilities 30.85% (A/B) / 6.68% (C/D); power probabilities 22.66% (A/B) / 10.56% (C/D); products 6.99% / 0.71%; normalized 90.83% A/B / 9.17% C/D.
 Q: Decision tree "depth" parameter
 A: Maximum number of branch layers; a tunable parameter — shallow trees underfit, deep trees overfit. Analysts often loop over depth values and pick the lowest-MSE tree.
+R: yes
 Q: Random forest definition
 A: An ensemble of many decision trees, each trained on a random subset of data/features, with results combined — reduces single-tree overfitting.
+R: yes
 Q: Random forest uses for cost analysts
 A: Predict future cost, assess risk via probability scores, rank feature importance, detect anomalies, support what-if analysis.
 Q: kNN classification rule
 A: Majority vote among the k nearest neighbors (by Euclidean or Manhattan distance).
+R: yes
 Q: kNN distance worked example (with source typo noted)
 A: New point (1500,1000) to (1200,900): sqrt((1500-1200)^2+(1000-900)^2) = 316. CEBoK's text prints "(100-900)", a typo for (1000-900).
 Q: Effect of small vs. large k in kNN
@@ -931,16 +953,20 @@ Q: kNN as "estimating by analogy"
 A: A weighted average of the k nearest neighbors' objective criteria (weight, power, technical/programmatic characteristics) used to estimate a new point.
 Q: Logistic regression equation
 A: $P = 1/(1+e^{-(\beta_0+\beta_1X_1+\dots+\beta_nX_n)})$; coefficients indicate direction/strength of each feature's influence.
+R: yes
 Q: ML regression techniques (besides ordinary linear regression)
 A: Decision tree regression (numeric leaf values, e.g. spacecraft cost from weight+design life), random forest regression (averages many trees), kNN regression (average of k nearest neighbors' outputs).
 Q: k-means clustering steps
 A: (1) start with data, (2) randomly place k centroids, (3) assign points to nearest centroid, (4) recompute centroids, (5) repeat until stable.
+R: yes
 Q: k-means use for cost analysts
 A: Cross-check an estimate by finding the most similar historical projects (by feature) and comparing their costs.
 Q: Neural network layers
 A: Input layer (receives data), hidden layer(s) (computation), output layer (result); trained via forward and backward propagation.
+R: yes
 Q: Reinforcement learning — key differences from supervised/unsupervised
 A: No supervisor, no large pre-collected labeled data set; the agent learns iteratively from real-world (or simulated) feedback (rewards/penalties) over time-steps.
+R: yes
 
 ## Logistic regression risk example (Table 6.3/6.4)
 Q: Logistic risk model coefficients: which feature has the largest positive and largest negative influence?
@@ -959,10 +985,13 @@ Q: Sample-size example: CV=30%, 95% CI — sufficient n per CEBoK
 A: n = 36 (Fig 6.45); the 2·CV/sqrt(n) rule gives ±10% at n = 36.
 Q: Chauvenet's Criterion (outlier rule)
 A: Assumes normality; multiply tail probability by n. If fewer than 0.5 point is expected (tail probability < 1/(2n)), the point may be an outlier.
+R: yes
 Q: Grubbs' Test (outlier rule)
 A: Assumes normality; test statistic G = max absolute deviation from the mean over the sample SD, compared to a critical value; if exceeded, rejects "no outliers."
+R: yes
 Q: Dixon's Q Test (outlier rule)
 A: Gap between the suspected outlier and its nearest neighbor, divided by the data range; compared to a critical-value table.
+R: yes
 Q: IQR-based outlier rule
 A: Same logic as a box plot: flag points beyond a set multiple of the IQR outside Q1 or Q3.
 Q: Mean mental math trick, therms example (c=10)

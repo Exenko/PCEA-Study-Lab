@@ -771,12 +771,16 @@ Q: What problem does EVM solve that budget-vs-actual alone cannot?
 A: EVM separates cost efficiency from schedule progress by measuring the budgeted value of work actually completed (EV), not just the dollars spent.
 Q: BCWS / PV definition
 A: Planned Value: the time-phased budgeted cost of work scheduled to be done by a given date.
+R: yes
 Q: BCWP / EV definition
 A: Earned Value: the budgeted cost of work actually performed to date.
+R: yes
 Q: ACWP / AC definition
 A: Actual Cost of Work Performed: the real cost incurred for the work completed.
+R: yes
 Q: BAC definition
 A: Budget at Completion: the baseline plan (sum of the PMB) for the entire effort.
+R: yes
 Q: LRE vs. EAC
 A: LRE is the contractor's own latest revised estimate at completion; EAC generally refers to the government's independent estimate at completion. Related, not strictly synonymous.
 Q: Why is EV called the "anchor" in EVM?
@@ -795,50 +799,68 @@ Q: WBS role in EVM
 A: The Work Breakdown Structure decomposes technical scope; the program WBS is typically government-defined, and is always a higher (less detailed) level than the Contractor WBS (CWBS).
 Q: CWBS definition
 A: Contractor WBS: how the contractor plans and manages the work, more detailed than the program WBS.
+R: yes
 Q: CES definition
 A: Cost Element Structure: the structure used for developing the cost estimate; level of detail varies by who develops it.
+R: yes
 Q: OBS definition
 A: Organizational Breakdown Structure: assigns work to the performing organization, similar in structure to a WBS but organized by function.
+R: yes
 Q: Control Account definition
 A: The management control point where WBS and OBS intersect; budgets, schedules, actuals, and EV are integrated here, managed by a CAM.
+R: yes
 Q: Work Package duration guideline
 A: Typically 4-6 weeks long; detailed, near-term tasks within a control account with a specific EV technique assigned before work begins.
+R: yes
 Q: Planning Package definition
 A: Far-term work within a control account not yet detail-planned; budget held at summary level and rolled into work packages as work approaches.
+R: yes
 
 ## Data Elements and Baseline
 Q: BCWR definition and formula
 A: Budgeted Cost of Work Remaining: BCWR = BAC - BCWP, the planned cost of all work left to do.
+R: yes
 Q: PMB formula
 A: PMB = Distributed Budget + Undistributed Budget (time-phased budget for measurable work).
+R: yes
 Q: CBB formula
 A: CBB = PMB + Management Reserve.
+R: yes
 Q: Management Reserve definition
 A: Budget held outside the PMB for in-scope, unplanned work (realized risks) and contingencies, not for scope changes.
+R: yes
 Q: Management Reserve typical ranges
 A: Typically 7-9%; as low as 2-4% for low-risk projects or cost-plus contracts; 15% or more for high-risk projects or FFP contracts.
 Q: Undistributed Budget definition
 A: Budget for authorized work not yet assigned to control accounts (temporary; most contracts try to clear it within 60 days).
+R: yes
 
 ## EV Measurement Methods
 Q: EV technique: Milestones
 A: Best for work packages over two months; objective milestones (ideally at least one per month) with weighted budget earned as each completes. Most objective method.
+R: yes
 Q: EV technique: Percent Complete
 A: Most subjective method - use sparingly; appropriate for procurement-type tasks where a fixed total cost is incurred over several months.
+R: yes
 Q: EV technique: 0/100
 A: 100% earned only at completion. Best for work packages under about a month, or tasks whose costs land at the end even if longer (procurement purchases, one-day meetings, trips).
+R: yes
 Q: EV technique: 50/50 (or X%/Y%)
 A: Best for packages of two months or less with no intermediate milestones; X% earned at start, remainder at end.
+R: yes
 Q: EV technique: Level of Effort (LOE)
 A: Performance earned on a straight-line basis, EV always equals PV (so SV can never occur), but CV can still occur if actual costs differ from plan. Reserved for time-related support work with no measurable output; not for tasks with defined deliverables or schedule risk.
+R: yes
 Q: Why can LOE still generate a Cost Variance despite never generating a Schedule Variance?
 A: EV is set equal to PV by definition (zeroing SV), but AC is independently determined by actual spending, so CV = EV - AC can still be nonzero.
 
 ## Variances and Indices
 Q: Cost Variance formula
 A: CV = EV − AC (negative = overrun)
+R: yes
 Q: Schedule Variance formula
 A: SV = EV − PV (negative = behind schedule in dollar terms; doesn't directly imply a time delay unless the task is on the critical path)
+R: yes
 Q: Memory hook for CV and SV
 A: EV always comes first. CV = EV minus AC (cost). SV = EV minus PV (schedule).
 Q: CV sign convention
@@ -847,14 +869,19 @@ Q: SV sign convention
 A: Positive (EV > PV) = good (ahead). Negative (EV < PV) = bad (behind).
 Q: CV% formula (identity form)
 A: CV% = CV/BCWP = 1 - 1/CPI
+R: yes
 Q: SV% formula (identity form)
 A: SV% = SV/BCWS = SPI - 1
+R: yes
 Q: % Planned formula
 A: % Planned = BCWS/BAC (= PV/BAC)
+R: yes
 Q: Percent Complete formula
 A: % Complete = BCWP/BAC (= EV/BAC)
+R: yes
 Q: Percent Spent formula
 A: % Spent = ACWP/BAC (= AC/BAC)
+R: yes
 Q: Identity: % Complete / % Spent
 A: Equals CPI.
 Q: Identity: % Complete / % Planned
@@ -863,14 +890,17 @@ Q: Diagnostic: if % Spent > % Complete
 A: Program is spending faster than it is completing work - consistent with CV < 0 (overrun).
 Q: CPI definition and formula
 A: Cost Performance Index = EV / AC. Dollars of value earned per dollar spent. CPI < 1.0 = overrun, CPI > 1.0 = under budget.
+R: yes
 Q: SPI definition and formula
 A: Schedule Performance Index = EV / PV. Rate of work accomplishment vs. plan. SPI < 1.0 = behind, SPI > 1.0 = ahead.
+R: yes
 Q: CPI stability rule
 A: Cumulative CPI by ~15-20% completion is a strong predictor of final CPI and historically will not change by more than ~10% from that value, in either direction.
 Q: Variance significance threshold
 A: Variances (CV% or SV%) exceeding about 10% are considered significant and warrant examination.
 Q: Quick-healing spike
 A: EV metrics suddenly reverting to on-cost/on-schedule after poor performance - a classic sign a rebaseline occurred, not genuine overnight recovery.
+R: yes
 Q: Aquarium percentages worked example
 A: %Spent = 300/800 = 37.5%, %Complete = 200/800 = 25%, CPI = 200/300 = 0.67. Using MR twice as fast as completing work (50% MR used vs 25% complete) is a concern unless risk is known to cluster early.
 
@@ -897,6 +927,7 @@ A: Should never happen - would imply the contractor owes the government money fo
 ## Variance Analysis Reports
 Q: Variance Analysis Report (VAR) - four questions
 A: Where is the variance (WBS/cost element)? What is the cause? What is the impact (current and at-completion)? What is the corrective action plan (CAP)?
+R: yes
 Q: Variance threshold examples
 A: Common patterns: -10%, \$100K, or +/-10%, or +/-\$100K - set up front so not every variance requires a report.
 Q: Why review favorable variances too?
@@ -905,14 +936,18 @@ A: They represent opportunities to reallocate funds to accelerate schedule, fix 
 ## Estimates at Completion
 Q: EAC general formula
 A: EAC = AC + ETC, where ETC (Estimate to Complete) is the cost of remaining work adjusted by efficiency.
+R: yes
 Q: CPI forecast (best case) formula
 A: EAC = AC + BCWR/CPI = BAC/CPI. Assumes cumulative CPI holds constant for the rest of the program.
+R: yes
 Q: Why is the CPI forecast called "best case" if it assumes no improvement?
 A: Because historically final CPI tends to land close to or worse than CPI at 15-20% complete, so holding steady is actually a favorable outcome.
 Q: CPI x SPI forecast (worst case) formula
 A: EAC = AC + BCWR/(CPI x SPI). Assumes remaining work follows both the cost and schedule trend; usually more pessimistic since most programs run behind schedule (though SPI>1 would lower it).
+R: yes
 Q: VAC formula and meaning
 A: VAC = BAC - LRE. Positive = projected underrun (good). Negative = projected overrun (bad); reflects the contractor's own projection since it uses LRE.
+R: yes
 Q: Why compute an EAC independent of EV data?
 A: Government offices develop independent EACs (technical input, bottom-up estimate) and use the EV-derived EAC only as a cross-check, since LRE reflects contractor optimism/risk assessment.
 Q: Aquarium best-case and worst-case EAC
@@ -921,8 +956,10 @@ A: Best case (CPI forecast) = 800/(2/3) = \$1200. Worst case (CPI x SPI forecast
 ## To-Complete Performance Index
 Q: TCPI_BAC formula
 A: BCWR / (BAC - AC). Efficiency required on remaining work to finish at the original budget.
+R: yes
 Q: TCPI_LRE formula
 A: BCWR / (LRE - AC). Efficiency required to finish at the contractor's current LRE estimate; analyzed more often than TCPI_BAC.
+R: yes
 Q: TCPI vs. CPI - 5% rule
 A: A TCPI more than about 5% above the cumulative CPI achieved to date is considered optimistic and requires further examination.
 Q: TCPI lower than CPI - what does it mean?
@@ -937,28 +974,37 @@ A: Testable = DAU Gold Card formulas and definitions. Not testable = Related and
 ## Advanced (not testable per CEBoK)
 Q: Rubber baselining
 A: (Not testable) A baseline changed too frequently, typically pushing near-term work out further, masking schedule/cost variances until they're expensive to fix.
+R: yes
 Q: Front-loaded baseline
 A: (Not testable) Too much budget and too little planned work in the early months, leaving later months underbudgeted - masks cost variances until later, distinct from aggressive early EV claiming.
+R: yes
 Q: Out-of-date baseline
 A: (Not testable) Legitimate baseline changes not made in a timely fashion, so performance is measured against a baseline that no longer reflects reality.
+R: yes
 Q: Over Target Baseline (OTB)
 A: (Not testable) A rebaseline specifically negotiated to heal accumulated cost/schedule variances, e.g. from unfunded related work or an overrun so large it obscures new, controllable trends.
+R: yes
 Q: Rebaseline example: cumulative vs. since-rebaseline indices
 A: (Not testable) Cumulative CPI/SPI can look fine (0.97) shortly after a rebaseline while since-rebaseline performance is worse (0.9) - cumulative data dilutes recent variances against the larger base.
 Q: Slip definition
 A: (Not testable) Cumulative SV divided by average current-period BCWS (often a 3-month average); a rough dollars-to-time conversion, flawed since it assumes similar future performance and inflates as BCWS shrinks near completion.
+R: yes
 Q: Earned Schedule (ES) definition
 A: (Not testable) The point in time on the cumulative PV curve where current EV intersects - "when should we have reached the work we've actually done?"
+R: yes
 Q: SPI(t) formula
 A: (Not testable) SPI(t) = ES/AT, where AT = actual time elapsed; stays meaningful through program completion, unlike dollar-based SPI.
+R: yes
 Q: SV(t) formula
 A: (Not testable) SV(t) = ES - AT, in time units.
+R: yes
 Q: Why does dollar-based SPI converge to 1.0 near completion?
 A: (Not testable) BCWP and BCWS both approach BAC as the program finishes, so EV/PV trends toward 1.0 regardless of actual lateness - Earned Schedule fixes this by measuring time directly.
 Q: Advanced EAC: ACWP + BCWR
 A: (Not testable) Only as good as the integrity of the BCWR estimate itself.
 Q: Advanced EAC: weighted CPI/SPI blend
 A: (Not testable) EAC = ACWP + BCWR/(0.8 CPI + 0.2 SPI), often used late in a contract; generalizes to X% CPI + Y% SPI with X+Y=100%.
+R: yes
 Q: General guideline: SV self-healing
 A: (Not testable) SV tends to self-heal as percent complete approaches 100%; place less emphasis on SV once percent complete passes about 80%.
 Q: General guideline: early SV and later CV

@@ -700,6 +700,7 @@ Q: What is the Fully Burdened Cost of Fuel (FBCF)?
 ## Fundamentals
 Q: Cost management (definition)
 A: Planning, controlling, motivating, and evaluating products, processes, and personnel from a cost perspective across the life cycle.
+R: yes
 Q: Why does CEBoK avoid the term "cost control"?
 A: It implies cost can be managed by sheer force of will; real cost management works by changing the program's actual course of action.
 Q: Three ways to reduce cost
@@ -720,16 +721,21 @@ A: Producing less, reducing scope, allocating fewer resources — all hurt perfo
 ## Total Ownership Cost and LCC
 Q: DoD Total Ownership Cost (Big TOC)
 A: Organizational-perspective sum of all financial resources to organize, equip, train, sustain, and operate forces and support DoD business operations.
+R: yes
 Q: Little TOC / Defense Systems TOC
 A: The program/project-level perspective on total ownership cost; defined as LCC.
+R: yes
 Q: Life Cycle Cost (LCC), per DoD 5000.4-M
 A: Includes acquisition-program direct costs plus indirect costs attributable to the program (costs that would not occur if the program did not exist).
+R: yes
 Q: Life Cycle Cost Estimate (LCCE)
 A: Covers all costs for the program's complete life cycle, regardless of funding source; often confused with just the O&S estimate.
+R: yes
 Q: Industry term for organizational-level TOC
 A: Total Cost of Ownership (TCO), especially for IT systems.
 Q: Linked indirect costs
 A: Indirect costs causally attributable to a specific program (e.g., infrastructure it drives), even though budgeted elsewhere.
+R: yes
 Q: Why keep both TOC perspectives in mind?
 A: Most reduction efforts work at the program level, but analysts must avoid program decisions that fail to reduce (or that increase) overall organizational TOC.
 
@@ -748,22 +754,27 @@ A: CAIV (DoD) or Target Costing (commercial).
 ## CAIV
 Q: CAIV definition
 A: Cost As an Independent Variable: the primary DoD acquisition process/strategy for meeting requirements while reducing TOC; cost is a design constraint on equal footing with performance/schedule.
+R: yes
 Q: CAIV flow vs. traditional flow
 A: CAIV: define affordable cost -> determine what requirements/performance fit within it. Traditional: define requirements -> design -> measure cost.
 Q: Commercial analog of CAIV
 A: Target costing.
 Q: Curves of equal preference (Beyond CEBoK)
 A: Indifference curves in cost-vs-performance space; every point on one curve is equally preferred; slope = exchange rate.
+R: yes
 Q: Optimal design (Beyond CEBoK)
 A: The feasible alternative on the most-preferred curve of equal preference, within official cost/performance thresholds and objectives.
+R: yes
 
 ## Target Costing
 Q: Target costing formula
 A: Target Cost = Target Price − Target Profit.
+R: yes
 Q: Target costing vs. cost-plus pricing
 A: Target costing: price and profit are fixed, cost is variable. Cost-plus: cost is determined first, price/profit follow.
 Q: What is the "target cost gap"?
 A: The difference between the engineering team's current design cost and the allowable target cost; closed via design/process/sourcing changes.
+R: yes
 Q: Market price \$250, required profit 20% on price: target cost?
 A: \$200 (illustrative example). Profit = \$250 x 0.20 = \$50; Cost = \$250 − \$50 = \$200.
 Q: Relationship: target costing and CAIV
@@ -772,18 +783,25 @@ A: Both set a cost constraint early and manage design to fit. Target costing der
 ## ABC Fundamentals
 Q: Activity Based Costing (ABC) definition
 A: A method of costing in which activities are the primary cost objects; assigns activity cost to cost objects based on their use of the activities.
+R: yes
 Q: ABC/M
 A: Activity Based Costing and Management — combines cost accounting (ABC) with management use of that data (ABM).
+R: yes
 Q: ABC chain
 A: Resources -> Activities -> Cost Objects.
+R: yes
 Q: Resource driver (first-stage assignment)
 A: Measure used to assign resource costs to activities.
+R: yes
 Q: Activity (cost) driver (second-stage assignment)
 A: Measure of how much of an activity a cost object uses; allocates activity costs to cost objects.
+R: yes
 Q: Cost pool
 A: Accumulated cost associated with a particular activity, gathered before allocation to cost objects.
+R: yes
 Q: Activity-Based Management (ABM)
 A: Uses ABC cost data to manage activities — determines how to perform them to maximize customer value and profit.
+R: yes
 Q: ABC vs. ABM scope
 A: ABC measures true cost of a single product/service; ABM uses that data across products/services to manage the whole operation.
 
@@ -814,8 +832,10 @@ Q: What does ABC primarily address across the life cycle?
 A: Process cost (Fig. 16.5, the ABC/M domain of application).
 Q: CAM-I Cross — ABC axis
 A: Vertical, top-down: resources -> activities (resource drivers, first stage) -> cost objects (activity drivers, second stage). Focuses on "what."
+R: yes
 Q: CAM-I Cross — ABM axis
 A: Horizontal, left-to-right: activities -> cost drivers -> performance measures. Focuses on "why."
+R: yes
 Q: CAM-I source-name inconsistency (Beyond CEBoK)
 A: CEBoK's Resources section says "Consortium for Advanced Manufacturing – International"; the body text says "Consortium for Advanced Management International" — same organization, inconsistent naming in the source.
 
@@ -834,5 +854,6 @@ Q: CEBoK's Testable Topics table for this module
 A: Testable = CAIV/design tradeoffs, optimal design in a hypothetical scenario, curves of equal preference, TOC vs. LCCE definitions. Less emphasized = FBCF. Not testable = names of US gov't initiatives (Nunn-McCurdy, WSARA, etc.).
 Q: Fully Burdened Cost of Fuel (FBCF)
 A: Price of fuel plus the cost of logistics and force protection to deliver it to the point of use (testable, less emphasized).
+R: yes
 `
 });

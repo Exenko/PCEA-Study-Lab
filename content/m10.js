@@ -870,12 +870,14 @@ Q: Role of statistics in cost estimating
 A: Test whether CER coefficients and growth factors are statistically significant; quantify confidence in estimates via intervals.
 Q: Random variable definition
 A: A quantity whose value is uncertain (e.g., next year's cost, number of defects).
+R: yes
 Q: Discrete vs. continuous random variable
 A: Discrete: countable outcomes (0, 1, 2, ...); Continuous: any value in a range.
 Q: PDF vs. CDF
 A: PDF (probability density function): relative likelihood of each value (area under = 1). CDF (cumulative): $P(X \le x)$, runs 0 to 1.
 Q: Independence of events
 A: Occurrence of one event does not change the probability of another.
+R: yes
 
 ## Normal Distribution
 Q: Normal distribution: % within 1, 2, 3 σ
@@ -884,8 +886,10 @@ Q: What percent of a normal distribution falls within ±1.96σ of the mean?
 A: Exactly 95% — worth memorizing alongside the 68.3/95.5/99.7 rule.
 Q: z-score formula
 A: $z = (x - \mu)/\sigma$
+R: yes
 Q: What does z-score measure?
 A: How many standard deviations a value is from the mean (standardized distance).
+R: yes
 Q: Interpretation of $z = 1.5$ from a z-table with $P(Z < 1.5) = 0.9332$
 A: About 93.32% of outcomes fall below that value; 6.68% exceed it.
 Q: When is normal distribution appropriate for cost?
@@ -900,6 +904,7 @@ Q: Dice example: mean and variance of the sum of two dice
 A: Mean = 7; Variance = 5.83 (35/6).
 Q: Coefficient of variation (CV) formula
 A: $CV = \sigma/\mu$ — unitless, so it's comparable across datasets of different scale.
+R: yes
 Q: CV estimate-quality rule (CEBoK)
 A: Cost estimates should have CV < 15%; above that, consider regression against a cost driver instead of a simple average.
 Q: Fig. 10.8 example: mean 10, CV 10% vs. CV 30% — what are the standard deviations?
@@ -924,10 +929,13 @@ Q: When to use z vs. t
 A: z: when σ is *known* (rare). t: when σ is *estimated* from data (standard in cost work).
 Q: One-sample t-statistic formula
 A: $t = (\bar x - \mu_0)/(s/\sqrt n)$, df = n − 1
+R: yes
 Q: Two-sample t-statistic formula
 A: $t = (\bar x_1 - \bar x_2)/\sqrt{s_1^2/n_1 + s_2^2/n_2}$
+R: yes
 Q: Formal definition of the t-distribution
 A: $t = N(0,1) / \sqrt{\chi^2(n)/n}$ — a standard normal divided by the square root of a chi-squared over its df.
+R: yes
 Q: t-distribution: mean and variance
 A: Mean = 0; Variance = $n/(n-2)$.
 Q: In regression, what df does the t-test for a coefficient use?
@@ -936,14 +944,18 @@ A: $df = n - k$ (n = sample size, k = number of parameters estimated, e.g. n-2 f
 ## Lognormal Distribution
 Q: Definition: X is lognormal if…
 A: ln(X) is normally distributed.
+R: yes
 Q: Lognormal key properties
 A: Always positive; right-skewed; Mean > Median > Mode.
 Q: Lognormal median formula
 A: $e^{\mu}$ (where μ is the mean of ln(X))
+R: yes
 Q: Lognormal mean formula
 A: $e^{\mu + \sigma^2/2}$ (always > median)
+R: yes
 Q: Lognormal mode formula
 A: $e^{\mu - \sigma^2}$ (always < median)
+R: yes
 Q: Why lognormal fits cost data
 A: Cost is bounded at zero and grows multiplicatively (50% over is easier than 50% under zero); log-space CER errors produce lognormal.
 Q: Normal vs. lognormal: which for cost?
@@ -958,16 +970,20 @@ Q: Triangular distribution: defined by
 A: Three parameters: low (a), most likely (m), high (b).
 Q: Triangular distribution mean
 A: $(a + m + b)/3$
+R: yes
 Q: Triangular distribution variance formula
 A: $(a^2 + b^2 + c^2 - ab - ac - bc)/18$
+R: yes
 Q: When is triangular used in cost estimating?
 A: Expert elicitation: only three intuitive inputs needed (best/worst/most likely).
 Q: Beta (PERT) distribution: key property
 A: Flexible, bounded on [a, b]; can be skewed either direction.
 Q: PERT mean approximation
 A: $(a + 4m + b)/6$
+R: yes
 Q: PERT standard deviation approximation
 A: $(b - a)/6$
+R: yes
 Q: Bernoulli distribution: two outcomes
 A: Success (1) with probability p; failure (0) with probability 1 − p.
 Q: Bernoulli mean and variance
@@ -980,6 +996,7 @@ Q: F-distribution: mean and variance
 A: Mean = $n/(n-2)$ for $n>2$; Variance = $2n^2(m+n-2) / [m(n-2)^2(n-4)]$ for $n>4$ (m, n = numerator/denominator df).
 Q: F-distribution definition
 A: Ratio of two chi-squared variables, each divided by its own df: $F_{m,n} = [\chi^2(m)/m] / [\chi^2(n)/n]$.
+R: yes
 Q: Beta(1,1) is identical to…
 A: Uniform(0,1).
 Q: Rayleigh(a=1) is identical to…
@@ -988,14 +1005,17 @@ A: Chi-squared with 2 degrees of freedom.
 ## Covariance and Correlation
 Q: Covariance formula
 A: $Cov(X,Y) = \sum(x_i - \bar x)(y_i - \bar y) / (n-1)$
+R: yes
 Q: Correlation coefficient formula
 A: $r = Cov(X,Y) / (s_X \, s_Y)$, range [−1, +1]
+R: yes
 Q: Interpretation of r = +1, 0, −1
 A: +1: perfect positive relationship; 0: no linear relationship; −1: perfect negative relationship.
 Q: Relationship between r and R²
 A: $R^2 = r^2$ (coefficient of determination in regression).
 Q: Variance of a sum of two random variables
 A: $\sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$
+R: yes
 Q: Effect of positive correlation on the variance of a sum
 A: Increases it (beyond the sum of individual variances).
 Q: Cost risk modeling: importance of correlation
@@ -1006,22 +1026,29 @@ A: $\sigma_X + \sigma_Y$ (the SDs add directly, not in quadrature).
 ## Hypothesis Testing
 Q: Null hypothesis definition
 A: Default claim, typically "no effect" or "equal to"; denoted H₀.
+R: yes
 Q: Alternative hypothesis definition
 A: The claim being tested for; denoted H_a or H₁.
+R: yes
 Q: Significance level α definition
 A: Pre-set threshold for probability of rejecting H₀ when it is true (Type I error).
+R: yes
 Q: Common significance levels
 A: α = 0.10, 0.05, 0.01 (lower = more conservative)
 Q: p-value definition
 A: Probability of observing the data (or more extreme), *given* H₀ is true.
+R: yes
 Q: Decision rule: reject H₀ when
 A: The test statistic falls beyond the critical value (or p < α)
 Q: Type I error definition
 A: Rejecting H₀ when H₀ is actually true (false positive); probability = α.
+R: yes
 Q: Type II error definition
 A: Failing to reject H₀ when H₀ is actually false (false negative); probability = β.
+R: yes
 Q: Power of a test
 A: 1 − β: probability of correctly rejecting a false H₀.
+R: yes
 Q: Trade-off between Type I and Type II error
 A: Lowering α reduces Type I but increases Type II (all else equal); more data improves both.
 Q: Two-tailed test: when and why
@@ -1030,20 +1057,26 @@ Q: One-tailed test: when and why
 A: When H_a is directional (e.g., $\mu > \mu_0$); all rejection region in one tail; easier to reject H₀ at same α.
 Q: Test statistic general form
 A: (Sample Statistic − Hypothesized Value) / Standard Error
+R: yes
 Q: What is the critical value?
 A: Threshold from a statistical table (z, t, χ², F) that separates fail-to-reject from reject regions.
+R: yes
 Q: Interpretation: fail to reject H₀
 A: The data do not provide enough evidence to reject H₀; does NOT prove H₀ true.
 
 ## Confidence Intervals
 Q: Confidence interval definition
 A: A range of plausible values for a population parameter at a stated confidence level (e.g., 95%).
+R: yes
 Q: General CI formula
 A: Point Estimate ± (Critical Value) × (Standard Error)
+R: yes
 Q: CI for a mean (σ unknown, t-distribution)
 A: $\bar x \pm t_{\alpha/2,n-1} \times (s/\sqrt n)$
+R: yes
 Q: CI for a mean (σ known, z-distribution)
 A: $\bar x \pm z_{\alpha/2} \times (\sigma/\sqrt n)$
+R: yes
 Q: Correct interpretation of a 95% CI
 A: Over repeated sampling, 95% of such intervals contain the true parameter.
 Q: Relationship between CI and two-tailed test
@@ -1060,6 +1093,7 @@ Q: Chi-squared test uses
 A: Categorical data, goodness-of-fit, independence, variance tests.
 Q: Chi-squared goodness-of-fit formula
 A: $\chi^2 = \sum (O_i - E_i)^2 / E_i$ (observed vs. expected frequencies)
+R: yes
 Q: Chi-squared degrees of freedom: goodness-of-fit
 A: df = k − 1 (k = number of categories)
 Q: Chi-squared degrees of freedom: test of independence
@@ -1068,12 +1102,15 @@ Q: F-test uses
 A: Compare two variances; test overall regression significance.
 Q: F-statistic formula
 A: $F = s_1^2 / s_2^2$ (larger variance in numerator)
+R: yes
 Q: F-distribution shape
 A: Always right-skewed, non-negative (ratio of two squared quantities).
 Q: Kolmogorov-Smirnov (K-S) test
 A: Goodness-of-fit test comparing empirical CDF to theoretical CDF.
+R: yes
 Q: K-S test statistic
 A: $D = \max |F_{\text{empirical}}(x) - F_{\text{theoretical}}(x)|$ (maximum vertical distance)
+R: yes
 Q: K-S advantage over chi-squared
 A: Works on continuous data directly without binning; generally more powerful.
 Q: K-S use in cost estimating
@@ -1086,12 +1123,14 @@ Q: Welch-Satterthwaite (Welch-Smith-Satterthwaite) t-test: when needed
 A: When the two samples' variances are not reasonably close — the standard two-sample t assumes equal variances.
 Q: DoD vs. NAVAIR example: pooled variance formula
 A: $S_p^2 = [(n-1)S_X^2 + (m-1)S_Y^2] / (n+m-2)$.
+R: yes
 Q: DoD vs. NAVAIR example: test statistic and conclusion
 A: T = -1.32 with df=38; critical value ±2.02 → fail to reject H0 (no significant difference), despite means of 1.19 vs. 1.33.
 Q: DoD vs. NAVAIR example: p-value and its meaning
 A: p = 0.194 (two-tailed) — rejecting H0 at that level risks a 19.4% chance of a false rejection, too high to accept.
 Q: CI for the difference of two means, formula
 A: $(\bar x - \bar y) \pm t_{\alpha/2,\,n+m-2} S_p \sqrt{1/n + 1/m}$.
+R: yes
 Q: CEBoK Testable Topics summary
 A: Testable = all main content; Testable but less emphasized = N/A; Not testable = Related and Advanced Topics (derivations, extra distributions, extra tests).
 
@@ -1102,6 +1141,7 @@ Q: Monte Carlo accuracy: how does error shrink?
 A: Error ∝ $1/\sqrt N$ (to cut error in half, need 4× trials)
 Q: Inverse CDF technique: basic steps
 A: 1. Draw u ~ Uniform(0,1). 2. Return x = F⁻¹(u).
+R: yes
 Q: Why inverse CDF technique works
 A: CDF F maps values uniformly to [0,1]; inverting maps uniform draws back to the target distribution.
 Q: Inverse CDF for Uniform(a, b)
@@ -1110,10 +1150,12 @@ Q: Normal vs. lognormal for modeling cost
 A: Lognormal: positive, right-skewed, fits cost growth (especially large CV). Normal: symmetric, allows negatives; below CV 25% tests can't tell it from lognormal.
 Q: Bivariate normal distribution
 A: Joint distribution of two correlated normal variables, characterized by two means, two SDs, and correlation ρ.
+R: yes
 
 ## Advanced (Not Testable per CEBoK)
 Q: Buffon's Needle Experiment
 A: Dropping a needle of length L onto lines spaced D apart; probability of crossing is $2L/(\pi D)$ — the historical origin of the Monte Carlo method (via Laplace, generalizing Buffon's approach).
+R: yes
 Q: Inverse CDF worked example
 A: u=0.0639 drawn from Normal(0,30) maps to x=-45.677, about 1.523σ below the mean (~6th percentile).
 Q: Effect of positive vs. negative correlation on a bivariate-normal roll-up's dispersion
@@ -1132,6 +1174,7 @@ Q: Chi-squared GOF test: known vs. estimated parameters
 A: A different test version applies depending on whether all distribution parameters are known in advance (rare) or must be estimated from the same data (usual case, needs adjusted df).
 Q: CI for a variance, formula
 A: $\left(\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2,n-1}},\ \sigma^2,\ \dfrac{(n-1)s^2}{\chi^2_{\alpha/2,n-1}}\right)$ — intrinsically asymmetric since the two chi-squared critical values aren't symmetric.
+R: yes
 Q: t-to-Z convergence: how much fatter is the t's 95th-percentile critical value at n=5?
 A: 32.7% higher than z=1.96 (2.6/1.96 = 1.327), versus only ~11% higher at the 68.3rd percentile.
 Q: k-sample test for means: what makes it different from a t-test?
@@ -1142,13 +1185,17 @@ A: Asymmetric and skewed high — the lower limit stays close to the true σ, bu
 ## Formula Reference
 Q: Triangular mean formula
 A: $(a + m + b)/3$
+R: yes
 Q: PERT approximations
 A: Mean ≈ $(a + 4m + b)/6$; SD ≈ $(b − a)/6$
+R: yes
 Q: Bernoulli variance
 A: $p(1 - p)$
 Q: Standard error of the mean
 A: $s/\sqrt n$ (or $\sigma/\sqrt n$ if σ known)
+R: yes
 Q: Variance of sum of two correlated variables
 A: $\sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$
+R: yes
 `
 });
