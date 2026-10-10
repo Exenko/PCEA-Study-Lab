@@ -7,7 +7,8 @@ eval(fs.readFileSync(path.join(root, 'js/registry.js'), 'utf8'));
 const PCEA = window.PCEA;
 const Meta = require('../js/widget-meta.js');
 const Challenge = require('../js/challenge.js');
-const CALLOUTS = ['tip', 'warn', 'key', 'example', 'formula', 'note', 'check', 'widget', 'challenge'];
+const Primer = require('../js/primer.js');
+const CALLOUTS = ['tip', 'warn', 'key', 'example', 'formula', 'note', 'check', 'widget', 'challenge', 'sort', 'order'];
 let errors = 0;
 const err = (f, msg) => { errors++; console.log(`ERROR ${f}: ${msg}`); };
 
@@ -21,6 +22,7 @@ function checkWidgetArgs(where, argStr) {
 }
 
 let challengeCount = 0;
+let primerCount = 0;
 function checkChallenge(where, b) {
   challengeCount++;
   const meta = Meta[Challenge.parseArgs(b.args).name];
@@ -35,6 +37,7 @@ function checkChallenge(where, b) {
 for (const rel of process.argv.slice(2)) {
   const file = path.resolve(rel);
   challengeCount = 0;
+  primerCount = 0;
   const src = fs.readFileSync(file, 'utf8');
   if (/\$\{/.test(src)) err(rel, 'contains "${" (breaks String.raw template)');
   const before = PCEA.modules.length;
@@ -53,7 +56,13 @@ for (const rel of process.argv.slice(2)) {
     let open = null, block = null;
     s.body.split('\n').forEach((line, i) => {
       if (open) {
-        if (/^:::\s*$/.test(line)) { if (open === 'challenge') checkChallenge(`${where} line ${block.i}`, block); open = null; }
+        if (/^:::\s*$/.test(line)) {
+          const at = `${where} line ${block.i}`;
+          if (open === 'challenge') checkChallenge(at, block);
+          if (open === 'sort') Primer.parseSort(block.lines).errors.forEach(e => err(at, e));
+          if (open === 'order') Primer.parseOrder(block.lines).errors.forEach(e => err(at, e));
+          open = null;
+        }
         else if (/^:::\w/.test(line)) err(where, `line ${i}: directive opened inside :::${open}`);
         else block.lines.push(line);
         return;
@@ -61,7 +70,8 @@ for (const rel of process.argv.slice(2)) {
       const one = line.match(/^:::(\w+)\s*(.*?):::\s*$/);
       const op = line.match(/^:::(\w+)\s*(.*)$/);
       if (one) {
-        if (one[1] !== 'widget') err(where, `single-line :::${one[1]}::: only allowed for widgets`);
+        if (one[1] === 'primer') { /* placement checked below */ }
+        else if (one[1] !== 'widget') err(where, `single-line :::${one[1]}::: only allowed for widgets and primer`);
         else checkWidgetArgs(where, one[2]);
       } else if (op) {
         if (!CALLOUTS.includes(op[1])) err(where, 'unknown directive ' + op[1]);
@@ -72,6 +82,23 @@ for (const rel of process.argv.slice(2)) {
       if (!open && /^:::\s*$/.test(line)) err(where, `line ${i}: stray closing :::`);
     });
     if (open) err(where, `unclosed :::${open}`);
+    // primers: marker first in step 0, exactly one committable block, recaps only with a primer
+    const stepTexts = s.body.split(/^\+\+\+\s*$/m);
+    const hasPrimer = /^\s*:::primer:::[ \t]*$/m.test(stepTexts[0]) && /^\s*:::primer:::/.test(stepTexts[0]);
+    stepTexts.forEach((t, i) => {
+      const n = (t.match(/^:::primer:::[ \t]*$/mg) || []).length;
+      if (n > (i === 0 && hasPrimer ? 1 : 0)) err(where, ':::primer::: must be the first line of the first step');
+    });
+    if (hasPrimer) {
+      primerCount++;
+      const t = stepTexts[0];
+      if (/^:::challenge\b/m.test(t)) err(where, 'primer cannot contain :::challenge (use check, sort or order)');
+      const blocks = t.match(/^:::(check|sort|order)\b.*$/mg) || [];
+      if (blocks.length !== 1) err(where, 'primer needs exactly one check, sort or order');
+      const chk = t.split(/^:::check.*$/m)[1];
+      if (chk !== undefined && !/^\s*\*\s+/m.test(chk.split(/^:::\s*$/m)[0])) err(where, 'primer check must be multiple choice');
+    }
+    if (!hasPrimer && /\{\{primer\}\}/.test(s.body)) err(where, '{{primer}} used without a primer');
     // checks
     const blocks = s.body.split(/^:::check.*$/m).slice(1).map(b => b.split(/^:::\s*$/m)[0]);
     blocks.forEach((b, i) => {
@@ -102,7 +129,7 @@ for (const rel of process.argv.slice(2)) {
   }));
   const raw = (m.cards || '').split('\n').filter(l => /^Q:/.test(l)).length;
   if (raw !== cards.length) err(rel, `cards: ${raw} Q: lines but ${cards.length} parsed (a Q: is missing its A:?)`);
-  console.log(`${rel}: ${m.sections.length} sections, ${checks} checks, ${challengeCount} challenges, ${cards.length} cards, ${new Set(cards.map(c => c.tag)).size} card topics, source=${m.source}`);
+  console.log(`${rel}: ${m.sections.length} sections, ${checks} checks, ${challengeCount} challenges, ${primerCount} primers, ${cards.length} cards, ${new Set(cards.map(c => c.tag)).size} card topics, source=${m.source}`);
 }
 console.log(errors ? `${errors} ERROR(S)` : 'OK');
 process.exit(errors ? 1 : 0);
