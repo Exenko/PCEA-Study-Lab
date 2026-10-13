@@ -10,7 +10,22 @@ PCEA.addModule({
   sections: [
     {
       id: 'concepts', title: 'Inflation concepts and the base-year paradigm', summary: 'Constant vs. then-year dollars, purchasing power, inflation defined',
-      body: String.raw`**Inflation** is an increase in the volume of money and credit relative to available goods and services, resulting in a continuing rise in the general price level. This **lowers purchasing power** per dollar. In cost estimating, this means "\$100M" is meaningless without specifying *which year's dollars, and which type*.
+      body: String.raw`:::primer:::
+Every cost number hides a choice: which year's dollars it is in. Think about what each kind of dollar is for.
+
+:::sort
+Q: Which kind of dollars fits each job?
+buckets: Constant base-year dollars | Then-year dollars
+- Developing a CER from historical data spanning many years = Constant base-year dollars
+- Comparing historical costs from different years apples-to-apples = Constant base-year dollars
+- Preparing a budget submission = Then-year dollars
+- Describing an obligation profile (when dollars must be budgeted) = Then-year dollars
+> Historical data is escalated to one base year for CERs and trend analysis; base-year costs are then time-phased and escalated to then-year dollars for budgets and obligations.
+:::
+
++++
+
+**Inflation** is an increase in the volume of money and credit relative to available goods and services, resulting in a continuing rise in the general price level. This **lowers purchasing power** per dollar. In cost estimating, this means "\$100M" is meaningless without specifying *which year's dollars, and which type*.
 
 CEBoK draws a strict distinction: **inflation** refers to historical (and projected) changes in price levels, while **escalation** is when the effects of inflation are applied to a dollar amount (**de-escalation** removes them). In common parlance the two words are often used interchangeably, but this module does not.
 
@@ -35,6 +50,8 @@ Q: At 2.5% inflation, what is the purchasing power of a dollar next year compare
 ### The base-year estimating paradigm
 
 All historical data is escalated to a single **Base Year** (usually the present year or the estimate's original year) for developing CERs and other estimating methods. Once a base-year cost estimate exists, it is **time-phased** across the estimated schedule, producing an expenditure or obligation profile. Finally, the base-year costs in each time period are escalated to Current-Year or Then-Year dollars using **raw** or **weighted** indices, respectively — each year escalated with that year's proper index.
+
+{{primer}}
 
 Distinguish an **expenditure profile** (when dollars are actually spent = Current Year dollars → use raw indices) from an **obligation profile** (when dollars must be budgeted = Then Year dollars → use weighted indices).
 
@@ -84,7 +101,22 @@ The base year is the year to which all dollars are normalized. It is set to inde
     },
     {
       id: 'escalation-vs-discount', title: 'Escalation vs. discounting — a critical distinction', summary: 'Inflation (price-level change) ≠ time value of money (opportunity cost)',
-      body: String.raw`These are **not** the same and must not be confused.
+      body: String.raw`:::primer:::
+Escalation and discounting both move dollars across time, and people mix them up constantly.
+
+:::sort
+Q: Which adjustment does each description fit?
+buckets: Escalation | Discounting
+- Applies an inflation rate to a cost = Escalation
+- Moves Constant Year dollars to Then Year dollars for a budget = Escalation
+- Applies a rate generally tied to a rate of return = Discounting
+- Produces a present value to compare alternatives = Discounting
+> Escalation adjusts for price-level change using the inflation rate; discounting adjusts for the time value of money using a rate tied to a rate of return, to convert future cash flows to present value.
+:::
+
++++
+
+These are **not** the same and must not be confused.
 
 | | **Escalation** | **Discounting** |
 |---|---|---|
@@ -94,6 +126,8 @@ The base year is the year to which all dollars are normalized. It is set to inde
 | Dollars used with | Indices convert Constant Year dollars to Current Year / Then Year dollars | Nominal discount rates with Current Year dollars; real discount rates with Constant Year dollars |
 
 Discounting is covered in detail in Module 13 Economic Analysis; it lets estimators compare the present-value cost of alternatives.
+
+{{primer}}
 
 :::example Real rate of return
 Consider a 5% nominal rate of return with 3% inflation. The **real rate of return** is the quotient of the nominal growth factor and the inflation factor: 1.05 / 1.03 = 1.0194, i.e. a **1.94%** real return — approximately, but not exactly, the simple difference of 2%. The nominal rate is what investments are typically measured against; the real rate indicates the actual increase in purchasing power.
@@ -143,7 +177,21 @@ Q: Real vs. nominal discount rates are applied to which dollar types, respective
     },
     {
       id: 'indices', title: 'Index numbers: raw, weighted, and composite', summary: 'Raw, weighted (Navy/AF harmonic vs. Army arithmetic), and composite indices',
-      body: String.raw`An **index** expresses the price level in a given year relative to a **base year**, where base year = 1.000. Indices are factors and are always multiplicative — multiply or divide depending on direction.
+      body: String.raw`:::primer:::
+Suppose prices rise a steady 5% every year. Make a gut call before the math.
+
+:::check
+Q: Relative to year zero, the price index two years later will be closest to:
+- 1.10 (just add 5% twice)
+* 1.1025
+- 1.25
+- 1.05
+> Costs each year are 1.05 times the prior year, so the two-year raw index is 1.05 squared = 1.1025. Inflation compounds.
+:::
+
++++
+
+An **index** expresses the price level in a given year relative to a **base year**, where base year = 1.000. Indices are factors and are always multiplicative — multiply or divide depending on direction.
 
 +++
 
@@ -152,6 +200,8 @@ Q: Real vs. nominal discount rates are applied to which dollar types, respective
 A raw index is a number representing the change in prices relative to a Base Year of 1.0000, used for **Constant Year to Constant Year** conversions (actual or projected expenditures, not obligations).
 
 **Constant inflation example (Figs 5.3/5.4):** at a constant 5% inflation rate, costs each year are 1.05 times the prior year. The raw index for year two relative to year zero is 1.05 squared = **1.1025**. When inflation is constant, a table isn't strictly needed since the index n years forward is just $(1+r)^n$; when inflation is *not* constant, tables of indices become essential.
+
+{{primer}}
 
 :::example Fig 5.5: nonconstant inflation (Navy 2001 indices)
 Using the Navy's 2001 indices for what \$1,000 in 2001 was equivalent to over the prior 31 years: from 1981 to 2001 (twenty years), military pay price levels rose by a factor of about **2.12** (3.8% annualized), while RDT&EN price levels rose by a factor of about **1.77** (2.9% annualized) — military pay has inflated faster than RDT&EN purchases.
@@ -387,7 +437,21 @@ Q: Your estimate covers aerospace labor and titanium procurement. Should you use
     },
     {
       id: 'procedures', title: 'Escalation procedures and examples', summary: 'The table\'s-year waystation, to-over-from, and the four CEBoK worked examples',
-      body: String.raw`Two basic principles govern every inflation-table lookup:
+      body: String.raw`:::primer:::
+Every dollar conversion follows the same routine, using the table's own base year as a stepping stone.
+
+:::order
+Q: Put the steps of an inflation-table conversion in order.
+1. Determine the starting and ending dollar types and years
+2. Choose the appropriation and its index table, noting the table's year
+3. Divide to convert the starting dollars to the table's year
+4. Multiply to convert from the table's year to the ending year
+> The step list runs: determine starting and ending dollars, choose the appropriation and table, divide to reach the table's year, then multiply to reach the ending year.
+:::
+
++++
+
+Two basic principles govern every inflation-table lookup:
 
 1. **Raw** indices are used for CY ► CY; **weighted** indices are used for CY ◄► TY. (For these purposes, Current Year = Constant Year.)
 2. If going **from** the table's year to any other year, **multiply**. If going **from** any other year **to** the table's year, **divide**.
@@ -403,6 +467,8 @@ Step by step:
 2. Choose the appropriation and its index table(s); note the table's Base Year (the "table's year").
 3. Convert to CY of the table's year: **divide** — by the **raw** index if starting from CY, by the **weighted** index if starting from TY.
 4. Convert to the CY or TY of the ending year: **multiply** — by the **raw** index if ending in CY, by the **weighted** index if ending in TY.
+
+{{primer}}
 
 ### Fig 5.14: "To over From"
 
@@ -514,7 +580,21 @@ For a single-year, same-table-year conversion, the general formula collapses to 
     },
     {
       id: 'special', title: 'Related and Advanced Topics (CEBoK)', summary: 'Time phasing, doubling time, custom indices, pitfalls and means, special cases',
-      body: String.raw`### Time Phasing Methodologies
+      body: String.raw`:::primer:::
+Inflation compounds, so a rule of thumb can tell you how fast prices double.
+
+:::check
+Q: At 7% annual inflation, prices double in closest to:
+- 5 years
+* 10 years
+- 14 years
+- 20 years
+> Doubling takes about 70 divided by the inflation rate, so at 7% it is about 70/7 = 10 years.
+:::
+
++++
+
+### Time Phasing Methodologies
 
 Time phasing relates percent spent (cost) to percent elapsed (duration) for past programs, using an analogy or average to spread estimates for future programs. Common methods: Level-Loaded, Throughput, Schedule-Based, Trapezoid, Learning Curve, and Probability Distribution-Based (e.g., a **Rayleigh** curve for development: rise, peak, tail off). Time-phasing is often done at the program level; if major elements are phased separately, pay attention to below-the-line elements such as Systems Engineering and Program Management.
 
@@ -531,6 +611,8 @@ Approximating the denominator by the first Taylor term rounds $\ln 2 = 0.693$ up
 $$n \approx \frac{70}{x}$$
 
 This is the **"Rule of 70,"** sometimes quoted as the **Rule of 72**. At 5% inflation, doubling takes about 70/5 = **14 years**; at 7%, about 70/7 = **10 years**. 70 and 72 are both convenient because together they're even multiples of every single-digit percent plus 10, 12, and 14 — but both are only approximations.
+
+{{primer}}
 
 :::check
 Q: Using the Rule of 70, at 5% annual inflation, about how many years until prices double?
