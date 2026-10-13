@@ -9,7 +9,20 @@ PCEA.addModule({
   sections: [
     {
       id: 'uncertainty', title: 'Uncertainty and Risk', summary: 'Why estimates are uncertain and what risk means',
-      body: String.raw`An estimate predicts the future, so it is always uncertain. Separate that uncertainty from **risk**.
+      body: String.raw`:::primer:::
+Estimators compare their numbers with what programs actually end up costing, over and over.
+
+:::check
+Q: Across many programs, how do actual costs compare with unadjusted estimates?
+- Equally likely to come in above or below
+* Systematically above: unadjusted estimates tend to be low
+- Systematically below: estimators pad their numbers
+> CEBoK treats risk as the upward shift applied to the estimate range because unadjusted estimates tend to be systematically low.
+:::
+
++++
+
+An estimate predicts the future, so it is always uncertain. Separate that uncertainty from **risk**.
 
 ### Sources of Uncertainty
 
@@ -39,6 +52,8 @@ Cost estimating draws on the **past** (historical cost and other data collected 
 
 - **Uncertainty**: natural statistical variability in an estimate given the data and method — describable with a distribution (e.g., ± prediction interval)
 - **Risk** (CEBoK's definition in this module): the **upward shift** applied to the cost estimate range because unadjusted estimates tend to be **systematically low**. It corrects an inherent bias and improves accuracy. Example: if costs come in on average 20% higher than the estimates, add 20% to the estimate — not atypical of historical cost growth.
+
+{{primer}}
 
 :::tip Beyond CEBoK
 In general risk management (and in Module 9), a **risk** is also described as a discrete event with a **probability** and a **consequence**, and an **opportunity** is an uncertain event with a positive effect.
@@ -76,7 +91,21 @@ Q: Why does a point estimate from "most likely" values usually fall below the me
     },
     {
       id: 'analogy', title: 'Analogy', summary: 'Estimate from one similar system, adjusted for differences',
-      body: String.raw`Estimate a new system from **one** (or a few) similar, historical systems, adjusted for differences in size, performance, complexity, or technology. Analogy is a one-for-one comparison, and is useful even alongside more detailed techniques as a cross-check (the estimates should at least be the same order of magnitude).
+      body: String.raw`:::primer:::
+Estimating from one similar historical system is a short, ordered recipe.
+
+:::order
+Q: Put the analogy process steps in order.
+1. Identify an analogous system (similar function, technology, design)
+2. Obtain the historical cost, normalized for inflation and quantity
+3. Identify differences between the analogy and the new system
+4. Apply an adjustment, a ratio scaled from a shared parameter
+> Find the analog, get its normalized cost, identify the differences, then apply the ratio adjustment.
+:::
+
++++
+
+Estimate a new system from **one** (or a few) similar, historical systems, adjusted for differences in size, performance, complexity, or technology. Analogy is a one-for-one comparison, and is useful even alongside more detailed techniques as a cross-check (the estimates should at least be the same order of magnitude).
 
 ### Process
 
@@ -84,6 +113,8 @@ Q: Why does a point estimate from "most likely" values usually fall below the me
 2. Obtain the historical cost, normalized for inflation and quantity
 3. Identify differences between the analogy and the new system
 4. Apply an adjustment (a ratio, scaled from a parameter the two systems share)
+
+{{primer}}
 
 ### Scaling Formula
 
@@ -151,7 +182,24 @@ predict: linear ±0.05
     },
     {
       id: 'parametric', title: 'Parametric', summary: 'Use statistical relationships (CERs) from many data points',
-      body: String.raw`Use a **statistical relationship** (a Cost Estimating Relationship, or **CER**) built from **many** historical data points relating cost to measurable parameters (e.g., weight, power, lines of code).
+      body: String.raw`:::primer:::
+A CER fit to many historical data points has strengths and weaknesses.
+
+:::sort
+Q: Which of these are strengths of parametric estimating, and which are weaknesses?
+buckets: Pro | Con
+- Statistically defensible when properly built = Pro
+- Gives uncertainty measures = Pro
+- Fast to apply = Pro
+- Requires a sufficient, normalized historical dataset = Con
+- Risk of extrapolating outside the data range = Con
+- Can be a "black box" if the relationship isn't understood = Con
+> The text lists these as parametric pros (defensible, objective, repeatable, uncertainty measures, fast) and cons (needs enough normalized data, extrapolation risk, black-box risk).
+:::
+
++++
+
+Use a **statistical relationship** (a Cost Estimating Relationship, or **CER**) built from **many** historical data points relating cost to measurable parameters (e.g., weight, power, lines of code).
 
 ### CER Forms
 
@@ -195,6 +243,8 @@ High $R^2$ (>0.90) looks good, but always check that the slope makes sense physi
 
 **Cons**: Requires a sufficient, normalized historical dataset; risk of extrapolating outside the data range; can be a "black box" if the relationship isn't understood.
 
+{{primer}}
+
 :::check
 Q: A parametric CER for software: $Cost (\$K) = 50 + 0.08 \times SLOC\ (thousands)$. Estimate cost for 400,000 SLOC.
 = 82
@@ -211,7 +261,22 @@ Q: You fit a power CER: $Cost = 2.5 \times Weight^{0.8}$. The relationship is st
     },
     {
       id: 'buildup', title: 'Build-up (Engineering / Bottom-up)', summary: 'Estimate from the lowest WBS level and sum',
-      body: String.raw`Estimate cost at a **low level of detail** (labor hours, material, tooling) and **roll up** the Work Breakdown Structure (WBS).
+      body: String.raw`:::primer:::
+Build-up labor splits into two kinds, and they are estimated differently.
+
+:::sort
+Q: Which labor is touch labor, and which is non-touch (support) labor?
+buckets: Touch labor | Support labor
+- Building a circuit card = Touch labor
+- A robot handling and working the product = Touch labor
+- Quality assurance = Support labor
+- Sustaining engineering = Support labor
+> Touch labor is workers (human or robotic) actually handling and working the product. Non-touch/support labor, such as quality assurance and sustaining engineering, is often estimated as a factor of touch labor.
+:::
+
++++
+
+Estimate cost at a **low level of detail** (labor hours, material, tooling) and **roll up** the Work Breakdown Structure (WBS).
 
 ### Process
 
@@ -231,6 +296,8 @@ $$Cost = \sum_{i=1}^{n}(Hours_i \times Rate_i) + \sum_{i=1}^{n} Materials_i + OD
 The foundation of build-up is a **standard**: how long a task takes, based on time-and-motion studies done in a controlled, **optimal** production environment. Because no one actually operates at that optimum, a **variance (realization) factor** is calculated from a company's actual historical performance against the standard, and applied to convert standard hours into realistic estimated hours.
 
 Labor also splits into **touch** labor (workers, human or robotic, actually handling and working the product — e.g., building a circuit card) and **non-touch/support** labor (quality assurance, sustaining engineering). Support labor is often estimated as a **factor of touch labor**.
+
+{{primer}}
 
 **Worked example** (JSF inlet nacelle, by analogy to the F/A-18 E/F program): the standard for the sheet-metal element is **2,000 touch labor hours**. The F/A-18 E/F program is running a **20% variance** (actuals to standard) and a **48% support-labor factor**.
 
@@ -293,7 +360,20 @@ predict: total ±0.5%
     },
     {
       id: 'other', title: 'Other Techniques and Data', summary: 'Expert opinion, extrapolation from actuals, and factor/ratio estimating',
-      body: String.raw`Two supplementary methods fill gaps or validate the primary techniques: **expert opinion** and **extrapolation from actuals**.
+      body: String.raw`:::primer:::
+Experts are used when data is missing, but human memory is imperfect.
+
+:::check
+Q: An expert recalls a past report taking "a week" (40 hours). What is the actual effort most likely to have been?
+- Less than 40 hours, since experts overestimate
+- About 40 hours
+* More than 40 hours, since overtime and rework are forgotten
+> Expert opinion rests on anecdotal, often faulty recollection, which tends to understate effort: the expert may forget the overtime or the rework from review comments.
+:::
+
++++
+
+Two supplementary methods fill gaps or validate the primary techniques: **expert opinion** and **extrapolation from actuals**.
 
 ### Expert Opinion / Engineering Judgment
 
@@ -310,6 +390,8 @@ Common ways experts go wrong: the availability heuristic (recent/memorable cases
 :::
 
 **Uncertainty and risk**: people are not great random-number generators — they tend to **understate both variance (spread) and randomness**. Expert opinion is grounded in anecdotal, and often faulty, recollection: an expert may remember a report taking "a week" (40 hours) but forget the overtime or the rework from review comments — so **faulty recollection tends to understate effort**.
+
+{{primer}}
 
 ### Extrapolation from Actuals
 
@@ -351,7 +433,21 @@ Q: An expert thinks software effort should be 15% lower than historical norms du
     },
     {
       id: 'selection', title: 'Choosing and Cross-Checking', summary: 'Estimate requirements, technique selection, top-down vs. bottom-up',
-      body: String.raw`### Estimate Requirements
+      body: String.raw`:::primer:::
+Choosing a technique for an element is a deliberate, staged process.
+
+:::order
+Q: Put the technique selection steps in order.
+1. Research all potential techniques from every source
+2. Compare candidate techniques against each other and the requirements
+3. Avoid outdated techniques and verify the technique fits the program phase
+4. Select the most appropriate technique, plus a secondary technique as a cross-check
+> Research the options, compare them, screen out outdated or ill-fitting ones, then select a primary technique plus a secondary cross-check.
+:::
+
++++
+
+### Estimate Requirements
 
 Before selecting a technique, understand why the estimate is being done — this drives what's needed and how soon:
 
@@ -405,6 +501,8 @@ Different WBS elements in the *same* estimate may use *different* techniques (e.
 2. **Compare** candidate techniques against each other and against the requirements: look at the underlying data, run statistical comparisons, and make sure nothing is overlooked.
 3. **Avoid outdated techniques** — a technique built on old data may not accurately estimate new technology — and **verify the technique fits the program phase**.
 4. **Select** the technique most appropriate for the element (or develop one), plus a **secondary technique as a cross-check**.
+
+{{primer}}
 
 ### Checking Results
 
@@ -461,7 +559,20 @@ Q: Prime mission equipment cost = \$200M. An illustrative SEITPM factor of 12% i
     },
     {
       id: 'lifecycle', title: 'Life Cycle and Technique Progression', summary: 'Early techniques to late techniques as data matures',
-      body: String.raw`As a program matures, design detail and actual data grow, and the preferred technique shifts.
+      body: String.raw`:::primer:::
+Estimates are redone as a program matures and data replaces assumptions.
+
+:::check
+Q: As a program matures, what happens to the confidence range around its estimates?
+- It stays the same, because it depends only on the technique
+- It widens, because more detail means more places to be wrong
+* It can tighten, but risk and growth allowances are still needed
+> Early estimates carry wide confidence ranges; later estimates can tighten ranges but must still add risk/growth allowances.
+:::
+
++++
+
+As a program matures, design detail and actual data grow, and the preferred technique shifts.
 
 ### Technique by Phase
 
@@ -482,6 +593,8 @@ Q: Prime mission equipment cost = \$200M. An illustrative SEITPM factor of 12% i
 ### When to Re-estimate
 
 Technique selection is not "set and forget." **Update at each milestone** to reflect the data and method appropriate at that time. Early estimates carry **wide confidence ranges**; later estimates can **tighten ranges** but must still add risk/growth allowances.
+
+{{primer}}
 
 +++
 
@@ -512,7 +625,24 @@ Q: Slide through the phases. In which phase does engineering build-up first beco
     },
     {
       id: 'related', title: 'Below-the-Line, Schedule, and Operations & Support', summary: 'Factor estimating, schedule estimating, and O&S cost structure',
-      body: String.raw`### Below-the-Line Factors
+      body: String.raw`:::primer:::
+The three cost techniques also predict schedules and O&S costs.
+
+:::sort
+Q: Which technique does each example use?
+buckets: Analogy | Parametric | Build-up
+- Scale a similar project's historical schedule = Analogy
+- Annual software maintenance cost per SLOC from a similar system = Analogy
+- A Schedule Estimating Relationship (SER) vs. total labor hours = Parametric
+- Ship overhaul cost vs. average ship age = Parametric
+- Sum lower-level task durations = Build-up
+- A reliability-based logistics model such as CASA = Build-up
+> Analogy scales a similar effort, parametric uses a statistical relationship to a driving parameter, and build-up sums lower-level pieces.
+:::
+
++++
+
+### Below-the-Line Factors
 
 Below-the-line (BTL) factors are also known as **cost-on-cost CERs**: they use the cost of another element to predict cost through a simple multiplicative relationship. They're **unitless**, often expressed as a **percentage**, and typically model support functions — SEITPM (systems engineering, integration & test, program management) — as a percentage of the program's **prime mission equipment**.
 
@@ -545,6 +675,8 @@ O&S costs are normally a large portion of total life-cycle cost — **some sourc
 - **Analogy**: System A is analogous to System B for annual software maintenance cost. System A: 2.5M SLOC, \$7.5M/yr. System B: 5M SLOC. Rate view: $\$7.5M / 2.5M = \$3/SLOC$, so $\$3 \times 5M = \$15M$. Ratio view: SLOC ratio $5M/2.5M = 2.0$, so $2.0 \times \$7.5M = \$15M$ — both mathematically equivalent.
 - **Parametric**: ship overhaul cost vs. average ship age shows a **non-linear** relationship.
 - **Build-up**: a reliability-based logistics model, such as the Army's Cost Analysis Strategy Assessment (CASA) — a bottom-up total-ownership-cost tool built from lower-level logistics costs, ideally derived from standard relationships and reliability data like Mean Time Between Failures (MTBF) and Mean Time To Repair (MTTR).
+
+{{primer}}
 
 **Key point**: As actual sustainment data accumulates over the system's life, O&S estimates should be **updated/refined** using that experience (extrapolation from actuals).
 
