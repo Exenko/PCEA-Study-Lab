@@ -9,7 +9,24 @@ PCEA.addModule({
   sections: [
     {
       id: 'definition', title: 'What is Parametric Estimating?', summary: 'Definition, position among three techniques, advantages, and data sources',
-      body: String.raw`### Definition
+      body: String.raw`:::primer:::
+Three classic ways to build a cost estimate each have their own signature strengths and weaknesses.
+
+:::sort
+Q: Match each trait to the estimating technique it describes.
+buckets: Analogy | Parametric | Engineering Build-Up
+- Comparative analysis of similar systems = Analogy
+- Usable early, before detailed requirements are known = Analogy
+- Mathematical relationship between a parameter and cost = Parametric
+- Provides statistical results to assess quality = Parametric
+- Sum of detailed lower-level elements rolled up = Engineering Build-Up
+- Requires a high level of data detail and can be expensive = Engineering Build-Up
+> Analogy compares similar systems and is usable early. Parametric estimating uses a mathematical relationship between a parameter and cost and gives statistical results. Engineering build-up rolls up detailed lower-level elements, needing high data detail and often costing more to produce.
+:::
+
++++
+
+### Definition
 
 A **Cost Estimating Relationship (CER)** is a mathematical expression relating cost (dependent variable, $Y$) to one or more cost drivers (independent variables, $X_1, X_2, ...$).
 
@@ -24,6 +41,8 @@ CER is the output of parametric estimating — the statistical relationship itse
 | **Analogy** | Comparative analysis of similar systems | Usable early, before detailed requirements are known; provides **no objective test of validity** |
 | **Parametric Estimating** | Mathematical relationship between a parameter and cost | Historical data can be difficult to obtain; relationships are easily adjusted for requirements changes and provide statistical results to assess quality |
 | **Engineering Build-Up** | Sum of detailed lower-level elements rolled up | Requires a high level of data detail and deep collaboration; produces easily **traceable** detail but can be **expensive**; missing or incorrect data raises the risk of omitting costs |
+
+{{primer}}
 
 Expert opinion is used alongside these three (see Module 2 Costing Techniques) but isn't one of the primary techniques covered in this module.
 
@@ -84,7 +103,22 @@ Q: Which statistic is used to derive error bands in cost risk analysis?
     },
     {
       id: 'forms', title: 'CER Functional Forms, Cost Drivers, and Cost Passengers', summary: 'Regression forms, driver criteria, cost passengers, rates/factors/ratios',
-      body: String.raw`### CER Regression Forms
+      body: String.raw`:::primer:::
+Some CERs are not full regressions at all, just simple multipliers. Each kind of multiplier has its own name.
+
+:::sort
+Q: Is each of these a rate, a factor, or a ratio?
+buckets: Rate | Factor | Ratio
+- A labor rate in \$/hour for a labor category = Rate
+- Cost per function point = Rate
+- System Engineering/Program Management estimated as 20% of prime mission equipment = Factor
+- 1,200 lines of code per integrated COTS package = Ratio
+> A rate is cost in dollars per parameter. A factor is cost-on-cost, unitless and usually a percentage. A ratio is parameter on parameter.
+:::
+
++++
+
+### CER Regression Forms
 
 | Form | Equation | Linearized | Typical Use |
 |---|---|---|---|
@@ -140,6 +174,8 @@ Some CERs are simple multipliers rather than full regressions — though, like C
 - **Factor**: **cost-on-cost**, unitless, usually a percentage — the cost of one element predicts the cost of another. Example: **System Engineering/Program Management (SE/PM)** estimated as 20% of the program's **prime mission equipment** (hardware and software).
 - **Ratio**: **parameter on parameter**. Example: an industry-average ratio of **1,200 lines of code (LOC) per integrated Commercial Off-The-Shelf (COTS) package**.
 
+{{primer}}
+
 CEBoK notes these three terms are sometimes improperly interchanged. Rates, factors, and ratios are often the result of very simple calculations such as the **arithmetic mean**: $A = \frac{1}{n}\sum_{i=1}^{n} a_i$.
 
 **Calibration example**: if a program later collects actuals showing **1,500 LOC per package** instead of the assumed 1,200, the analyst can update the model. Because the new average could fall within expected statistical variation, options include: re-running the CER with the augmented data set, re-calibrating the CER to pass through the new data point, changing the methodology altogether, or leaving the model unchanged.
@@ -173,7 +209,23 @@ Q: A driver is statistically significant in a CER but is only known after detail
     },
     {
       id: 'process', title: 'The 4-Step Parametric Process', summary: 'Data collection → cost drivers → CER development (5 steps) → calibration → parametric model',
-      body: String.raw`Parametric estimating follows a rigid sequence: **Data Collection → Cost Driver Identification → CER Development → Parametric Model Development**.
+      body: String.raw`:::primer:::
+Building a parametric model is not a free-for-all. The work runs in a fixed sequence.
+
+:::order
+Q: Put the four steps of the parametric process in order.
+1. Data Collection
+2. Cost Driver Identification
+3. CER Development
+4. Parametric Model Development
+> The sequence runs from assembling historical data, to finding the variables that explain cost, to fitting CERs, to packaging them into a usable model.
+:::
+
++++
+
+Parametric estimating follows a rigid sequence: **Data Collection → Cost Driver Identification → CER Development → Parametric Model Development**.
+
+{{primer}}
 
 ### Step 1: Data Collection
 
@@ -274,7 +326,20 @@ Q: In the CER development process, in which step is representative data set asid
     },
     {
       id: 'development', title: 'CER Development: Fitting, Evaluation, Range', summary: 'Regression mechanics, validity checks, extrapolation risk',
-      body: String.raw`### From scatter plot to regression
+      body: String.raw`:::primer:::
+You have fitted a CER and want to know whether you picked the right shape of curve.
+
+:::check
+Q: After fitting a CER, its residual plot shows a clear pattern, such as a funnel shape, instead of random scatter. What does that suggest?
+- The CER fits exceptionally well
+* The functional form is probably wrong
+- The intercept should be read as a fixed cost
+> Residual scatter should be random, with no pattern, no trends and no funnel shape. Patterns suggest the functional form is wrong.
+:::
+
++++
+
+### From scatter plot to regression
 
 **Plot the raw data** in unit space: cost vs. driver. The shape tells you which functional form to try (straight line → linear; curve → power or exponential).
 
@@ -296,6 +361,8 @@ After regression, check four things:
 4. **Residual plot**: scatter should be random (no pattern, no trends, no funnel shape). Patterns suggest the functional form is wrong.
 
 An **intercept (constant term)** is often not statistically significant even when the rest of the model is — this is common, and analysts usually accept the predicted intercept anyway. Never interpret an intercept as an actual fixed cost at $X=0$; especially when it's negative, it can simply be outside the CER's valid range and mathematically meaningless as a "cost."
+
+{{primer}}
 
 ### Range of applicability
 
@@ -325,7 +392,20 @@ Q: When you fit a power-form CER $Y = aX^b$ using OLS regression in log space, w
     },
     {
       id: 'examples', title: 'Worked Examples: Site Activation and Multivariate CER', summary: 'CEBoK\'s own two examples, step-by-step',
-      body: String.raw`### Example 1: Site Activation (Simple Linear CER)
+      body: String.raw`:::primer:::
+Two drivers can each explain only part of a cost. What happens when you use both together?
+
+:::check
+Q: In CEBoK's purchased-services example, cold iron hours alone gives $R^2 = 0.39$ and ship's complement alone gives $R^2 = 0.62$. What would you expect from a CER that uses both drivers together?
+- $R^2$ below 0.39, since the drivers get in each other's way
+- $R^2$ stuck at 0.62, the better single driver
+* $R^2$ well above 0.62, better than either driver alone
+> The two drivers each explain what the other misses, so the combined regression fits far better than either alone.
+:::
+
++++
+
+### Example 1: Site Activation (Simple Linear CER)
 
 **Hypothesis**: Site activation cost can be calculated as a function of the number of workstations per site — the bigger an installation, the more workstations, so the greater the site activation cost.
 
@@ -366,6 +446,8 @@ predict: pred ±3000
 - **Destroyer C** (purchased services $582.75K): complement is a poor explanatory variable, but the ship's **higher cold iron hours** drives its higher cost.
 
 **Combined (multivariate) regression**: $R^2 = 0.87$ — far better than either driver alone — with an excellent **CV of 9.1%**. Both independent variables are statistically significant; the intercept, again, is not. The two drivers show **low correlation with each other** when plotted against each other, confirming there's no meaningful **multicollinearity** (which would occur if two drivers were significantly correlated with each other, making it unlikely both stay good explanatory variables at once).
+
+{{primer}}
 
 The intercept is **negative** — irrelevant here, since the CER only applies within a reasonable range of the drivers that keeps cost positive. **Never interpret a CER's intercept/constant term as a fixed cost at $x=0$.**
 
@@ -417,7 +499,20 @@ Q: Combining cold iron hours and complement raised R² from a maximum of 0.62 (e
     },
     {
       id: 'sensitivity', title: 'Sensitivity Analysis, Cost Response Curves, and Risk vs. Uncertainty (Advanced, not testable)', summary: 'Advanced topics — not testable on PCEA: one-at-a-time sensitivity, Monte Carlo, CRCs, WER/SER, risk vs. uncertainty',
-      body: String.raw`:::note Advanced: not testable on PCEA
+      body: String.raw`:::primer:::
+The site activation CER is \$82,756 + \$26,491 per workstation. At the 10-workstation base case it gives about \$348K.
+
+:::check
+Q: If you halve the driver to 5 workstations, changing nothing else, the cost comes out closest to which value?
+- About \$174K, half the base case
+* About \$215K
+- About \$82K
+> Varying one input at a time, 5 workstations gives about \$215K, roughly 38% below the base case. Cost does not halve with the driver.
+:::
+
++++
+
+:::note Advanced: not testable on PCEA
 CEBoK's Testable Topics table marks this module's "Advanced topics" (Cost Response Curves, Risk vs. Uncertainty, Sensitivity Analysis, and Parametric Analysis of Technical Parameters) as **Not Testable**. The content below is real CEBoK material, but PCEA questions won't draw from it.
 :::
 
@@ -426,6 +521,8 @@ CEBoK's Testable Topics table marks this module's "Advanced topics" (Cost Respon
 **Definition**: Vary a CER's input driver value **one at a time**, holding all other inputs at base-case values, and observe how output cost changes. This addresses uncertainty in overall cost-output variability by showing which input(s) the estimate is most sensitive to.
 
 **Example** (site activation CER, base case 10 workstations $\approx$ \$348K): at 5 workstations, cost $\approx$ \$215K (about −38%); at 15 workstations, cost $\approx$ \$480K (about +38%).
+
+{{primer}}
 
 +++
 
@@ -492,7 +589,24 @@ Q: For SLOC that is more likely to grow than shrink (Fig 3.15), what should the 
     },
     {
       id: 'pitfalls', title: 'Pitfalls, Checks, and Decision Tree', summary: 'Common traps, sanity checks, when to use parametric',
-      body: String.raw`### Common Mistakes
+      body: String.raw`:::primer:::
+Before you trust a fitted CER, there are habits that signal a healthy analysis and habits that signal trouble.
+
+:::sort
+Q: Which of these is a healthy sign, and which is a common mistake?
+buckets: Healthy sign | Common mistake
+- Residuals scatter randomly with no patterns = Healthy sign
+- The model's F-statistic is significant overall = Healthy sign
+- Range of applicability is clearly stated = Healthy sign
+- Extrapolating beyond the data range without flagging risk = Common mistake
+- Reporting only a point estimate, omitting the uncertainty range = Common mistake
+- Dropping outliers without documentation = Common mistake
+> The sanity checks list random residuals, a significant F-statistic and a stated range of applicability. The mistakes list includes unflagged extrapolation, point estimates alone, and undocumented outlier removal.
+:::
+
++++
+
+### Common Mistakes
 
 1. **Extrapolating beyond the data range** without flagging risk.
 2. **Choosing functional form by best $R^2$ alone**, ignoring engineering logic.
@@ -515,6 +629,8 @@ Q: For SLOC that is more likely to grow than shrink (Fig 3.15), what should the 
 ✓ Residuals scatter randomly (no patterns)
 ✓ Range of applicability is clearly stated
 ✓ The intercept is never read as a fixed cost at driver = 0
+
+{{primer}}
 
 +++
 
