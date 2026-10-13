@@ -7,7 +7,21 @@ PCEA.addModule({
   sections: [
     {
       id: 'data-types', title: 'Types of data', summary: 'Univariate, bivariate, multivariate, time series',
-      body: String.raw`Before calculating anything, ask: *how many variables am I looking at, and what role does each play?* The answer tells you which statistics and charts make sense.
+      body: String.raw`:::primer:::
+Every data set has a shape: how many variables, and what role each plays.
+
+:::sort
+Q: How many variables does each situation involve?
+buckets: One variable | Two variables
+- Historical cost growth factors = One variable
+- Software cost vs. lines of code = Two variables
+- Monthly freight volume over time = Two variables
+> A univariate data set has one variable (such as historical cost growth factors). Bivariate data has one X (driver) and one Y (cost), and a time series is bivariate data with time as X.
+:::
+
++++
+
+Before calculating anything, ask: *how many variables am I looking at, and what role does each play?* The answer tells you which statistics and charts make sense.
 
 | Type | What it is | Example | Typical chart |
 |---|---|---|---|
@@ -15,6 +29,8 @@ PCEA.addModule({
 | **Bivariate** | One X (driver), one Y (cost) | Software cost vs. lines of code | Scatter plot |
 | **Multivariate** | Several X's, one Y | Ship supply cost vs. crew size **and** hours underway | 3-D plot / pairwise scatters |
 | **Time series** | Bivariate with time as X | Monthly freight volume | Line / scatter over time |
+
+{{primer}}
 
 :::note
 True univariate data is **rare** in cost estimating. Usually there is a driver hiding somewhere.
@@ -71,7 +87,20 @@ Q: No standard factors handbook exists for your commodity. What should you do to
     },
     {
       id: 'central', title: 'Central tendency', summary: 'Mean, median, mode, and when to use each',
-      body: String.raw`Three numbers compete to be "the typical value." Each answers a slightly different question.
+      body: String.raw`:::primer:::
+Five numbers, one of them far bigger than the rest. Which single number is the "typical" one?
+
+:::check
+Q: Take {2, 5, 7, 9, 25}. The median is 7. How will the mean compare?
+* The mean will be higher than 7
+- The mean will also be exactly 7
+- The mean will be lower than 7
+> The mean uses every value, so the outlier 25 pulls it up (it works out to 9.6). The median ignores how extreme the tails are, which is why it is preferred when there are outliers.
+:::
+
++++
+
+Three numbers compete to be "the typical value." Each answers a slightly different question.
 
 ### Mean: the balancing point
 
@@ -119,6 +148,8 @@ Monthly average therms used: {37, 26, 13, 3, 3, 3, 3, 3, 4, 7, 21, 40}. Pick $c 
 
 The median ignores how extreme the tails are, so it is **preferred when there are outliers** (family income is the classic example).
 
+{{primer}}
+
 ### Mode: the most frequent
 
 Best for **categorical / qualitative** data (most common color) and for finding the peak of a distribution. Its weakness: if the most frequent value is still rare, it tells you little.
@@ -153,7 +184,20 @@ show: data=12,15,18,15,22,15,48
     },
     {
       id: 'dispersion', title: 'Dispersion and CV', summary: 'Variance, standard deviation, coefficient of variation',
-      body: String.raw`Two data sets can have the same mean and look nothing alike. Dispersion measures how spread out the values are.
+      body: String.raw`:::primer:::
+Two data sets can have the same mean and still behave very differently.
+
+:::check
+Q: Two data sets have the same mean, but one is tightly clustered and the other widely spread. You predict a future value from each. What should you expect?
+* A much wider range of future values from the widely spread set
+- The same range from both, since the means match
+- A wider range from the tightly clustered set
+> The Fig 6.6 data sets share a mean, yet one has CV of about 17% (tight) and the other about 38% (dispersed). A much wider range of future values should be expected when predicting from the higher-CV set.
+:::
+
++++
+
+Two data sets can have the same mean and look nothing alike. Dispersion measures how spread out the values are.
 
 ### Variance
 
@@ -187,6 +231,8 @@ The CV is **unitless**. It expresses spread as a percentage of the mean, so you 
 Two data sets can share the same mean but very different spreads. One set has CV ≈ 17% (tightly distributed around the mean); the other has CV ≈ 38% (much more dispersed) even though both have the same expected value. A much wider range of future values should be expected when predicting from the higher-CV set. If a CER doesn't meaningfully reduce a high CV, the cost driver may be misidentified — or the data may simply be inherently noisier.
 :::
 
+{{primer}}
+
 +++
 
 :::check
@@ -218,7 +264,22 @@ predict: cv +- 5%
     },
     {
       id: 'shape', title: 'Skew and outliers', summary: 'Which way the tail points, kurtosis, and the 2σ / 3σ rules',
-      body: String.raw`### Skewness
+      body: String.raw`:::primer:::
+A distribution can lean to one side. The mean and median reveal which.
+
+:::sort
+Q: Which shape does each go with?
+buckets: Symmetric | Right-skewed | Left-skewed
+- Normal distribution = Symmetric
+- Mean = median = mode = Symmetric
+- Lognormal distribution = Right-skewed
+- Beta distribution = Left-skewed
+> Symmetric data (e.g. normal) has mean = median = mode. The lognormal is the classic right-skewed example, with its tail extending right. The beta distribution is a classic left-skewed example.
+:::
+
++++
+
+### Skewness
 
 - **Symmetric** (e.g. normal): mean = median = mode
 - **Right-skewed** (positive skew): mean > median, the tail extends right (the lognormal is the classic example)
@@ -227,6 +288,8 @@ predict: cv +- 5%
 :::key
 The direction of skew follows the **tail**, not the hump.
 :::
+
+{{primer}}
 
 ### Pearson's median skewness
 
@@ -338,7 +401,22 @@ Q: A point sits 4.24 SD from the mean; removing it moves $R^2$ from 0.1608 to 0.
     },
     {
       id: 'visual', title: 'Visualization tools', summary: 'Scatter, histogram, bar, box plot',
-      body: String.raw`What you can't see in a table often jumps out of a chart.
+      body: String.raw`:::primer:::
+A box plot squeezes a whole data set into five numbers.
+
+:::order
+Q: Put the five numbers of a box plot's summary in order, low to high.
+1. Minimum
+2. Q1 (25th percentile)
+3. Median (Q2, 50th percentile)
+4. Q3 (75th percentile)
+5. Maximum
+> The five-number summary runs from the minimum, through Q1, the median (Q2) and Q3, up to the maximum. The box holds the middle 50% of the data, from Q1 to Q3.
+:::
+
++++
+
+What you can't see in a table often jumps out of a chart.
 
 ### Scatter plots (bivariate)
 - **Y-axis**: dependent variable (usually cost). **X-axis**: independent variable (the cost driver).
@@ -393,6 +471,8 @@ Q: A bar chart shows each company's SD as a whisker. To turn that into a confide
 
 The **box** holds the middle 50% of the data (Q1 to Q3). The line in the box is the **median**. **Whiskers** reach toward the min and max, and points plotted separately are potential outliers.
 
+{{primer}}
+
 :::example Figs 6.13/6.14: the same gas-bill data as a box plot
 Q1 ≈ \$11–12, median = \$16.50, Q3 = \$37.00. So 25% of bills fall in the \$11–12 range, the next 25% from Q1 to the \$16.50 median, the next 25% from the median to the \$37.00 Q3, and the top 25% (including potential outliers) above that. The far-right outliers turned out to be winter-month (Dec/Jan/Feb) bills — 4-5× the summer bills, plausibly explained by heating demand (or an occupant home more often). Understanding *why* a point looks like an outlier matters more than the flag itself.
 :::
@@ -431,7 +511,22 @@ Q: You want to show how a program's EAC changed from a September baseline to an 
     },
     {
       id: 'functions', title: 'Function types and transformations', summary: 'Linear, power, exponential, and making curves straight',
-      body: String.raw`Regression works on straight lines. When the data curves, we **transform** it until it is straight, fit a line, then transform back.
+      body: String.raw`:::primer:::
+Regression fits straight lines, but cost data often curves.
+
+:::sort
+Q: In which space does each function plot as a straight line?
+buckets: Unit space | Log-log | Semi-log
+- Linear function = Unit space
+- Power function = Log-log
+- Learning curve = Log-log
+- Exponential function = Semi-log
+> Linear is straight in unit space, a power function is straight in log-log space, and an exponential is straight in semi-log space. Learning curves are power functions with negative b.
+:::
+
++++
+
+Regression works on straight lines. When the data curves, we **transform** it until it is straight, fit a line, then transform back.
 
 | Function | Form | Linear form | Straight in |
 |---|---|---|---|
@@ -442,6 +537,8 @@ Q: You want to show how a program's EAC changed from a September baseline to an 
 - **Linear** is the most basic form and the best first assumption.
 - **Power**: slope in log-log space equals the exponent $b$. Learning curves are power functions with negative $b$.
 - **Exponential**: rapid growth or decay; less common in CERs.
+
+{{primer}}
 
 +++
 
@@ -478,7 +575,20 @@ Q: Data curves in unit space but is a straight line when only Y is logged. Which
     },
     {
       id: 'ml', title: 'Machine learning', summary: 'Supervised classification/regression, unsupervised, reinforcement learning',
-      body: String.raw`Machine Learning (ML) algorithms learn from data to make predictions or inform decisions, using statistical, mathematical, and numerical techniques. ML doesn't replace critical thought in cost estimating — it adds tools for specific use cases in the data analysis process.
+      body: String.raw`:::primer:::
+A classifier sees an instrument it has never met and has to pick a class using weight and power.
+
+:::check
+Q: Class A/B averages weight 1100 and power 1600. Class C/D averages weight 900 and power 1400. A new instrument has weight 1050 and power 1525. Which class is it more likely to be?
+* Class A/B
+- Class C/D
+- Equally likely
+> The new point is 0.5 SD from A/B's weight mean and 0.75 SD from its power mean, but 1.5 SD and 1.25 SD from C/D's means. Normalized, A/B comes out about 90.83% likely against 9.17% for C/D.
+:::
+
++++
+
+Machine Learning (ML) algorithms learn from data to make predictions or inform decisions, using statistical, mathematical, and numerical techniques. ML doesn't replace critical thought in cost estimating — it adds tools for specific use cases in the data analysis process.
 
 There are three primary techniques: **supervised** (labeled data), **unsupervised** (unlabeled data, looking for similarity), and **reinforcement** (learning by interacting with an environment in real time). Supervised learning splits into **classification** (predicting a category) and **regression** (predicting a number).
 
@@ -514,6 +624,8 @@ Class A/B: weight mean 1100 (SD 100), power mean 1600 (SD 100). Class C/D: weigh
 
 The new point is 90.83% likely Class A/B. Naive Bayes classifiers generally work better with normally distributed data, and extend to more than two variables.
 :::
+
+{{primer}}
 
 :::check
 Q: A new point is 0.5 SD from Class A/B's weight mean (30.85% probability) and 0.75 SD from A/B's power mean (22.66%). What's the joint (unnormalized) probability product for A/B?
@@ -638,7 +750,20 @@ Q: Which supervised classification algorithm is specifically built for binary (y
     },
     {
       id: 'pitfalls', title: 'Pitfalls, biases and examples', summary: 'Common mistakes and expert-opinion biases',
-      body: String.raw`### Data analysis pitfalls
+      body: String.raw`:::primer:::
+An expert says follow-on ships cost 4% of the lead ship. Then you plot the history.
+
+:::check
+Q: You plot the historical data for ships 2, 3 and 4. What do you expect the trend to show relative to the expert's 4%?
+* A trend pointing to a higher value, about 6%
+- A trend pointing right at 4%
+- A trend pointing to a lower value than 4%
+> The expert estimated 4% of the lead ship, but plotting historical data for ships 2, 3 and 4 showed a trend pointing to about 6%. The graph corrected the judgment.
+:::
+
++++
+
+### Data analysis pitfalls
 
 1. **Removing outliers without justification.** Investigate first and document any removal.
 2. **Poor histogram binning.** Don't accept the software default; experiment.
@@ -663,6 +788,8 @@ The fix: **validate with data analysis, cross-checks and documentation.**
 :::example Validating engineering judgment
 An expert estimated follow-on ship support at 4% of the lead ship. Plotting historical data for ships 2, 3 and 4 showed a trend pointing to about **6%**. The graph corrected the judgment.
 :::
+
+{{primer}}
 
 :::check
 Q: An estimator insists a task will take 3 months "because it always goes smoothly," even though history shows 5. Which bias is this?
@@ -726,7 +853,21 @@ Q: In the logistic risk model, which coefficient has the largest positive influe
     },
     {
       id: 'advanced', title: 'Related and advanced topics', summary: 'Sample size (advanced) and outlier identification rules (testable, less emphasized)',
-      body: String.raw`### Sufficient sample size
+      body: String.raw`:::primer:::
+A sample of just four data points can leave a lot of doubt about the true mean.
+
+:::check
+Q: The data has CV = 30% and n = 4. About how far from the estimated mean could the true mean be, with 68.3% confidence?
+- About ±5%
+* About ±17%
+- About ±30%
+- About ±50%
+> At n = 4 with CV = 30%, the 68.3% CI is the estimated mean ±17%: a 68.3% chance the true mean is within 17%.
+:::
+
++++
+
+### Sufficient sample size
 
 Rearranging the confidence-interval formula for the mean into percentage terms gives $1 \pm t_{\alpha/2,n-1}\, CV/\sqrt{n}$ — the estimated mean, plus or minus a range set by the CV and the sample size $n$.
 
@@ -738,6 +879,8 @@ A quick rule of thumb rounds $t \approx 1$:
 :::example Worked example, CV = 30%
 At $n = 4$, the 68.3% CI is the estimated mean ±17% — a 68.3% chance the true mean is within 17%. The source's goal is judgments within 5%; for a 95% CI, its Fig 6.45 table gives a sufficient sample of $n = 36$. The rule-of-thumb ($t\approx1$) results track the exact ($t$-distribution) results closely — well worth the simplicity.
 :::
+
+{{primer}}
 
 :::check
 Q: Using the 95% CI rule of thumb $2\,CV/\sqrt{n}$ with CV = 30%, what sample size makes the range ±10% (i.e., $2(0.30)/\sqrt{n} = 0.10$)?
