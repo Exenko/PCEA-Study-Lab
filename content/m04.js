@@ -9,9 +9,24 @@ PCEA.addModule({
   sections: [
     {
       id: 'importance', title: 'Why data matters', summary: 'The foundation of every estimate',
-      body: String.raw`Every estimating method — analogy, parametric/CER, and engineering build-up — ultimately rests on **historical data**. The GAO Cost Estimating and Assessment Guide and the CEBoK stress that an estimate is only as good as the data underlying it: strong methodology cannot compensate for bad, irrelevant, or misunderstood data.
+      body: String.raw`:::primer:::
+You hand a skilled estimator a sophisticated model but weak data. What do you expect?
+
+:::check
+Q: A skilled estimator feeds bad, irrelevant data into a strong estimating method. What happens to the estimate?
+- The strong method corrects for the weak data
+* It is only as good as the data, so the method cannot rescue it
+- It stays credible as long as the model is well documented
+> The GAO guide and CEBoK stress that an estimate is only as good as its underlying data: strong methodology cannot compensate for bad, irrelevant, or misunderstood data.
+:::
+
++++
+
+Every estimating method — analogy, parametric/CER, and engineering build-up — ultimately rests on **historical data**. The GAO Cost Estimating and Assessment Guide and the CEBoK stress that an estimate is only as good as the data underlying it: strong methodology cannot compensate for bad, irrelevant, or misunderstood data.
 
 Estimators must spend significant time and rigor on data collection because it directly drives the **credibility** and **defensibility** of the resulting estimate.
+
+{{primer}}
 
 ### Key Principles
 
@@ -63,7 +78,24 @@ Q: Which is the primary reason to collect and document data sources?
     },
     {
       id: 'types', title: 'Types of data', summary: 'Cost, technical, programmatic, and quality dimensions',
-      body: String.raw`### Cost, Technical, and Programmatic
+      body: String.raw`:::primer:::
+Estimators collect three families of data, not just dollars.
+
+:::sort
+Q: Which family does each piece of data belong to?
+buckets: Cost | Technical | Programmatic
+- Labor hours = Cost
+- Material costs = Cost
+- Lines of code = Technical
+- Power = Technical
+- Production rate = Programmatic
+- Contract type = Programmatic
+> Cost data is dollars, hours, materials and rates; technical data is weight, power, speed, lines of code and the like; programmatic data is schedule, quantities, production rate and contract type.
+:::
+
++++
+
+### Cost, Technical, and Programmatic
 
 Three broad categories of data are collected for every estimate:
 
@@ -72,6 +104,8 @@ Three broad categories of data are collected for every estimate:
 | **Cost** | Dollars, labor hours, material costs, rates, by WBS element and time period |
 | **Technical** | Weight, power, speed, lines of code, materials, performance, complexity, TRL |
 | **Programmatic** | Schedule, quantities, production rate, contract type, acquisition strategy, number of test articles |
+
+{{primer}}
 
 **Why all three?** Technical and programmatic data provide the **context** that makes cost data usable and normalizable. You cannot normalize for quantity without programmatic data on lot size, or normalize for content without technical data on what was actually built.
 
@@ -250,12 +284,29 @@ Q: "O&M utilities cost \$36,500" is a poor data point mainly because…
     },
     {
       id: 'considerations', title: 'Data quality considerations', summary: 'Availability, accessibility, validity, constraints, and pitfalls',
-      body: String.raw`| Consideration | Question to Ask |
+      body: String.raw`:::primer:::
+Good data can still fail you for very different reasons.
+
+:::sort
+Q: Which of the four data considerations does each problem raise?
+buckets: Availability | Accessibility | Validity | Constraints
+- Nobody ever recorded costs at the WBS level you need = Availability
+- The data exists but is proprietary or classified = Accessibility
+- The data comes from a system that is not comparable = Validity
+- You only have time for a quick ROM = Constraints
+> Availability asks whether the data exists at the needed WBS level; accessibility whether you can get it (proprietary data, classification); validity whether it is current and from comparable systems; constraints cover time and the estimate's requirements, such as a ROM.
+:::
+
++++
+
+| Consideration | Question to Ask |
 |---|---|
 | **Availability** | Does the data exist at all, at the WBS level I need? |
 | **Accessibility** | Can I get it? (proprietary data, classification, organizational barriers) |
 | **Validity** | Is it relatively current and applicable (from comparable systems)? |
 | **Constraints** | Time and the underlying estimate requirements (e.g., a ROM vs. a cross-check) |
+
+{{primer}}
 
 These four considerations determine whether data can realistically be obtained and used in an estimate.
 
@@ -294,7 +345,21 @@ Q: Program A reports airframe cost \$50M for 100 units, Program B reports \$60M 
     },
     {
       id: 'process', title: 'Data collection process and sources', summary: 'The structured workflow and where to find data',
-      body: String.raw`### The Structured Workflow
+      body: String.raw`:::primer:::
+An estimator could start pulling data on day one. A sensible one doesn't.
+
+:::order
+Q: Put the steps before collecting data in order.
+1. Understand the total picture of the system, program and purpose
+2. Define the estimate structure (the Cost Element Structure)
+3. Identify the data needs for each WBS element and method
+4. Develop a data collection plan
+> The workflow starts with understanding the total picture, then defines the CES, then identifies data needs per element and method, and ends with a documented data collection plan.
+:::
+
++++
+
+### The Structured Workflow
 
 Before collecting data, follow these steps:
 
@@ -302,6 +367,8 @@ Before collecting data, follow these steps:
 2. **Define the estimate structure**: cost estimators establish a documented **Cost Element Structure (CES)**, a detailed, bounded structure that determines what needs to be estimated and how it will be shown. **The CES is not the same as a contract WBS** — the CES is all-inclusive, spanning the entire subject being estimated over the entire estimate timeframe, and it is tailored/bounded to the customer's needs (e.g., excluding O&M elements if only development is being estimated). Data collection should be organized around this structure.
 3. **Identify data needs**: for each WBS element and chosen method (analogy, parametric/CER, or engineering build-up), determine what data is needed. Different methods have different requirements.
 4. **Develop a data collection plan**: a formal documented plan specifying what data is needed, from which sources, using what methods (interviews, document review, database queries, surveys), the schedule for collection, and how data quality will be verified. Having a plan improves consistency, ensures traceability, and helps manage time/resources.
+
+{{primer}}
 
 +++
 
@@ -396,7 +463,23 @@ Q: Which is a cost driver example given for cabling cost?
     },
     {
       id: 'normalization', title: 'Data normalization', summary: 'Adjusting data for apples-to-apples comparison',
-      body: String.raw`**Normalization** is the process of adjusting collected data so that all data points are placed on a **consistent, comparable basis** before they are used for analysis. Without normalization, apparent differences between data points may simply reflect differences in scope, timing, quantity, or units rather than true cost differences.
+      body: String.raw`:::primer:::
+Normalization is not one adjustment. Different mismatches call for different fixes.
+
+:::sort
+Q: Which kind of normalization fixes each mismatch?
+buckets: Cost (inflation) | Quantity | Content | Sizing
+- One cost is in CY1994 dollars, another in BY2000 dollars = Cost (inflation)
+- One weight is in kilograms, another in tons = Sizing
+- Cost per meter versus cost per foot = Sizing
+- One source includes spares, another does not = Content
+- Costs recorded at very different production quantities = Quantity
+> Inflation indices put dollars on a common base year; learning curves put quantities on a common point; sizing converts mixed units (kg, tons, meters, feet) to one standard; content mapping adds or removes scope such as spares or fee.
+:::
+
++++
+
+**Normalization** is the process of adjusting collected data so that all data points are placed on a **consistent, comparable basis** before they are used for analysis. Without normalization, apparent differences between data points may simply reflect differences in scope, timing, quantity, or units rather than true cost differences.
 
 ### The Key Normalization Groupings
 
@@ -408,6 +491,8 @@ Q: Which is a cost driver example given for cabling cost?
 | **Content** | Different scope in the "same" element | Map to a common WBS; add or remove content (e.g., strip out spares or fee) |
 | **State of development** | Prototype/EMD vs. production, new design vs. modification | Separate groups, dummy variables, or adjustment factors |
 | **Key groupings / units** | Non-homogeneous data / mixed units | Group by mission application, operating environment, contractor, era; ensure consistent units |
+
+{{primer}}
 
 **Why this matters**: To validly compare two data points, they must be normalized/checked across **all relevant dimensions simultaneously**: same time basis, same quantity basis, same content/scope, same units of measure, and same state of development/maturity. Missing any one of these dimensions can invalidate an otherwise careful comparison.
 
@@ -520,10 +605,28 @@ predict: byValue +- 1%
     },
     {
       id: 'recurring', title: 'Non-recurring vs. recurring cost', summary: 'Why separation matters before analysis',
-      body: String.raw`Non-recurring and recurring costs must be broken out to add fidelity to estimates, accounting for anomalies such as **production quantity** and **time-phasing** differences.
+      body: String.raw`:::primer:::
+Some costs are paid once; others come back with every unit.
+
+:::sort
+Q: Is each cost non-recurring or recurring?
+buckets: Non-recurring | Recurring
+- Developing proof of concept = Non-recurring
+- Building production molds = Non-recurring
+- Spares = Recurring
+- Developed software installations = Recurring
+- Hardware built during the program = Recurring
+> Non-recurring costs are one-time development costs such as proof of concept and production molds; recurring costs are maintenance and production costs incurred repeatedly, including hardware built during the program, software installations and spares.
+:::
+
++++
+
+Non-recurring and recurring costs must be broken out to add fidelity to estimates, accounting for anomalies such as **production quantity** and **time-phasing** differences.
 
 - **Non-recurring cost**: development costs, incurred once — e.g., developing proof of concept, setting up the factory line for production, building production molds, upgrades/improvements, and the original purchase of hardware/software.
 - **Recurring cost**: maintenance and production costs, incurred repeatedly — e.g., hardware built during the program, capitalized non-recurring hardware/software, developed software installations, and **spares**, since spares are a continuous expense.
+
+{{primer}}
 
 A related distinction is **fixed vs. variable cost**: fixed costs don't change as the production rate changes (e.g., **rent** for facilities), while variable costs do change with production rate (e.g., **electricity consumed** or **overtime pay**).
 
@@ -577,7 +680,20 @@ Q: Why separate recurring from non-recurring cost before quantity-based analysis
     },
     {
       id: 'practice', title: 'Putting it together', summary: 'Common mistakes and a normalization checklist',
-      body: String.raw`### Common Mistakes
+      body: String.raw`:::primer:::
+Imagine a dataset already converted to one base year and one set of units.
+
+:::check
+Q: Is that dataset ready for a CER fit?
+- Yes, once dollars and units match it is fully normalized
+* Not necessarily: any checklist dimension left unchecked can invalidate the conclusion
+- Yes, any other differences average out in the regression
+> The checklist covers time, quantity, content, units, state of development, recurring vs. non-recurring, and source. If any dimension is left unchecked, your conclusion may be invalid.
+:::
+
++++
+
+### Common Mistakes
 
 1. **Comparing unnormalized cost data** — comparing then-year dollars, different quantities, or different scopes directly, producing invalid conclusions.
 2. **Ignoring content differences** — pooling data where one source includes spares/support and another does not.
@@ -604,6 +720,8 @@ Before performing statistical analysis or CER development, review your dataset a
 - ✓ **Source documented**: Every data point's source and context recorded?
 
 If any dimension is left unchecked, your conclusion may be invalid.
+
+{{primer}}
 
 :::tip
 **A normalized data set is homogeneous and comparable.** Each data point can be directly compared to the others without artificial differences from scope, timing, quantity, or units distorting the comparison.
