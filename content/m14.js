@@ -7,7 +7,23 @@ PCEA.addModule({
   sections: [
     {
       id: 'overview', title: 'Basics of contract pricing', summary: 'Acquisition process, purpose, evaluation',
-      body: String.raw`### The acquisition process
+      body: String.raw`:::primer:::
+Buying a system is not one step. The government and contractor pass through a fixed chain from need to award.
+
+:::order
+Q: Put these stages in the order they happen.
+1. Requirements
+2. Solicitation (RFP/RFQ)
+3. Proposal preparation
+4. Proposal evaluation
+5. Negotiation
+6. Contract award
+> The government defines requirements, issues the solicitation, the contractor prepares a proposal, the government evaluates it, the parties negotiate, and then the contract is awarded.
+:::
+
++++
+
+### The acquisition process
 
 The path from need to contract award spans:
 
@@ -21,6 +37,8 @@ The path from need to contract award spans:
 8. **Administration** - performance tracking, especially critical for cost and incentive contracts
 
 Cost estimators work **both sides**: contractors build proposals; government builds the **Independent Government Cost Estimate (IGCE)** and evaluates.
+
+{{primer}}
 
 +++
 
@@ -55,7 +73,23 @@ Above a dollar threshold set by the Truth in Negotiations Act (TINA), now codifi
     },
     {
       id: 'types', title: 'Contract types and the risk spectrum', summary: 'FFP to CPFF: fee/profit/margin, share ratios, the risk spectrum',
-      body: String.raw`Contracting rests on **commensurate risk and reward**: the more difficult and riskier the work, the greater the expected profit, tempered by more uncertainty in the outcome. FAR Part 16 defines a **spectrum of contract types**, differentiated by how cost risk is allocated. Contract type is the **primary mechanism** for managing that risk.
+      body: String.raw`:::primer:::
+Every contract type is a bet on who eats a cost surprise. First, which family does each type belong to?
+
+:::sort
+Q: Is each contract type fixed-price or cost-reimbursement?
+buckets: Fixed-price | Cost-reimbursement
+- Firm Fixed Price (FFP) = Fixed-price
+- Fixed Price Incentive (FPIF) = Fixed-price
+- Cost Plus Fixed Fee (CPFF) = Cost-reimbursement
+- Cost Plus Incentive Fee (CPIF) = Cost-reimbursement
+- Cost Plus Award Fee (CPAF) = Cost-reimbursement
+> Fixed-price contracts set price first and subtract cost to get profit. Cost-reimbursement contracts reimburse allowable cost and add a determined fee to get price.
+:::
+
++++
+
+Contracting rests on **commensurate risk and reward**: the more difficult and riskier the work, the greater the expected profit, tempered by more uncertainty in the outcome. FAR Part 16 defines a **spectrum of contract types**, differentiated by how cost risk is allocated. Contract type is the **primary mechanism** for managing that risk.
 
 The two broad categories are **fixed-price** contracts (price is determined first, then cost is subtracted, resulting in profit - which may be negative) and **cost-reimbursement** contracts (the government reimburses total allowable cost, to which a determined fee is added to result in price).
 
@@ -86,6 +120,8 @@ $$\text{Margin \%} = \frac{\text{Fee \%}}{1 + \text{Fee \%}} \qquad \text{Fee \%
 | **Time & Materials (T&M) / Labor Hour (LH)** | Low | High | Built-in labor rates + materials; no cost-control incentive | Scope/duration can't be estimated |
 
 **General rule:** as requirements/cost uncertainty increase, contract type moves **from fixed-price toward cost-reimbursement**, shifting risk from contractor to government. The contractor earns a **risk premium** (higher profit) for bearing more risk.
+
+{{primer}}
 
 +++
 
@@ -137,7 +173,21 @@ Q: CPFF is best described, in shareline terms, as approximately...
     },
     {
       id: 'fpif', title: 'Fixed Price Incentive (FPIF)', summary: 'Target cost, share ratio, adjusted profit, PTA, worked example',
-      body: String.raw`FPIF contracts set a **target cost (TC)**, **target profit (TP)**, a **ceiling price (CP)**, and a **share ratio**. Cost performance is shared via the ratio up to the ceiling; beyond the ceiling, the contractor absorbs 100% of further growth (the contract effectively becomes FFP at that point).
+      body: String.raw`:::primer:::
+Take the section's \$90M FPIF example, with target profit of \$9M. Overrun or underrun, how does the contractor fare against that target?
+
+:::sort
+Q: Is adjusted profit above or below the \$9M target at each final cost (target cost \$90M)?
+buckets: Above target profit | Below target profit
+- Final cost of \$85M = Above target profit
+- Final cost of \$97M = Below target profit
+- Final cost of \$105M = Below target profit
+> An underrun lifts profit above target. An overrun cuts it below target, and even once price is capped at the ceiling the contractor still earns less than the \$9M target.
+:::
+
++++
+
+FPIF contracts set a **target cost (TC)**, **target profit (TP)**, a **ceiling price (CP)**, and a **share ratio**. Cost performance is shared via the ratio up to the ceiling; beyond the ceiling, the contractor absorbs 100% of further growth (the contract effectively becomes FFP at that point).
 
 ### FPIF elements
 
@@ -216,6 +266,8 @@ All three scenarios share: TC = \$90M, TP = "10%" of TC = \$9M (so target price 
 
 **Scenario 3 - overrun beyond PTA, FC = \$105M** (PTA = \$102.86M): price is capped at the ceiling, \$108M. $AP = FP - FC = 108 - 105 = \$3M$ (equivalently, $AP = TP + S(TC - PTA) - (FC - PTA) = 9 + 0.30(90 - 102.86) - (105 - 102.86) = 9 - 3.86 - 2.14 = \$3M$).
 
+{{primer}}
+
 :::note Source note
 CEBoK's text renders the target profit as "\$10%" (a typo for "10%," i.e., \$9M) in this example. The scenario share ratios (80/20 underrun, 70/30 overrun) are used in the figure's math but are not spelled out in the surrounding prose - treat the numbers above, not the prose, as authoritative.
 :::
@@ -242,7 +294,22 @@ Q: Same example, Scenario 3 (FC = \$105M, PTA = \$102.86M, ceiling = \$108M): fi
     },
     {
       id: 'cpif', title: 'Cost-Reimbursement and Other Incentive Contracts', summary: 'CPFF, CPIF with RIE, CPAF, worked examples',
-      body: String.raw`Cost-reimbursement contracts reimburse the contractor's **allowable, allocable, reasonable costs** (per FAR Part 31) plus a **fee**. They require an adequate contractor accounting system plus government surveillance, and are used when uncertainty is too high for fixed-price.
+      body: String.raw`:::primer:::
+FPIF and CPIF both share cost growth through a ratio, yet they end differently when costs run far off target.
+
+:::sort
+Q: Which contract type does each description fit?
+buckets: FPIF | CPIF
+- Has a ceiling price on total payment = FPIF
+- Has a minimum fee and a maximum fee = CPIF
+- Price is set first, then cost is subtracted to get profit = FPIF
+- Contractor is reimbursed allowable cost plus a fee = CPIF
+> FPIF caps total price at the ceiling. CPIF reimburses allowable cost plus a fee that is bounded by a minimum and maximum.
+:::
+
++++
+
+Cost-reimbursement contracts reimburse the contractor's **allowable, allocable, reasonable costs** (per FAR Part 31) plus a **fee**. They require an adequate contractor accounting system plus government surveillance, and are used when uncertainty is too high for fixed-price.
 
 ### CPFF (Cost Plus Fixed Fee)
 
@@ -279,6 +346,8 @@ $$RIE_{high} = \frac{TF - mF}{CS_{over}} + TC \qquad RIE_{low} = TC - \frac{MF -
 where $mF$/$MF$ are the min/max fee, and $CS_{over}$/$CS_{under}$ are the contractor's shares of an overrun/underrun respectively (note: CEBoK's own text labels both share terms "overrun" - a source typo; treat one as the underrun share as the subscripts indicate).
 
 **Worked example**: TC = \$90M, mF = \$1M, MF = \$10M, TF = \$9M, share 70/30 (used for both sides here). $RIE_{high} = (9-1)/0.30 + 90 = \$116.67M$; $RIE_{low} = 90 - (10-9)/0.30 = \$86.67M$. The \$8M gap between TF and mF is closed at 30 cents on the dollar over a \$26.67M range above TC; the \$1M gap between TF and MF closes over a \$3.33M range below TC.
+
+{{primer}}
 
 :::widget cpif:::
 
@@ -363,7 +432,23 @@ Q: The "ceiling" in a CPAF contract is a...
     },
     {
       id: 'proposal', title: 'Cost proposals and basis of estimate', summary: 'BOE content, three equations, cost elements, methodology, quality',
-      body: String.raw`### Basis of Estimate (BOE)
+      body: String.raw`:::primer:::
+A proposal's basis of estimate leans on one of three equation shapes. Each has its own signature inputs.
+
+:::sort
+Q: Which BOE equation does each description fit?
+buckets: Analogy equation | Related (indirect) cost equation | Build-up equation
+- Starts from the actual cost of a successful analogy program = Analogy equation
+- F is the ratio of the estimated system's parameter to the analogy's parameter = Analogy equation
+- F is a historically demonstrated fraction applied to an estimated direct cost = Related (indirect) cost equation
+- Covers items like program management, test, or design hours = Related (indirect) cost equation
+- Multiplies a historical rate such as MH/ft or \$/trip by a measured or design parameter = Build-up equation
+> Analogy is E = A x F with F = Pe/Pa. Related cost is E = F x C with F = Ci/Cd. Build-up is E = R x P, a historical rate times a measured or design parameter.
+:::
+
++++
+
+### Basis of Estimate (BOE)
 
 The **BOE is the documented rationale** for every element of the cost proposal, containing a description of the work (WBS, cost type, schedule, activity), the estimating methodology, and all planned resources. It must allow an independent reviewer to understand, trace, and verify - and *replicate* - how each number was derived. BOE quality cannot exceed the quality of the underlying cost estimate.
 
@@ -403,6 +488,8 @@ Proposal BOEs use the estimating methods from earlier modules: **analogy, parame
 - **Build-Up Equation**: $E = R \times P$, where $R$ is a historical rate (MH/ft, MH/ton, \$/trip) and $P$ is a measured/surveyed/design parameter. $R$ must be **historically demonstrated**; $P$ must be a **measured or design value**. **Risk lies in $P$**, because $R$ is usually well-justified. Preferred variant: $E = R \times P + b$, justified by regression.
 
 :::widget boe-calc:::
+
+{{primer}}
 
 +++
 
@@ -454,7 +541,22 @@ Q: BOE Fig. 14.13: 1,776 LOC x 1.19 hrs/LOC x \$42/hr. Total dollars? (round hou
     },
     {
       id: 'analysis', title: 'Price and cost analysis', summary: 'Analysis methods, comparative process, BOE review, errors',
-      body: String.raw`### Price analysis vs. cost analysis
+      body: String.raw`:::primer:::
+Government evaluators can look at a proposal's bottom line only, or open up every cost element. Each approach has its own triggers.
+
+:::sort
+Q: Does each description fit price analysis or cost analysis?
+buckets: Price analysis | Cost analysis
+- Evaluates the total price without examining separate cost elements = Price analysis
+- Used when adequate price competition exists = Price analysis
+- Evaluates labor hours, rates, material, overhead, G&A, and profit = Cost analysis
+- Verifies reasonableness, allocability, and allowability under FAR Part 31 = Cost analysis
+> Price analysis looks at total price, typically under adequate competition. Cost analysis evaluates the individual cost elements and is required when adequate competition is absent or certified data was obtained.
+:::
+
++++
+
+### Price analysis vs. cost analysis
 
 **Price Analysis:**
 - Evaluate the **total price** without examining separate cost elements
@@ -467,6 +569,8 @@ Q: BOE Fig. 14.13: 1,776 LOC x 1.19 hrs/LOC x \$42/hr. Total dollars? (round hou
 - Verifies reasonableness, allocability, and allowability under FAR Part 31 cost principles
 
 **Cost Realism** (for cost-type contracts): is the proposed cost realistic for the work described? Government may adjust the proposed cost to a **most probable cost** for evaluation purposes.
+
+{{primer}}
 
 +++
 
@@ -565,7 +669,21 @@ Q: Where in the UCF do offerors learn how proposals will be evaluated?
     },
     {
       id: 'testable', title: 'Testable Topics', summary: 'What CEBoK expects you to know for this module',
-      body: String.raw`CEBoK publishes an explicit testable-topics table for this module:
+      body: String.raw`:::primer:::
+CEBoK says what to study hardest in this module. Where would you put each topic?
+
+:::sort
+Q: How does CEBoK rate each topic for this module?
+buckets: Testable | Not testable
+- Types of contracts (names and basics of each one) = Testable
+- Computing FPIF adjusted profit and PTA, or CPIF adjusted fee and RIE = Testable
+- Anything specific about the FAR unless otherwise noted = Not testable
+> The table marks contract types and profit/loss calculations as testable. Anything specific about the FAR is not testable unless a number is explicitly called out elsewhere in the module.
+:::
+
++++
+
+CEBoK publishes an explicit testable-topics table for this module:
 
 | Testable | Testable, but less emphasized | Not testable |
 |---|---|---|
@@ -574,6 +692,8 @@ Q: Where in the UCF do offerors learn how proposals will be evaluated?
 | Calculating vendor profit (loss) in various scenarios | | |
 
 In short: know the contract types (FFP through CPFF and their variants), how each allocates risk and reward, and how to compute contractor profit/loss under a given scenario (FPIF's adjusted profit and PTA, CPIF's adjusted fee and RIE, CPAF's award-fee mechanics). The Basis of Estimate is tested, but less heavily than the contract-type math. Specific FAR citations (thresholds, section numbers) and the names/roles of government organizations (NCCA, CAIG, DCAA, etc.) are background reading, not exam content, unless a specific number is explicitly called out elsewhere in this module (e.g., the CPFF fee caps, the letter-contract 50% rule).
+
+{{primer}}
 
 :::check
 Q: Per CEBoK's testable-topics table for this module, which is explicitly called out as "not testable" (absent a specific callout elsewhere)?
@@ -593,7 +713,20 @@ Q: How does CEBoK characterize the Basis of Estimate's exam emphasis relative to
     },
     {
       id: 'advanced', title: 'Advanced (not testable per CEBoK)', summary: 'Full UCF, CAS exceptions, contract-type envelope comparison',
-      body: String.raw`Per the Testable Topics table, the FAR specifics and organizational detail below are **not testable** - read for context, not memorization. (PTA and RIE calculations remain core/testable material, covered in the FPIF and Cost-Reimbursement sections above.)
+      body: String.raw`:::primer:::
+Plot contractor profit against actual cost for different contract types. One type draws a very different line from the rest.
+
+:::check
+Q: Under CPFF, what happens to the contractor's profit as actual cost overruns?
+* Nothing; the profit function is flat
+- It falls dollar-for-dollar with the overrun
+- It rises as the fee grows with the overrun
+> The CPFF profit function is invariant (flat). FFP is the one that rises or falls dollar-for-dollar with under/overruns.
+:::
+
++++
+
+Per the Testable Topics table, the FAR specifics and organizational detail below are **not testable** - read for context, not memorization. (PTA and RIE calculations remain core/testable material, covered in the FPIF and Cost-Reimbursement sections above.)
 
 ### Uniform Contract Format (UCF), full structure
 
@@ -623,6 +756,8 @@ Plotting **profit**, **price**, and **revenue** functions for FFP, FPI, CPIF, an
 **Takeaway**: CPIF is CPFF with a share-ratio-driven zone in the middle (between the min and max fee); FPI is FFP with a share-ratio-driven zone in the middle (up to the PTA). Everything else is a blend that behaves like whichever bound it's closest to once outside its own incentive range.
 
 :::widget contract-spectrum:::
+
+{{primer}}
 
 :::note Source note
 CEBoK's PTA formula section (Related and Advanced Topics) writes $PTA = (CP-TP)/GS + TC$ using "TP" for **target price**, whereas the main FPIF section elsewhere uses TP for **target profit**. Watch for this notational overlap - the formula itself, $PTA = TC + (CP - \text{Target Price})/\text{Government Share}$, is unchanged either way.
