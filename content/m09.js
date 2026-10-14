@@ -7,12 +7,30 @@ PCEA.addModule({
   sections: [
     {
       id: 'definitions', title: 'Risk and Uncertainty Definitions', summary: 'Key terms, types of risk, why programs grow in cost',
-      body: String.raw`### Risk vs. Uncertainty vs. Opportunity
+      body: String.raw`:::primer:::
+Not every unknown in an estimate is a threat, and not every one is a single event.
+
+:::sort
+Q: Uncertainty, risk, or opportunity?
+buckets: Uncertainty | Risk | Opportunity
+- Variation in labor rates = Uncertainty
+- Residual error around a CER estimate = Uncertainty
+- A specific, identifiable event that could raise cost = Risk
+- Finishing the program earlier than planned = Opportunity
+- Reducing cost exposure = Opportunity
+> Uncertainty reflects the precision of estimating techniques and exists even with no bad event. Risk is a specific, identifiable event with a negative effect. Opportunities are factors that could give a positive outcome.
+:::
+
++++
+
+### Risk vs. Uncertainty vs. Opportunity
 
 - **Uncertainty**: An uncertainty range is added to address the precision of estimating techniques — it exists even with no specific "bad thing" happening (e.g., variation in labor rates, quantities, or CER residual error).
 - **Risk**: The possibility of a *specific, identifiable event* that, if it occurs, has a negative effect on cost, schedule, or performance. Risk addresses the *inherent bias* of estimates by calibrating them toward a more accurate result, and properly positioning the point estimate in the probability distribution.
 - **Opportunities**: Factors that could result in a *positive* outcome, such as finishing a program earlier or reducing cost exposure.
 - Risk analysis differs from **sensitivity analysis**: sensitivity analysis is deterministic (impact of specific cost drivers on the estimate); risk analysis portrays the most accurate probability distribution for overall cost.
+
+{{primer}}
 
 +++
 
@@ -85,7 +103,20 @@ Q: A cost element's point estimate came from a non-linear CER. What does this po
     },
     {
       id: 'models', title: 'Cost Risk Models and Architecture', summary: 'Input vs. output models, historical vs. expert basis, and the three-part architecture framework',
-      body: String.raw`### Types of Cost Risk Models
+      body: String.raw`:::primer:::
+A cost risk model is built in layers, from what goes in to what gets checked.
+
+:::order
+Q: Put the three components of a risk model in order.
+1. Inputs: choose a scoring method and a dollar basis
+2. Structure: organize the risk coverage and pick the probability model
+3. Execution: compute, then run cross-checks
+> The model has three components: inputs (scoring plus dollar basis), structure (organization plus probability model), and execution (computation, then cross-checks).
+:::
+
++++
+
+### Types of Cost Risk Models
 
 The risk process breaks into inputs, structure and execution, and outputs. Risk models are characterized along two axes:
 
@@ -126,6 +157,8 @@ There are three components to any risk model (Fig. 9.4): **inputs**, **structure
 
 **Execution** — computation, then cross-checks (below).
 
+{{primer}}
+
 :::check
 Q: A risk model uses a scale where low risk = 1, medium = 5, high = 10, with no objective criteria behind the numbers, but the *distance* between scores is meaningful. What kind of scoring is this?
 * Interval
@@ -152,7 +185,23 @@ Q: If SEPM = 15\% of hardware cost, and hardware is uncertain, what happens to S
     },
     {
       id: 'distributions', title: 'Probability Distributions in Risk Models', summary: 'Normal, Lognormal, Triangular, Beta, Bernoulli — and which fit the total',
-      body: String.raw`Underestimation of both the mean and standard deviation is an issue across every distribution used in risk models. CEBoK covers five (full mechanics of each are in Module 10):
+      body: String.raw`:::primer:::
+Five named distributions show up in cost risk models, each with its own telltale trait.
+
+:::sort
+Q: Which distribution matches each trait?
+buckets: Normal | Lognormal | Triangular | Bernoulli
+- Can produce negative values = Normal
+- Symmetric, so it must be shifted to move its mean = Normal
+- Nearly indistinguishable from Normal when CV is under 25% = Lognormal
+- The most commonly used risk distribution, but its modes are not additive = Triangular
+- Discrete: probability p of 1 and 1-p of 0 = Bernoulli
+> Normal allows negative values and is symmetric. Lognormal is virtually indistinguishable from Normal below a CV of 25%. Triangular is the most commonly used for its simplicity. Bernoulli is discrete, used for risks that either occur or do not.
+:::
+
++++
+
+Underestimation of both the mean and standard deviation is an issue across every distribution used in risk models. CEBoK covers five (full mechanics of each are in Module 10):
 
 | Distribution | Conditions |
 |---|---|
@@ -161,6 +210,8 @@ Q: If SEPM = 15\% of hardware cost, and hardware is uncertain, what happens to S
 | **Triangular** (Fig. 9.7) | Min and max pre-determined; most likely value is between them; values near the min/max are as likely as values near the most likely; can be skewed or symmetric. The most commonly used risk distribution (simplicity), but modes of multiple triangular variables are **not additive**. Questionable whether SMEs can truly pin the min/max — sometimes widened by an extra factor. |
 | **Beta** (Fig. 9.8) | Min and max pre-determined; shape set by two positive shaping parameters. Solves negative-value issues normal can have; can be symmetric or skewed; less commonly used today (more parameters to manage). |
 | **Bernoulli** (Fig. 9.9) | Discrete; assigns probability $p$ to the value 1 and $(1-p)$ to 0 — a simplified Binomial. Used in likelihood/consequence (risk cube) models, where a nonzero result ("success" mathematically) is a risk *occurring*. |
+
+{{primer}}
 
 +++
 
@@ -190,7 +241,24 @@ Q: You are summing 20 lower-level triangular cost elements to characterize *tota
     },
     {
       id: 'triangular', title: 'Triangular Distribution Deep Dive', summary: 'The workhorse of cost risk: mean, mode, median, variance, and why modes do not add',
-      body: String.raw`The **triangular distribution** is the standard choice in cost risk because it is easy to parameterize from expert three-point estimates (Low, Most Likely, High).
+      body: String.raw`:::primer:::
+An expert hands you three numbers. Everything else about the distribution is derived from them.
+
+:::sort
+Q: Which quantities does the expert supply, and which do you compute?
+buckets: Supplied as an input | Computed by formula
+- Low (a) = Supplied as an input
+- Most likely (c) = Supplied as an input
+- High (b) = Supplied as an input
+- Mean = Computed by formula
+- Median = Computed by formula
+- Variance = Computed by formula
+> The parameters are a (low), c (most likely, which is the mode by definition and not computed), and b (high). Mean, median, and variance each come from a formula built on those three.
+:::
+
++++
+
+The **triangular distribution** is the standard choice in cost risk because it is easy to parameterize from expert three-point estimates (Low, Most Likely, High).
 
 **Parameters**: $a$ = low (minimum), $c$ = most likely (mode), $b$ = high (maximum)
 
@@ -205,6 +273,8 @@ $$\text{Mean} = \frac{a + c + b}{3}$$
 - If $c \le \frac{a+b}{2}$: $\text{Median} = b - \sqrt{\dfrac{(b-a)(b-c)}{2}}$
 
 $$\text{Variance} = \frac{a^2+b^2+c^2-ab-ac-bc}{18}$$
+
+{{primer}}
 
 +++
 
@@ -260,7 +330,20 @@ Q: For the above element (L=80, ML=100, H=160), what is the standard deviation?
     },
     {
       id: 'summing', title: 'Why Modes Do Not Add', summary: 'The mathematical reason point estimates are too low',
-      body: String.raw`### Means Are Additive; Modes Are Not
+      body: String.raw`:::primer:::
+An estimator sums the most likely values of two cost elements to get a program total.
+
+:::check
+Q: Two independent elements each have Low 80, Most Likely 100, High 160. The modes sum to 200. How far is that from the true expected total?
+* About 27 too low
+- No difference, since both elements are identical
+- About 100 too low
+> Each element's mean is 113.33, so the expected total is 226.67. The modes sum to 200, which misses about 26.67.
+:::
+
++++
+
+### Means Are Additive; Modes Are Not
 
 This is the **single most testable concept** in the entire module.
 
@@ -292,6 +375,8 @@ A WBS has 20 cost elements. An estimator gives a "most likely" value for each an
 
 The difference (226.67 − 200 = 26.67) is cost that an estimator using only modes would miss.
 
+{{primer}}
+
 +++
 
 ### Why Simulation Matters
@@ -321,7 +406,20 @@ Q: True or False: The mean of a sum of cost elements equals the sum of their ind
     },
     {
       id: 'correlation', title: 'Correlation and Total Variance', summary: 'How correlation widens the total distribution; the four correlation methods',
-      body: String.raw`When summing multiple cost elements, **correlation between elements dramatically affects the total spread** — but not the mean. Correlation increases dispersion and is difficult to model. (CEBoK also says it shifts the mean; for a simple sum the mean is unchanged, and what moves are the upper percentiles.)
+      body: String.raw`:::primer:::
+Cost elements rarely move independently: they share labor rates, schedule, and technical risk.
+
+:::check
+Q: A model treats elements that share drivers as independent. How will its total S-curve compare with reality?
+* Too narrow, overstating confidence
+- Too wide, understating confidence
+- Shifted left, but the same width
+> Ignoring correlation produces an S-curve that is too narrow, overstating confidence and understating true risk. In the two-element example, the uncorrelated total spread was 24.04 against 34.0 when perfectly correlated.
+:::
+
++++
+
+When summing multiple cost elements, **correlation between elements dramatically affects the total spread** — but not the mean. Correlation increases dispersion and is difficult to model. (CEBoK also says it shifts the mean; for a simple sum the mean is unchanged, and what moves are the upper percentiles.)
 
 ### The Variance Formula
 
@@ -375,6 +473,8 @@ $$\sigma_{total} = 17.0 + 17.0 = 34.0$$
 
 **Critical pitfall**: Ignoring correlation (assuming $\rho=0$ when elements actually share drivers) produces an S-curve that is too narrow — overstating confidence in the estimate and understating true risk.
 
+{{primer}}
+
 :::check
 Q: Two cost elements each have $\sigma = 10$ (\$K). They are uncorrelated. What is the total $\sigma$, in \$K?
 = 14.14 ±0.01
@@ -405,7 +505,21 @@ Q: Which correlation method arises automatically because a CER expresses program
     },
     {
       id: 'scurve', title: 'Monte Carlo, S-Curves, and Confidence Levels', summary: 'Simulation, PDF/CDF, percentiles, and why point estimates sit below 50%',
-      body: String.raw`### Monte Carlo Simulation Mechanics
+      body: String.raw`:::primer:::
+Monte Carlo turns a pile of element-level distributions into one total-cost picture.
+
+:::order
+Q: Put the Monte Carlo steps in order.
+1. Assign a probability distribution to each uncertain element
+2. Draw a random value from each element and add up the total
+3. Repeat thousands of times to build an empirical distribution
+4. Read the S-curve and confidence levels off the result
+> Each iteration draws one value per element and totals them. Many repetitions build the empirical distribution, which yields the S-curve and descriptive statistics such as the cost at various confidence levels.
+:::
+
++++
+
+### Monte Carlo Simulation Mechanics
 
 **Monte Carlo** is the standard quantitative method for propagating element-level uncertainty and correlation to a total-program distribution.
 
@@ -416,6 +530,8 @@ Q: Which correlation method arises automatically because a CER expresses program
 4. The output varies by software, but can include an S-curve and descriptive statistics: mean, variance, median, and cost at various confidence levels
 
 **Key property**: Correctly captures skewness and non-normality of the total, even when individual elements are simple shapes.
+
+{{primer}}
 
 +++
 
@@ -479,7 +595,24 @@ Q: Can you get the 80th percentile of total cost by adding each element's 80th p
     },
     {
       id: 'methods', title: 'Risk Methods: Historical, Expert, Risk Cube', summary: 'Real-world examples of each method, biases to watch, and the risk cube math',
-      body: String.raw`### Historical Cost Risk Methods
+      body: String.raw`:::primer:::
+Analysts have three common ways to put numbers on risk, each with its own flavor.
+
+:::sort
+Q: Which method does each description fit?
+buckets: Historical | Expert opinion | Risk cube
+- Applies growth observed on comparable completed programs = Historical
+- Grounded in actual outcomes, so it captures unknown unknowns = Historical
+- SMEs are interviewed with structured questionnaires = Expert opinion
+- Anchoring and optimism bias are the main danger = Expert opinion
+- Each risk is rated on likelihood and consequence = Risk cube
+- Each risk is modeled as a Bernoulli distribution = Risk cube
+> Historical methods use empirically observed growth. Expert opinion relies on SME elicitation, with anchoring and optimism bias to guard against. The risk cube rates each risk on likelihood and consequence and models it as a Bernoulli distribution.
+:::
+
++++
+
+### Historical Cost Risk Methods
 
 Apply empirically observed cost growth from comparable, completed programs to the current estimate.
 
@@ -530,6 +663,8 @@ Mean, min, and max are straightforward; **percentiles and medians require a Mont
 **Management Reserve vs. Risk**: Management reserve (Fig. 9.27, a percentage of contract value that varies by contract type) is money held back to challenge account managers — it is **not** the same as risk or contingency funds, which are extra funds beyond the point estimate to cover risk possibilities.
 
 **Critical distinction**: The risk cube is fundamentally a **qualitative ranking tool** for prioritization and management attention. It is NOT a statistically rigorous method for deriving a total cost probability distribution (the way Monte Carlo or method-of-moments are). It **complements** quantitative analysis but does NOT replace it. Ideally, the risk cube and a historical analysis run in parallel.
+
+{{primer}}
 
 :::widget risk-cube:::
 
@@ -583,7 +718,20 @@ After computing a model, **cross-check** its calculated statistics (mean, CV) an
     },
     {
       id: 'related', title: 'CER Uncertainty and Confidence Levels', summary: 'How regression statistics feed risk models; choosing a confidence level',
-      body: String.raw`### Uncertainty Around CER Estimates
+      body: String.raw`:::primer:::
+The S-curve gives you a whole menu of possible budgets, each with its own confidence level.
+
+:::check
+Q: Once the S-curve is built, who chooses the funding confidence level?
+* Management, as a risk-management or policy decision
+- The estimator, by a statistical calculation
+- No one: the S-curve has one correct confidence level
+> Selecting the funding confidence level is a policy decision, not a purely statistical one. The estimator produces an accurate, defensible S-curve and management chooses where on it to fund.
+:::
+
++++
+
+### Uncertainty Around CER Estimates
 
 A **least-squares CER** produces a regression equation and associated statistics that directly feed into a risk model:
 
@@ -615,6 +763,8 @@ A **risk-adjusted estimate** pairs a point estimate with a **confidence level** 
 
 **Critical principle**: Selecting the funding confidence level is a **risk-management / policy decision**, not a purely statistical calculation. The estimator's job is to produce an accurate, defensible S-curve; management chooses where on that curve to fund.
 
+{{primer}}
+
 :::tip Beyond CEBoK: typical numeric ranges
 CEBoK doesn't give a fixed number for where the *mean* sits, but practitioners commonly see it land around **50–60%** confidence for right-skewed totals (above the point estimate, since means exceed modes for skewed distributions). 70th/80th percentile targets, as above, are common — but always a policy choice, not a statistical constant.
 :::
@@ -637,13 +787,28 @@ Q: "The point estimate is \$100M." What is missing from this statement?
     },
     {
       id: 'cer-pi', title: 'CER Prediction Intervals in Risk Models', summary: 'Why SEE understates uncertainty, the prediction-interval formula, and feeding it into Monte Carlo',
-      body: String.raw`### Confidence Interval vs. Prediction Interval
+      body: String.raw`:::primer:::
+Regression software hands you SEE, the standard error around the fitted line. It is tempting to use it directly as the uncertainty.
+
+:::check
+Q: If SEE alone is used as a CER's uncertainty, how will the spread compare with the true uncertainty of a prediction?
+* Too narrow, understating variability on both sides
+- Too wide, overstating variability
+- About right, with a bias only on the upper side
+> SEE measures points around the regression line, not the error of the estimate itself. Using it alone understates variability both above and below the median, which is why the prediction interval is the correct measure.
+:::
+
++++
+
+### Confidence Interval vs. Prediction Interval
 
 A **confidence interval (CI)** is a range for the *true mean* of a parameter at a given significance level $\alpha$ (an $\alpha$ of 0.05 = 95% confidence). A **prediction interval (PI)** is the interval for a *y-value at a specific fitted X*, not the mean — so a PI is always **wider** than a CI, because it includes both the error in the regression coefficients and the error of the individual prediction.
 
 Since the error around the regression line is assumed normal (symmetric), an 80% PI has a 10% chance the actual cost falls below it and a 10% chance above. Equivalently, the PI's endpoints for a given $\alpha$ are the $\alpha/2$ and $1-\alpha/2$ percentiles of the CDF implied by the CER.
 
 **Why not just use SEE?** SEE is the standard error of points around the regression line — not the standard error of the *estimate*. Using SEE alone as the uncertainty measure produces a **systemic bias**, understating variability both above and below the median; the prediction interval is the correct measure.
+
+{{primer}}
 
 +++
 
@@ -720,13 +885,28 @@ Q: A non-linear (power-form) CER's prediction interval was computed in log space
     },
     {
       id: 'schedule', title: 'Schedule Risk', summary: 'Parallel vs. serial networks, crosslinks, and the RAND schedule growth distribution',
-      body: String.raw`### How Schedule Networks Behave
+      body: String.raw`:::primer:::
+A schedule finishes only when its last parallel task finishes.
+
+:::check
+Q: Each parallel task is normally distributed with mean 10. As more parallel tasks are added, what happens to the average critical path duration?
+* It keeps rising above 10
+- It stays at 10
+- It falls below 10
+> With more tasks, the chance that at least one exceeds its mean increases, so the critical path's average duration keeps rising. A higher CV makes the growth larger and faster.
+:::
+
++++
+
+### How Schedule Networks Behave
 
 Schedule networks are **stochastic, not deterministic** — this leads to some unusual conclusions. Consider two independent tasks running in parallel: Task A averages 10 hours, Task B averages 8 hours, both normally distributed with CV ≈ 20%. The schedule finishes only when *both* finish.
 
 Naive intuition says the longer task (A, mean 10) sets the overall schedule mean. But 1000 simulated trials (Fig. 9.38) show the **finish time's mean exceeds either individual task's mean** — because in about **20%** of trials, Task B ends up taking longer than Task A. With parallel tasks, either one can end up dictating the critical path.
 
 *This effect compounds*: as more parallel tasks (each normally distributed, mean 10) are added, the critical path's average duration keeps rising (Fig. 9.39) — with more tasks, the likelihood at least one exceeds the mean increases. Raising the CV increases both the magnitude and speed of this critical-path growth.
+
+{{primer}}
 
 +++
 
@@ -805,7 +985,20 @@ Q: Why is the Extreme Value distribution theoretically preferred over Lognormal 
     },
     {
       id: 'growth', title: 'Historical Cost Growth & SARs', summary: 'SAR data quality issues, growth trends by phase, EVM-based CPI prediction, and program size',
-      body: String.raw`### Data Sources: SARs vs. Contract Data
+      body: String.raw`:::primer:::
+Does a big program or a small one tend to blow its estimate by a bigger fraction?
+
+:::check
+Q: Which programs tend to show the highest relative cost growth?
+* Smaller programs, and they are also less predictable
+- Larger programs, since they have more to go wrong
+- Size makes no difference to relative growth
+> Smaller programs consistently show higher relative cost growth, resembling CGF of about 1 over size. Dispersion around the prediction is wider at lower sizes, so small programs are also less predictable.
+:::
+
++++
+
+### Data Sources: SARs vs. Contract Data
 
 **Selected Acquisition Reports (SARs)** are DoD's primary source for cost risk data — vendors submit one per acquisition year, and Section 13 (Cost Variance Analysis) shows year-over-year cost changes plus the latest revised estimate. Using the revised (quantity-adjusted) estimate against the baseline estimate lets the analyst calculate the **Cost Growth Factor (CGF)**.
 
@@ -852,6 +1045,8 @@ $$\text{Predicted CGF} = 1.8 \times (\text{MS II Baseline Size, \$M})^{-0.3} + 1
 
 Dispersion around this prediction is symmetric, but **wider at lower size values** — small programs are both more likely to grow *and* less predictable about how much.
 
+{{primer}}
+
 :::check
 Q: A K-S test found no statistically significant difference between contract data and SAR data. For which programs does this hold?
 * Those under \$1B RDT&E
@@ -884,7 +1079,21 @@ Q: In the EVM Final CPI model, which two inputs predict the completed program's 
     },
     {
       id: 'conflation', title: 'Conflation of Expert Judgments', summary: 'Merging multiple SME triangular distributions the right way',
-      body: String.raw`### The Problem
+      body: String.raw`:::primer:::
+Several experts each give you their own triangular distribution for the same risk item. You need one distribution out of them.
+
+:::check
+Q: Several experts each give a triangular distribution for one risk item. What should decide which merging method you use?
+* What their disagreement represents: a similar assessment, or multiple different realities
+- How many experts were consulted
+- Which expert gave the highest most-likely value
+- Whether the Monte Carlo runs thousands of trials
+> The section says to choose based on what the experts' disagreement represents.
+:::
+
++++
+
+### The Problem
 
 An analyst consults several experts about one risk item; each provides a triangular distribution. **Conflation** is how these distributions get merged into one probability distribution for that element — first introduced under Expert Opinion Methods.
 
@@ -907,6 +1116,8 @@ Choose based on what the experts' disagreement represents:
 **If the SMEs reflect multiple different realities:**
 - **Stack the distributions**: scale each expert's PDF by $1/n$ (e.g. divide by 5 for five experts), stack the scaled PDFs, and draw from the combined distribution.
 - **Pick a random expert per trial**: one trial draws entirely from Expert 1's distribution, the next trial entirely from Expert 4's, etc.
+
+{{primer}}
 
 :::widget conflation:::
 
