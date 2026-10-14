@@ -11,7 +11,22 @@ This module extends Module 6 (descriptive statistics: mean, median, mode, CV) in
   sections: [
     {
       id: 'intro', title: 'Introduction and definitions', summary: 'Probability vs. statistics; population vs. sample; random variables; parameters vs. statistics',
-      body: String.raw`### Core definitions
+      body: String.raw`:::primer:::
+Some quantities you can count; others slide through a range of values.
+
+:::sort
+Q: Is each quantity discrete or continuous?
+buckets: Discrete | Continuous
+- Defects per batch = Discrete
+- Cost = Continuous
+- Weight = Continuous
+- Time = Continuous
+> Discrete variables have countable outcomes (defects per batch: 0, 1, 2, ...). Continuous variables take any value in a range, such as cost, weight, and time.
+:::
+
++++
+
+### Core definitions
 
 **Probability** is mathematics describing likelihood of events (0 = impossible, 1 = certain). **Statistics** infers what populations look like from sample data (the inverse problem).
 
@@ -26,6 +41,8 @@ This module extends Module 6 (descriptive statistics: mean, median, mode, CV) in
 | **Parameter** | A numerical characteristic of a population ($\mu$, $\sigma$) — usually unknown |
 | **Statistic** | A number computed from sample data ($\bar x$, $s$) — estimates a parameter |
 | **Independence** | Occurrence of one event doesn't change probability of another |
+
+{{primer}}
 
 +++
 
@@ -61,7 +78,20 @@ Q: For a symmetric distribution like the normal, how do mean, median, and mode r
     },
     {
       id: 'distributions-basic', title: 'Types of distributions', summary: 'Normal, t, lognormal, beta, triangular, Bernoulli: when and why to use each',
-      body: String.raw`### PDF and CDF
+      body: String.raw`:::primer:::
+An expert gives you three numbers for a cost: a low, a most likely, and a high.
+
+:::check
+Q: Low is 80K, most likely is 100K, high is 150K. Where will the triangular distribution's mean land relative to 100K?
+* Above 100K
+- Exactly at 100K
+- Below 100K
+> The triangular mean is (a + c + b)/3 = (80 + 100 + 150)/3 = 110K, so it sits above the 100K most-likely value.
+:::
+
++++
+
+### PDF and CDF
 
 The **PDF** (Probability Density Function) is the curve itself: probability is the *area* under it between two points, and the total area is 1. The **CDF** (Cumulative Distribution Function) is $P(X \le x)$ — it runs from 0 up to 1 and gives percentiles directly.
 
@@ -213,6 +243,8 @@ Q: If $\ln(\text{cost})$ is normal with $\mu = 4$, $\sigma = 0.5$, what is the m
 
 **Note**: the mode of a *sum* of triangular distributions is not the sum of the individual modes — see Module 9 for the full treatment of why "most likely" values don't add.
 
+{{primer}}
+
 :::tip Beyond CEBoK: PERT approximations
 CEBoK's core text covers the triangular distribution in depth but not PERT formulas; these approximations are standard practice for the Beta/PERT distribution as an alternative to triangular:
 - Mean $\approx \dfrac{a + 4m + b}{6}$
@@ -292,7 +324,20 @@ Q: For this lognormal, in what order do the mean, median and mode fall?
     },
     {
       id: 'correlation', title: 'Covariance and correlation', summary: 'How random variables move together; variance of sums',
-      body: String.raw`### Covariance
+      body: String.raw`:::primer:::
+Two cost elements tend to rise and fall together, and you roll them up into one total.
+
+:::check
+Q: You add two positively correlated cost elements but ignore the correlation. What happens to the risk you report for the total?
+* It is understated
+- It is overstated
+- It is unchanged; correlation only affects the mean
+> Positive correlation increases the variance of the total, so ignoring it in a cost roll-up understates risk.
+:::
+
++++
+
+### Covariance
 
 Measures how two random variables move together:
 $$Cov(X,Y) = \frac{\sum(x_i - \bar x)(y_i - \bar y)}{n-1}$$
@@ -326,6 +371,8 @@ where $\rho$ is the correlation coefficient.
 
 Special case: If $\rho = 1$ (perfect correlation), $Var(X + Y) = (\sigma_X + \sigma_Y)^2$, so the standard deviations add directly: $SD(X+Y) = \sigma_X + \sigma_Y$.
 
+{{primer}}
+
 :::check
 Q: $\sigma_X = 3$, $\sigma_Y = 4$, $\rho = 0.5$. What is $Var(X + Y)$?
 = 37
@@ -343,7 +390,22 @@ Q: If X and Y are perfectly correlated ($\rho = 1$), the SD of the sum equals…
     },
     {
       id: 'hypothesis', title: 'Hypothesis testing framework', summary: '$H_0$, $H_a$, significance level, test statistics, critical values, error types',
-      body: String.raw`### The five-step framework
+      body: String.raw`:::primer:::
+A hypothesis test follows a fixed routine. Can you rebuild it from scratch?
+
+:::order
+Q: Put the steps of a hypothesis test in order.
+1. State the null and alternative hypotheses
+2. Choose the significance level
+3. Compute the test statistic from the sample
+4. Compare to the critical value (or the p-value to alpha)
+5. Reject or fail to reject the null hypothesis
+> You state the hypotheses, set alpha, compute the test statistic, compare it to the critical value (or p to alpha), and then reject or fail to reject H0.
+:::
+
++++
+
+### The five-step framework
 
 1. State $H_0$ (null: default claim, usually "no effect" or "equal to") and $H_a$ (alternative).
 2. Choose significance level $\alpha$ (commonly 0.05; sometimes 0.10 or 0.01).
@@ -352,6 +414,8 @@ Q: If X and Y are perfectly correlated ($\rho = 1$), the SD of the sum equals…
 5. **Reject** $H_0$ if the statistic is beyond the critical value ($p < \alpha$); otherwise **fail to reject**.
 
 The test never *proves* $H_0$ true — it either rejects it or doesn't.
+
+{{primer}}
 
 +++
 
@@ -498,7 +562,24 @@ show: method=t
     },
     {
       id: 'tests', title: 'Statistical tests', summary: 't-tests, chi-squared, F-tests, Kolmogorov-Smirnov',
-      body: String.raw`### t-tests
+      body: String.raw`:::primer:::
+Each statistical test answers a different kind of question.
+
+:::sort
+Q: Which test fits each question?
+buckets: t-test | Chi-squared | F-test
+- Does a sample mean differ from a hypothesized value? = t-test
+- Are matched before/after observations different on average? = t-test
+- Do observed frequencies match expected frequencies? = Chi-squared
+- Are contract type and overrun related? = Chi-squared
+- Do two datasets have different variances? = F-test
+- Do the independent variables in a regression jointly explain variation? = F-test
+> The t-tests compare means (one-sample or paired). Chi-squared tests goodness-of-fit and independence of categorical variables. F-tests compare two variances and test overall regression significance.
+:::
+
++++
+
+### t-tests
 
 **One-sample t**: Tests if sample mean differs from a hypothesized value.
 $$t = \frac{\bar x - \mu_0}{s/\sqrt n}$$
@@ -556,6 +637,8 @@ The F-distribution is always right-skewed and non-negative (ratio of two squared
 
 **Degrees of freedom**: Two values needed — numerator df and denominator df.
 
+{{primer}}
+
 :::check
 Q: Two datasets have variances $s_1^2 = 64$ and $s_2^2 = 16$. Calculate the F-statistic.
 = 4
@@ -585,7 +668,20 @@ Q: The Kolmogorov-Smirnov test compares…
     },
     {
       id: 'montecarlo', title: 'Monte Carlo and simulation', summary: 'Sampling from distributions, inverse CDF, why MC works',
-      body: String.raw`### Monte Carlo simulation
+      body: String.raw`:::primer:::
+Monte Carlo runs the same model thousands of times with random inputs. More trials means a more accurate answer, but at what price?
+
+:::check
+Q: You want to cut the simulation's error in half. How many times more trials do you need?
+- 2 times as many
+* 4 times as many
+- 8 times as many
+> Error shrinks like 1 over the square root of N, so to cut error in half you need 4 times more trials.
+:::
+
++++
+
+### Monte Carlo simulation
 
 **Procedure**:
 1. Define uncertain inputs (e.g., labor cost, material cost) and their probability distributions (normal, lognormal, triangular).
@@ -594,6 +690,8 @@ Q: The Kolmogorov-Smirnov test compares…
 4. The collection of outputs approximates the output distribution: mean, percentiles, S-curve.
 
 **Accuracy**: Error shrinks like $1/\sqrt{N}$ — to cut error in half, need 4× more trials.
+
+{{primer}}
 
 **Use in cost risk** (Module 12): Build a probability distribution for total cost to answer "what's the confidence level at \$X?" or "what's the cost at the 80th percentile?"
 
@@ -661,7 +759,20 @@ Related topics: Additional distributions (uniform, exponential, Poisson) and adv
     },
     {
       id: 'practice', title: 'Common pitfalls and practice', summary: 'Error types, what to memorize, worked examples',
-      body: String.raw`### Top pitfalls to avoid
+      body: String.raw`:::primer:::
+You get a small p-value from a test. It is tempting to read it as a verdict on the hypothesis.
+
+:::check
+Q: What does a p-value actually measure?
+- The probability that the null hypothesis is true
+* The probability of data at least this extreme, assuming the null hypothesis is true
+- The probability that the sample mean equals the hypothesized value
+> The p-value is the probability of the observed (or more extreme) data, given H0 is true. It is NOT the probability that H0 is true.
+:::
+
++++
+
+### Top pitfalls to avoid
 
 1. **Confusing z and t**: Use t when $\sigma$ is estimated from the sample (almost always in cost). Use z only when $\sigma$ is known in advance (rare).
 2. **Misinterpreting CIs**: A 95% CI does NOT mean "95% probability the true value is in this interval." It means over repeated sampling, 95% of such intervals contain the true value.
@@ -671,6 +782,8 @@ Related topics: Additional distributions (uniform, exponential, Poisson) and adv
 6. **Wrong degrees of freedom**: Always use $df = n-1$ for a single sample; confirm the correct df before consulting tables.
 7. **Assuming normality without checking**: Use goodness-of-fit tests (K-S, chi-square) or lognormal if data is skewed. Do not assume normal.
 8. **Ignoring correlation in cost rolls**: Positive correlation between cost elements increases total variance beyond the simple sum.
+
+{{primer}}
 
 +++
 
@@ -741,7 +854,22 @@ Q: Per CEBoK's Testable Topics table, which tier does "Related and Advanced Topi
     },
     {
       id: 'advanced-dists', title: 'Advanced: distributions & simulation', summary: 'Not testable per CEBoK — Buffon’s needle, inverse CDF derivation, normal vs. lognormal detail, bivariate normal, chi-squared/Rayleigh/Beta/Extreme Value',
-      body: String.raw`:::note Not testable per CEBoK
+      body: String.raw`:::primer:::
+Some distributions show up only in specialized corners of cost work.
+
+:::sort
+Q: Which distribution goes with each use?
+buckets: Chi-squared | Rayleigh | Extreme Value
+- Goodness-of-fit testing = Chi-squared
+- Time-phasing R&D cost/EAC curves = Rayleigh
+- Modeling the largest of many variables = Extreme Value
+- Finish-to-finish schedule constraints = Extreme Value
+> Chi-squared is used in goodness-of-fit testing, Rayleigh in time-phasing R&D cost/EAC curves, and Extreme Value models the largest of many variables, which fits finish-to-finish constraints.
+:::
+
++++
+
+:::note Not testable per CEBoK
 Everything in this section and the next ("Advanced: more tests & intervals") falls under CEBoK's **Related and Advanced Topics** — explicitly marked **not testable**. Included for completeness and because the underlying ideas (chi-squared, Rayleigh, Extreme Value, CI for sigma) show up elsewhere in cost estimating.
 :::
 
@@ -795,6 +923,8 @@ Q: Two WBS elements are bivariate normal with $\rho$ close to $-1$. What happens
 
 **Extreme Value (Type I / Gumbel)**: parameters $a,b>0$; mode $=a$, mean $= a+\gamma b$ ($\gamma\approx0.57721$, the Euler-Mascheroni constant), variance $=b^2\pi^2/6$. Models the *largest* of many variables (flood levels, earthquake magnitudes); in schedule risk, it fits finish-to-finish constraints, since a task can't finish until every sub-task does — the schedule is dominated by the slowest path (see Module 9's schedule-network discussion).
 
+{{primer}}
+
 :::check
 Q: An Extreme Value (Gumbel) distribution has $a=5$, $b=2$. What is its mode?
 = 5
@@ -804,7 +934,20 @@ Q: An Extreme Value (Gumbel) distribution has $a=5$, $b=2$. What is its mode?
     },
     {
       id: 'advanced-tests', title: 'Advanced: more tests & intervals', summary: 'Not testable per CEBoK — chi-squared GOF, CI for variance/sigma, k-sample test, t-to-Z convergence',
-      body: String.raw`:::note Not testable per CEBoK
+      body: String.raw`:::primer:::
+Collect more and more data. Something gets known almost perfectly; something else never does.
+
+:::check
+Q: As the sample size n grows without limit, which can in principle be known with near-perfect precision?
+* The population mean
+- The next single value of X
+- Both, equally well
+> The mean can be known with near-perfect precision as n grows, but the next single value of X is always limited by sigma.
+:::
+
++++
+
+:::note Not testable per CEBoK
 Continuing Related and Advanced Topics — not on the exam, but useful background.
 :::
 
@@ -827,6 +970,8 @@ Full treatment (multivariate case, SEE substitution) is in Module 8 Regression A
 ### Confidence intervals and sample size
 
 CI and PI width shrink with $\sqrt n$, but never hit zero the way a CI eventually can — the *next single value of X* is always limited by $\sigma$, while the *mean* can, in principle, be known with near-perfect precision as $n\to\infty$. **The penalty for not knowing $\sigma$ (comparing PI/CI width at higher vs. lower confidence) is roughly 2-4×** worse at higher confidence levels — this is exactly what gives the t-distribution its fat tails.
+
+{{primer}}
 
 ### k-sample test for means
 
