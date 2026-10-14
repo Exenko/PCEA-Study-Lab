@@ -13,7 +13,21 @@ Single-variable regression is **bivariate data analysis** (cost Y, one candidate
   sections: [
     {
       id: 'model', title: 'The regression model', summary: 'True vs. estimated coefficients, OLS assumptions',
-      body: String.raw`The "true" population relationship:
+      body: String.raw`:::primer:::
+You fit a line to cost data and the software reports a slope of exactly zero.
+
+:::check
+Q: A fitted line has slope $b = 0$. What does that say about X?
+* Average cost isn't related to X at all
+- X is a very strong cost driver
+- The data must be curved
+> Setting $b = 0$ collapses any of these models to a constant: average cost isn't related to X.
+:::
+
+
++++
+
+The "true" population relationship:
 $$Y = \beta_0 + \beta_1 X + \epsilon$$
 
 What we estimate from data:
@@ -79,6 +93,8 @@ Module 6's algebra notation is $y = mx + b$ ($m$ = slope, $b$ = intercept). Regr
 
 $b = 0$ (or $c = 0$ in the quadratic) collapses any of these to a constant: average cost isn't related to X at all. Always start with a linear model — if it fits poorly, the residual and scatter plots point toward the right non-linear shape.
 
+{{primer}}
+
 :::check
 Q: A power model has $0 < b < 1$. How does $Y$ behave as $X$ grows?
 * It increases at a decreasing rate
@@ -90,7 +106,22 @@ Q: A power model has $0 < b < 1$. How does $Y$ behave as $X$ grows?
     },
     {
       id: 'fit', title: 'Finding the line', summary: 'Least squares slope and intercept, worked example',
-      body: String.raw`**Least squares** picks the line that minimizes the sum of squared vertical distances (residuals) from the points to the line. We square them so positive and negative misses don't cancel.
+      body: String.raw`:::primer:::
+Five Seekers: weights X = 4, 7, 8, 12, 16 and costs Y = 5, 5, 10, 7, 13. Eyeball the trend.
+
+:::check
+Q: Roughly how much does cost rise per extra unit of X on the least-squares line?
+- About 0.2
+* About 0.6
+- About 1.5
+- About 3
+> Least squares gives $b_1 = 255/436 = 0.585$, so about 0.6 per unit of X.
+:::
+
+
++++
+
+**Least squares** picks the line that minimizes the sum of squared vertical distances (residuals) from the points to the line. We square them so positive and negative misses don't cancel.
 
 Play with the points. Drag one far from the others and watch the slope, $R^2$ and residual plot react.
 
@@ -146,6 +177,8 @@ X = {4, 7, 8, 12, 16}, Y = {5, 5, 10, 7, 13}, n = 5
 - **$\hat Y = 2.50 + 0.585X$**
 :::
 
+{{primer}}
+
 :::note CEBoK's printed numbers
 CEBoK's own worked example rounds $\bar X$ to 9 (it's actually 9.4), giving $\hat b = (427 - 5\cdot9\cdot8)/(529-5\cdot9^2) = 0.6$ (that printed fraction actually evaluates to 67/124 = 0.54; CEBoK carries 0.6 forward) and $\hat a = 8 - 0.6(9) = 2.5$, so $\hat Y = 2.5 + 0.6X$. CEBoK builds its worked examples on these rounded values: the slope's 95% CI comes out $0.6 \pm 3.18(0.3) = (-0.3, 1.4)$ (note that its own arithmetic, $0.6 \pm 0.9$, would actually give $(-0.3, 1.5)$), and the mean CI at X = 11 comes out $9 \pm 3.8 = (5.2, 12.8)$, restated as \$5.3M–\$12.9M.
 
@@ -158,7 +191,22 @@ At X = 11 kg, the exact fit gives $\hat Y = 2.50 + 0.585(11) = 8.94$ (CEBoK's ro
     },
     {
       id: 'anova', title: 'ANOVA and goodness of fit', summary: 'SST = SSR + SSE, R², adjusted R², r',
-      body: String.raw`Split the total variation in Y into what the line explains and what it doesn't:
+      body: String.raw`:::primer:::
+A fitted line splits Y's variation into a part it explains and a part it leaves behind.
+
+:::check
+Q: In the toy fit, the line explains 29.83 (SSR) and leaves 18.17 unexplained (SSE). What share of Y's variation does X explain?
+- About 38%
+* About 62%
+- About 83%
+- About 95%
+> SST = SSR + SSE = 48, so $R^2 = 29.83/48 \approx 0.62$. The 38% is the unexplained share.
+:::
+
+
++++
+
+Split the total variation in Y into what the line explains and what it doesn't:
 
 | Sum of squares | Formula | Meaning | df |
 |---|---|---|---|
@@ -216,13 +264,29 @@ Q: A regression has $R^2 = 0.64$ and a **negative** slope. What is r?
 
 Two true statements need reconciling: a CER's job is to **reduce CV** versus a straight average, and $R^2$ measures the **percent of variation explained**. $R^2$ is a Pythagorean (squared) measure; CV reduction is a linear (standard deviation) measure. For a large sample, the CV is reduced by a factor of about $\sqrt{1-R^2}$. For the toy problem ($R^2 = 0.62$), the three methods in the source all agree: CV is reduced by a factor of about **0.71**, a **29%** reduction.
 
+{{primer}}
+
 :::key When is a CER worse than just using the average?
 If $R^2$ is below $(k-1)/(n-1)$, the CER performs **worse** than the straight average. Example: 11 data points, one predictor ($k=1$): $(1-1)/(11-1) = 0$... using $k$ = parameters (intercept + slope = 2): $(2-1)/(11-1) = 10\%$. An $R^2$ of 10% or less on 11 points means don't bother with the CER (and it likely wouldn't test significant anyway).
 :::`
     },
     {
       id: 'see', title: 'SEE and CV', summary: 'How big is the typical miss?',
-      body: String.raw`### Standard error of the estimate
+      body: String.raw`:::primer:::
+A CER predicts cost in \$M, and you want a single number for how big its typical miss is.
+
+:::check
+Q: Cost is in \$M. Which description fits the SEE?
+* The typical miss, in \$M
+- A percentage of mean cost
+- The share of variation the line explains
+> SEE estimates the standard deviation of the error, in the same units as Y. CV is the percentage version.
+:::
+
+
++++
+
+### Standard error of the estimate
 
 $$SEE = \sqrt{MSE} = \sqrt{\frac{SSE}{n-k-1}}$$
 
@@ -233,6 +297,8 @@ It estimates the standard deviation of $\epsilon$, in the **same units as Y**. L
 $$CV = \frac{SEE}{\bar Y} \times 100\%$$
 
 This is SEE as a percentage of the mean. It is unitless and comparable across models. **Below 15% is respectable.** Band: $\hat Y \pm CV \times \hat Y$.
+
+{{primer}}
 
 +++
 
@@ -254,7 +320,21 @@ Sample size and precision: the width of a 68% interval on the mean, in percent, 
     },
     {
       id: 'significance', title: 'Significance: t and F tests', summary: 'Is the relationship real?',
-      body: String.raw`### t-test: is this coefficient different from zero?
+      body: String.raw`:::primer:::
+The toy fit has a slope of 0.585 with a standard error of 0.264, from only 5 points.
+
+:::check
+Q: Is that slope statistically significant at $\alpha = 0.05$?
+- Yes, the slope is positive and the line trends upward
+* No, the p-value is about 0.11
+- Yes, any positive slope counts
+> $t = 0.585/0.264 = 2.22$ on 3 df gives p of about 0.11, above 0.05. The small sample makes significance hard to reach.
+:::
+
+
++++
+
+### t-test: is this coefficient different from zero?
 
 - $H_0: \beta_1 = 0$ (no relationship); $H_1: \beta_1 \ne 0$
 - $t = \dfrac{b_1}{SE(b_1)}$ with $n-k-1$ df
@@ -263,6 +343,8 @@ Sample size and precision: the width of a 68% interval on the mean, in percent, 
 :::example Toy problem t-test (exact values)
 $b = 0.585$, $SE(b) = 0.264$, so $t = 0.585/0.264 = 2.22$, with $n-k-1 = 3$ df. The two-sided p-value is about **0.11**, which is greater than α = 0.05, so the slope is **not significant** — the small sample (n = 5) makes it hard to reach significance even though the scatter plot looks like it trends upward.
 :::
+
+{{primer}}
 
 :::tip Small samples are normal in cost estimating
 When estimating a new Navy destroyer, there may exist only a couple of destroyers, a couple of cruisers, and a frigate as applicable historical ship-class data. Five data points is not an unrealistic sample size to work with — it's exactly why significance is often hard to reach.
@@ -340,7 +422,22 @@ Q: In the firemen/fire example, what is the true cost driver, and what role do t
     },
     {
       id: 'residuals', title: 'Residual analysis', summary: 'Patterns that invalidate a model',
-      body: String.raw`A residual is actual minus predicted:
+      body: String.raw`:::primer:::
+Residuals are what the line misses. Their pattern can tell on the model.
+
+:::check
+Q: Residuals rise and fall in a regular wave as X increases, as in a time series. What does that suggest?
+- Heteroscedasticity
+- A non-linear relationship
+* Serial correlation
+- A perfect fit
+> A wave or cycle in the residuals signals serial correlation, common in time series.
+:::
+
+
++++
+
+A residual is actual minus predicted:
 $$e_i = Y_i - \hat Y_i$$
 
 Plot residuals against X (or $\hat Y$). **Good:** a random, rectangular band around zero. **Bad** patterns:
@@ -350,6 +447,8 @@ Plot residuals against X (or $\hat Y$). **Good:** a random, rectangular band aro
 | **Curve / arch** | Non-linear relationship | Try power, exponential, log |
 | **Funnel / cone** | Heteroscedasticity | Transform Y, weighted least squares |
 | **Wave / cycle** | Serial correlation | Common in time series; in learning curves it can signal lost learning or new work |
+
+{{primer}}
 
 :::tip Beyond CEBoK: non-OLS remedies
 **Weighted Least Squares (WLS)** minimizes $\sum w_i(y_i - f(x_i))^2$ instead of plain SSE, commonly with $w_i = 1/\sigma_i^2$ — points with less variance get more weight. It's a direct fix for a funnel-shaped residual plot. Separately, OLS assumes an **additive** error, $y = ax^b + \epsilon$; some non-linear processes instead have **multiplicative** error, $y = (ax^b)\cdot\epsilon$ (this is also what OLS-transformed prediction intervals produce once translated back to unit space). MUPE and ZMPE are techniques built for multiplicative error.
@@ -389,7 +488,21 @@ Q: The residual plot shows a smile (arch) shape. What does it suggest?
     },
     {
       id: 'intervals', title: 'Confidence and prediction intervals', summary: 'Mean response vs. next observation',
-      body: String.raw`### Confidence interval: for the **mean** Y at $X_0$
+      body: String.raw`:::primer:::
+At X = 11 the toy fit predicts 8.94, and the 95% interval for the **mean** cost there runs from about 5.2 to 12.7.
+
+:::check
+Q: What would you guess for the 95% interval for **one new** seeker at X = 11?
+- The same, about 5.2 to 12.7
+- Narrower, about 7 to 11
+* Wider, about 0.3 to 17.6
+> The prediction interval adds the "1+" term for individual scatter, giving (0.25, 17.62).
+:::
+
+
++++
+
+### Confidence interval: for the **mean** Y at $X_0$
 
 $$\hat Y \pm t_{\alpha/2,\,n-k-1}\cdot SEE\sqrt{\frac1n + \frac{(X_0-\bar X)^2}{\sum (X_i - \bar X)^2}}$$
 
@@ -409,6 +522,8 @@ Mean at X = 11: $\hat Y \pm t_{.025,3}\cdot SEE\sqrt{\tfrac1n + \tfrac{(X_0-\bar
 
 Prediction interval at X = 11 (adds the "1+" term): $(0.25, 17.62)$ — much wider, because it must also cover the scatter of one new observation, not just uncertainty in the mean.
 :::
+
+{{primer}}
 
 +++
 
@@ -441,7 +556,22 @@ Don't extrapolate beyond the data range. Intervals widen quickly and the relatio
     },
     {
       id: 'nonlinear', title: 'Non-linear regression', summary: 'Log transforms and the missing intercept',
-      body: String.raw`| Model | Equation | Transform | Straight in |
+      body: String.raw`:::primer:::
+Regress the natural log of Y on X and you get $\ln Y = -3.0 + 1.2X$.
+
+:::check
+Q: Back in the form $Y = ae^{bX}$, about what is $a$?
+- About -3.0
+- About 1.2
+* About 0.05
+- About 20
+> $a = e^{-3.0} = 0.05$ and $b = 1.2$.
+:::
+
+
++++
+
+| Model | Equation | Transform | Straight in |
 |---|---|---|---|
 | Logarithmic | $Y = \beta_0 + \beta_1 \ln X$ | ln X only | semi-log |
 | Exponential | $Y = ae^{bX}$ | ln Y only | semi-log |
@@ -466,6 +596,8 @@ Q: These data follow a power function $y = a x^b$. In which space do they plot a
 :::example Exponential worked example (Fig 8.29/8.30)
 Regressing $\ln Y$ on $X$ gives $\ln Y = -3.0 + 1.2X$, statistically significant with $R^2 = 0.88$, SEE = 0.30, CV = 9%. Back-transforming: $a = e^{-3.0} = 0.05$ and $b = 1.2$, so $\hat Y = 0.05e^{1.2x}$. The residual plot (Fig 8.30) shows no pattern and constant spread, consistent with the OLS assumptions holding.
 :::
+
+{{primer}}
 
 ### Choosing a shape from the raw plot
 - Curving up at an **increasing** rate → power or exponential
@@ -494,11 +626,29 @@ Q: After a log-log regression, intercept $\alpha = 1.2$ and slope $\beta = 0.75$
     },
     {
       id: 'multi', title: 'Multivariate regression and multicollinearity', summary: 'Several drivers, VIF',
-      body: String.raw`$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_k X_k + \epsilon$$
+      body: String.raw`:::primer:::
+You have several candidate cost drivers. Which order do you work in?
+
+:::order
+Q: Put the multivariate regression process in order.
+1. Run with all candidate variables
+2. Check the overall F
+3. Check each t
+4. Drop the least significant variable
+5. Rerun until every variable is significant
+> Run with all candidates, check F, then each t, drop the least significant variable, and rerun until every variable is significant.
+:::
+
+
++++
+
+$$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_k X_k + \epsilon$$
 
 Each coefficient is the **partial effect** of its variable with the others held constant. Geometrically: 1 variable gives a line, 2 give a plane, k give a hyperplane.
 
 **Process:** run with all candidate variables → check the overall F → check each t → drop the least significant variable → rerun until every variable is significant. Check a residual plot for **each** X. If every variable ends up dropped, the model reduces to a simple average.
+
+{{primer}}
 
 :::example Fig 8.34: a three-variable example
 $\hat y = 1.5 + 0.2X_1 - 1.6X_2 + 0.8X_3$. SSR = 4720.8 (df 3, MSR = 1573.6); SSE = 201.0 (df 11, MSE = 18.3); $F = 1573.6/18.3 = 86.1$, p ≈ 0.0000001 — the model as a whole is highly significant. But of the three t-tests, only $X_3$'s coefficient (0.8) is significant. Since the F-test passes but not every t-test does, this model must be **rerun** — first with just $X_3$, or possibly $X_3$ plus one other variable — before it can be accepted.
@@ -546,7 +696,22 @@ Q: Which pair of predictors is a classic multicollinearity trap?
     },
     {
       id: 'selection', title: 'Selecting the best model', summary: 'Within type, across type, nested',
-      body: String.raw`First, every candidate must be **significant** (F) with **significant variables** (t) and clean **residuals**. Then:
+      body: String.raw`:::primer:::
+A set of candidate models needs ranking, and the yardstick depends on how they differ.
+
+:::sort
+Q: Which criterion picks the winner in each comparison?
+buckets: Highest R-squared | Lowest SSE in unit space | Look at everything
+- Three linear CERs, each using a different cost driver = Highest R-squared
+- A linear model against a power model = Lowest SSE in unit space
+- One model that adds variables to another = Look at everything
+> Within a type, the highest R-squared wins; across types, compare SSE computed in unit space; for nested models, weigh adjusted R-squared, SEE, CV, Significance F and t-stats together.
+:::
+
+
++++
+
+First, every candidate must be **significant** (F) with **significant variables** (t) and clean **residuals**. Then:
 
 | Comparison | Criterion |
 |---|---|
@@ -561,6 +726,8 @@ Three significant linear CERs, each using a different cost driver. A (surface ar
 :::example Fig 8.37: selecting from nested models
 A three-variable model has adjusted $R^2 = 63.6\%$, SEE = 0.178, CV = 16.1%. Dropping $x_3$ (its least significant variable) improves **every** metric: adjusted $R^2 = 64.0\%$, SEE = 0.177, CV = 15.9%, and Significance F also improves. A logical next step would be testing whether $x_1$ can be dropped too.
 :::
+
+{{primer}}
 
 :::widget nested-model:::
 
