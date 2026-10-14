@@ -9,7 +9,20 @@ PCEA.addModule({
   sections: [
     {
       id: 'equation', title: 'The learning curve equation', summary: 'Y = aX^b, b and LCS, and the doubling rule',
-      body: String.raw`Suppose the 1st unit takes 100 hours, the 2nd takes 85, the 4th takes 72.25, and the 8th takes 61.4. Each time quantity doubles, cost is multiplied by **0.85**. That is an **85% learning curve**.
+      body: String.raw`:::primer:::
+Cost falls as a team builds more units. Plot that curve with both axes on a log scale and look at its shape.
+
+:::check
+Q: A learning curve is plotted in log-log space. What shape would you expect?
+- A steeply falling curve
+- A U-shaped curve
+* A straight line
+> Taking logs gives $\ln Y = \ln a + b \ln X$, a straight line with slope $b$ and intercept $\ln a$. That is what lets ordinary linear regression fit the curve.
+:::
+
++++
+
+Suppose the 1st unit takes 100 hours, the 2nd takes 85, the 4th takes 72.25, and the 8th takes 61.4. Each time quantity doubles, cost is multiplied by **0.85**. That is an **85% learning curve**.
 
 The equation behind it is a power function:
 
@@ -60,6 +73,8 @@ $$\ln Y = \ln a + b \ln X$$
 
 In log-log space the curve is a **straight line** with slope $b$ and intercept $\ln a$. That is what lets us use ordinary linear regression. Toggle the axes below to see it.
 
+{{primer}}
+
 :::widget lc-explorer:::
 
 :::challenge lc-explorer theory=ulc t1=100 lcs=0.95 n=8 log=unit lock=theory,t1,n,log
@@ -95,7 +110,23 @@ Q: A lot runs from unit 7 through unit 15. What is $N$?
     },
     {
       id: 'theories', title: 'CUMAV vs. unit theory', summary: 'Wright vs. Crawford: what Y means',
-      body: String.raw`Both theories use $Y = aX^b$. They disagree about **what $Y$ is**.
+      body: String.raw`:::primer:::
+Two theories share one equation, $Y = aX^b$, yet disagree about what $Y$ means. Can you tell which claim belongs to which?
+
+:::sort
+Q: Which theory does each statement describe?
+buckets: CUMAV (Wright) | Unit / ULC (Crawford)
+- Y is the average cost of units 1 through X = CUMAV (Wright)
+- Y is the cost of the Xth unit itself = Unit / ULC (Crawford)
+- Works directly with lot data = CUMAV (Wright)
+- Needs lot midpoints for lot data = Unit / ULC (Crawford)
+- Generally preferred in practice = Unit / ULC (Crawford)
+> CUMAV predicts the cumulative average (a synthetic variable) and works with lot data directly. Unit theory predicts the Xth unit's actual cost, needs lot midpoints, and is generally preferred.
+:::
+
++++
+
+Both theories use $Y = aX^b$. They disagree about **what $Y$ is**.
 
 | | **CUMAV** (Wright) | **Unit / ULC** (Crawford) |
 |---|---|---|
@@ -107,6 +138,8 @@ Q: A lot runs from unit 7 through unit 15. What is $N$?
 | Preference | Generally **not** preferred | Generally **preferred** (default) |
 
 **CEBoK rule of thumb:** for data with more than about a 2% Coefficient of Variation (CV), CUMAV will likely produce the better statistical fit, even if the true process is ULC. That said, ULC's objections to CUMAV stand: CUMAV uses a synthetic (not observed) variable, obscures the true error and variation of the observed cost, and produces artificially favorable statistics. ULC is generally **preferred** in practice now that spreadsheets make its extra bookkeeping easy.
+
+{{primer}}
 
 +++
 
@@ -173,7 +206,21 @@ Q: 85% curve, T1 = 100: Which is larger: the ULC total of the first 20 units, or
     },
     {
       id: 'formulas', title: 'Totals, lots and conversions', summary: 'b+1 exponent, lot costs, CAUC ↔ unit',
-      body: String.raw`### CUMAV totals
+      body: String.raw`:::primer:::
+Suppose a cost model gives you a formula with exponent $b$ for the cost of a single unit or an average. Totals work differently.
+
+:::check
+Q: Under CUMAV, the average of the first X units is $aX^b$. What exponent goes on X in the formula for the TOTAL cost of those X units?
+- $b$, the same exponent
+- $2b$
+* $b+1$
+- $b-1$
+> Total is average times quantity: $X \cdot aX^b = aX^{b+1}$. Individual unit or average uses exponent $b$; total cost uses $b+1$.
+:::
+
++++
+
+### CUMAV totals
 
 If $\bar{Y}_X = aX^b$ is the average of the first X units, then the **total** is average × quantity:
 
@@ -185,6 +232,8 @@ Individual unit or average → exponent $b$. **Total cost → exponent $b+1$.**
 
 **Lot cost (units F through L):**
 $$\text{Lot} = aL^{b+1} - a(F-1)^{b+1}$$
+
+{{primer}}
 
 +++
 
@@ -263,7 +312,24 @@ Q: In Fig 7.4, units 4–8 total \$3,312.93. What is the lot's average unit cost
     },
     {
       id: 'process', title: 'The 7-step process', summary: 'From raw data to a fitted curve',
-      body: String.raw`Both theories follow the same procedure:
+      body: String.raw`:::primer:::
+Fitting a learning curve to raw cost data is a fixed procedure. Think about what has to happen before and after the regression.
+
+:::order
+Q: Put the steps of the learning curve procedure in order.
+1. Collect and normalize the data
+2. Plot in unit space
+3. Prepare the data (CAUC or lot midpoints, then take logs)
+4. Plot in log space
+5. Regress ln Y on ln X
+6. Transform back to a, b and LCS
+7. Apply the curve to get totals
+> Normalize first, check the unit-space plot, prepare and log-transform, confirm a straight line in log space, regress, transform back ($a = e^{\alpha}$, $b = \beta$), then apply.
+:::
+
++++
+
+Both theories follow the same procedure:
 
 1. **Collect and normalize** the data: convert to constant-year dollars and remove effects of labor mix, change orders and production irregularities.
 2. **Plot in unit space.** Scatter plot, power trendline, check $R^2$ and the visual fit.
@@ -272,6 +338,8 @@ Q: In Fig 7.4, units 4–8 total \$3,312.93. What is the lot's average unit cost
 5. **Regress** $\ln Y$ on $\ln X$ (OLS). Get the intercept $\alpha$ and slope $\beta$, and check the t- and F-statistics.
 6. **Transform back.** $a = e^{\alpha}$, $b = \beta$, $LCS = 2^b$.
 7. **Apply.** CUMAV totals: CAUC × X. ULC totals: sum the units.
+
+{{primer}}
 
 +++
 
@@ -339,13 +407,28 @@ Q: A 2-unit lot totals \$185. Which statement is true?
     },
     {
       id: 'lmp', title: 'Lot midpoints', summary: 'The unit where the curve equals the lot average',
-      body: String.raw`With **lot data** you only know each lot's total cost, so each lot's average unit cost (AUC). To fit a **unit** curve, you need an X for each AUC. That X is the **lot midpoint (LMP)**: the unit number whose cost on the curve equals the lot's average.
+      body: String.raw`:::primer:::
+A lot of units 4 through 8 has one average cost. Somewhere on the curve is a single unit that costs exactly that average. The arithmetic middle of units 4 to 8 is unit 6.
+
+:::check
+Q: Where does the unit whose cost equals the lot's average fall, compared with unit 6?
+* Earlier than unit 6
+- Exactly at unit 6
+- Later than unit 6
+> Early units in the lot cost more than later ones and pull the average up, so the matching unit is earlier than the middle.
+:::
+
++++
+
+With **lot data** you only know each lot's total cost, so each lot's average unit cost (AUC). To fit a **unit** curve, you need an X for each AUC. That X is the **lot midpoint (LMP)**: the unit number whose cost on the curve equals the lot's average.
 
 - It is **not** the arithmetic middle of the lot.
 - It usually isn't an integer.
 - It sits **between** the geometric mean $\sqrt{FL}$ (too low) and the arithmetic mean $\frac{F+L}{2}$ (too high).
 
 Why is the arithmetic mean too high? Early units in the lot cost more than later ones and pull the average up, so the matching unit is earlier than the middle.
+
+{{primer}}
 
 +++
 
@@ -406,7 +489,22 @@ Q: For the **first** lot (F = 1), where does the true LMP fall as the lot gets l
     },
     {
       id: 'special', title: 'Breaks, rate and new work', summary: 'Lost learning, production rate, added content',
-      body: String.raw`### Production breaks
+      body: String.raw`:::primer:::
+Production stops for a while, then restarts. How much of the learning workers had built up survives depends on the break.
+
+:::sort
+Q: Which kind of learning loss does each situation lead to?
+buckets: No change | Partial loss | Complete loss
+- A short break; the process continues as if it never stopped = No change
+- The typical case, best addressed analytically = Partial loss
+- A long break with complete workforce turnover = Complete loss
+- Cost goes back to T1 = Complete loss
+> Short breaks mean no change, the typical case is partial loss, and long breaks with complete turnover send you back to T1.
+:::
+
++++
+
+### Production breaks
 
 Breaks come from customer rate/quantity changes, over-production, supply-chain gaps, strikes, design or process changes. After a break, some learning may be lost:
 
@@ -426,6 +524,8 @@ $$a' = aN^b + L(a - aN^b) = La + (1-L)aN^b$$
 - $b$ = the original learning exponent
 
 Check the extremes: $L=1$ (complete loss) gives $a' = a$ — back to T1. $L=0$ (no loss) gives $a' = aN^b$ — exactly where production would have been anyway.
+
+{{primer}}
 
 Once $a'$ is known, find the **effective unit number** $Q$ it corresponds to on the original curve, then resume the curve at $Q$:
 $$Q = \left(\frac{a'}{a}\right)^{1/b} \qquad\qquad Y = a\big(Q + (X - N)\big)^b$$
@@ -527,7 +627,24 @@ Q: What does QAIV do differently from the standard T1-plus-learning-curve approa
     },
     {
       id: 'exam', title: 'Pitfalls and exam patterns', summary: 'Traps, quick checks, decision tree',
-      body: String.raw`### Common traps
+      body: String.raw`:::primer:::
+Some entries below are mistakes that cost points, and others are quick checks that tell you your answer is sane. Can you separate them?
+
+:::sort
+Q: Is each item a common trap or a sanity check?
+buckets: Common trap | Sanity check
+- Using b instead of b+1 for totals = Common trap
+- Using the arithmetic mean as the LMP = Common trap
+- Rounding the LCS = Common trap
+- b is negative = Sanity check
+- The LMP lies between F and L = Sanity check
+- Cost falls as units increase (except around breaks) = Sanity check
+> The traps are errors in method (wrong exponent, wrong LMP, rounded LCS). The sanity checks describe what a correct answer looks like.
+:::
+
++++
+
+### Common traps
 - Forgetting to convert LCS ↔ b
 - Using $b$ instead of $b+1$ for totals
 - Mixing up CUMAV and ULC interpretations
@@ -541,6 +658,8 @@ Q: What does QAIV do differently from the standard T1-plus-learning-curve approa
 - $b$ is negative
 - The LMP lies between F and L
 - T1 may not equal the actual first-unit cost
+
+{{primer}}
 
 +++
 
