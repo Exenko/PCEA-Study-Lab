@@ -9,7 +9,20 @@ PCEA.addModule({
   sections: [
     {
       id: 'basics', title: 'The three core numbers', summary: 'PV, EV, AC and why EVM matters',
-      body: String.raw`EVM integrates technical scope with the time-phased budget required to complete that scope, so program planning and execution can be managed together. It answers the question a plain budget-vs-actual comparison cannot: not just what was spent, but what was actually accomplished for that money.
+      body: String.raw`:::primer:::
+A project plans \$400 of work this month and has spent \$300 so far. Sounds like good news, right?
+
+:::check
+Q: With only those two numbers (planned \$400, spent \$300), what can you conclude about cost performance?
+* Not enough yet: you also need to know how much work was actually accomplished
+- The project is \$100 under budget, so it is performing well
+- The project is over budget
+> Budget-vs-actual alone is misleading. EVM adds the budgeted value of the work actually done (EV), which is what separates cost performance from schedule progress.
+:::
+
++++
+
+EVM integrates technical scope with the time-phased budget required to complete that scope, so program planning and execution can be managed together. It answers the question a plain budget-vs-actual comparison cannot: not just what was spent, but what was actually accomplished for that money.
 
 EVM rests on three core data elements, all measured at the same point in time:
 
@@ -37,6 +50,8 @@ The missing variable is what work was accomplished for that \$300. Suppose only 
 - **Behind schedule**: only \$200 of the \$400 planned work is done, and the project still needs to build two more aquariums even though November has passed.
 
 Without EV, the \$100 "underrun" looked like good news. EV reveals both problems at once.
+
+{{primer}}
 
 :::tip
 Cumulative CPI usually stabilizes by 15–20% completion, and historically will not change by more than about 10% from its value at that point — in either direction. It is not a one-way ratchet: a CPI can drift slightly better as well as worse after that point, it just rarely moves far.
@@ -69,7 +84,22 @@ Q: Using the aquarium data (PV=\$400, EV=\$200, AC=\$300), what is the Cost Vari
     },
     {
       id: 'employing', title: 'When and why to use EVM', summary: 'Benefits, suitability, and the acquisition process',
-      body: String.raw`### Benefits
+      body: String.raw`:::primer:::
+Before a contractor ever reports earned value, a lot happens in acquisition. Can you sequence it?
+
+:::order
+Q: Put the steps of EVM in the acquisition process in order.
+1. The acquisition strategy decides whether EVM is required and states it in the RFP
+2. The contractor's proposal supplies the WBS/OBS and BOEs
+3. Contract award establishes the initial baseline
+4. An Integrated Baseline Review confirms the baseline
+5. Regular EV reporting tracks progress during execution
+> EVM is used throughout acquisition: strategy and RFP first, then the proposal, the baseline at award, the IBR, and finally regular EV reporting during execution.
+:::
+
++++
+
+### Benefits
 
 EVM can provide early warning of cost or schedule issues. It creates a clear definition of work scope and effort responsibility, and identifies problem areas for management attention across all discrete work in the project. It imposes objective measurement of cost, schedule, and technical progress, and links technical and schedule performance to cost.
 
@@ -102,6 +132,8 @@ Although EV data collection begins once a program starts execution, EVM is used 
 4. An **Integrated Baseline Review (IBR)** confirms the baseline supports program success (see the Advanced section).
 5. During execution, regular EV reporting tracks progress against that baseline.
 
+{{primer}}
+
 :::check
 Q: Which project is the best fit for EVM?
 * An 18-month cost-reimbursement development effort with clearly defined deliverables
@@ -120,7 +152,21 @@ Q: Why is EV reporting to the government discouraged on Firm Fixed Price contrac
     },
     {
       id: 'structure', title: 'WBS, control accounts, and baseline structure', summary: 'WBS/OBS/CA, PMB, CBB, MR, and the five EV data elements',
-      body: String.raw`### Work Breakdown Structure
+      body: String.raw`:::primer:::
+The baseline that performance is measured against has some budget inside it and some deliberately held outside.
+
+:::sort
+Q: Is this budget inside the Performance Measurement Baseline (PMB) or outside it?
+buckets: Inside the PMB | Outside the PMB
+- Time-phased budgets assigned to control accounts = Inside the PMB
+- Budget for authorized work not yet assigned to control accounts = Inside the PMB
+- Management Reserve = Outside the PMB
+> PMB = Distributed Budget + Undistributed Budget. Management Reserve sits outside the PMB, and it is not time-phased or part of BAC.
+:::
+
++++
+
+### Work Breakdown Structure
 
 The **Work Breakdown Structure (WBS)** is critical to EVM: its hierarchy lets the program manage and report at different levels. A project often has more than one WBS in play:
 
@@ -193,6 +239,8 @@ $$CBB = PMB + MR \quad \text{(Contract Budget Base)}$$
 
 The CBB plus fee equals the total contract price.
 
+{{primer}}
+
 :::check
 Q: MR = \$50M, PMB = \$950M. Contract Budget Base?
 = 1000
@@ -223,7 +271,20 @@ Q: A high-risk, FFP-type effort would typically set Management Reserve toward wh
     },
     {
       id: 'methods', title: 'Measuring earned value', summary: 'The five EV techniques and when to use each',
-      body: String.raw`Performance (EV/BCWP) must be **taken when the work is accomplished** — a work package earns full credit only once complete, and earns nothing while merely in progress. Analysts pick the measurement method for each work package **up front**, before work begins, and should minimize subjectivity wherever possible.
+      body: String.raw`:::primer:::
+Imagine a work package that is 80% done at month end. How much credit it earns depends on the technique chosen up front.
+
+:::check
+Q: A work package using the 0/100 technique is 80% complete at month end. How much value is earned?
+* None yet: 100% is earned only at completion
+- 80% of its budget
+- 50% of its budget
+> With 0/100, 100% of value is earned only at task completion and 0% until then. A work package earns nothing while merely in progress.
+:::
+
++++
+
+Performance (EV/BCWP) must be **taken when the work is accomplished** — a work package earns full credit only once complete, and earns nothing while merely in progress. Analysts pick the measurement method for each work package **up front**, before work begins, and should minimize subjectivity wherever possible.
 
 ### The five methods
 
@@ -234,6 +295,8 @@ Q: A high-risk, FFP-type effort would typically set Management Reserve toward wh
 - **Level of Effort (LOE)**: performance is planned and **earned using a straight-line approach — EV always equals PV** for the period. Because of this, **SV can never occur** for LOE work. **CV can still occur**, though, if actual costs run higher than planned. LOE is reserved for time-related support work with no measurable output — it should **not** be used for any task whose schedule might slip, or for any task with defined deliverables (those have a real basis for measuring performance).
 
 :::widget ev-method:::
+
+{{primer}}
 
 +++
 
@@ -271,7 +334,24 @@ Q: An 8-week work package has no natural interim milestones. Best EV technique?
     },
     {
       id: 'variances', title: 'Variances and performance indices', summary: 'CV, SV, CPI, SPI — diagnosis of cost and schedule health',
-      body: String.raw`The two **variances** tell you the dollar magnitude of a problem. The two **indices** tell you the **efficiency rate**.
+      body: String.raw`:::primer:::
+CPI and SPI are ratios, and for each one a value above 1.0 means something different from a value below 1.0.
+
+:::sort
+Q: Is each reading good news or bad news for the program?
+buckets: Favorable | Unfavorable
+- CPI = 1.15 = Favorable
+- SPI = 0.85 = Unfavorable
+- CV = -50 = Unfavorable
+- SV = +30 = Favorable
+- CPI = 0.90 = Unfavorable
+- SPI = 1.10 = Favorable
+> Positive variances and indices above 1.0 are favorable (under budget, ahead of schedule); negative variances and indices below 1.0 are unfavorable.
+:::
+
++++
+
+The two **variances** tell you the dollar magnitude of a problem. The two **indices** tell you the **efficiency rate**.
 
 ### Variances (dollars)
 
@@ -298,6 +378,8 @@ $$SPI = \frac{EV}{PV} \quad \text{(Schedule Performance Index)}$$
 - Cost estimators also use the **reciprocal of CPI** (1/CPI): the cost incurred for each dollar of value.
 
 **Cumulative vs. current-period indices**: always examine both. Cumulative smooths noise; current-period spots emerging trends. Plot CPI and SPI together to see how schedule deviations affect cost, and vice versa.
+
+{{primer}}
 
 +++
 
@@ -345,7 +427,20 @@ show: m=14
     },
     {
       id: 'pastperf', title: 'Analyzing past performance', summary: 'Variance percentages, quick-healing spikes, MR trends, the aquarium percentages',
-      body: String.raw`CV, SV, and VAC are the derived elements most commonly used to assess program status. Look at **cumulative** data to review performance to date, and **current-period** data to spot anomalies, errors, and unusual recent activity. Plot the trend: is the variance getting worse, better, or fluctuating around zero?
+      body: String.raw`:::primer:::
+EV data is not always trustworthy at face value. Sometimes a problem seems to fix itself in a single month.
+
+:::check
+Q: A 0/100 work package spans three months. What will its cost variance (CV) look like?
+* Worsening for the first two months, then suddenly healing in month three
+- Steady and near zero in all three months
+- Improving a little each month
+> Under 0/100, costs are incurred but no credit is taken for two months, so CV worsens. When full credit is taken in month three, the CV heals at once.
+:::
+
++++
+
+CV, SV, and VAC are the derived elements most commonly used to assess program status. Look at **cumulative** data to review performance to date, and **current-period** data to spot anomalies, errors, and unusual recent activity. Plot the trend: is the variance getting worse, better, or fluctuating around zero?
 
 ### Variance percentages
 
@@ -360,6 +455,8 @@ $$CV\% = \frac{CV}{BCWP} = 1 - \frac{1}{CPI} \qquad SV\% = \frac{SV}{BCWS} = SPI
 A **quick-healing spike** — where the EV metrics suddenly jump back to on-cost and on-schedule — can indicate a **rebaseline** has occurred. SVs are especially prone to fluctuating spikes: a month-boundary crossing (material expected Oct 27 arriving Nov 3) can create a large unfavorable SV one month and a healing SV the next, without real project impact. CVs can spike too, particularly from a poorly-chosen measurement technique: a 0/100 task spanning three months will show a worsening CV for the first two months (costs incurred, no credit taken) and then suddenly heal in month three when full credit is taken.
 
 Perfect EV data with no variances at all is improbable — it usually signals a rebaseline or EV data that doesn't reflect real progress.
+
+{{primer}}
 
 +++
 
@@ -415,7 +512,23 @@ Q: Using MR at twice the rate that work is being completed (50% MR used, 25% com
     },
     {
       id: 'anomalies', title: 'Anomalies in EV data', summary: 'Nine data patterns that flag a problem in the EVMS',
-      body: String.raw`Analysts scan EV data for outliers or unusual conditions. Nine common anomalies:
+      body: String.raw`:::primer:::
+Some odd-looking EV data has an innocent explanation. Some is simply wrong.
+
+:::sort
+Q: Which of these data patterns is always a mistake, and which can have a legitimate explanation?
+buckets: Always a mistake | Can be explained
+- BCWP or BCWS greater than BAC = Always a mistake
+- BAC or EAC below zero = Always a mistake
+- BCWP above zero but ACWP equal to zero = Can be explained
+- ACWP above zero but BCWP equal to zero = Can be explained
+- EAC above zero while BAC is zero = Can be explained
+> You cannot plan or complete more than 100% of the work, and a negative BAC or EAC would imply the contractor owes money. The others usually come from lags (invoices, accounting) or contract changes not yet processed.
+:::
+
++++
+
+Analysts scan EV data for outliers or unusual conditions. Nine common anomalies:
 
 1. **BCWS = BCWP = ACWP**: EVM isn't really being applied to that task. Expected for LOE (BCWS = BCWP is normal there), but ACWP is normally different — if all three match, EVM may not be in use, which may be acceptable but should be understood.
 2. **BCWP > 0 but ACWP = 0**: over-performance, or a lag between incurring costs and their appearing in accounting (e.g., a travel claim taking 2-3 weeks to process). Can also result from a BCWP correction after a mistyped percent-complete entry.
@@ -428,6 +541,8 @@ Q: Using MR at twice the rate that work is being completed (50% MR used, 25% com
 9. **BAC < 0 or EAC < 0**: should never happen — it would imply the contractor owes the government money for work performed.
 
 :::widget evm-anomaly:::
+
+{{primer}}
 
 :::check
 Q: Cumulative data shows BCWP > 0 but BCWS = 0 for a task. What does this indicate?
@@ -447,7 +562,20 @@ Q: A task shows BCWS = BCWP = ACWP every period. What is this most likely to ind
     },
     {
       id: 'reports', title: 'Variance Analysis Reports', summary: 'The four VAR questions, thresholds, and favorable variances',
-      body: String.raw`When CV or SV — current-period or cumulative — exceeds a contractually set **threshold**, the Control Account Manager writes a **Variance Analysis Report (VAR)**. A VAR should answer four questions:
+      body: String.raw`:::primer:::
+Every variance could be reported, but nobody has time to read that many reports.
+
+:::check
+Q: How is it usually decided which variances need a written Variance Analysis Report?
+* Thresholds set up front, as a percentage and/or an absolute dollar amount
+- Every nonzero variance gets a report
+- Only variances found during the final review
+> Reporting every variance is not cost-effective, so thresholds are set up front, such as -10%, \$100K, or ±10%, or ±\$100K.
+:::
+
++++
+
+When CV or SV — current-period or cumulative — exceeds a contractually set **threshold**, the Control Account Manager writes a **Variance Analysis Report (VAR)**. A VAR should answer four questions:
 
 1. **Where** is the variance? Which WBS element, and is it primarily labor, material, etc.?
 2. **What is the cause?** The issue, risk, or error behind it.
@@ -461,6 +589,8 @@ Q: A task shows BCWS = BCWP = ACWP every period. What is this most likely to ind
 Reporting every variance is not cost-effective, so thresholds are set up front — commonly a **percentage** and/or an **absolute dollar amount**, for example **-10%, \$100K, or ±10%, or ±\$100K**. Thresholds can tighten or loosen as a project progresses depending on where the risk sits; some programs instead use a subjective "top ten" critical task list.
 
 Variance reporting tends to focus on unfavorable variances, but **favorable variances matter too** — they represent an opportunity to reallocate funds to accelerate schedule, fix problem areas, or add to Management Reserve.
+
+{{primer}}
 
 :::check
 Q: What are the four questions a Variance Analysis Report should answer?
@@ -480,7 +610,20 @@ Q: A CV is favorable (positive) and well above the reporting threshold. Should i
     },
     {
       id: 'eac', title: 'Estimates at completion', summary: 'CPI and CPI×SPI forecasts, VAC, and the aquarium future-performance example',
-      body: String.raw`Analysts emphasize EACs to identify cost drivers and take corrective action, ensure contract ceilings and program budgets are sufficient, and avoid overpaying progress payments. Generally, **CV at completion will not improve** on the CV identified as early as the 20% complete point — problems are rarely fully correctable after that, even with early action.
+      body: String.raw`:::primer:::
+The aquarium project is over cost (CPI about 0.67) and behind schedule (SPI = 0.5). Two forecasts of its final cost are possible: one uses CPI only, the other uses CPI and SPI together.
+
+:::check
+Q: Compared with the CPI-only EAC, how will the CPI x SPI EAC come out for this project?
+* Higher, because SPI below 1 raises the EAC
+- Lower, because the schedule trend offsets the cost trend
+- The same, because SPI does not affect cost
+> The CPI x SPI forecast assumes the remaining work follows the same cost and schedule trend, so SPI < 1 raises the EAC. That is why it is usually the worst case.
+:::
+
++++
+
+Analysts emphasize EACs to identify cost drivers and take corrective action, ensure contract ceilings and program budgets are sufficient, and avoid overpaying progress payments. Generally, **CV at completion will not improve** on the CV identified as early as the 20% complete point — problems are rarely fully correctable after that, even with early action.
 
 There is **no single correct formula** — always compute multiple EACs and understand the assumption each embeds.
 
@@ -524,6 +667,8 @@ Building on the aquarium example: BCWS=\$400, BCWP=\$200, ACWP=\$300, BAC=\$800,
 Using the rounded CPI = 0.67 instead of 2/3 gives slightly different figures (about \$1194 and \$2091) — carry the exact fraction through the math.
 :::
 
+{{primer}}
+
 :::check
 Q: BAC=800, BCWP=200, ACWP=300, CPI = 2/3 (0.67). CPI-forecast EAC?
 = 1200 ±5
@@ -550,7 +695,20 @@ predict: eac +- 0.5%
     },
     {
       id: 'tcpi', title: 'To-complete performance index', summary: 'TCPI_BAC and TCPI_LRE — the reality check on a target',
-      body: String.raw`The **TCPI** answers: "What efficiency must we achieve on remaining work (BCWR) to finish at a given target X?"
+      body: String.raw`:::primer:::
+TCPI is the efficiency a program must achieve on its remaining work to hit a target. CPI is the efficiency it has achieved so far.
+
+:::check
+Q: A contractor's TCPI is below its CPI so far. What is the forecast assuming about the rest of the work?
+* Productivity will decrease: the remaining work is expected to be done less efficiently
+- Productivity will increase
+- Nothing: TCPI and CPI cannot be compared
+> If TCPI < CPI, productivity is expected to decrease going forward, so ask what is driving that and whether it can be mitigated. The more common case is TCPI > CPI.
+:::
+
++++
+
+The **TCPI** answers: "What efficiency must we achieve on remaining work (BCWR) to finish at a given target X?"
 
 $$TCPI_{\text{BAC}} = \frac{BCWR}{BAC - AC} \qquad TCPI_{\text{LRE}} = \frac{BCWR}{LRE - AC}$$
 
@@ -560,6 +718,8 @@ $$TCPI_{\text{BAC}} = \frac{BCWR}{BAC - AC} \qquad TCPI_{\text{LRE}} = \frac{BCW
 
 - If **TCPI < CPI**: productivity is expected to *decrease* going forward — ask what's driving that and whether it can be mitigated.
 - If **TCPI > CPI** (the more common case): productivity is expected to *increase*. As a rule of thumb, a **TCPI more than 5% above cumulative CPI** is considered optimistic and needs further examination — ask whether the assumed improvement is realistic or overly rosy.
+
+{{primer}}
 
 +++
 
@@ -607,7 +767,20 @@ Q: At month 10, compare the TCPI (to finish on BAC) with the CPI so far. Is fini
     },
     {
       id: 'summary', title: 'Summary and testable topics', summary: 'EVM benefits recap and what CEBoK actually tests',
-      body: String.raw`### Why programs use EVM
+      body: String.raw`:::primer:::
+EVM comes with formulas, reports, and baselines. Which of those is the "real key" to making it work?
+
+:::check
+Q: According to the module, what is the real key to a successful EVMS?
+* The partnership and dialogue it opens between government and contractor
+- Having the largest number of formulas available to analysts
+- Strict penalties for every unfavorable variance
+> The real key is the partnership and dialogue EVM opens between government and contractor, giving everyone on a project a sense of ownership in its success.
+:::
+
++++
+
+### Why programs use EVM
 
 - Improved planning, and a clear definition of work before it begins
 - Quick, early problem identification
@@ -619,6 +792,8 @@ Q: At month 10, compare the TCPI (to finish on BAC) with the CPI so far. Is fini
 - Sound data to justify resource requests
 
 The real key to a successful EVMS is the **partnership and dialogue** it opens between government and contractor — EVM gives everyone on a project a sense of ownership in its success.
+
+{{primer}}
 
 +++
 
@@ -650,7 +825,20 @@ Q: Which of these is explicitly called out as NOT testable per CEBoK?
     },
     {
       id: 'advanced', title: 'Advanced (not testable per CEBoK)', summary: 'Gold card, IBR, baseline problems, OTB, Earned Schedule/IMS, advanced EACs, guidelines',
-      body: String.raw`This section covers CEBoK's "Related and Advanced Topics" — useful background, but explicitly **not testable** per the module's own Testable Topics table. Checks here are light and clearly labeled.
+      body: String.raw`:::primer:::
+A program is finishing months late, yet its schedule index may not show it.
+
+:::check
+Q: On a program finishing months late, what happens to the dollar-based SPI as BCWP approaches BAC?
+* It drifts toward 1.0, which hides the lateness
+- It keeps falling toward 0
+- It rises above 1.0
+> SV and SPI measure schedule in dollars, not time, and both converge toward zero and 1.0 as BCWP approaches BAC, even on a program finishing months late. Earned Schedule fixes this.
+:::
+
++++
+
+This section covers CEBoK's "Related and Advanced Topics" — useful background, but explicitly **not testable** per the module's own Testable Topics table. Checks here are light and clearly labeled.
 
 ### EVM Gold Card
 
@@ -721,6 +909,8 @@ AT = 6 months elapsed, cumulative EV = \$600K, which corresponds to \$600K plann
 
 SPI(t) = 4.5 / 6 = **0.75** — 25% behind schedule in time, a figure that stays meaningful even near completion, unlike dollar-based SPI.
 :::
+
+{{primer}}
 
 +++
 
