@@ -10,7 +10,22 @@ This module connects Modules 7 (learning curves), 6 (data analysis), and 2 (esti
   sections: [
     {
       id: 'process', title: 'Hardware lifecycle and functional cost elements', summary: 'Acquisition reviews, prototype types, manufacturing operations, cost elements',
-      body: String.raw`### Acquisition Context and Hardware Development Cycle
+      body: String.raw`:::primer:::
+A shop floor turns raw stock into a shipped product through a chain of operations. Can you sequence them?
+
+:::order
+Q: Put these typical manufacturing operations in order, from first to last.
+1. Receiving
+2. Machining
+3. Assembly
+4. Finishing
+5. Shipping
+> Shop work orders are received on the floor first, raw material is machined into components, machined and purchased parts come together in assembly, finishing yields the desired form, fit, and function, and shipping delivers the product to the next level of integration or a customer.
+:::
+
++++
+
+### Acquisition Context and Hardware Development Cycle
 
 Serious consideration of the production environment begins after **Critical Design Review (CDR)**. Recurring activities generally start with the beginning of production immediately following a **Production Readiness Review (PRR)** — a formal examination of whether the design is ready for production, whether production engineering problems have been resolved, and whether the producer has adequately planned for the production phase. PRR may also be called a **Manufacturing Readiness Review (MRR)**. The **Test Readiness Review (TRR)** is the gateway to system integration and test.
 
@@ -50,6 +65,8 @@ Typical operations in a manufacturing/production facility (per CEBoK):
 - **Assembly**: machined components and purchased parts come together (e.g., transmitter, structural boom)
 - **Finishing**: final processing yields the desired form, fit, and function
 - **Shipping**: delivers the finished product to the next higher level of integration or a customer distribution center
+
+{{primer}}
 
 +++
 
@@ -98,7 +115,22 @@ show: ga=0.2 fee=0.09
     },
     {
       id: 'setup', title: 'Production setup: facilities and tooling', summary: 'CAD/CAM/CAE, GSE, setup cost estimating, FCCOM, soft vs. rate tooling',
-      body: String.raw`### Production Setup
+      body: String.raw`:::primer:::
+Production setup leans on three computer-aided tool families. Each has its own job.
+
+:::sort
+Q: Which tool family does each job belong to?
+buckets: CAD | CAM | CAE
+- Design and drafting (technical drawing) = CAD
+- Manufacture of physical models = CAM
+- Analysis and simulation = CAE
+- Diagnosis and repair = CAE
+> CAD is design and drafting, CAM is manufacture of physical models, and CAE covers analysis, simulation, design, manufacture, planning, diagnosis, and repair.
+:::
+
++++
+
+### Production Setup
 
 Setup is the **non-recurring process** of placing manufacturing equipment and tools in proper arrangement before a production run. Setup time is critical on small production runs, where it may easily exceed run time.
 
@@ -111,6 +143,8 @@ The primary automated tools of production setup:
 - **CAE (Computer-Aided Engineering)**: analysis, simulation, design, manufacture, planning, diagnosis, repair
 
 Collectively referred to as **CAD/CAM/CAE**, often used with 3D modeling.
+
+{{primer}}
 
 +++
 
@@ -173,7 +207,22 @@ Typical MGSE includes handling fixtures, lift slings, and transport dollies. Typ
     },
     {
       id: 'labor', title: 'Labor rates and burdening', summary: 'Fully burdened rate buildup: direct labor, fringe, overhead, G&A, fee',
-      body: String.raw`**Total Labor = Direct Labor + Indirect Labor.** Direct labor is immediately associated with producing the product; indirect labor includes supporting engineering (industrial, mechanical) and supervisory/management labor, often assessed as a burden on direct labor.
+      body: String.raw`:::primer:::
+Wrap rates stack several burdens on a base wage, and the order matters because each layer applies to a different base.
+
+:::order
+Q: Put these labor cost layers in the order they are applied.
+1. Direct Labor Rate
+2. Fringe Benefits
+3. Overhead
+4. G&A
+5. Fee/Profit
+> Start with the base wage, add fringe on direct labor, add overhead on labor plus fringe, add G&A on total cost, then add fee/profit on total cost to reach the fully burdened rate.
+:::
+
++++
+
+**Total Labor = Direct Labor + Indirect Labor.** Direct labor is immediately associated with producing the product; indirect labor includes supporting engineering (industrial, mechanical) and supervisory/management labor, often assessed as a burden on direct labor.
 
 ### Burdening Structure
 
@@ -195,6 +244,8 @@ Layers, in order, each applied to the correct base:
 9. **= Fully Burdened Price (wrap rate)**
 
 **FCCOM** can also be affected by manufacturing when facilities/equipment are considered in its calculation.
+
+{{primer}}
 
 +++
 
@@ -265,13 +316,28 @@ Q: Fringe benefit rates in manufacturing can run about what percentage of direct
     },
     {
       id: 'composite', title: 'Composite rates and skill mix', summary: 'Blended rates across labor categories, hours-weighted averages',
-      body: String.raw`When performing a cost estimate, the proper **skill mix** — the relative mix of junior/senior artisans for a task — must be understood. The skills needed dictate the labor categories in the estimate, and the labor rate used must be a **weighted average** of the junior/senior artisan rates.
+      body: String.raw`:::primer:::
+A task needs junior and senior artisans at different pay rates, but the estimate needs a single labor rate.
+
+:::check
+Q: How should the one blended labor rate be formed from the categories used?
+- Take the simple average of the category rates
+- Use the rate of the most senior category
+* Weight each category's rate by the hours worked in it
+> The composite rate is the hours-weighted average of the rates across all categories, not a simple average.
+:::
+
++++
+
+When performing a cost estimate, the proper **skill mix** — the relative mix of junior/senior artisans for a task — must be understood. The skills needed dictate the labor categories in the estimate, and the labor rate used must be a **weighted average** of the junior/senior artisan rates.
 
 ### Composite Rate Formula
 
 $$\text{Composite Rate} = \frac{\sum (\text{Direct Rate}_i \times \text{Hours}_i)}{\sum \text{Hours}_i}$$
 
 The composite is the **hours-weighted average** rate across all categories, not a simple average.
+
+{{primer}}
 
 +++
 
@@ -323,7 +389,24 @@ Q: At start of production, labor is 80% assembler (\$40/hr), 20% engineer (\$80/
     },
     {
       id: 'standards', title: 'Time standards and performance', summary: 'Development of standards, Maynard formula, PF&D, pace, efficiency vs. realization',
-      body: String.raw`A **time standard** is the standard duration to perform a specific task, developed via time and motion studies. Time studies should be based on **observed, not estimated** data, and require the correct method, accurate recording, and honest performance evaluation. Build-up (using detailed labor standards) is the hallmark technique of manufacturing cost estimating, but is impeded by insufficient design detail (early in development) or a lack of time standards — companies without mass production (e.g., a satellite builder), non-process-controlled shops, or sole-source cost-type contracts often lack incentive to develop them.
+      body: String.raw`:::primer:::
+Two factors compare actual labor hours with a time standard. One is the reciprocal of the other, so it is easy to mix them up.
+
+:::sort
+Q: Which factor does each statement describe?
+buckets: Realization Factor (FR) | Efficiency Factor (FE)
+- Actual hours divided by standard hours = Realization Factor (FR)
+- A value above 1 means more hours were needed = Realization Factor (FR)
+- Similar to a Cost Growth Factor = Realization Factor (FR)
+- Standard hours divided by actual hours = Efficiency Factor (FE)
+- Similar to an EVM performance index = Efficiency Factor (FE)
+- Also called Performance to Standards (PTS) = Efficiency Factor (FE)
+> FR is actual over standard, the variance factor akin to a Cost Growth Factor, where values above 1 mean more hours. FE is standard over actual, akin to an EVM performance index, and is also called PTS.
+:::
+
++++
+
+A **time standard** is the standard duration to perform a specific task, developed via time and motion studies. Time studies should be based on **observed, not estimated** data, and require the correct method, accurate recording, and honest performance evaluation. Build-up (using detailed labor standards) is the hallmark technique of manufacturing cost estimating, but is impeded by insufficient design detail (early in development) or a lack of time standards — companies without mass production (e.g., a satellite builder), non-process-controlled shops, or sole-source cost-type contracts often lack incentive to develop them.
 
 ### Techniques for Developing Time Standards
 
@@ -402,6 +485,8 @@ Both compare actual labor hours to a defined time standard, and are reciprocals 
 
 Most organizations use either $F_E$ or $F_R$, not both; both may be closely related to the pace term.
 
+{{primer}}
+
 :::check
 Q: Time standard 2.0 hours/unit, realization factor 1.5. Estimated actual hours per unit?
 = 3
@@ -416,7 +501,22 @@ Q: Standard = 2.5 hr/unit, historically shop's efficiency (FE) = 0.83. Expected 
     },
     {
       id: 'learning', title: 'Learning curves in manufacturing', summary: 'What learns and what doesn\'t; production runs, breaks, P3I, anomalies',
-      body: String.raw`**Full learning curve theory is in Module 7.** This section covers manufacturing-specific application and pitfalls. The learning curve idea's genesis and purest application is in the manufacturing environment.
+      body: String.raw`:::primer:::
+Repetition makes workers faster, so some costs shrink as units are built. Others never budge.
+
+:::sort
+Q: Which costs follow a manufacturing learning curve?
+buckets: Learns | Does not learn
+- Recurring touch labor = Learns
+- Material cost per unit = Does not learn
+- Setup, tooling, and facilities = Does not learn
+- Prototype and engineering units = Does not learn
+> Learning applies to recurring touch labor that improves with repetition. Material cost per unit is a physical quantity, non-recurring costs are one-time, and prototype units are a different task and process maturity.
+:::
+
++++
+
+**Full learning curve theory is in Module 7.** This section covers manufacturing-specific application and pitfalls. The learning curve idea's genesis and purest application is in the manufacturing environment.
 
 ### Production Runs and Learning
 
@@ -431,6 +531,8 @@ Learning applies to **recurring touch labor** that improves with repetition unde
 - **Non-recurring costs**: setup, tooling, facilities are one-time
 - **Prototype/engineering units**: different task, different process maturity
 - **Support labor** (QC, planning): not given its own learning curve; when estimated as a factor of touch labor it simply moves with touch labor's learning
+
+{{primer}}
 
 +++
 
@@ -506,7 +608,20 @@ Q: T1 = 800 hr, 90% curve. Hours for unit 20? ($b = -0.1520$)
     },
     {
       id: 'material', title: 'Material cost estimating and scrap', summary: 'Material types, composite/exotic materials, scrap rates and MUA, MTOL',
-      body: String.raw`### Material Categories
+      body: String.raw`:::primer:::
+Composite laminates are usually formed in a near-final shape, with little machining or rework left to do.
+
+:::check
+Q: Compared with metal parts, what does that do to the estimate?
+- Machining labor becomes the dominant cost
+* Tooling becomes relatively more important
+- Material handling costs vanish
+> Because composites need little rework or machining, the relative importance of tooling increases versus metal parts.
+:::
+
++++
+
+### Material Categories
 
 - **Raw Material**: matter the manufacturer transforms into a product (e.g., steel plates welded/fitted into a ship's hull)
 - **Purchased Parts**: materials installed to make a final product (e.g., prefabricated doors and hatches)
@@ -523,6 +638,8 @@ Metal vs. non-metal properties affect both cost and processing. A general rule: 
 ### Composite Materials
 
 Composite laminates are usually formed in a **near-final shape** with little rework or machining, which increases the relative importance of tooling for composites versus metal parts. Their light weight with comparable strength to metal makes composites preferred in aircraft manufacturing where weight is critical. Bonding chemicals are increasingly replacing traditional fasteners (nuts and bolts), proving superior and often cheaper.
+
+{{primer}}
 
 ### Exotic Materials
 
@@ -611,7 +728,20 @@ Q: Per CEBoK's Testable Topics table for this module, which content is NOT testa
     },
     {
       id: 'makebuy', title: 'Make-or-buy decisions', summary: 'Cost comparison, breakeven analysis, decision factors',
-      body: String.raw`A **make-or-buy** decision chooses whether to produce an item in-house ("make") or purchase from a supplier ("buy"). Responsibility typically belongs to the **IPT lead**, who exercises creativity with available resources and assesses whether a part is more economical to buy outside than make in-house. The cost estimator develops a cost estimate to support this assessment (typically from historical data) and must assess any outside vendor quote for realism and reasonableness — buying may be faster than in-house fabrication, and schedule may matter as much as cost.
+      body: String.raw`:::primer:::
+Making in-house is cheaper per unit, but you must buy tooling first. At some quantity the tooling pays for itself.
+
+:::check
+Q: Make cost is \$90/unit, buy price is \$102/unit, and tooling for making costs \$40,000. Roughly where does making become cheaper?
+- About 330 units
+* About 3,300 units
+- About 33,000 units
+> The unit saving is \$102 - \$90 = \$12, so the \$40,000 tooling is recovered at about 40,000 / 12 = 3,333 units. Above that, making is cheaper.
+:::
+
++++
+
+A **make-or-buy** decision chooses whether to produce an item in-house ("make") or purchase from a supplier ("buy"). Responsibility typically belongs to the **IPT lead**, who exercises creativity with available resources and assesses whether a part is more economical to buy outside than make in-house. The cost estimator develops a cost estimate to support this assessment (typically from historical data) and must assess any outside vendor quote for realism and reasonableness — buying may be faster than in-house fabrication, and schedule may matter as much as cost.
 
 ### Decision Drivers
 
@@ -644,6 +774,8 @@ $$Q_{breakeven} = \frac{\text{Incremental Tooling Cost}}{\text{Buy Price} - \tex
 
 Sensitivity: if tooling rises to \$60,000, breakeven = \$60,000 / \$12 = 5,000 units.
 
+{{primer}}
+
 :::check
 Q: Make cost \$75/unit (no tooling investment in hand), buy \$85/unit, new tooling \$30,000. Breakeven quantity?
 = 3000
@@ -669,7 +801,22 @@ Q: When an item is marked "buy," how does it typically enter the cost estimate?
     },
     {
       id: 'adv-programs', title: 'Advanced: DoD reporting, Six Sigma & Lean', summary: 'Not testable per CEBoK — DD 1921-1, Six Sigma DMAIC, Lean/JIT/Kanban/5S, Agile',
-      body: String.raw`:::note Not testable per CEBoK
+      body: String.raw`:::primer:::
+Six Sigma improves a process in five phases, each building on the one before.
+
+:::order
+Q: Put the five DMAIC phases in order.
+1. Define
+2. Measure
+3. Analyze
+4. Improve
+5. Control
+> The team first agrees on scope and goals (Define), then collects data on the current state (Measure), pinpoints causes (Analyze), pilots and implements the fix (Improve), and hands off with gain-maintenance procedures (Control).
+:::
+
++++
+
+:::note Not testable per CEBoK
 This module's "Related and Advanced Topics" content, including this section, is explicitly marked **not testable**.
 :::
 
@@ -694,6 +841,8 @@ Developed by **Bill Smith at Motorola** in the mid-1980s as a measure of quality
 - **Control**: complete project work, hand off to process owner with gain-maintenance procedures
 
 Six Sigma places heavy emphasis on the **Voice of the Customer (VOC)**.
+
+{{primer}}
 
 +++
 
@@ -759,7 +908,24 @@ Q: Why can't traditional labor standards and learning curves be applied to Agile
     },
     {
       id: 'adv-other', title: 'Advanced: IT services, modeling, IPPD & quality tools', summary: 'Not testable per CEBoK — IT services cost categories, CAD/CAM modeling, IPPD budget allocation, QA tools',
-      body: String.raw`:::note Not testable per CEBoK
+      body: String.raw`:::primer:::
+A program team has to split a budget among its members. There are several ways to decide the shares.
+
+:::sort
+Q: Which budget allocation approach does each description fit?
+buckets: Equal allocation | Historical data | Reallocation
+- All teammates share equally in budget increases and decreases = Equal allocation
+- Based on the status quo = Equal allocation
+- Based on a similar program or benchmarking data = Historical data
+- Based on should-cost benchmarks = Historical data
+- Used after a reorganization requiring revised budgets = Reallocation
+- Based on new current task estimates = Reallocation
+> Equal allocation keeps the status quo and shares changes equally. Historical-data allocation uses a similar program or benchmarking data (should-cost). Reallocation uses new current task estimates, typically after a reorganization.
+:::
+
++++
+
+:::note Not testable per CEBoK
 This module's "Related and Advanced Topics" content, including this section, is explicitly marked **not testable**.
 :::
 
@@ -790,6 +956,8 @@ The cost estimate/budget is usually held at the **IPT level**, with ultimate res
 1. **Equal allocation** based on status quo — all teammates share equally in budget increases/decreases
 2. **Historical-data allocation** — based on a similar program or benchmarking data (should-cost)
 3. **Reallocation** based on new current task estimates — used after a reorganization requiring revised budgets
+
+{{primer}}
 
 +++
 
