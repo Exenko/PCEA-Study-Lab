@@ -9,7 +9,24 @@ Where a cost estimate answers "what will this cost?", EA answers "which alternat
   sections: [
     {
       id: 'process', title: 'The 7-step EA process', summary: 'From objective through recommendation',
-      body: String.raw`Every EA follows a formal seven-step sequence. Exam questions frequently ask you to identify which step a described activity belongs to.
+      body: String.raw`:::primer:::
+Seven steps, shuffled. Which comes first, and which last?
+
+:::order
+Q: Put the EA steps in order.
+1. Define the objective
+2. Formulate the assumptions and ground rules
+3. Identify and examine alternatives
+4. Develop the cost and benefit estimates
+5. Compare and rank the alternatives
+6. Test sensitivity of the rankings
+7. Formulate the recommendation
+> Every EA follows this formal seven-step sequence: objective, assumptions and ground rules, alternatives, cost and benefit estimates, compare and rank, sensitivity, then recommendation.
+:::
+
++++
+
+Every EA follows a formal seven-step sequence. Exam questions frequently ask you to identify which step a described activity belongs to.
 
 **Step 1: Define the Objective**
 - State clearly what decision the analysis supports and what question it answers.
@@ -58,6 +75,8 @@ Where a cost estimate answers "what will this cost?", EA answers "which alternat
 - Document caveats from sensitivity analysis and any non-quantifiable factors (risk, policy, qualitative benefits).
 - Make the analysis defendable and traceable.
 
+{{primer}}
+
 +++
 
 :::check
@@ -86,13 +105,30 @@ Q: Why is the status quo always included as an alternative?
     },
     {
       id: 'ground-rules', title: 'Ground rules: period of analysis, dollars, costs, and benefits', summary: 'Period-of-analysis methods, constant vs. current dollars, what to include/exclude',
-      body: String.raw`### EA period of analysis
+      body: String.raw`:::primer:::
+Alternatives rarely last the same number of years, so the analysis needs one common time window.
+
+:::sort
+Q: Which period-of-analysis method does each description fit?
+buckets: Shortest life | Common denominator life | Uniform Annual Cost (UAC)
+- Needs a residual value estimate for the longer-lived alternatives = Shortest life
+- Uses the least common multiple of the individual periods = Common denominator life
+- Systems keep replacing themselves until all end together = Common denominator life
+- Assumes the longest period of analysis among the alternatives = Uniform Annual Cost (UAC)
+> Shortest life cuts off at the shortest period and adds residual value for the rest. Common denominator life is the least common multiple, with repeated replacement. UAC adjusts for unequal lives and assumes the longest period.
+:::
+
++++
+
+### EA period of analysis
 
 Each alternative has an **economic life** (bounded by physical, mission, and/or technological life) and a **period of analysis** (economic life plus any lead time to develop/implement, often ending at Initial Operating Capability). Alternatives frequently have different economic lives, so once each alternative's period of analysis is known, choose one overall **EA period of analysis** using one of three methods:
 
 - **Shortest life**: use the shortest alternative's period of analysis; estimate and include a **residual value** for the other alternatives to account for the benefits they still had left.
 - **Common denominator life**: assume each system keeps replacing itself until all alternatives end at the same time (technically the **least common multiple** of the individual periods). Example: lives of 3, 4, and 6 years → a 12-year common denominator; the 3-year system is replaced 3 times, the 4-year system 2 times, the 6-year system once.
 - **Uniform Annual Cost (UAC)**: economically adjusts dollars for unequal lives and assumes the **longest** period of analysis among the alternatives.
+
+{{primer}}
 
 ### Type of dollars and base year
 
@@ -169,7 +205,20 @@ Q: An asset's value at the end of its economic life, where economic life is defi
     },
     {
       id: 'discounting', title: 'Time value: discounting, real vs. nominal', summary: 'PV, DF, Fisher equation, mid-year convention',
-      body: String.raw`**Discounting** converts future cash flows to a single point in time (usually present value) to reflect the **time value of money**: a dollar today is worth more than a dollar in the future because it can be invested to earn a return.
+      body: String.raw`:::primer:::
+A payment is due three years from now. Someone changes the discount rate, and the payment itself stays the same.
+
+:::check
+Q: The discount rate rises from 5% to 10%. What happens to the present value of that future payment?
+* It falls
+- It rises
+- It stays the same, since the payment amount did not change
+> The discount factor is 1/(1+r)^n, so a larger r makes the denominator bigger and the factor smaller. The same future dollars are worth less today.
+:::
+
++++
+
+**Discounting** converts future cash flows to a single point in time (usually present value) to reflect the **time value of money**: a dollar today is worth more than a dollar in the future because it can be invested to earn a return.
 
 ### The discount factor and present value
 
@@ -182,6 +231,8 @@ where $r$ = discount rate (as a decimal) and $n$ = years from the base period.
 $$DF_n^{mid} = \frac{1}{(1+r)^{n-0.5}}$$
 
 Mid-year discount factors are always **larger** than end-of-year for the same year, reflecting earlier average timing.
+
+{{primer}}
 
 +++
 
@@ -240,7 +291,20 @@ Q: Mid-year discount factor for year 1 at 4%? (4 decimals)
     },
     {
       id: 'comparison', title: 'Comparison techniques', summary: 'NPV, PV of cost, BCR, SIR, EUAC, payback, ROI',
-      body: String.raw`### The main techniques
+      body: String.raw`:::primer:::
+Two alternatives: one returns \$2 of benefit for \$1 of cost, the other returns \$6 of benefit for \$4 of cost (all in present value).
+
+:::check
+Q: Which alternative creates more total value (PV of benefits minus PV of costs)?
+- Alternative 1 (\$2 benefit, \$1 cost)
+* Alternative 2 (\$6 benefit, \$4 cost)
+- They create the same total value
+> Alternative 2 nets +\$2 and Alternative 1 nets +\$1. NPV measures total value created, which is why it ranks mutually exclusive alternatives, not efficiency ratios.
+:::
+
++++
+
+### The main techniques
 
 | Technique | Formula | Use when | Decision rule |
 |---|---|---|---|
@@ -286,6 +350,8 @@ C/BR = PV(Costs) / PV(Benefits) (or its reciprocal, B/CR, where higher is better
 | Alt 2 | +\$2 | 0.67 |
 
 Alt 2 **wins on NPV** (+\$2 vs +\$1, more total value created) but **loses on C/BR** (0.67 vs 0.50, Alt 1 is "more efficient" per dollar). This is why efficiency ratios like C/BR, B/CR, and ROI can favor the wrong alternative — they measure efficiency, not total value.
+
+{{primer}}
 
 ### SIR and payback rule (DoD FMR)
 
@@ -360,7 +426,22 @@ Q: Project A: unequal life, same benefits as B. Which is the best comparison?
     },
     {
       id: 'example', title: 'Worked example: the lawn-mower EA', summary: 'CEBoK’s full 7-step example, mid-year discounting, C/BR flip, sensitivity',
-      body: String.raw`CEBoK's core worked example runs the full seven-step process on a deliberately simple, non-technical problem: it takes too long to mow the lawn.
+      body: String.raw`:::primer:::
+Four ways to get the lawn mowed: keep the old mower, upgrade it, buy a new one, or pay someone else.
+
+:::sort
+Q: Which alternatives come out with a positive NPV?
+buckets: Positive NPV | Negative NPV
+- Outsource = Positive NPV
+- Purchase new mower = Positive NPV
+- Upgrade existing mower = Negative NPV
+- Status quo = Negative NPV
+> Only outsourcing (128) and the new mower (103) have positive NPV. Upgrading (-31) and the status quo (-125) are negative.
+:::
+
++++
+
+CEBoK's core worked example runs the full seven-step process on a deliberately simple, non-technical problem: it takes too long to mow the lawn.
 
 ### Steps 1–3: Objective, Assumptions, Alternatives
 
@@ -414,6 +495,8 @@ Discounting each alternative's 10-year cost and benefit stream by these factors 
 | Status quo | −125 |
 
 **Preliminary recommendation: Outsource** (NPV \$128/yr in today's dollars). Only outsourcing and the new mower have positive NPV.
+
+{{primer}}
 
 **The C/BR flip**: if a Cost/Benefit Ratio were used instead of NPV, the **new mower** would win by a narrow margin — it is more *efficient* (lower cost per unit of benefit) but less *effective* (smaller total net benefit). This is the same C/BR-vs-NPV paradox from the Comparison Techniques section, and it is why NPV, not C/BR, drives the recommendation.
 
@@ -502,7 +585,20 @@ Q: Facility EA (Beyond CEBoK): which alternative has the lowest UAC at r = 5%?
     },
     {
       id: 'depreciation', title: 'Depreciation methods', summary: 'Straight-line, declining balance, sum-of-years-digits',
-      body: String.raw`**Depreciation** allocates the cost of a capital asset over its useful life for accounting and tax purposes. It is **not a cash flow** in itself, but it matters for tax-effect analysis, asset-replacement decisions, and lease-vs-buy comparisons.
+      body: String.raw`:::primer:::
+Different depreciation methods write off an asset on very different schedules.
+
+:::check
+Q: A \$140,000 asset with \$20,000 salvage is depreciated over 5 years, once straight-line and once with 200% declining balance. How do the lifetime totals compare?
+* Both total \$120,000; only the timing differs
+- Declining balance totals more, since it takes larger early deductions
+- Straight-line totals more, since its deductions are spread evenly
+> Total depreciation always equals cost minus salvage (\$140,000 - \$20,000 = \$120,000) for straight-line, DDB, and SYD. Only the timing differs.
+:::
+
++++
+
+**Depreciation** allocates the cost of a capital asset over its useful life for accounting and tax purposes. It is **not a cash flow** in itself, but it matters for tax-effect analysis, asset-replacement decisions, and lease-vs-buy comparisons.
 
 **Key terms:**
 - **Cost basis**: original cost of the asset (including costs to place it in service).
@@ -592,6 +688,8 @@ Across straight-line, DDB, and SYD, total depreciation always equals (Cost − S
 - **Sinking fund**: back-loaded (more depreciation in later years) — the other exception to front-loading.
 - **DDB and SYD**: front-loaded (more depreciation early, favoring earlier tax deductions).
 
+{{primer}}
+
 :::warn Important rule
 **Never depreciate an asset below its salvage value.** Cap the final-year depreciation so book value exactly equals (not less than) salvage value.
 :::
@@ -644,7 +742,22 @@ Q: Which two depreciation methods do NOT front-load depreciation into the early 
     },
     {
       id: 'testable', title: 'Testable Topics', summary: 'What CEBoK expects you to know vs. what it does not',
-      body: String.raw`CEBoK publishes an explicit testable-topics breakdown for this module:
+      body: String.raw`:::primer:::
+CEBoK tells you which parts of this module are fair game for the exam.
+
+:::sort
+Q: Which of these is on the testable list, and which is not?
+buckets: Testable | Not testable
+- Discounting, present value, and the time value of money = Testable
+- Defining alternatives, including the status quo = Testable
+- Types of benefits and how to monetize them = Testable
+- Names of cost products that use EA (AoA vs. BCA vs. CBA) = Not testable
+> The testable column includes discounting and present value, defining alternatives including the status quo, and types of benefits. Cost-product names and other advanced topics are not testable.
+:::
+
++++
+
+CEBoK publishes an explicit testable-topics breakdown for this module:
 
 | Testable | Testable, but less emphasized | Not testable |
 | --- | --- | --- |
@@ -656,6 +769,8 @@ Q: Which two depreciation methods do NOT front-load depreciation into the early 
 | Other main content | | |
 
 In short: know discounting, real/nominal rates and the Fisher equation, alternatives (including the status quo requirement), period of analysis, and benefits cold — these are core exam material. Know depreciation's mechanics, but expect it to be tested less heavily than the core comparison techniques. Legislation names and cost-product terminology (the special cases and advanced topics that follow) are background reading, not exam content.
+
+{{primer}}
 
 :::check
 Q: Per CEBoK's testable-topics table, which of these is explicitly "not testable"?
@@ -675,7 +790,22 @@ Q: How does CEBoK characterize depreciation's exam emphasis relative to discount
     },
     {
       id: 'related', title: 'Advanced (not testable per CEBoK)', summary: 'FEA, Commercial Activities, AoA, lease-buy, benefits matrix, ROI vs. NPV critique',
-      body: String.raw`Per CEBoK's testable-topics table, the special-case studies and legislation names below are **not testable** — read for context, not memorization.
+      body: String.raw`:::primer:::
+Three special-case studies build on the basic EA, each for a different kind of decision.
+
+:::sort
+Q: Which study does each description fit?
+buckets: Functional Economic Analysis (FEA) | Commercial Activities (A-76) | Analysis of Alternatives (AoA)
+- Applied to business-process improvement = Functional Economic Analysis (FEA)
+- Alternatives are usually incremental variations on one basic set of changes = Functional Economic Analysis (FEA)
+- Governed by OMB Circular A-76 = Commercial Activities (A-76)
+- An acquisition-milestone study pairing effectiveness analysis with cost analysis = Analysis of Alternatives (AoA)
+> FEA applies EA to business-process improvement with incremental alternatives. Commercial Activities studies are governed by OMB Circular A-76. AoA is the broader acquisition-milestone study with effectiveness and cost analyses of equal importance.
+:::
+
++++
+
+Per CEBoK's testable-topics table, the special-case studies and legislation names below are **not testable** — read for context, not memorization.
 
 ### Functional Economic Analysis (FEA)
 
@@ -688,6 +818,8 @@ Also called privatization or outsourcing studies, governed by **OMB Circular A-7
 ### Analysis of Alternatives (AoA)
 
 A broader, formal **acquisition-milestone study**, running an effectiveness analysis (military worth in performing Mission Tasks) in parallel with, and equal in importance to, a cost analysis (total Life Cycle Cost). Their results are combined to identify the best-value alternative. For major defense acquisition programs (ACAT IA), law requires an AoA at Milestones A and B and at the full-rate production decision.
+
+{{primer}}
 
 +++
 
