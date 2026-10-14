@@ -9,7 +9,23 @@ PCEA.addModule({
   sections: [
     {
       id: 'definition', title: 'Definition and objectives', summary: 'What cost management does',
-      body: String.raw`**Cost management** is the planning, controlling, motivating, and evaluating of products, processes, and personnel involved with system/product development from a cost perspective. It identifies the cost of resources consumed in performing significant activities, determines the efficiency and effectiveness of those activities, and evaluates new activities that can improve future performance.
+      body: String.raw`:::primer:::
+Cost can be attacked at every stage of a system's life, but the lever changes from phase to phase.
+
+:::sort
+Q: Which life-cycle phase does each cost-reduction approach mainly target?
+buckets: R&D | Production | O&S
+- Analysis of design alternatives = R&D
+- Development trade-offs and process improvements = Production
+- Design For Manufacturability and Assembly (DFMA) = Production
+- A more intensive cost-of-ownership analysis = O&S
+- Concurrent Engineering and Supportability Analysis (CESA) = O&S
+> R&D cost is reduced through analysis of design alternatives. Production cost is addressed through development trade-offs and process improvements, including DFMA. O&S is reduced through more intensive cost-of-ownership analysis, made more visible by approaches like CESA.
+:::
+
++++
+
+**Cost management** is the planning, controlling, motivating, and evaluating of products, processes, and personnel involved with system/product development from a cost perspective. It identifies the cost of resources consumed in performing significant activities, determines the efficiency and effectiveness of those activities, and evaluates new activities that can improve future performance.
 
 CEBoK deliberately avoids the term **"cost control"** — it implies costs can be managed by sheer force of will. Instead, management decisions alter the program's course of action in a meaningful way. Cost estimators are vital participants throughout the program life cycle.
 
@@ -109,6 +125,8 @@ Cost management targets both **product costs** (the cost of system design — ha
 - O&S trade-offs are made more visible through approaches like **Concurrent Engineering and Supportability Analysis (CESA)**; new technology and process efficiencies can still reduce cost later, though opportunities diminish over time.
 - **Disposal** costs, though sometimes lumped into O&S, matter increasingly — eco-friendly materials and early planning for deactivation, demilitarization, and disposal reduce them.
 
+{{primer}}
+
 ### How to make things cheaper
 
 Programs emphasize minimizing production cost but struggle to find practical strategies, since a solution often costs performance. Example approaches (all with an undesirable effect on performance if used alone):
@@ -137,7 +155,23 @@ Q: Cost management addresses both product cost and process cost (Fig. 16.1). Whi
     },
     {
       id: 'lcc-toc', title: 'Total Ownership Cost and Life Cycle Cost', summary: 'Two perspectives on total cost',
-      body: String.raw`Managing and reducing *all* cost, not just a portion, requires two perspectives: the **organizational perspective** and the **program/project perspective**.
+      body: String.raw`:::primer:::
+Total ownership cost can be viewed from the whole organization or from a single program, and the two views are not the same size.
+
+:::sort
+Q: Which view does each description belong to?
+buckets: Big TOC | Little TOC
+- The organizational perspective = Big TOC
+- Includes the costs to recruit, train, and retain military and civilian personnel = Big TOC
+- Includes all other costs of business operations of the DoD = Big TOC
+- The program-level perspective = Little TOC
+- Also called Defense Systems TOC = Little TOC
+> Big TOC is the organizational DoD perspective, covering personnel and all other business-operations costs. Little TOC, or Defense Systems TOC, is the program-level subset for defense systems.
+:::
+
++++
+
+Managing and reducing *all* cost, not just a portion, requires two perspectives: the **organizational perspective** and the **program/project perspective**.
 
 ### DoD Total Ownership Cost (Big TOC)
 
@@ -156,6 +190,8 @@ The program-level subset of DoD TOC for defense systems is **Defense System TOC*
 LCC estimates span the entire life cycle: R&D, production, O&S, and disposal. Commercial definitions are similar. Life cycle is often confused with just O&S, but the **Life Cycle Cost Estimate (LCCE)** covers **all costs associated with the program for its complete life cycle, regardless of funding source**.
 
 Analysts must keep **both** TOC perspectives in mind: most TOC reduction efforts are worked at the program/project level, but analysts must avoid program/project decisions that fail to reduce overall TOC, or that increase it.
+
+{{primer}}
 
 :::key
 **Little TOC (Defense Systems TOC) = LCC.** "Big TOC" is the organization-wide DoD perspective. LCC already includes both direct costs and the indirect costs attributable to the program — not "LCC plus something extra."
@@ -209,7 +245,22 @@ The idea that O&S is "typically the largest phase" of LCC is common industry int
     },
     {
       id: 'reducing-toc', title: 'Reducing Total Ownership Cost', summary: 'R-TOC process and managing costs early',
-      body: String.raw`The overarching process for managing and reducing all life-cycle costs has been called, by various organizations, **Reducing TOC, Reduction of TOC, R-TOC, RTOC, TOC Reduction,** and **TOCR**. CEBoK uses the generic term **R-TOC**. Regardless of name, these processes address cost by changing *what* is acquired and *how* the system is acquired and operated.
+      body: String.raw`:::primer:::
+A new system is still a blank sheet, while an old one has been fielded for years. Where would you expect cost to be easier to reduce?
+
+:::sort
+Q: Does each statement describe the early acquisition process or an old, fielded system?
+buckets: Early in acquisition | Old fielded system
+- Decisions have more effect on life-cycle cost = Early in acquisition
+- Wise decisions reduce cost across all phases = Early in acquisition
+- Most cost has already been designed in = Old fielded system
+- Cost reduction is difficult = Old fielded system
+> The best time to reduce TOC is early, because earlier decisions have more effect on life-cycle cost and, made wisely, reduce cost across all phases. With old systems most cost has already been designed in, making reduction difficult.
+:::
+
++++
+
+The overarching process for managing and reducing all life-cycle costs has been called, by various organizations, **Reducing TOC, Reduction of TOC, R-TOC, RTOC, TOC Reduction,** and **TOCR**. CEBoK uses the generic term **R-TOC**. Regardless of name, these processes address cost by changing *what* is acquired and *how* the system is acquired and operated.
 
 ### Why organizations adopt R-TOC
 
@@ -237,6 +288,8 @@ The best time to reduce TOC is **early** in the acquisition process. Earlier dec
 Inserting new technology can lower TOC: new technology increases reliability, which decreases support costs. Process changes that improve support-process efficiency also lead to less costly maintenance and operating requirements.
 
 The two primary methods for affecting cost early are **CAIV** (DoD) and **Target Costing** (commercial) — covered next.
+
+{{primer}}
 
 :::key
 **High-leverage point**: Because R&D/design decisions lock in the largest share of downstream TOC, the highest-leverage point to reduce TOC is early in the program, before the design is fixed. Once a system is fielded, modernization is the only path to significant savings.
@@ -272,7 +325,20 @@ Figures 16.2 (a NAVSEA ship TOC decomposition chart) and 16.3 (an F/A-22 TOC dec
     },
     {
       id: 'caiv', title: 'Cost As an Independent Variable', summary: 'Cost as a design constraint, and curves of equal preference',
-      body: String.raw`Reducing TOC requires a comprehensive process, **CAIV**, to anticipate and reduce cost throughout the life cycle, especially during development. **CAIV is the primary acquisition process and strategy for meeting requirements while reducing TOC.** CAIV is a DoD term; the analogous commercial process is **target costing** (next section).
+      body: String.raw`:::primer:::
+In traditional acquisition, cost is the thing you find out at the end.
+
+:::order
+Q: Put the traditional acquisition sequence in order.
+1. Define requirements
+2. Design
+3. Measure cost
+> Traditionally, requirements come first, then design, and cost is measured as an output. Cost is a dependent variable.
+:::
+
++++
+
+Reducing TOC requires a comprehensive process, **CAIV**, to anticipate and reduce cost throughout the life cycle, especially during development. **CAIV is the primary acquisition process and strategy for meeting requirements while reducing TOC.** CAIV is a DoD term; the analogous commercial process is **target costing** (next section).
 
 ### Traditional vs. CAIV approach
 
@@ -286,6 +352,8 @@ Figures 16.2 (a NAVSEA ship TOC decomposition chart) and 16.3 (an F/A-22 TOC dec
 :::key
 CAIV **reverses the traditional sequence**: instead of "define requirements -> design -> determine cost," CAIV asks "define affordable cost -> determine what requirements/performance can be achieved within that cost."
 :::
+
+{{primer}}
 
 :::check
 Q: What best describes CAIV?
@@ -345,7 +413,20 @@ Q: A hypothetical program has a cost threshold of \$500M and objective of \$400M
     },
     {
       id: 'target-costing', title: 'Target Costing', summary: 'Market-driven cost, price, and profit',
-      body: String.raw`Due to increasingly competitive market pressures, organizations use **target costing** to reduce cost while concurrently increasing customer value. Traditionally, organizations focused on satisfying customer requirements and viewed product cost as a **dependent variable** — an after-the-fact result of decisions about a product's functions, features, and performance. Target costing orients products to **customer affordability or market-driven pricing**, treats product cost as an **independent variable** during requirements definition, and proactively works to achieve the target cost during product and process development.
+      body: String.raw`:::primer:::
+Imagine a product the market will pay a fixed price for, and a company that insists on a set profit margin. What is left for cost?
+
+:::check
+Q: Customers will pay \$250 per unit and company policy requires a 20% profit margin on price. Which target cost is closest?
+- \$50
+* \$200
+- \$300
+> Target Profit is 20% of \$250, or \$50. Target Cost is Target Price minus Target Profit, so \$250 - \$50 = \$200.
+:::
+
++++
+
+Due to increasingly competitive market pressures, organizations use **target costing** to reduce cost while concurrently increasing customer value. Traditionally, organizations focused on satisfying customer requirements and viewed product cost as a **dependent variable** — an after-the-fact result of decisions about a product's functions, features, and performance. Target costing orients products to **customer affordability or market-driven pricing**, treats product cost as an **independent variable** during requirements definition, and proactively works to achieve the target cost during product and process development.
 
 ### Core formula
 
@@ -374,6 +455,8 @@ $$\text{Target Cost} = \$250 - \$50 = \$200$$
 
 If the engineering team's current design would cost \$230 to produce, there is a **\$30 cost gap** that must be closed — through design changes, process improvement, value engineering, or sourcing changes — before production begins.
 
+{{primer}}
+
 :::check
 Q: Market research says customers will pay \$500 per unit, and the company requires a 20% profit margin on price. What is the target cost?
 = 400
@@ -392,7 +475,24 @@ Both target costing and CAIV require **value engineering** and cross-functional 
     },
     {
       id: 'abc-fundamentals', title: 'Activity-Based Costing: Fundamentals', summary: 'Definitions and the cost-driver flow',
-      body: String.raw`**Activity Based Costing and Management (ABC/M)** consists of two elements: cost accounting and management. ABC/M is a methodology for understanding activities, processes, services, and products — it identifies **activities and drivers** that consume resources and affect performance, and associates them with products or services. ABC/M applies to right-sourcing decisions in government and private companies, to product-line rationalization, and, as a key cost-management tool, to the entire life cycle.
+      body: String.raw`:::primer:::
+ABC follows money from where it is spent to where it ends up. Each kind of thing sits at a different point on that path.
+
+:::sort
+Q: Is each item a resource, an activity, or a cost object?
+buckets: Resource | Activity | Cost Object
+- Utilities = Resource
+- Facilities = Resource
+- Machine setup = Activity
+- Inspection = Activity
+- Customers = Cost Object
+- Contracts = Cost Object
+> Resources are inputs like labor, equipment, utilities, and facilities. Activities are work like machine setup, purchasing, and inspection. Cost objects are end items like products, services, customers, or contracts.
+:::
+
++++
+
+**Activity Based Costing and Management (ABC/M)** consists of two elements: cost accounting and management. ABC/M is a methodology for understanding activities, processes, services, and products — it identifies **activities and drivers** that consume resources and affect performance, and associates them with products or services. ABC/M applies to right-sourcing decisions in government and private companies, to product-line rationalization, and, as a key cost-management tool, to the entire life cycle.
 
 **Activity Based Costing (ABC)** is a method of costing in which **activities are the primary cost objects**. ABC measures activity cost and performance and assigns the costs of those activities to other cost objects (products, customers) based on their use of the activities — captured as quantified cost and time data translated into decision information.
 
@@ -416,6 +516,8 @@ Resources are consumed by activities (traced via **resource drivers**); activiti
 
 **Example**: A factory spends \$100,000 on setup labor per year. That's a *resource*. The setup activity consumes the labor. Individual products (cost objects) consume setups at different rates (the *activity driver*). ABC traces the \$100,000 to each product based on how many setups it requires.
 
+{{primer}}
+
 :::check
 Q: In the ABC chain Resources -> Activities -> Cost Objects, what links activity costs to products?
 - Resource drivers
@@ -434,13 +536,32 @@ Q: How does ABM differ from ABC in scope?
     },
     {
       id: 'abc-benefits', title: 'Why Activity-Based Costing', summary: 'Strategic, operational, and planning benefits',
-      body: String.raw`ABC supports decision-making across three levels:
+      body: String.raw`:::primer:::
+A cost method can serve very different decisions, from setting company direction to building next year's budget.
+
+:::sort
+Q: At which decision level does ABC provide each benefit?
+buckets: Strategic | Operational | Planning and budgeting
+- Provides an economic map of the enterprise = Strategic
+- Compares costs of goods and services to prices = Strategic
+- Identifies process-improvement opportunities = Operational
+- Measures organizational impacts of process change = Operational
+- Correlates budget changes to resources = Planning and budgeting
+- Assists in forecasting required resources to satisfy program requirements = Planning and budgeting
+> Strategic benefits include an economic map and competitive price comparison. Operational benefits include finding process improvements and measuring their impact. Planning and budgeting benefits include tying budget changes to resources and forecasting required resources.
+:::
+
++++
+
+ABC supports decision-making across three levels:
 
 - **Strategic decision-making**: provides an economic map of the enterprise, compares process costs to strategic direction, assesses impacts of changes in product/service offerings, and compares costs of goods/services to prices (competitive benchmarking).
 - **Operational decision-making**: identifies process-improvement opportunities, measures organizational impacts of process change, clarifies the contribution resources make to processes, and leverages process best practices (internal and external benchmarking).
 - **Planning and budgeting decision-making**: correlates budget changes to resources (selective vs. broad-brush changes), assists in forecasting required resources to satisfy program requirements, and supports more effective reporting to stakeholders and customers.
 
 Ultimately, ABC: **improves customer value, increases profit, clarifies cost, and facilitates business planning.**
+
+{{primer}}
 
 ### ABC exposes what GAAP hides
 
@@ -504,7 +625,20 @@ Q: Why does CEBoK say traditional (GAAP-based) accounting fails to give manageme
     },
     {
       id: 'abc-allocation', title: 'The allocation problem: worked example', summary: 'Volume-based distortion and worked example',
-      body: String.raw`### The problem: traditional volume-based allocation
+      body: String.raw`:::primer:::
+Two products share a pool of setup overhead. Product A is high volume and simple. Product B is low volume and complex, and it causes 18 of the 20 setups. A traditional system spreads the overhead by direct labor hours and gives both products \$10.00 of overhead per unit.
+
+:::check
+Q: Once ABC assigns the overhead by number of setups, what happens to Product B's overhead per unit compared with \$10.00?
+* It goes up
+- It goes down
+- It stays the same
+> Product B causes most of the setups, so ABC assigns it far more of the overhead. Its cost rises to \$45.00 per unit, while Product A's falls.
+:::
+
++++
+
+### The problem: traditional volume-based allocation
 
 Traditional overhead allocation assigns indirect/overhead costs to products using a **single, often volume-based allocation base** — commonly direct labor hours, machine hours, or units produced — applied at one uniform overhead rate.
 
@@ -558,6 +692,8 @@ $$\text{Cost per setup} = \frac{\$100{,}000}{20 \text{ setups}} = \$5{,}000/\tex
 
 **Interpretation**: Traditional allocation masked the fact that Product B drives 90% of setup activity and cost (illustrative figure, not from CEBoK). Product B appears far more profitable (and Product A less profitable) than it actually is under traditional costing — this can distort pricing and product-mix decisions. ABC reveals the true relationship.
 
+{{primer}}
+
 :::check
 Q: A factory allocates \$60K of inspection overhead using direct labor hours. Product X uses 3,000 DL hours and requires 4 inspections; Product Y uses 3,000 DL hours and requires 36 inspections (40 total). Under ABC, what is the cost per inspection (in dollars)?
 = 1500
@@ -566,7 +702,20 @@ Q: A factory allocates \$60K of inspection overhead using direct labor hours. Pr
     },
     {
       id: 'abc-model', title: 'The ABC/M model: the CAM-I Cross', summary: 'ABC (what) vs. ABM (why), and the domain of application',
-      body: String.raw`Because ABC examines the cost of activities, it primarily addresses **process cost** throughout the life cycle (Fig. 16.5, the ABC/M domain of application).
+      body: String.raw`:::primer:::
+ABC/M has a reputation. Think about how a manager might react when asked to adopt it.
+
+:::check
+Q: How do organizations often perceive ABC/M?
+- As too simple to be useful
+* As expensive to implement
+- As usable only in commercial firms
+> Organizations often perceive ABC/M as expensive to implement. It has still been used successfully in both industry and government.
+:::
+
++++
+
+Because ABC examines the cost of activities, it primarily addresses **process cost** throughout the life cycle (Fig. 16.5, the ABC/M domain of application).
 
 ### The CAM-I Cross (Fig. 16.6)
 
@@ -582,6 +731,8 @@ CEBoK's own text names the CAM-I Cross's origin two different ways in the same m
 :::
 
 Organizations often perceive ABC/M as expensive to implement. It has been used successfully in both industry and government, but is met with resistance among government contractors, especially defense-sector manufacturers.
+
+{{primer}}
 
 :::check
 Q: On the CAM-I Cross, what does the vertical (top-down) axis represent?
@@ -603,7 +754,22 @@ Q: On the CAM-I Cross, what does the horizontal (left-to-right) axis represent?
     },
     {
       id: 'abc-estimating', title: 'ABC/M and cost estimating', summary: 'Better data, driver identification, and trade studies',
-      body: String.raw`ABC/M is another method of performing cost estimates. Rather than breaking product cost into the traditional labor, material, overhead, etc., ABC/M breaks it into the **activities** that must be performed to produce the item. By looking at what activities actually make up production, management can better see where costs can be saved. Overhead, often shown as a large, undifferentiated line item, gets broken into the activities performed under ABC — making potential cost savings readily visible.
+      body: String.raw`:::primer:::
+A traditional estimate shows overhead as one big line. ABC/M cuts the estimate up differently.
+
+:::check
+Q: Instead of labor, material, and overhead, what does ABC/M break product cost into?
+- The work phases of the schedule
+- The same labor, material, and overhead lines
+* The activities that must be performed to produce the item
+> ABC/M breaks cost into the activities needed to produce the item. Overhead, often one undifferentiated line, is broken into activities, making potential savings visible.
+:::
+
++++
+
+ABC/M is another method of performing cost estimates. Rather than breaking product cost into the traditional labor, material, overhead, etc., ABC/M breaks it into the **activities** that must be performed to produce the item. By looking at what activities actually make up production, management can better see where costs can be saved. Overhead, often shown as a large, undifferentiated line item, gets broken into the activities performed under ABC — making potential cost savings readily visible.
+
+{{primer}}
 
 ### Better historical cost data
 
@@ -652,9 +818,24 @@ Q: How can ABC improve a cost estimator's historical cost data used for CER deve
     },
     {
       id: 'summary', title: 'Summary and testable topics', summary: 'Recap and what CEBoK actually tests',
-      body: String.raw`We discussed a holistic approach to cost management that seeks to manage and reduce TOC by applying **CAIV, Target Costing, and ABC**, along with **Economic Analysis, Contracting, and EVM** from earlier Unit V modules.
+      body: String.raw`:::primer:::
+This module's methods do not work alone. CAIV, target costing, and ABC lean on other tools from earlier in Unit V.
+
+:::check
+Q: Which earlier Unit V modules does the summary say are applied alongside CAIV, Target Costing, and ABC?
+- Parametric Estimating, Learning Curves, and Inflation
+* Economic Analysis, Contracting, and EVM
+- Schedule Analysis, Risk, and Data Collection
+> The summary says cost management applies CAIV, Target Costing, and ABC along with Economic Analysis, Contracting, and EVM from earlier Unit V modules.
+:::
+
++++
+
+We discussed a holistic approach to cost management that seeks to manage and reduce TOC by applying **CAIV, Target Costing, and ABC**, along with **Economic Analysis, Contracting, and EVM** from earlier Unit V modules.
 
 Cost management employs extensive cost modeling to capture how the interaction of dynamic systems drives cost. It rigorously applies cost estimating throughout the life cycle and better integrates the management processes across the discipline, providing a realistic and impartial assessment of cost objectives relative to other program objectives.
+
+{{primer}}
 
 +++
 
