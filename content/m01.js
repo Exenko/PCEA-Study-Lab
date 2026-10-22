@@ -50,11 +50,11 @@ An estimate turns **uncertain future resources** into numbers decision-makers ca
 
 Cost estimating serves three primary reasons:
 
-**1. Budgeting and Programming**: Independent Cost Estimates (ICEs) provide the basis for improving program budgets to give programs a chance for success and ensure effective utilization of valuable agency resources. When a program runs over budget, resources are diverted to cover the overrun, creating a ripple effect through other programs. Programs that run far over budget may be terminated, leaving capability gaps. Track records show how long an ICE-based budget remains adequate year-by-year and cumulatively.
+**1. Budgeting and Programming**: Independent Cost Estimates (ICEs) provide the basis for improving program budgets to give programs a chance for success and ensure effective utilization of valuable agency resources. If a program runs over budget, other programs' resources will be diverted to cover the additional costs, which can cause a detrimental ripple effect through other programs. Some programs that run far over budget will be terminated, leaving a gap in capabilities. Success in supporting budgeting should be measured by a track record showing how long each ICE-based budget proves adequate on a year-by-year and cumulative basis. The track record should determine in what fiscal years relative to the ICE the program **first ran a deficit** and **first incurred a debt** (i.e., net cumulative shortfall).
 
 **2. Planning**: After establishing the budget, estimating supports the development of Basis of Estimate (BOE) documentation that establishes the integrated baseline. Cost estimates enable Earned Value Management (EVM) to track cost and performance against this baseline.
 
-**3. Trade-offs**: Trade-off studies use baseline cost estimates to explore the relative cost impact of changing requirements. Trade-offs aim to achieve the proper balance between maximizing utility and minimizing cost. Periodic Life Cycle Cost Estimates (LCCEs) measure overall progress toward cost goals.
+**3. Trade-offs**: Trade-off studies use baseline cost estimates to explore the relative cost impact of changing requirements. Trade-offs aim to achieve the proper balance between maximizing utility and minimizing cost. Often the cost impact of trades is cursory. Overall progress toward cost goals must be measured by periodic Life Cycle Cost Estimates (LCCEs), **preferably based on a closed engineering design**.
 
 +++
 
@@ -386,10 +386,12 @@ A good cost model is:
 - Flexible enough to support sensitivity analysis and "what-if" trades
 - Documented so another analyst could reproduce and verify it
 
-**Three factors influence model structure:**
-- The maturity level of the technical and programmatic definition
-- The availability and maturity of relevant estimating methodologies
-- The availability of historical data for developing new estimating methodologies
+A **cost model** is the collection of cost estimating methodologies associated with a cost element or WBS that best reflects the cost of a future system given three important considerations:
+- The **level of detail of technical/programmatic definition** of the future system
+- The **level of detail of relevant existing cost estimating methodologies**
+- The **level of detail of historical data** available to develop new cost estimating methodologies
+
+**Model structure:** Depending on the system's maturity and the scope, time, and resources given for the estimate, the analyst may develop a model structure at varying levels of detail. Analysts may build custom models, use commercially available software, or both. The model should apply some combination of accepted estimating techniques such as parametric, analogy, and engineering build-up.
 
 ### 3a. Types of Estimates
 
@@ -931,8 +933,8 @@ A: So that changes can be tracked, and the estimate's sensitivity to baseline ch
 Q: Definition of a cost model
 A: A structured combination of a WBS, cost estimating relationships (CERs), and supporting data used to generate the estimate. It should be traceable, flexible for sensitivity analysis, and documented.
 R: yes
-Q: Three factors that influence cost model structure
-A: Maturity level of the technical and programmatic definition; availability and maturity of relevant estimating methodologies; availability of historical data for developing new estimating methodologies.
+Q: Three considerations that shape a cost model
+A: Level of detail of the technical/programmatic definition of the future system; level of detail of relevant existing cost estimating methodologies; level of detail of historical data available to develop new methodologies.
 
 ## Estimate Types
 Q: ROM estimate
