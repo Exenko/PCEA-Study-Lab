@@ -39,13 +39,16 @@ $$\hat{Y} = b_0 + b_1 X$$
 
 +++
 
-### OLS assumptions (verify them!)
+### Key OLS assumptions (error term)
 
-1. **Linearity**: the relationship is linear (or has been transformed to be).
-2. **Independence**: the errors are independent of X.
-3. **Homoscedasticity**: the error variance is constant across X.
-4. **Normality**: errors are normal with mean 0.
-5. **No perfect multicollinearity** (multivariate only).
+CEBoK states two key OLS assumptions regarding the error term:
+
+1. **Independence of X**: the error is independent of X (the scatter plot of residuals vs. X shows no correlation); CEBoK calls this assumption homoscedasticity.
+2. **Normality**: the error is normally distributed with a mean of zero and constant variance for all X.
+
+:::tip Beyond CEBoK
+Related checks: linearity (residual analysis should show the assumption of linearity is reasonable) and, for multivariate models, no severe multicollinearity.
+:::
 
 :::check
 Q: Residuals fan out wider as X grows. Which assumption is violated?
@@ -71,11 +74,11 @@ Q: What distinguishes $b_1$ from $\beta_1$?
 - **Factors** ($y = bx$): the intercept is assumed to be zero. They should generally be avoided and replaced with the linear regression methods in this module.
 - **OLS linear regression** ($y = a + bx + \epsilon$): one dependent, one independent variable, minimizing SSE. Can also fit non-linear shapes (power, log, exponential) by transforming them into linear form first.
 - **OLS multivariate linear regression** ($y = a + b_1x_1 + \dots + b_kx_k + \epsilon$): one dependent variable, multiple independent variables. Introduces the risk of multicollinearity.
-- **Non-OLS models**: Weighted Least Squares (WLS), Mean Absolute Percentage Error (MAPE), Zero-Percentage-Bias Minimum Percentage Error (ZMPE). These minimize an error other than SSE and matter when OLS residuals aren't homoscedastic.
+- **Non-OLS models**: Weighted Least Squares (WLS), Mean Absolute Percentage Error (MAPE), Zero-Percentage-Bias Minimum Percentage Error (ZMPE). These minimize an error other than SSE and are necessary when OLS residuals don't exhibit homoscedasticity.
 
 ### Software and OLS
 
-Always **plot the data and fit a trend line first** in software, before trusting the full regression output. A trend line helps spot outliers or points unduly influencing the fit, reveals curvature the regression might miss, and confirms constants were transformed correctly (they appear in natural form on a trend line). This is especially valuable for non-linear regressions, which are easy to get lost in.
+**Plot the data and fit a trend line** in software. A trend line only gives a first glance at the quality of a regression; if a function will be used going forward, a full set of ANOVA statistics should still be developed. A trend line helps spot outliers or points unduly influencing the fit, reveals curvature the regression might miss, and confirms constants were transformed correctly (they appear in natural form on a trend line). This is especially valuable for non-linear regressions, which are easy to get lost in.
 
 :::tip Two ways to write "linear"
 Module 6's algebra notation is $y = mx + b$ ($m$ = slope, $b$ = intercept). Regression notation flips the letters: $y = a + bx$ ($a$ = intercept, $b$ = slope). Same line, different letters — know which convention a problem is using.
@@ -91,7 +94,7 @@ Module 6's algebra notation is $y = mx + b$ ($m$ = slope, $b$ = intercept). Regr
 | Exponential | $y = ae^{bx}$ | $b>0$ grows, $b<0$ decays |
 | Power | $y = ax^b$ | $b<0$ decreasing; $0<b<1$ increasing at a decreasing rate; $b>1$ increasing at an increasing rate |
 
-$b = 0$ (or $c = 0$ in the quadratic) collapses any of these to a constant: average cost isn't related to X at all. Always start with a linear model — if it fits poorly, the residual and scatter plots point toward the right non-linear shape.
+$b = 0$ (or $c = 0$ in the quadratic) collapses any of these to a constant: average cost isn't related to X at all. Analysts should start with a linear model — the linear regression steps will lead to another model type if the fit is poor.
 
 {{primer}}
 
@@ -232,7 +235,7 @@ For the toy problem: $MSE = 18.17/3 = 6.06$ and $MSR = 29.83/1 = 29.83$.
 
 $$R^2 = \frac{SSR}{SST} = 1 - \frac{SSE}{SST}$$
 
-It is the share of Y's variation explained by X, from 0 to 1. Above 0.9 is excellent and above 0.7 is respectable, but **$R^2$ alone says nothing about significance.**
+It is the share of Y's variation explained by X, from 0 to 1. Other things being equal, higher $R^2$ tends to occur for statistically significant regressions. One would typically wish to see high values of $R^2$ (greater than 0.9, say), although lower values do not necessarily indicate an unacceptable relationship. Significance is judged by the F- and t-tests.
 
 :::check
 Q: SSE = 20 and SST = 100. What is $R^2$?
@@ -267,7 +270,7 @@ Two true statements need reconciling: a CER's job is to **reduce CV** versus a s
 {{primer}}
 
 :::key When is a CER worse than just using the average?
-If $R^2$ is below $(k-1)/(n-1)$, the CER performs **worse** than the straight average. Example: 11 data points, one predictor ($k=1$): $(1-1)/(11-1) = 0$... using $k$ = parameters (intercept + slope = 2): $(2-1)/(11-1) = 10\%$. An $R^2$ of 10% or less on 11 points means don't bother with the CER (and it likely wouldn't test significant anyway).
+If $R^2$ is below $(k-1)/(n-1)$, the CER performs **worse** than the straight average. Example: 11 data points, one predictor ($k=1$): $(1-1)/(11-1) = 0$... using $k$ = parameters (intercept + slope = 2): $(2-1)/(11-1) = 10\%$. An $R^2$ of 10% or less on 11 points (single-variable regression) indicates the straight average would perform better; the CER would not test as statistically significant anyway.
 :::`
     },
     {
@@ -296,7 +299,7 @@ It estimates the standard deviation of $\epsilon$, in the **same units as Y**. L
 
 $$CV = \frac{SEE}{\bar Y} \times 100\%$$
 
-This is SEE as a percentage of the mean. It is unitless and comparable across models. **Below 15% is respectable.** Band: $\hat Y \pm CV \times \hat Y$.
+This is SEE as a percentage of the mean. It is unitless and comparable across models. A CV **around 15%** is considered respectable, although higher CVs do not necessarily indicate an unacceptable model. Band: $\hat Y \pm CV \times \hat Y$.
 
 {{primer}}
 
@@ -341,7 +344,7 @@ Q: Is that slope statistically significant at $\alpha = 0.05$?
 - If **p < α** (usually 0.05), reject $H_0$: the coefficient is significant.
 
 :::example Toy problem t-test (exact values)
-$b = 0.585$, $SE(b) = 0.264$, so $t = 0.585/0.264 = 2.22$, with $n-k-1 = 3$ df. The two-sided p-value is about **0.11**, which is greater than α = 0.05, so the slope is **not significant** — the small sample (n = 5) makes it hard to reach significance even though the scatter plot looks like it trends upward.
+$b = 0.585$, $SE(b) = 0.264$, so $t = 0.585/0.264 = 2.22$, with $n-k-1 = 3$ df. The two-sided p-value is about **0.11**, which is greater than α = 0.05, so the slope is **not significant** — the small sample (n = 5) makes it hard to reach significance even though the scatter plot looks like it trends upward. An analyst would typically find this model unacceptable; a lack of significance may also indicate the wrong functional form, in which case go back to the residual plot(s).
 :::
 
 {{primer}}
@@ -374,12 +377,7 @@ Q: MSR = 120 and MSE = 8. What is F?
 
 The p-value is the probability of seeing a relationship this strong **if the true coefficient were zero**.
 
-| p | Reading |
-|---|---|
-| < 0.01 | highly significant |
-| < 0.05 | significant |
-| < 0.10 | marginal |
-| ≥ 0.10 | not significant |
+Compare p to the chosen significance level $\alpha$: typically 0.01 (1%) or 0.05 (5%), occasionally 0.10 (10%). The hypothesis $H_0: b = 0$ is rejected if the p-value is less than the chosen significance level: p < $\alpha$ is significant; otherwise not.
 
 :::warn
 At α = 0.05, when there is truly no relationship you will still see "significant" results 1 time in 20. Run many candidate regressions and some will look good by chance. If an analyst tries many non-significant models before finding a significant one, that "winner" is likely a false positive. **Validate the CER against an independent data set** — either a randomly held-out second half of the original data, or a completely separate data set — rather than trusting the first significant-looking fit.
@@ -392,7 +390,7 @@ Q: A model has $R^2 = 0.93$ but its F-test p-value is 0.21. Accept it?
 - Yes, the $R^2$ is excellent
 * No, it isn't statistically significant
 - Only if CV < 15%
-> Significance comes before fit. High $R^2$ with a tiny sample can happen by chance. Check F, then t, then residuals.
+> Significance comes before fit. High $R^2$ with a tiny sample can happen by chance. Statistical significance is the most important factor in determining whether the statistical relationship is valid.
 :::
 
 ### Correlation, causation, and proxy variables
@@ -426,12 +424,12 @@ Q: In the firemen/fire example, what is the true cost driver, and what role do t
 Residuals are what the line misses. Their pattern can tell on the model.
 
 :::check
-Q: Residuals rise and fall in a regular wave as X increases, as in a time series. What does that suggest?
+Q: Residuals weave in and out of the line, following a periodic relationship. What is this a key pattern to watch for?
 - Heteroscedasticity
 - A non-linear relationship
-* Serial correlation
+* Possible loss of learning or injection of new work in a learning curve
 - A perfect fit
-> A wave or cycle in the residuals signals serial correlation, common in time series.
+> Residuals weaving in and out of the line or following a periodic relationship is a key pattern to watch out for in learning curve analysis and might indicate loss of learning or the injection of new work.
 :::
 
 
@@ -445,8 +443,8 @@ Plot residuals against X (or $\hat Y$). **Good:** a random, rectangular band aro
 | Pattern | Meaning | Remedy |
 |---|---|---|
 | **Curve / arch** | Non-linear relationship | Try power, exponential, log |
-| **Funnel / cone** | Heteroscedasticity | Transform Y, weighted least squares |
-| **Wave / cycle** | Serial correlation | Common in time series; in learning curves it can signal lost learning or new work |
+| **Funnel / cone** | Heteroscedasticity | Weighted Least Squares (fairly rare in application) |
+| **Weaving / periodic** | Residuals weave in and out of the line or follow a periodic relationship | Key pattern in learning curve analysis; might indicate loss of learning or injection of new work |
 
 {{primer}}
 
@@ -455,7 +453,7 @@ Plot residuals against X (or $\hat Y$). **Good:** a random, rectangular band aro
 :::
 
 :::key
-Always look at the residual plot before accepting a model. Patterns in the residuals outweigh good-looking statistics.
+Check the residuals (the OLS assumptions) after deriving the equation, and before moving on to goodness of fit.
 :::
 
 For the Seeker toy example, plotting each residual against its X value (Fig 8.13) shows no pattern and roughly constant spread — the OLS assumptions look reasonable, even though the fit itself isn't statistically significant with only n = 5 points.
@@ -474,7 +472,7 @@ Q: Look at the residual plot below the fit. What problem does it show?
 - The residuals follow a curve, so the relationship is nonlinear
 - One outlier dominates the fit
 - Nothing is wrong, since the residuals average zero
-> A funnel shape means the error variance isn't constant, which breaks an OLS assumption and makes the SEE and t-tests unreliable. A log transformation or weighted regression usually helps.
+> A funnel shape means the error variance isn't constant, which breaks an OLS assumption and makes the SEE and t-tests unreliable. Weighted Least Squares can handle this.
 :::
 
 :::check
@@ -529,10 +527,10 @@ Prediction interval at X = 11 (adds the "1+" term): $(0.25, 17.62)$ — much wid
 
 | Use | Interval |
 |---|---|
-| Average cost for a program type / risk analysis inputs | CI |
-| Cost of a specific new item | PI (more conservative) |
+| Average (mean) cost within a range | CI |
+| Predicted cost of a new item (one new observation) within a range | PI (always wider) |
 
-Large-n rule of thumb: ±1 ≈ 68%, ±2 (1.96) ≈ 95%, ±3 (2.58 exactly) ≈ 99%. More precisely, a normal distribution has 68.3%, 95.5%, and 99.7% of its probability within one, two, and three standard deviations of the mean, respectively — this is where those rules of thumb come from once the sample is large enough (roughly $n \ge 30$, per the Central Limit Theorem) for the t-distribution to approach the normal.
+Normal critical values are easy to remember for 68%, 95%, and 99% CIs: approximately one, two, and three, respectively (exact z for 95% is 1.96, for 99% 2.58). More precisely, a normal distribution has 68.3%, 95.5%, and 99.7% of its probability within one, two, and three standard deviations of the mean, respectively — this is where those rules of thumb come from once the sample is large enough (roughly $n \ge 30$, per the Central Limit Theorem) for the t-distribution to approach the normal.
 
 :::check
 Q: You are estimating the cost of **one specific** new radar. Which interval should you use?
@@ -551,7 +549,7 @@ Q: Where is a regression confidence interval narrowest?
 :::
 
 :::warn
-Don't extrapolate beyond the data range. Intervals widen quickly and the relationship may not hold out there.
+Extrapolating beyond the X range carries risk and should be avoided, but sometimes it is necessary when estimating programs that push the state of the art. Confidence worsens toward the endpoints and further when extrapolating.
 :::`
     },
     {
@@ -577,7 +575,7 @@ Q: Back in the form $Y = ae^{bX}$, about what is $a$?
 | Exponential | $Y = ae^{bX}$ | ln Y only | semi-log |
 | Power | $Y = aX^b$ | ln X and ln Y | log-log |
 
-**Power** (most common in cost work): regress $\ln Y$ on $\ln X$, then $a = e^{\alpha}$ and $b = \beta$.
+**Power** (learning curves are power functions, arguably the most important non-linear application in cost analysis): regress $\ln Y$ on $\ln X$, then $a = e^{\alpha}$ and $b = \beta$.
 **Exponential:** regress $\ln Y$ on X, then $a = e^{\alpha}$ and $b = \beta$.
 **Logarithmic:** just use $\ln X$ as the predictor. No back-transform is needed.
 
@@ -599,16 +597,15 @@ Regressing $\ln Y$ on $X$ gives $\ln Y = -3.0 + 1.2X$, statistically significant
 
 {{primer}}
 
-### Choosing a shape from the raw plot
-- Curving up at an **increasing** rate → power or exponential
-- Curving up at a **decreasing** rate → logarithmic (or power with b < 1)
-- S-shaped → logistic (advanced)
+### Choosing a shape
+
+The residual plot is the primary way of pointing towards using a curvilinear model. A power function with a fractional positive exponent (0 < b < 1) increases at a decreasing rate; a positive exponent greater than one increases at an increasing rate.
 
 ### The missing intercept ("data bowing")
 
 Transforms assume $Y = aX^b$ with no constant. Real data is often $Y = aX^b + c$. The symptom is that the transformed plot still **bows** and the residuals arch.
 
-Fixes: adjust Y by a trial constant and refit, use Solver to fit all three parameters, and keep the version with better $R^2$ and lower SEE.
+Fixes: add or subtract a constant to/from the y-values and examine the change in the trend line, or use Excel's Solver or other packages; the better fit shows lower SEE and higher $R^2$.
 
 :::example Minding the intercept (Fig 8.31/8.32)
 Without adjustment, a toy data set fits $y = 4.2867x^{-0.2467}$ with $R^2 = 0.9162$, but the transformed plot still bows — a sign of a missing non-zero intercept. Subtracting a trial constant of 3 from Y and refitting gives a perfect fit, $y = x^{-1}$ (add the 3 back afterward), with $R^2 = 1$. The bow disappears entirely once the intercept is accounted for.
@@ -631,12 +628,12 @@ You have several candidate cost drivers. Which order do you work in?
 
 :::order
 Q: Put the multivariate regression process in order.
-1. Run with all candidate variables
+1. Select candidate drivers by sound engineering judgment, then run the regression
 2. Check the overall F
 3. Check each t
 4. Drop the least significant variable
 5. Rerun until every variable is significant
-> Run with all candidates, check F, then each t, drop the least significant variable, and rerun until every variable is significant.
+> Select candidate drivers by engineering judgment (don't throw in every variable), check F, then each t, drop the least significant variable, and rerun until every variable coefficient is significant.
 :::
 
 
@@ -646,7 +643,7 @@ $$Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_k X_k + \epsilon$$
 
 Each coefficient is the **partial effect** of its variable with the others held constant. Geometrically: 1 variable gives a line, 2 give a plane, k give a hyperplane.
 
-**Process:** run with all candidate variables → check the overall F → check each t → drop the least significant variable → rerun until every variable is significant. Check a residual plot for **each** X. If every variable ends up dropped, the model reduces to a simple average.
+**Process:** select candidate drivers by sound engineering judgment (avoid throwing all possible variables into the model) and run the regression → check the overall F → check each t → rerun with the least significant variable removed → repeat until all the variable coefficients are significant. The F-statistic and all t statistics must be significant, excluding the y-intercept. Check a residual plot for **each** X. If every variable ends up dropped, the model reduces to a simple average.
 
 {{primer}}
 
@@ -672,7 +669,7 @@ A finer-grained tier some practitioners use: **< 5** generally OK, **5–10** mo
 :::
 
 **Symptoms:** large swings in coefficient values when a variable is added or dropped; coefficients with an unexpected sign; expected-significant variables that aren't; a high overall $R^2$ with several non-significant variables; high VIFs. Note that multicollinearity does **not** affect the reliability of SEE, F, or t as calculated — it only clouds interpretation of which variable is "doing the work."
-**Fixes:** drop one of the correlated variables, combine them into an index, ridge regression, or more data.
+**Fixes:** remove one of the variables with a high VIF and rerun, repeating until the regression is significant; ridge regression keeps all variables.
 
 :::tip Beyond CEBoK
 **Ridge regression** regularizes the model by adding a ridge constant $k$ to each independent variable's variance, so no variable has to be dropped. It reduces SEE and keeps every variable in the analysis, but the resulting coefficients are biased and harder to interpret directly from the output. Best used only when correlation between predictors is extremely high.
@@ -705,7 +702,7 @@ buckets: Highest R-squared | Lowest SSE in unit space | Look at everything
 - Three linear CERs, each using a different cost driver = Highest R-squared
 - A linear model against a power model = Lowest SSE in unit space
 - One model that adds variables to another = Look at everything
-> Within a type, the highest R-squared wins; across types, compare SSE computed in unit space; for nested models, weigh adjusted R-squared, SEE, CV, Significance F and t-stats together.
+> Within a type, the highest R-squared wins; across types, compare SSE computed in unit space; for nested models, weigh adjusted R-squared, SEE, CV and Significance F together.
 :::
 
 
@@ -717,7 +714,7 @@ First, every candidate must be **significant** (F) with **significant variables*
 |---|---|
 | **Within type** (all linear, all power…) | Highest $R^2$ (adjusted $R^2$ if the variable counts differ) |
 | **Across type** (linear vs. power…) | Lowest **SSE computed in unit space** |
-| **Nested** (one model adds variables to another) | Look at everything: adjusted $R^2$, SEE, CV, Significance F, t-stats |
+| **Nested** (one model adds variables to another) | Look at everything: adjusted $R^2$, SEE, CV, Significance F |
 
 :::example Fig 8.35: selecting within type
 Three significant linear CERs, each using a different cost driver. A (surface area) has $R^2 = 0.95$ and wins. In a separate pair of power CERs (both regressed in log space), B (speed) has $R^2 = 0.96$ and wins over A. Note: if a lower-$R^2$ model's driver is more useful for decision-making (e.g., for CAIV trades), that practical value can still outweigh a small $R^2$ edge.
@@ -755,14 +752,9 @@ For the non-linear model: fit in log space → transform the equation back to un
 
 +++
 
-### Accepting a model: decision tree
-1. F-test significant? No → reject.
-2. All t-tests significant? No → drop the weakest variable and rerun.
-3. Residuals random? No → try another functional form.
-4. $R^2$ reasonable in context? Then accept, and use SEE/CV for the uncertainty.
+### Accepting a model
 
-### Reporting a CER
-Include the equation, $R^2$ (or adjusted), SEE/CV, F and its p, t's and their p's, n, and a note on the residuals.
+After deriving the equation and checking the residuals, the next step is to check the model's goodness of fit. To select a model: reject all non-significant models first, remove all non-significant variables until the model is concise, select within type based on $R^2$, and select across type based on SSE.
 
 :::check
 Q: Model A: $R^2$ 0.95, Model B: 0.87, Model C: 0.82, all linear, all significant, same number of variables. Pick?
@@ -793,8 +785,8 @@ R: yes
 Q: Estimated regression equation
 A: $\hat{Y} = b_0 + b_1X$ (b's are sample estimates of the true β's)
 R: yes
-Q: Five OLS assumptions
-A: Linearity; independence of errors from X; homoscedasticity (constant variance); normality of errors (mean 0); no perfect multicollinearity.
+Q: Key OLS assumptions on the error term
+A: Two key OLS assumptions on the error term (CEBoK): independent of X (called homoscedasticity), and normally distributed with mean zero and constant variance for all X.
 Q: What is a CER?
 A: Cost Estimating Relationship: an equation relating cost to one or more cost drivers, usually built with regression.
 R: yes
@@ -835,30 +827,30 @@ Q: SST formula and df
 A: $\sum(Y_i-\bar Y)^2$; df = n − 1
 R: yes
 Q: SSR formula and df
-A: $\sum(\hat Y_i - \bar Y)^2$; df = k
+A: $\sum(\hat Y_i - \bar Y)^2$; df = k − 1 in CEBoK (k = parameters incl. intercept; = number of predictors in this app's convention)
 R: yes
 Q: SSE formula and df
-A: $\sum(Y_i - \hat Y_i)^2$; df = n − k − 1
+A: $\sum(Y_i - \hat Y_i)^2$; df = n − k in CEBoK (k = parameters incl. intercept; n − k − 1 with k = predictors in this app's convention)
 R: yes
 Q: Fundamental ANOVA identity
 A: SST = SSR + SSE (total = explained + unexplained)
 R: yes
 Q: MSR and MSE
-A: MSR = SSR/k; MSE = SSE/(n − k − 1)
+A: CEBoK: MSR = SSR/(k − 1); MSE = SSE/(n − k) (k = parameters incl. intercept). App convention (k = predictors): MSR = SSR/k; MSE = SSE/(n − k − 1).
 R: yes
 Q: $R^2$ formula
 A: $R^2 = SSR/SST = 1 - SSE/SST$
 R: yes
 Q: What does $R^2$ measure, and what doesn't it tell you?
-A: The proportion of Y's variation explained by X. It does NOT indicate statistical significance.
+A: The proportion of Y's variation explained by X. Higher $R^2$ tends to occur for significant regressions, but significance is judged by the F- and t-tests.
 Q: Adjusted $R^2$ formula and purpose
-A: $1 - \frac{SSE/(n-k-1)}{SST/(n-1)}$. Penalizes useless variables; use to compare models with different numbers of variables.
+A: CEBoK: $R^2_a = 1 - (1-R^2)\frac{n-1}{n-k}$ (k = parameters incl. intercept); equivalently $1 - \frac{SSE/(n-k-1)}{SST/(n-1)}$ with k = predictors. Penalizes useless variables; use to compare models with different numbers of variables.
 R: yes
 Q: Correlation coefficient r from $R^2$
 A: $r = \pm\sqrt{R^2}$, with the same sign as the slope.
 R: yes
 Q: Typical $R^2$ expectations
-A: > 0.9 excellent; > 0.7 respectable; lower can still be useful if significant.
+A: Typically want $R^2$ greater than 0.9, say; lower values do not necessarily indicate an unacceptable relationship.
 Q: Toy problem MSE and MSR (exact values)
 A: MSE = 18.17/3 = 6.06; MSR = 29.83/1 = 29.83.
 Q: CEBoK's k in ANOVA df vs. this app's k
@@ -872,7 +864,7 @@ A: Factor of about 0.71, a 29% reduction, from R2 = 0.62.
 
 ## SEE and CV
 Q: SEE formula
-A: $SEE = \sqrt{MSE} = \sqrt{SSE/(n-k-1)}$
+A: $SEE = \sqrt{MSE}$; CEBoK: $\sqrt{SSE/(n-k)}$ (k = parameters incl. intercept); $\sqrt{SSE/(n-k-1)}$ with k = predictors
 R: yes
 Q: What does SEE represent?
 A: The estimated standard deviation of the error term, in Y's units. Lower is better.
@@ -880,13 +872,13 @@ Q: Regression CV formula
 A: $CV = SEE/\bar Y \times 100\%$
 R: yes
 Q: Desired regression CV threshold
-A: < 15% is respectable (higher can be acceptable).
+A: A CV around 15% is considered respectable; higher CVs do not necessarily mean an unacceptable model.
 Q: Rule of thumb linking CV, n and the width of a 68% CI
 A: CI width (%) ≈ $CV/\sqrt n$. E.g., CV 30% and ±5% → n = 36.
 
 ## Significance
 Q: t-statistic for a coefficient
-A: $t = b_1 / SE(b_1)$, df = n − k − 1
+A: $t = b_1 / SE(b_1)$, df = n − k in CEBoK (k = parameters incl. intercept; n − k − 1 with k = predictors)
 R: yes
 Q: Hypotheses for the slope t-test
 A: $H_0: \beta_1 = 0$ (no relationship) vs. $H_1: \beta_1 \ne 0$
@@ -903,9 +895,9 @@ Q: Definition of p-value (regression)
 A: The probability of observing a relationship this strong by chance if the true coefficient were zero.
 R: yes
 Q: p-value significance levels
-A: < 0.01 highly significant; < 0.05 significant; < 0.10 marginal; ≥ 0.10 not significant.
+A: Reject $H_0$ if p < the chosen $\alpha$ (typically 0.01 or 0.05, occasionally 0.10).
 Q: Order of checks when evaluating a regression
-A: F-test (overall) → t-tests (each variable) → residual plot → $R^2$ → SEE/CV.
+A: Develop the equation, check residuals (OLS assumptions), then goodness of fit: significance (F, t), $R^2$, SEE/CV. For model choice: reject non-significant models, remove non-significant variables, select within type on $R^2$, across type on SSE.
 Q: Correlation vs. causation
 A: Correlation is a statistical relationship; causation means X drives Y. Pick drivers by engineering judgment (e.g., ice cream & drownings are both driven by temperature).
 Q: Toy problem t-test (exact values)
@@ -922,9 +914,9 @@ A: A random rectangular band around zero with constant spread and no pattern.
 Q: Curved / arched residual pattern means…
 A: A non-linear relationship. Try power, exponential, or logarithmic forms.
 Q: Funnel / cone residual pattern means…
-A: Heteroscedasticity (variance grows with X). Transform Y or use weighted least squares.
+A: Heteroscedasticity (variability increases with X); violates OLS assumptions. Weighted Least Squares can handle it.
 Q: Cyclical / wave residual pattern means…
-A: Serial correlation (common in time series; in learning curves it can mean lost learning or new work).
+A: Residuals weaving in and out of the line / periodic relationship; in learning curve analysis might indicate loss of learning or injection of new work.
 Q: Homoscedasticity vs. heteroscedasticity
 A: Constant error variance (OLS assumption met) vs. non-constant variance (violated; funnel pattern).
 
@@ -946,9 +938,9 @@ Q: SE for prediction interval
 A: $SEE\sqrt{1 + \frac1n + \frac{(X_0-\bar X)^2}{\sum(X_i-\bar X)^2}}$
 R: yes
 Q: Large-sample critical values for 68/95/99% intervals
-A: ≈ 1.0, 1.96, 2.58
+A: Approximately 1, 2, 3 (68.3%, 95.5%, 99.7% within 1, 2, 3 standard deviations; exact z for 95% is 1.96, for 99% 2.58).
 Q: When to use a CI vs. a PI in cost work
-A: CI: average cost of a program type / risk inputs. PI: a specific new item (more conservative).
+A: CI: average (mean) cost within a range. PI: predicted cost of a new item (one new observation) within a range; always wider.
 Q: Toy problem: slope 95% CI (exact values)
 A: $0.585 \pm 3.182(0.264) = (-0.25, 1.42)$
 Q: Toy problem: mean CI and PI at X=11 (exact values)
@@ -970,7 +962,7 @@ A: $a = e^{\alpha}$; $b = \beta$ (the slope stays the same).
 Q: Symptom of a missing (non-zero) intercept in a transformed fit
 A: "Data bowing": the transformed plot still curves and the residuals arch.
 Q: Fixes for a missing intercept
-A: Add or subtract a trial constant from Y and refit; use Solver to fit all 3 parameters; keep the better $R^2$ / lower SEE.
+A: Add or subtract a constant to/from the y-values and examine the change in the trend line, or use Excel's Solver or other packages; better fit shows lower SEE and higher $R^2$.
 Q: Exponential example (Fig 8.29/8.30): transformed fit and back-transform
 A: ln Y = -3.0 + 1.2X, R2 = 0.88, SEE = 0.30, CV = 9%. a = e^-3.0 = 0.05, b = 1.2, so $\hat Y = 0.05e^{1.2x}$.
 Q: Minding the intercept example (Fig 8.31/8.32): before and after
@@ -983,18 +975,16 @@ Q: Multicollinearity definition
 A: High correlation among the independent variables.
 R: yes
 Q: Effects of multicollinearity
-A: Inflated standard errors, lower t-stats, non-significant or wrong-sign coefficients, unstable estimates.
+A: Inflates the standard deviation (standard error) of coefficients, which lowers their significance; hard to interpret each variable's effect (does not affect reliability of SEE, F, t).
 Q: VIF formula
 A: $VIF_j = 1/(1 - R_j^2)$, where $R_j^2$ comes from regressing $X_j$ on the other X's.
 R: yes
 Q: VIF thresholds
-A: < 5 OK; 5–10 investigate; > 10 severe.
+A: CEBoK: VIF over 10 is severe enough to take a second look. (Beyond CEBoK: some use < 5 OK, 5–10 moderate.)
 Q: Symptoms of multicollinearity
-A: High $R^2$ but few significant t's; unexpected signs; coefficients jump when variables change; high pairwise correlations.
+A: Large coefficient changes when a variable is added/deleted; unexpected coefficient sign; expected-significant variables not significant; high overall $R^2$ with several non-significant variables; high VIFs (or VAFs).
 Q: Remedies for multicollinearity
-A: Drop one of the correlated variables; combine them into an index; ridge regression; more data.
-Q: Minimum data points for regression
-A: Absolute minimum k + 2; practical 3k–5k; 30+ desired.
+A: Remove one of the variables with a high VIF and rerun, repeating until the regression is significant; ridge regression keeps all variables.
 Q: Fig 8.34 worked multivariate example
 A: $\hat y = 1.5+0.2X_1-1.6X_2+0.8X_3$. SSR=4720.8 (df 3, MSR=1573.6); SSE=201.0 (df 11, MSE=18.3); F=86.1, p≈0.0000001. Only $X_3$'s t-test is significant -> rerun.
 Q: CEBoK's VIF threshold
@@ -1018,11 +1008,7 @@ A: Lowest SSE calculated in UNIT space.
 Q: Why not compare $R^2$ across model types?
 A: A log-space $R^2$ measures variation in ln Y, which isn't comparable to a unit-space $R^2$.
 Q: Nested models: what to compare?
-A: Adjusted $R^2$, SEE, CV, Significance F, and the individual t-stats.
-Q: Minimum contents of a regression write-up
-A: Equation, $R^2$/adj $R^2$, SEE/CV, F and p, t's and p's, n, residual analysis statement.
-Q: Three cross-validation methods
-A: Hold-out (20–30%), k-fold, leave-one-out. Often infeasible with small cost data sets; validate with SMEs and analogies instead.
+A: Adjusted $R^2$, SEE, CV, and Significance F (p-value of the F-test); selection is based on adjusted $R^2$.
 Q: Fig 8.35: selecting within type example
 A: Three significant linear CERs; A (surface area) has the highest R2 = 0.95 and is chosen.
 Q: Fig 8.37: nested model comparison

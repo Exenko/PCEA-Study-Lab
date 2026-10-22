@@ -1,7 +1,7 @@
 PCEA.addModule({
   id: 'm03', num: 3, title: 'Parametric Estimating', short: 'Parametric Estimating', source: 'guide',
   blurb: 'Cost Estimating Relationships (CERs) derive cost from measurable drivers. Master the 4-step process, functional forms, driver selection, cost drivers vs. passengers, and calibration.',
-  intro: String.raw`Parametric estimating uses **Cost Estimating Relationships (CERs)** — mathematical expressions linking cost to one or more independent variables (cost drivers) — to estimate cost quickly and with statistical rigor.
+  intro: String.raw`Parametric estimating uses **Cost Estimating Relationships (CERs)** — mathematical expressions linking cost to one or more independent variables (cost drivers) — to predict the cost of a new project or system.
 
 **PEH definition**: "Parametric estimating is a technique that develops cost estimates based upon the examination and validation of the relationships which exist between a project's technical, programmatic, and cost characteristics as well as the resources consumed during its development, manufacture, maintenance, and/or modification."
 
@@ -21,7 +21,7 @@ buckets: Analogy | Parametric | Engineering Build-Up
 - Provides statistical results to assess quality = Parametric
 - Sum of detailed lower-level elements rolled up = Engineering Build-Up
 - Requires a high level of data detail and can be expensive = Engineering Build-Up
-> Analogy compares similar systems and is usable early. Parametric estimating uses a mathematical relationship between a parameter and cost and gives statistical results. Engineering build-up rolls up detailed lower-level elements, needing high data detail and often costing more to produce.
+> Analogy compares similar systems and is usable early. Parametric estimating uses a mathematical relationship between a parameter and cost and gives statistical results. Engineering build-up rolls up detailed lower-level elements, needing a high level of data detail and can be expensive.
 :::
 
 +++
@@ -32,7 +32,7 @@ A **Cost Estimating Relationship (CER)** is a mathematical expression relating c
 
 General form: $\hat{Y} = f(X_1, X_2, ..., X_k)$
 
-CER is the output of parametric estimating — the statistical relationship itself. Cost drivers, preferably drawn from an organization's own history, are the independent variables that influence how much money is spent on an item (cost, the dependent variable); these variables become required inputs that must be accurately determined for the CER to produce cost. Parametric relationships can also estimate schedule, weight, and other non-cost outputs.
+Cost drivers, preferably drawn from an organization's own history, are the independent variables that influence how much money is spent on an item (cost, the dependent variable); these variables become required inputs that must be accurately determined for the CER to produce cost. Parametric relationships can also estimate schedule, weight, and other non-cost outputs.
 
 ### Three primary estimating techniques
 
@@ -40,19 +40,17 @@ CER is the output of parametric estimating — the statistical relationship itse
 |---|---|---|
 | **Analogy** | Comparative analysis of similar systems | Usable early, before detailed requirements are known; provides **no objective test of validity** |
 | **Parametric Estimating** | Mathematical relationship between a parameter and cost | Historical data can be difficult to obtain; relationships are easily adjusted for requirements changes and provide statistical results to assess quality |
-| **Engineering Build-Up** | Sum of detailed lower-level elements rolled up | Requires a high level of data detail and deep collaboration; produces easily **traceable** detail but can be **expensive**; missing or incorrect data raises the risk of omitting costs |
+| **Engineering Build-Up** | Sum of detailed lower-level elements rolled up | A high level of data detail is required and may involve deep knowledge of the project and extensive collaboration with stakeholders; missing or incorrect data may increase the risk of omitting costs; produces easily **traceable** detail, though it can be **expensive** |
 
 {{primer}}
 
-Expert opinion is used alongside these three (see Module 2 Costing Techniques) but isn't one of the primary techniques covered in this module.
-
-Analysts rely heavily on analogy and parametrics early in the acquisition cycle. As design detail matures, build-up sees more use, though parametric estimating continues to play a role. As actuals arrive — from Low-Rate Initial Production (LRIP) or full-rate production — they are incorporated into the estimate. Manufacturers directly incorporate their own costs; government analysts use data available via the **Contractor Cost Data Reporting (CCDR)** system.
+Analysts rely heavily on analogy and parametrics during concept and design stages. As more design detail becomes available, analysts begin to use build-up, although parametric estimating continues to play an important role. Actual costs are incorporated as Low-Rate Initial Production (LRIP) or full-rate production begins; actual cost experience on prototype units and early engineering development hardware can enlighten the estimate before production actuals become available. Manufacturers directly incorporate their own costs; government analysts use data available via the **Contractor Cost Data Reporting (CCDR)** system.
 
 +++
 
 ### Advantages
 
-The parametric approach provides:
+The parametric approach provides several advantages, including:
 
 - **Versatility**
 - **Objective, quantitative inputs**
@@ -61,18 +59,18 @@ The parametric approach provides:
 
 ### Statistical measures
 
-Regression analysis produces several statistics used to judge CER quality: the **t-statistic** and **F-statistic** (objective measures of a coefficient's or the model's validity), **R²** (explanatory power), and the **Coefficient of Variation (CV)** (used to derive error bands in cost risk analysis). Module 8 Regression Analysis and Module 9 Cost Risk Analysis explore these measures and their application in more detail.
+Regression analysis produces several statistics used to judge CER quality: the **t-statistic** and **F-statistic** (objective measures of the validity of the model), **R²** (explanatory power), and the **Coefficient of Variation (CV)** (used to derive error bands in cost risk analysis). Module 8 Regression Analysis and Module 9 Cost Risk Analysis explore these measures and their application in more detail.
 
 ### Data sources
 
 Some example data types collected to support parametric estimating: Lines of Code (LOC), site deployment plans, subcontractor/vendor procurement data, Test & Evaluation (T&E) schedules, physical characteristics (weight, power), Technical Performance Measures (e.g., speed), resource staffing, and other operational parameters reflecting a concept of operations (CONOPs).
 
-### COTS models vs. in-house models
+### COTS models vs. models developed from scratch
 
-COTS (Commercial Off-The-Shelf) parametric cost models are generally quicker to build and execute than models built from scratch, but they suffer two disadvantages: lack of visibility into the underlying methodology, and they encourage an over-reliance on the model.
+COTS (Commercial Off-The-Shelf) cost models are generally quicker to build and execute than those developed from scratch, but they suffer the disadvantages of lack of visibility into the underlying methodology and encouragement of an over-reliance on the models.
 
 :::tip Beyond CEBoK
-This module's source lists exactly four advantages above. Practitioners commonly also describe parametric methods as fast, repeatable, good for sensitivity/trade studies, and helpful for reducing estimator bias versus pure expert judgment — all true in practice, and covered elsewhere in CEBoK, but not part of this module's own advantages list. Likewise, "valid only within the data's range" and "black-box masking of drivers" are real cautions (see the Range of Applicability discussion later in this module) rather than items on this specific list.
+This module's source lists four advantages above (introduced with "several advantages, including"). Practitioners commonly also describe parametric methods as fast, repeatable, good for sensitivity/trade studies, and helpful for reducing estimator bias versus pure expert judgment — all true in practice, and covered elsewhere in CEBoK, but not part of this module's own advantages list. Likewise, "valid only within the data's range" and "black-box masking of drivers" are real cautions (see the Range of Applicability discussion later in this module) rather than items on this specific list.
 :::
 
 :::check
@@ -90,7 +88,7 @@ Q: Which of the three primary estimating techniques provides no objective test o
 * Analogy
 - Parametric Estimating
 - Engineering Build-Up
-> Analogy compares to one similar system with no statistical test behind the comparison.
+> Analogy is a comparative analysis of similar systems; analogous estimates provide no objective test of validity.
 :::
 
 :::check
@@ -113,22 +111,26 @@ buckets: Rate | Factor | Ratio
 - Cost per function point = Rate
 - System Engineering/Program Management estimated as 20% of prime mission equipment = Factor
 - 1,200 lines of code per integrated COTS package = Ratio
-> A rate is cost in dollars per parameter. A factor is cost-on-cost, unitless and usually a percentage. A ratio is parameter on parameter.
+> A rate is always expressed in dollars per parameter. A factor is cost on cost, without units, often expressed as a percentage. A ratio estimates effort and is defined as parameter on parameter.
 :::
 
 +++
 
 ### CER Regression Forms
 
-| Form | Equation | Linearized | Typical Use |
-|---|---|---|---|
-| **Linear** | $Y = a + bX$ | Already linear | Constant marginal cost per unit of driver |
-| **Power** | $Y = aX^b$ | $\ln Y = \ln a + b\ln X$ | Economies/diseconomies of scale; learning curves |
-| **Logarithmic** | $Y = a + b\ln X$ | Already linear in $\ln X$ | Diminishing returns, one-sided curvature |
-| **Exponential** | $Y = ae^{bX}$ | $\ln Y = \ln a + bX$ | Rapid growth/decay with driver |
-| **Generalized polynomial** (less common) | $Y = a + b_1X_1 + b_2X_2 + ... + b_nX_n$ | Already linear in each $X_i$ | Several additive linear drivers |
+| Form | Equation | Linearized |
+|---|---|---|
+| **Linear** | $Y = a + bX$ | Already linear |
+| **Power** | $Y = aX^b$ | $\ln Y = \ln a + b\ln X$ |
+| **Logarithmic** | $Y = a + b\ln X$ | Already linear in $\ln X$ |
+| **Exponential** | $Y = ae^{bX}$ | $\ln Y = \ln a + bX$ |
+| **Generalized polynomial** (less common) | $Y = a + b_1X_1 + b_2X_2 + ... + b_nX_n$ | Already linear in each $X_i$ |
 
-**Choosing a form**: Plot the data in unit space first. A straight line → linear. A curve that straightens in log-log space → power. A curve that straightens in semi-log space → exponential. Always test the **engineering rationale**, not just which transform gives the best $R^2$.
+For non-linear models, transform the data to a smaller, restricted class of function to fit a linear model.
+
+:::tip Beyond CEBoK
+Choosing a form: plot the data in unit space first. A straight line suggests linear; a curve that straightens in log-log space suggests power; one that straightens in semi-log space suggests exponential. Typical uses: linear for constant marginal cost per unit of driver; power for economies/diseconomies of scale; logarithmic for diminishing returns; exponential for rapid growth/decay. Always test the engineering rationale, not just which transform gives the best $R^2$.
+:::
 
 +++
 
@@ -160,7 +162,7 @@ Some cost drivers may affect more than one cost element or ripple into design; b
 
 ### Cost Passengers
 
-**Cost passengers** are major system components representing the majority of a system's cost — the WBS elements with the highest dollar values — identified using **Pareto charts**. Cost drivers and cost passengers are easy to confuse: analysts looking for savings (e.g., under a Reduction of Total Ownership Cost initiative) often target passengers, but a cost passenger **does not always represent the biggest potential for cost savings**. Cost drivers are the design decisions/requirements that actually control how cost can be influenced; passengers just show where the dollars sit.
+**Cost passengers** are major system components representing the majority of a system's cost — the WBS elements with the highest dollar values — identified using **Pareto charts**. Cost drivers and cost passengers are easy to confuse: analysts often misuse the terms when looking for cost reduction opportunities (e.g., under a Reduction of Total Ownership Cost initiative), but a cost passenger **does not always represent the biggest potential for cost savings**. Cost passengers indicate which items cost the most; cost drivers predict how those costs can be influenced.
 
 **Pea-pod analogy**: A pea pod wraps around the peas, and its design (size, shape) is dictated by the number/shape/size of the peas — the driver — even though the pod itself may be the visible cost item — the passenger. Likewise, a ship's hull or an airplane's airframe is a cost passenger: it's designed to carry the crew and mission equipment (the cost drivers), represents a large share of system cost, but can't easily be changed to influence that cost without changing the underlying requirements it wraps.
 
@@ -170,9 +172,9 @@ Some cost drivers may affect more than one cost element or ripple into design; b
 
 Some CERs are simple multipliers rather than full regressions — though, like CERs, they can also be derived from a rigorous regression process:
 
-- **Rate**: cost expressed in dollars per parameter. The most common example is a **labor rate** (\$/hour for a labor category). Cost per function point or per LOC are common software-estimating rates.
-- **Factor**: **cost-on-cost**, unitless, usually a percentage — the cost of one element predicts the cost of another. Example: **System Engineering/Program Management (SE/PM)** estimated as 20% of the program's **prime mission equipment** (hardware and software).
-- **Ratio**: **parameter on parameter**. Example: an industry-average ratio of **1,200 lines of code (LOC) per integrated Commercial Off-The-Shelf (COTS) package**.
+- **Rate**: always expressed in dollars per parameter, predicting cost via a simple multiplicative relationship. The most common example is a **labor rate** (\$/hour for a labor category). Cost per function point or per LOC are common software-estimating rates.
+- **Factor**: **cost on cost**, without units, often expressed as a percentage — uses the cost of one element to predict the cost of another via a simple multiplicative relationship. Example: **System Engineering/Program Management (SE/PM)** estimated as 20% of the program's **prime mission equipment** (hardware and software).
+- **Ratio**: estimates effort and is defined as **parameter on parameter**. Example: an industry-average ratio of **1,200 lines of code (LOC) per integrated Commercial Off-The-Shelf (COTS) package**.
 
 {{primer}}
 
@@ -186,7 +188,7 @@ Q: Which is the **weakest** reason to pick a cost driver?
 - It is known early in the program
 * It happens to have the highest correlation in a data-mining run, with no engineering rationale
 - It is consistently defined across the historical data
-> Correlation without logic is spurious; it won't hold for new systems.
+> (Beyond CEBoK) Correlation without logic is spurious; it won't hold for new systems.
 :::
 
 +++
@@ -204,13 +206,13 @@ Q: A driver is statistically significant in a CER but is only known after detail
 * Because it isn't available early enough to support early estimates, budgeting, or trade studies
 - Because the regression t-stat is not high enough
 - Because it will cause multicollinearity
-> If the driver is unknown until late, the CER can't apply when you need the estimate.
+> (Beyond CEBoK) If the driver is unknown until late, the CER can't apply when you need the estimate.
 :::`
     },
     {
       id: 'process', title: 'The 4-Step Parametric Process', summary: 'Data collection → cost drivers → CER development (5 steps) → calibration → parametric model',
       body: String.raw`:::primer:::
-Building a parametric model is not a free-for-all. The work runs in a fixed sequence.
+Building a parametric model is not a free-for-all. The work runs in four activities.
 
 :::order
 Q: Put the four steps of the parametric process in order.
@@ -223,19 +225,23 @@ Q: Put the four steps of the parametric process in order.
 
 +++
 
-Parametric estimating follows a rigid sequence: **Data Collection → Cost Driver Identification → CER Development → Parametric Model Development**.
+The basic parametric estimating approach consists of four activities:**Data Collection → Cost Driver Identification → CER Development → Parametric Model Development**.
 
 {{primer}}
 
 ### Step 1: Data Collection
 
-**Goal**: Assemble a dataset of historical cost, schedule, and technical data from systems similar to the one being estimated (e.g., skills for a software project; missiles for a missile program; cruisers/destroyers/frigates for a new surface ship).
+**Goal**: Assemble historical cost, programmatic, schedule, technical, and operational data from systems similar to the system being estimated (e.g., skills required for a software development project; missiles for a missile program; logistics data for supply chain optimization; cruisers, destroyers, and frigates for a new surface ship of similar class).
 
 **Key activities**:
 - Gather data from cost reports, the schedule, and requirements documents (e.g., the Cost Analysis Requirements Description, CARD).
-- **Normalize the data**: inflation adjustment (constant-year dollars), scope adjustment, non-recurring vs. recurring content, consistent units of measure.
-- **Document pedigree**: source, reasoning, assumptions, raw data — for traceability.
+- **Normalize the data**: costs must be normalized so they represent similar content in all programs and are all in the same constant year dollars (see Module 4).
+- **Traceability**: document the sources, reasoning, assumptions, and raw data behind the values used to develop CERs.
 - Data collection is **iterative**: analysts keep adding data as new sources are identified.
+
+:::tip Beyond CEBoK
+Common normalization adjustments in practice: inflation (constant-year dollars), scope, non-recurring vs. recurring content, and consistent units of measure. This module's source only states that costs must represent similar content and be in the same constant year dollars.
+:::
 
 +++
 
@@ -244,21 +250,24 @@ Parametric estimating follows a rigid sequence: **Data Collection → Cost Drive
 **Goal**: Determine which independent variable(s) best explain cost variation.
 
 **Process**:
-1. Hypothesize candidate drivers from analogy, organization history, expert judgment, or engineering knowledge of the system.
+1. Hypothesize candidate drivers from analogy, organization history, or expert judgment.
 2. **Scatter plot** the data to visually surface relationships (often easier to interpret than numerical analysis alone).
-3. Test each candidate's correlation with cost.
-4. Check drivers for multicollinearity before using them together in a multivariate CER.
+3. Explore cost drivers via correlation of each independent element with cost.
 
-A driver must pass both **statistical tests** (significance) and **logic tests** (engineering/physical causality). This step is also iterative: analysts can't identify drivers without data, but predicted drivers can shape the data collection plan.
+Analysts use cost drivers to capture the underlying engineering/physical causality in a complex system. This step is also iterative: analysts can't identify drivers without data, but predicted drivers can shape the data collection plan.
+
+:::tip Beyond CEBoK
+In practice a driver is expected to pass both statistical tests (significance) and logic tests (engineering/physical causality), and drivers are checked for multicollinearity before being used together in a multivariate CER. In this source, multicollinearity appears in Example 2 and Module 8.
+:::
 
 +++
 
 ### Step 3: CER Development
 
-The regression process (preferred over simple averaging) follows **five steps**:
+The regression process (the preferred process for developing CERs) has **five top-level steps**:
 
 1. **Select the Variables**: Determine the independent (source) variable, its data collection methodology, and data type; determine which cost data is the dependent variable.
-2. **Test Relationships**: Set aside representative data for later validation. Scatter plot the remaining (working) data set to see the strength, form, and direction of each relationship, and spot trends, anomalies, or outliers.
+2. **Test Relationships**: Test for associations between each variable and cost. Remove representative data from the working data set for validation later in the analysis. Scatter plot the working data set to see the strength, form, and direction of each relationship, and spot trends, anomalies, or outliers. Determine the type of relationship for each variable.
 3. **Perform Regression**: Use Ordinary Least Squares (OLS). Regression equations can be linear ($y=a+bx$), power ($y=ax^b$), logarithmic ($y=a+b\ln x$), exponential ($y=ae^{bx}$), or generalized polynomial (less common, $y=a+b_1x_1+b_2x_2+...+b_nx_n$). Non-linear models are transformed to fit a linear model.
 4. **Select CERs**: Choose the CER that best represents the data.
 5. **Validate CERs**: Validate against the representative data **held out** in step 2 (not used to build the equation). Use the **Prediction Interval (PI)** methodology to capture uncertainty — important because analysts often apply CERs outside the range of collected data (e.g., estimating a faster, bigger, or more accurate successor system), and PI-based uncertainty grows the further an estimate departs from the core data set.
@@ -288,7 +297,7 @@ Calibration is **not** force-fitting a data point in a regression-based CER, and
 **Characteristics**:
 - May combine multiple CERs across a Work Breakdown Structure (WBS), plus other cost estimating techniques; often used for Life Cycle Cost (LCC)/Total Ownership Cost (TOC) estimates.
 - May include logic for time phasing, inflation, allocations, Monte Carlo simulation, schedule estimating, learning curves, earned value management, or Design-to-Cost/CAIV trades.
-- Elements estimated separately are often correlated; ignoring that correlation understates overall uncertainty (Module 9 Cost and Schedule Risk Analysis).
+- Cost elements, though estimated separately, are most likely dependent; without considering correlation between elements, overall uncertainty will be understated (Module 9 Cost and Schedule Risk Analysis).
 - When new program-specific actuals arrive, choices include: re-running the CER with the augmented data set, re-calibrating to pass through the new point, changing methodology, or leaving the model unchanged.
 
 :::widget regression:::
@@ -330,7 +339,7 @@ Q: In the CER development process, in which step is representative data set asid
 You have fitted a CER and want to know whether you picked the right shape of curve.
 
 :::check
-Q: After fitting a CER, its residual plot shows a clear pattern, such as a funnel shape, instead of random scatter. What does that suggest?
+Q: (Beyond CEBoK) After fitting a CER, its residual plot shows a clear pattern, such as a funnel shape, instead of random scatter. What does that suggest?
 - The CER fits exceptionally well
 * The functional form is probably wrong
 - The intercept should be read as a fixed cost
@@ -341,7 +350,11 @@ Q: After fitting a CER, its residual plot shows a clear pattern, such as a funne
 
 ### From scatter plot to regression
 
-**Plot the raw data** in unit space: cost vs. driver. The shape tells you which functional form to try (straight line → linear; curve → power or exponential).
+**Scatter plot the working data set** to visualize the relationship between cost and driver.
+
+:::tip Beyond CEBoK
+In unit space, the shape suggests which functional form to try (straight line → linear; curve → power or exponential).
+:::
 
 **For power forms** ($Y = aX^b$), take natural logs: $\ln Y = \ln a + b\ln X$. This becomes a linear regression problem in log-log space, which is how we use OLS to fit power relationships.
 
@@ -353,12 +366,15 @@ Q: After fitting a CER, its residual plot shows a clear pattern, such as a funne
 
 ### Evaluating a fitted CER
 
-After regression, check four things:
+After regression, check these statistics:
 
-1. **Statistical fit** ($R^2$): what proportion of variance does the CER explain? Higher is better; some analysts use 0.70+ as a rule of thumb, though this module's source sets no fixed threshold.
-2. **Coefficient of Variation (CV)**: typical scatter around the line, used to derive risk error bands. Lower is better.
-3. **Significance of each coefficient** (t-stat / F-stat / p-value): is the model as a whole, and each driver, statistically significant? The model is valid overall if the **F-statistic**'s p-value ("Significance F") is below $\alpha = 0.05$. If a coefficient's p-value is high, that variable may not belong — and if a variable in the model isn't significant, the model should generally be **rejected**. For a single-variable regression, the variable's t-statistic and the model's F-statistic are always identical.
-4. **Residual plot**: scatter should be random (no pattern, no trends, no funnel shape). Patterns suggest the functional form is wrong.
+1. **Statistical fit** ($R^2$): the explanatory power of the CER. Higher is better; some analysts use 0.70+ as a rule of thumb, though this module's source sets no fixed threshold.
+2. **Coefficient of Variation (CV)**: used to derive error bands in cost risk analysis. Lower is better.
+3. **Significance of each coefficient** (t-stat / F-stat / p-value): the model as a whole is judged to be valid if the **F-statistic** is significant (p-value of "Significance F" below $\alpha = 0.05$). The individual coefficients are statistically significant based on their t statistics (bigger is better) and corresponding p-values. If one of the variables is not statistically significant, the model should be **rejected**. For a single-variable regression, the variable's t-statistic and the model's F-statistic are always identical.
+
+:::tip Beyond CEBoK
+Residual plot: scatter should be random (no pattern, no trends, no funnel shape). Patterns suggest the functional form is wrong. This module's source does not discuss residual plots.
+:::
 
 An **intercept (constant term)** is often not statistically significant even when the rest of the model is — this is common, and analysts usually accept the predicted intercept anyway. Never interpret an intercept as an actual fixed cost at $X=0$; especially when it's negative, it can simply be outside the CER's valid range and mathematically meaningless as a "cost."
 
@@ -366,7 +382,11 @@ An **intercept (constant term)** is often not statistically significant even whe
 
 ### Range of applicability
 
-**Every CER has a range:** the minimum and maximum driver values in the **fitting data**. Using the CER **inside** this range is **interpolation** (defensible). Using it **outside** is **extrapolation** (adds risk) — and it happens often in practice, since programs frequently target systems faster, bigger, or more capable than their predecessors.
+Analysts often apply CERs outside the range of collected data since many programs attempt to build systems that are faster, bigger (or smaller), more dense, more accurate, etc., than their predecessors. The Prediction Interval (PI) methodology provides one method to capture uncertainty in OLS estimates, which increase as estimates deviate from the core data set.
+
+:::tip Beyond CEBoK
+Range of applicability: the minimum and maximum driver values in the fitting data. Using the CER inside this range is interpolation (defensible); using it outside is extrapolation (adds risk). These terms are not used in this module's source.
+:::
 
 +++
 
@@ -417,9 +437,9 @@ $$\text{site activation} = \$82{,}756 + \$26{,}491 \times \text{number of workst
 
 The equation is shown to the nearest dollar, but is only **accurate to the thousands** given the granularity of the underlying data.
 
-**Fit quality**: $R^2 \approx 91\%$ — workstations explain almost all the variation in site activation cost, an excellent cost driver. The model as a whole is significant (Significance $F < \alpha = 0.05$), and the workstations coefficient (slope) is highly significant from its t-statistic. The **intercept is not statistically significant** — common, and analysts usually accept the predicted constant term anyway. (If, instead, one of the *variables* isn't significant, the model should be rejected.) Because this is a single-variable regression, the variable's t-statistic and the model's F-statistic are identical.
+**Fit quality**: $R^2 \approx 91\%$ — the number of workstations explains almost 91% of the variation in site activation costs, an excellent cost driver. The model as a whole is significant (Significance $F < \alpha = 0.05$), and the workstations coefficient (slope) is highly significant from its t-statistic. The **intercept is not statistically significant** — common, and analysts usually accept the predicted constant term anyway. (If, instead, one of the *variables* isn't significant, the model should be rejected.) Because this is a single-variable regression, the variable's t-statistic and the model's F-statistic are identical.
 
-**Applying the CER** (base case, 10 workstations):
+**Applying the CER** (base case, 10 workstations; illustrative, not from CEBoK text):
 $$\hat{Y} = 82{,}756 + 26{,}491(10) = 347{,}666 \approx \$348\text{K}$$
 
 **Update**: Four new sites were added (15 total). The workstations coefficient and $R^2$ **barely changed**, but the constant term (intercept) **changed quite a bit** — it still isn't statistically significant, though, so it has little effect on the final predicted cost. If the new data had differed a lot from the original, the analyst would investigate normalization, data source, technology change, or a simple mistake.
@@ -520,7 +540,7 @@ CEBoK's Testable Topics table marks this module's "Advanced topics" (Cost Respon
 
 **Definition**: Vary a CER's input driver value **one at a time**, holding all other inputs at base-case values, and observe how output cost changes. This addresses uncertainty in overall cost-output variability by showing which input(s) the estimate is most sensitive to.
 
-**Example** (site activation CER, base case 10 workstations $\approx$ \$348K): at 5 workstations, cost $\approx$ \$215K (about −38%); at 15 workstations, cost $\approx$ \$480K (about +38%).
+**Example** (illustrative, not from CEBoK text; site activation CER, base case 10 workstations $\approx$ \$348K): at 5 workstations, cost $\approx$ \$215K (about −38%); at 15 workstations, cost $\approx$ \$480K (about +38%).
 
 {{primer}}
 
@@ -538,7 +558,7 @@ CEBoK's Testable Topics table marks this module's "Advanced topics" (Cost Respon
 
 ### Cost Response Curves (CRCs)
 
-A **CRC** encapsulates an entire cost model in a single equation, relating total or phase cost to one performance or programmatic parameter. CRCs are portable and easy to use, reproducing the cost model's results within a small margin of error — but a CRC is **never more accurate than the underlying cost model**; its value is the fast response it gives decision-makers and designers who lack cost training or easy access to the model itself.
+A **CRC** encapsulates an entire cost model in a single equation, relating total or phase cost to a specific attribute or decision variable. CRCs are portable and easy to use, reproducing the cost model's results within a small margin of error — but a CRC is **never more accurate than the underlying cost model**; its value is the fast response it gives decision-makers and designers who lack cost training or easy access to the model itself.
 
 **Source example (Fig 3.14)**: an O&S-phase CRC is built by running the cost model at several values of a performance parameter — here, maximum ship speed, in 1-knot increments from **21 to 27 knots** — plotting the resulting output costs, and fitting a curve to the points. That fitted curve is the CRC.
 
@@ -605,6 +625,10 @@ buckets: Healthy sign | Common mistake
 :::
 
 +++
+
+:::tip Beyond CEBoK
+This whole section (common mistakes, sanity checks, decision tree) is an authored study aid, not CEBoK text. Nearest source statements: never interpret the intercept as a fixed cost at x = 0, and calibration does not mean force-fitting a data point in a regression-based CER.
+:::
 
 ### Common Mistakes
 
@@ -674,34 +698,34 @@ Q: A multivariate CER has a high $R^2$ (0.95) but neither coefficient is signifi
   cards: String.raw`
 ## Fundamentals
 Q: Parametric estimating (definition)
-A: Estimating cost from technical/programmatic/cost characteristics using statistical relationships (CERs) derived from historical data (PEH definition).
+A: A technique that develops cost estimates based upon the examination and validation of the relationships which exist between a project's technical, programmatic, and cost characteristics as well as the resources consumed during its development, manufacture, maintenance, and/or modification (PEH definition).
 R: yes
 Q: Cost Estimating Relationship (CER) (definition)
-A: A mathematical expression relating cost (Y) to one or more cost drivers (X₁, X₂, ...) — the output of parametric estimating.
+A: An equation used to predict cost from one or more cost drivers (independent variables); CERs range from the simple arithmetic mean of a few data points to multivariate regressions.
 R: yes
 Q: General form of a CER
 A: $\hat{Y} = f(X_1, X_2, ..., X_k)$ (point estimate of cost as a function of drivers)
 R: yes
 Q: The three primary cost estimating techniques
-A: Analogy, Parametric Estimating, Engineering Build-Up (expert opinion is used alongside them but isn't one of the three).
+A: Analogy, Parametric Estimating, Engineering Build-Up.
 Q: Which technique provides no objective test of validity?
-A: Analogy — it's a comparative analysis against one similar system.
-Q: Which technique is easily traceable but can be expensive, with a high risk of omitting costs if data is missing or incorrect?
+A: Analogy — a comparative analysis of similar systems; analogous estimates provide no objective test of validity.
+Q: Which technique is easily traceable but can be expensive, with an increased risk of omitting costs (missing or incorrect data may increase the risk of omitting costs)?
 A: Engineering Build-Up.
 Q: The parametric approach's four advantages
-A: Versatility; objective quantitative inputs; easily traceable equations linking input and output; easily adjustable input parameters.
+A: Versatility; objective quantitative inputs; easily traceable equations linking input and output; easily adjustable input parameters (listed as "several advantages, including").
 Q: Four statistical measures derived from CER regression analysis
-A: t-statistic and F-statistic (validity of coefficients/model), R² (explanatory power), Coefficient of Variation, CV (error bands for cost risk analysis).
+A: t-statistic and F-statistic (objective measures of the validity of the model), R² (explanatory power), Coefficient of Variation, CV (error bands for cost risk analysis).
 Q: Where do government analysts get cost data as a program matures, versus manufacturers?
-A: Government analysts use Contractor Cost Data Reporting (CCDR) data and LRIP/full-rate production actuals; manufacturers directly incorporate their own costs.
-Q: Trade-off of a COTS parametric cost model vs. one built in-house
-A: COTS models are quicker to build and execute, but give less visibility into their underlying methodology and encourage over-reliance on the model.
+A: Government analysts use data available via the Contractor Cost Data Reporting (CCDR) system; manufacturers directly incorporate their own costs.
+Q: Trade-off of a COTS parametric cost model vs. one developed from scratch
+A: COTS models are generally quicker to build and execute than those developed from scratch, but suffer a lack of visibility into the underlying methodology and encourage over-reliance on the models.
 Q: Why must a CER be logically justified, not just statistically significant?
-A: Correlation without causal logic is spurious and won't hold for new systems.
+A: (Beyond CEBoK) Correlation without causal logic is spurious and won't hold for new systems. CEBoK defers the causation vs. correlation discussion to Module 8.
 
 ## CER Forms
 Q: Linear CER functional form
-A: $Y = a + bX$ (constant marginal cost per unit of driver)
+A: $Y = a + bX$
 R: yes
 Q: Power CER functional form
 A: $Y = aX^b$ (linearized: $\ln Y = \ln a + b\ln X$ for regression)
@@ -716,26 +740,26 @@ Q: Exponential CER (linearized form for OLS)
 A: $\ln Y = \ln a + bX$ (semi-log regression)
 R: yes
 Q: Logarithmic CER functional form
-A: $Y = a + b\ln X$ (diminishing returns, one-sided curvature)
+A: $Y = a + b\ln X$
 R: yes
 Q: Generalized polynomial CER functional form (less common)
-A: $Y = a + b_1X_1 + b_2X_2 + ... + b_nX_n$ (already linear in each $X_i$; multiple additive drivers)
+A: $Y = a + b_1X_1 + b_2X_2 + ... + b_nX_n$ (already linear in each $X_i$)
 R: yes
 Q: How do you linearize a power CER for regression?
 A: Take natural log of both sides: $\ln Y = \ln a + b\ln X$. Then regress $\ln Y$ on $\ln X$ using OLS.
 Q: How to choose which CER functional form to use
-A: Plot data in unit space; straight line → linear; curve that straightens in log-log → power; curve that straightens in semi-log → exponential; always verify engineering logic.
+A: (Beyond CEBoK) Plot data in unit space; straight line → linear; curve that straightens in log-log → power; curve that straightens in semi-log → exponential; always verify engineering logic. CEBoK only lists the forms and says to transform non-linear models to fit a linear model.
 
 ## Cost Drivers
 Q: Cost driver (definition)
 A: An independent variable (e.g., weight, power, lines of code) that logically drives cost, used to predict cost in a CER.
 R: yes
-Q: Five criteria for a good cost driver
-A: (Beyond CEBoK checklist) Logical/causal link to cost, measurable/quantifiable, available early, statistically significant, sensitive to design changes.
+Q: Six criteria for a good cost driver
+A: (Beyond CEBoK checklist) Logical/causal link to cost, measurable/quantifiable, available early, statistically significant, sensitive to design changes, not redundant with other drivers (multicollinearity).
 Q: Why must a cost driver be "available early"?
-A: So the CER can support early estimates, budgeting, and trade studies before final design is known.
+A: (Beyond CEBoK) So the CER can support early estimates, budgeting, and trade studies before final design is known.
 Q: Why check multicollinearity between drivers in a multivariate CER?
-A: Highly correlated drivers inflate standard errors, making individual coefficients unreliable and hard to interpret.
+A: Multicollinearity (significant correlation between two cost drivers) makes it unlikely both will be good explanatory variables at the same time.
 Q: Common hardware cost drivers
 A: (Beyond CEBoK examples) Weight, power output, thrust, volume, complexity/technology factors. CEBoK: weight, power and LOC are common drivers.
 Q: Common software cost drivers
@@ -748,23 +772,23 @@ A: (Beyond CEBoK examples) Square footage, number of units/beds/positions.
 
 ## Cost Passengers
 Q: Cost passenger (definition)
-A: A major WBS/system component with one of the highest dollar values in the system, identified using Pareto charts.
+A: Major system components that represent the majority of the system's cost; the cost elements with the highest dollar values in the WBS, identified using Pareto charts.
 R: yes
 Q: Why don't cost passengers always represent the biggest cost-savings opportunity?
-A: Passengers show where cost is concentrated, but cost drivers (the design decisions/requirements) are what actually control how that cost can be influenced.
+A: Passengers indicate which items cost the most, but cost drivers (the design decisions/requirements) predict how those costs can be influenced.
 Q: Pea-pod analogy for cost drivers vs. cost passengers
 A: The pod (passenger) wraps and is shaped by the peas (driver) inside it — like a ship's hull or aircraft's airframe, a passenger shaped by the crew/mission equipment it carries (the driver).
 R: yes
 
 ## Rates, Factors, and Ratios
 Q: Rate (as used in CER-style estimating)
-A: Cost per parameter, expressed in dollars (e.g., a labor rate in \$/hour, or cost per LOC/function point).
+A: Always expressed in dollars per parameter (e.g., a labor rate in \$/hour, or cost per LOC/function point).
 R: yes
 Q: Factor (as used in CER-style estimating)
-A: Cost-on-cost, unitless, usually a percentage; the cost of one element predicts another's (e.g., SE/PM as 20% of prime mission equipment).
+A: Cost on cost, without units, often expressed as a percentage; uses the cost of one element to predict another's (e.g., SE/PM as 20% of prime mission equipment).
 R: yes
 Q: Ratio (as used in CER-style estimating)
-A: Parameter on parameter (e.g., an industry-average 1,200 LOC per integrated COTS package).
+A: Estimates effort; defined as parameter on parameter (e.g., an industry-average 1,200 LOC per integrated COTS package).
 R: yes
 Q: SE/PM (in factor estimating)
 A: Systems Engineering / Program Management — a factor commonly estimated as a percentage (e.g., 20%) of prime mission equipment cost.
@@ -776,9 +800,9 @@ A: Re-run the CER with the augmented data set, re-calibrate to pass through the 
 Q: The four steps of the parametric process, in order
 A: 1. Data Collection 2. Cost Driver Identification 3. CER Development 4. Parametric Model Development
 Q: Step 1 of parametric process: Data Collection (key activities)
-A: Gather data from cost reports, schedule, and requirements docs (e.g., the CARD); normalize (inflation, scope, units, NR vs. R); document pedigree; iterate as new sources appear.
+A: Gather data from cost reports, schedule, and requirements docs (e.g., the CARD); normalize (similar content in all programs, same constant year dollars); document pedigree; iterate as new sources appear.
 Q: Step 2 of parametric process: Cost Driver Identification (key activities)
-A: Hypothesize candidates, scatter plot, test correlation with cost, check multicollinearity; drivers must pass both statistical and logic tests.
+A: Hypothesize candidates (analogy, organization history, expert judgment), scatter plot, explore correlation of each independent element with cost.
 Q: The five steps of CER Development, in order
 A: 1. Select the Variables 2. Test Relationships 3. Perform Regression 4. Select CERs 5. Validate CERs
 Q: In CER Development, what happens during "Test Relationships"?
@@ -792,8 +816,8 @@ A: Resetting the y-intercept (constant term) so the CER passes through a desired
 R: yes
 Q: How far can a calibrated CER generally be applied from its calibration point?
 A: Generally within about one standard deviation of x from the point of departure.
-Q: What is validation of a parametric model?
-A: Testing the model against data not used to build it (held out during CER development) to confirm predictive accuracy.
+Q: What is validation of a CER?
+A: Validating the CER on the representative data that was not used to develop the equation (set aside during Test Relationships), using the Prediction Interval (PI) methodology to capture uncertainty.
 R: yes
 Q: (Beyond CEBoK rule of thumb) Minimum and preferred number of data points for a CER
 A: (Beyond CEBoK rule of thumb) Minimum 3; 8+ preferred for statistical confidence — not a number given in this module's source.
@@ -806,7 +830,7 @@ A: The y-intercept — often loosely called a "fixed/setup cost," but never inte
 Q: In a linear CER $Y = a + bX$, what does $b$ represent?
 A: The marginal cost per unit increase in the driver (the slope).
 Q: Four items to check when evaluating a fitted CER
-A: Statistical fit (R²), Coefficient of Variation, significance of each coefficient (t-stat/F-stat/p-value), and residuals (random scatter).
+A: R² (explanatory power), Coefficient of Variation (error bands in cost risk analysis), F-statistic (model valid if significant), and t-statistics/p-values (individual coefficients significant).
 Q: What does it mean if the model's F-statistic is significant (Significance F < α = 0.05)?
 A: The regression model as a whole is judged statistically valid.
 Q: For a single-variable regression, how do the driver's t-statistic and the model's F-statistic relate?
@@ -816,12 +840,12 @@ A: Reject the model if a driver variable isn't significant; an insignificant int
 Q: (Beyond CEBoK rule of thumb) What R² threshold is typical for a defensible CER?
 A: (Beyond CEBoK rule of thumb) 0.70 or higher is a common rule of thumb; this module's source doesn't set a fixed threshold.
 Q: Range of applicability (definition)
-A: The minimum and maximum driver values in the dataset used to fit the CER.
+A: (Beyond CEBoK) The minimum and maximum driver values in the dataset used to fit the CER.
 R: yes
 Q: Using a CER inside its range of applicability is called ___; outside is called ___
-A: Interpolation; extrapolation.
+A: (Beyond CEBoK) Interpolation; extrapolation.
 Q: Why is extrapolation risky, and why does it happen often in practice?
-A: The relationship's validity outside the fitted range is unverified, adding risk — but analysts often extrapolate anyway since many programs target systems faster, bigger, or more capable than their predecessors.
+A: Analysts often apply CERs outside the range of collected data because many programs target systems faster, bigger (or smaller), more dense, or more accurate than predecessors; uncertainty in OLS estimates (via PI) increases as estimates deviate from the core data set.
 Q: How do you transform back from a log-space regression to get $a$ in $Y = aX^b$?
 A: If the regression gives intercept $\alpha$ and slope $\beta$ in log space, then $a = e^{\alpha}$ and $b = \beta$.
 
@@ -833,7 +857,7 @@ A: Only accurate to the thousands of dollars, given the granularity of the under
 Q: Site activation CER: cost for 10 workstations?
 A: $82{,}756 + 26{,}491(10) = 347{,}666 \approx \$348$K
 Q: Site activation CER: what R² value was achieved, and what does it mean?
-A: R² ≈ 91% — the number of workstations explains almost all the variation in site activation cost, an excellent cost driver.
+A: R² ≈ 91% — the number of workstations explains almost 91% of the variation in site activation costs, an excellent cost driver.
 Q: In the site activation example, was the intercept statistically significant? What about the slope?
 A: The slope (workstations coefficient) was highly significant; the intercept was not — common, and analysts usually accept it anyway.
 Q: When 4 new sites were added to the site activation data (15 total) and the CER re-run, what changed and what didn't?
@@ -864,7 +888,7 @@ A: (Advanced, not testable) It varies two or more inputs simultaneously and comp
 Q: "Tornado chart" — is this CEBoK's term?
 A: (Advanced, not testable) Not exactly — the source describes a chart that visualizes relative importance via rank correlation; "tornado chart" is common industry usage for this kind of swing-ranked bar chart.
 Q: Cost Response Curve (CRC) (definition)
-A: (Advanced, not testable) A single equation encapsulating an entire cost model, relating total/phase cost to one parameter; portable and fast, but never more accurate than the underlying cost model.
+A: (Advanced, not testable) A single equation encapsulating an entire cost model, relating total/phase cost to a specific attribute or decision variable; portable and fast, but never more accurate than the underlying cost model.
 R: yes
 Q: CEBoK's own CRC example (Fig 3.14)
 A: (Advanced, not testable) An O&S-phase CRC built by running the cost model at 1-knot increments of maximum ship speed from 21 to 27 knots and fitting a curve to the resulting costs.
@@ -887,25 +911,25 @@ A: (Advanced, not testable) Update the risk bounds of the estimate, rather than 
 
 ## Pitfalls & Decision Tree
 Q: Ten common CER mistakes (name any four)
-A: Extrapolating without flagging risk; choosing form by R² alone; using un-normalized data; confusing correlation with causation; ignoring multicollinearity; omitting uncertainty range; mixing risk/uncertainty; dropping outliers without documentation; over-fitting; force-fitting a calibration point.
+A: (Beyond CEBoK) Extrapolating without flagging risk; choosing form by R² alone; using un-normalized data; confusing correlation with causation; ignoring multicollinearity; omitting uncertainty range; mixing risk/uncertainty; dropping outliers without documentation; over-fitting; force-fitting a calibration point.
 Q: When CER coefficients are statistically significant but engineering sense is violated, what should you do?
-A: Reject or investigate the CER; statistical significance does not guarantee causal/logical validity.
+A: (Beyond CEBoK) Reject or investigate the CER; statistical significance does not guarantee causal/logical validity.
 Q: Sanity check: how should cost move as the driving quantity/parameter increases?
-A: In a logically consistent direction with the driver — usually increase; if it instead decreases against engineering judgment (e.g., versus weight), investigate before trusting the CER.
+A: (Beyond CEBoK) In a logically consistent direction with the driver — usually increase; if it instead decreases against engineering judgment (e.g., versus weight), investigate before trusting the CER.
 Q: Use parametric estimating when…
-A: You have historical data from analogous systems, design parameters are known/estimable early, and you want objective, repeatable estimates.
+A: (Beyond CEBoK) You have historical data from analogous systems, design parameters are known/estimable early, and you want objective, repeatable estimates.
 Q: Use analogy when…
-A: You have only one very similar historical system and need an estimate; requires minimal data; provides no objective test of validity.
+A: (Beyond CEBoK) You have only one very similar historical system and need an estimate; requires minimal data; provides no objective test of validity.
 Q: Use engineering build-up when…
-A: Detailed design is complete and all element costs can be estimated bottom-up; traceable but expensive, with risk of omitting costs from missing/incorrect data.
+A: (Beyond CEBoK) Detailed design is complete and all element costs can be estimated bottom-up; traceable but expensive, with risk of omitting costs from missing/incorrect data.
 Q: In a multivariate CER with high R² but no significant individual coefficients and r=0.97 between drivers, the problem is…
-A: Multicollinearity; the correlated drivers inflate standard errors, masking individual significance despite good overall fit.
+A: (Beyond CEBoK) Multicollinearity; the correlated drivers inflate standard errors, masking individual significance despite good overall fit.
 Q: Point estimate vs. uncertainty range in a CER
-A: Always report a CER as a point estimate **plus** an uncertainty range (SEE/prediction interval), never point estimate alone.
+A: (Beyond CEBoK) Always report a CER as a point estimate **plus** an uncertainty range (SEE/prediction interval), never point estimate alone.
 Q: (Beyond CEBoK rule of thumb) A high correlation between two drivers in a multivariate CER, such as r > 0.80, suggests…
 A: (Beyond CEBoK rule of thumb) Multicollinearity — the drivers may be redundant, making coefficients unreliable; consider dropping one or combining them.
 Q: A CER built from 100–500-unit data is applied to an 800-unit system. Name this practice and the risk.
-A: Extrapolation; the relationship's validity outside the data range is unverified, adding risk/uncertainty.
+A: (Beyond CEBoK) Extrapolation; the relationship's validity outside the data range is unverified, adding risk/uncertainty.
 
 ## Key Formulas & Definitions
 Q: OLS linear regression computational formulas

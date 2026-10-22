@@ -2,7 +2,7 @@ PCEA.addModule({
   id: 'm11', num: 11, title: 'Manufacturing Cost Estimating', short: 'Manufacturing',
   source: 'guide',
   blurb: 'Break production cost into functional elements: labor rates and burdening, time standards, learning curves, and material with scrap. Make-or-buy decisions.',
-  intro: String.raw`Manufacturing cost estimating builds production cost from **functional elements** (engineering, tooling, production run) and **resource categories** (labor and material).
+  intro: String.raw`Manufacturing cost estimating builds production cost from **functional elements** (engineering and prototyping, setup, production run) and **resource categories** (labor and material).
 
 **Core workflow**: decompose into elements → estimate each via rates, standards, quantity factors (learning) and material takeoff → time-phase and adjust for risk.
 
@@ -27,7 +27,7 @@ Q: Put these typical manufacturing operations in order, from first to last.
 
 ### Acquisition Context and Hardware Development Cycle
 
-Serious consideration of the production environment begins after **Critical Design Review (CDR)**. Recurring activities generally start with the beginning of production immediately following a **Production Readiness Review (PRR)** — a formal examination of whether the design is ready for production, whether production engineering problems have been resolved, and whether the producer has adequately planned for the production phase. PRR may also be called a **Manufacturing Readiness Review (MRR)**. The **Test Readiness Review (TRR)** is the gateway to system integration and test.
+Serious consideration of the production environment begins after **Critical Design Review (CDR)**. Recurring activities generally start with the beginning of production immediately following a **Production Readiness Review (PRR)** — a formal examination of whether the design is ready for production, whether production engineering problems have been resolved, and whether the producer has adequately planned for the production phase. PRR may also be called a **Manufacturing Readiness Review (MRR)**. While individual sub-system test activities occur earlier, the **Test Readiness Review (TRR)** is the gateway to system integration and test.
 
 Sustaining activities (manufacturing, industrial engineering, other commodity engineering) and program functions (program management, subcontract management, business management, configuration/data management) support both development and production throughout the life cycle.
 
@@ -48,9 +48,13 @@ CEBoK's Table 11.1 (as printed):
 The "most/least mature" labels in Table 11.1 conflict with CEBoK's own step-up discussion below (ADM costs more than EDM, which costs more than production) and with the usual XDM → ADM → EDM → PPM sequence toward production, where the PPM is the most production-representative. Learn the definitions (what each model confirms); treat the printed maturity labels with caution.
 :::
 
-Prototype costs are a sound basis for estimating recurring production unit costs. An **ADM costs more than an EDM**, which costs more than a production version — these **step-up factors** are usually expressed as the ratio of prototype to production version and **vary between about 1.2 and 2.0 between ADM and EDM, and the same amount between EDM and production unit**. Prototype manufacturing is a laboratory environment with considerable engineering oversight, assessing producibility and specification compliance — it is NOT representative of the repetitive production process.
+Prototype costs are a sound basis for estimating recurring production unit costs. An **ADM costs more than an EDM**, which costs more than a production version — these **step-up factors** are usually expressed as the ratio of prototype to production version and **vary between about 1.2 and 2.0 between ADM and EDM, and the same amount between EDM and production unit**. The factors are a function of the Commercial-Off-The-Shelf (COTS) content.
 
-**Best practice**: Exclude prototype/engineering build hours from the production learning curve (distorts T1 and slope); estimate prototype cost separately (analogy, step factor, or engineering buildup).
+The prototyping environment must be considered separately in the estimate since it is much different than a traditional full-rate or limited-rate production environment. The prototyping estimate data should come from a similar environment or an appropriate step-up or step-down factor should be applied. In general, prototypes are considerably more expensive to produce. Prototype manufacturing is frequently thought of as a laboratory environment where a component is assembled with considerable engineering oversight and analysis, to assess the producibility of the design and to evaluate how well the design meets the specified performance parameters (i.e., specification values).
+
+:::tip Beyond CEBoK: prototype hours and learning curves
+A common best practice is to exclude prototype/engineering build hours from the production learning curve (they can distort T1 and slope) and to estimate prototype cost separately (analogy, step factor, or engineering buildup). CEBoK itself only says the prototyping environment must be considered separately.
+:::
 
 +++
 
@@ -72,7 +76,7 @@ Typical operations in a manufacturing/production facility (per CEBoK):
 
 ### Functional Cost Elements
 
-A Life Cycle Cost Estimate or production estimate should include:
+A Life Cycle Cost Estimate (LCCE) or production estimate should directly or indirectly include:
 
 - **Engineering and prototyping costs**
 - **Setup costs**: non-recurring or recurring functions, and the procedures, tooling, test equipment, and facilities to produce the component(s)
@@ -142,7 +146,7 @@ The primary automated tools of production setup:
 - **CAM (Computer-Aided Manufacturing)**: manufacture of physical models
 - **CAE (Computer-Aided Engineering)**: analysis, simulation, design, manufacture, planning, diagnosis, repair
 
-Collectively referred to as **CAD/CAM/CAE**, often used with 3D modeling.
+Integrated software tools are often referred to collectively as **CAD/CAM/CAE** and can be used in conjunction with 3D modeling.
 
 {{primer}}
 
@@ -156,7 +160,9 @@ Tools and test equipment are non-recurring products of designing and fabricating
 
 ### Estimating Setup Costs
 
-Setup is typically estimated by **analogy** to a similar program (e.g., Joint Strike Fighter setup time by analogy to F-18 or F-14). The analyst may scale by lot size, degree of automation, or **theoretical first unit (T1) cost** — equivalent to estimating as a factor of T1 cost. To scale by content and automation simultaneously, the analyst may need a factor from a second program pair that has undergone similar automation — this is called a **double analogy**. Parametric CERs may also work but require a homogenous data set. Setup costs often get buried in recurring production costs (amortized over lots) or non-recurring development, making consistent comparable data hard to find.
+When developing setup estimates: consider commodity type, account for production rate, and consider automation.
+
+Setup is typically estimated by **analogy** to a similar program (e.g., Joint Strike Fighter setup time by analogy to F-18 or F-14). The analyst may scale by lot size (production quantity), degree of automation, **theoretical first unit (T1) cost** (where the learning curve crosses the y-axis at unit n = 1), or labor hours. This last method is equivalent to estimating as a factor of T1 cost. To scale by content and automation simultaneously, the analyst may need a factor from a second program pair that has undergone similar automation — this is called a **double analogy**. Parametric CERs may also work but require a homogenous data set. Setup costs often get buried in recurring production costs (amortized over lots) or non-recurring development, making consistent comparable data hard to find.
 
 ### Facilities Capital Cost of Money
 
@@ -164,7 +170,7 @@ Setup is typically estimated by **analogy** to a similar program (e.g., Joint St
 
 ### Tooling
 
-**Soft tooling** is most widely used in a prototype environment (e.g., silicone-injected molds), for one-time, disposable use. **Rate tooling** is used for increased-quantity manufacture (parts molds injected with steel or aluminum) and can increase efficiency at production quantities.
+**Soft tooling** is most widely used in a prototype environment (e.g., silicone-injected molds), for one-time, disposable use. **Rate tooling** is used for increased-quantity manufacture (parts molds injected with steel or aluminum) and, depending on the level of maturing of the parts being manufactured, might increase efficiency.
 
 **Maintenance and recapitalization**: computer workstations used for test may be upgraded every **3–5 years**; mechanical crane assemblies may be upgraded every **10 years**.
 
@@ -172,7 +178,7 @@ Setup is typically estimated by **analogy** to a similar program (e.g., Joint St
 
 ### Production Run and IPTs
 
-Once setup is complete, the production run converts raw materials to finished goods, including touch labor, manufacturing support labor, and overhead. Many facilities rely on **Integrated Product Teams (IPTs)**: interdisciplinary teams for review and decision-making in complex development programs, involving all stakeholders in a collaborative forum. The IPT lead typically has responsibility for the make-or-buy decision, exercising creativity with available resources to assess whether a part is more economical to buy than to make in-house.
+Once setup is complete, the production run converts raw materials to finished goods, including touch labor, manufacturing support labor, and overhead. Many facilities rely on **Integrated Product Teams (IPTs)**: interdisciplinary teams for review and decision-making in complex development programs, involving all stakeholders in a collaborative forum. When product manufacturing and delivery responsibility belongs primarily to the IPT lead, the IPT lead will often exercise creativity with available resources to get the job done and assess whether a part is more economical to buy from outside the company than to make in-house.
 
 :::check
 Q: A setup-cost factor derived by comparing automation improvements across a second pair of programs, then applied to scale a setup estimate by content and automation together, is called:
@@ -208,7 +214,7 @@ Typical MGSE includes handling fixtures, lift slings, and transport dollies. Typ
     {
       id: 'labor', title: 'Labor rates and burdening', summary: 'Fully burdened rate buildup: direct labor, fringe, overhead, G&A, fee',
       body: String.raw`:::primer:::
-Wrap rates stack several burdens on a base wage, and the order matters because each layer applies to a different base.
+Wrap rates stack several burdens on a base wage. Under the common stacking convention (beyond CEBoK), the order matters because each layer applies to a different base.
 
 :::order
 Q: Put these labor cost layers in the order they are applied.
@@ -231,19 +237,27 @@ $$\text{Total Labor Cost} = (1 + \text{Overhead Rate}) \times \text{Direct Labor
 
 Overhead rates are usually additive but may be stated additively (100% more) or multiplicatively (200%) — read carefully.
 
-Layers, in order, each applied to the correct base:
+CEBoK discusses these burdening factors in the context of manufacturing:
+
+- **Fringe**: usually comparable with the rest of the company, except possibly for union personnel with a more comprehensive benefits package; fringe includes health care and pension and **can be about 50% of direct salary cost**
+- **Overhead**: manufacturing overhead costs are usually higher than other overhead costs such as engineering overhead, usually driven by the equipment and tools required for the manufacturing process
+- **G&A**: manufacturing contributes heavily to the G&A burden; typically, all the shop capital equipment is included in determining the G&A burden
+- **FCCOM**: can be affected by manufacturing when the manufacturing facilities and equipment are considered in the FCCOM calculation
+- **Fee**: driven by risk; in manufacturing, risk performance is assessed by whether the product has hindrances such as equipment and tooling capacity
+
+:::tip Beyond CEBoK: layer order and bases
+CEBoK lists the burden factors above but does not state a layer order or the base each one applies to. A common convention stacks them as follows, each applied to the correct base:
 
 1. **Direct Labor Rate** — base wage for the labor category
-2. **+ Fringe Benefits** (% of direct labor) — payroll taxes, health insurance, pension; **fringe can run about 50% of direct salary cost**, heavily influenced by union benefits packages
+2. **+ Fringe Benefits** (% of direct labor)
 3. **= Labor plus Fringe**
-4. **+ Overhead** (% of labor+fringe) — manufacturing overhead is usually higher than other overhead (e.g., engineering overhead) due to equipment/tooling costs
+4. **+ Overhead** (% of labor+fringe)
 5. **= Total Labor Cost**
-6. **+ G&A** (% of total cost) — manufacturing contributes heavily to G&A since shop capital equipment is typically included in the G&A burden base
+6. **+ G&A** (% of total cost)
 7. **= Total Cost**
-8. **+ Fee/Profit** (% of total cost) — driven by risk, including equipment/tooling capacity hindrances
+8. **+ Fee/Profit** (% of total cost)
 9. **= Fully Burdened Price (wrap rate)**
-
-**FCCOM** can also be affected by manufacturing when facilities/equipment are considered in its calculation.
+:::
 
 {{primer}}
 
@@ -251,7 +265,8 @@ Layers, in order, each applied to the correct base:
 
 ### Worked Burdening Example
 
-Direct Labor \$30.00/hr, Fringe 35%, Overhead 80% (of labor+fringe), G&A 10%, Fee 8%:
+:::tip Beyond CEBoK: worked burdening example
+This example uses the common stacking convention above (CEBoK gives no layer order). Direct Labor \$30.00/hr, Fringe 35%, Overhead 80% (of labor+fringe), G&A 10%, Fee 8%:
 
 | Layer | Calculation | Amount |
 |---|---|---|
@@ -266,9 +281,10 @@ Direct Labor \$30.00/hr, Fringe 35%, Overhead 80% (of labor+fringe), G&A 10%, Fe
 | **Wrap Rate** | — | **\$86.61/hr** |
 
 Or: \$30.00 × 1.35 × 1.80 × 1.10 × 1.08 = **\$86.61**
+:::
 
-:::key
-Each burden % applies to a different cumulative base, not all to the original direct labor rate. Test questions often hide incorrect bases to trap careless arithmetic.
+:::tip Beyond CEBoK: burden bases
+In this stacking convention, each burden % applies to a different cumulative base, not all to the original direct labor rate.
 :::
 
 :::check
@@ -287,12 +303,12 @@ Two companies can have the same cost elements but apply burden differently, bidd
 
 ### Labor Rates in Practice
 
-Rates come from **Forward Pricing Rate Agreements (FPRAs)** — per FAR 15.801, a written agreement negotiated between contractor and government making certain rates and factors available for a specified period, for pricing contracts or modifications not easily estimated for a specific contract/end item/task. A **Forward Pricing Agreement (FPA)** is different: a written agreement with a large-volume contractor setting a pricing *methodology*, which — once established — can determine the complete final price of individual orders (e.g., covering spares acquisition).
+Rates come from **Forward Pricing Rate Agreements (FPRAs)** — per FAR 15.801, a written agreement negotiated between a contractor and the government to make certain rates and factors available during a specified period for use in pricing contracts or contract modifications. Such rates and factors represent reasonable projections of specific costs that are not easily estimated for, identified with, or generated by a specific contract, contract end item, or task. A **Forward Pricing Agreement (FPA)** is different: a written agreement with a large-volume contractor setting a pricing *methodology*, which — once established — can determine the complete final price of individual orders (e.g., covering spares acquisition).
 
 Manufacturing labor often involves **organized labor (unions)**, which guarantee specific rates and benefits different from corporate-wide rates — assess these when estimating union-protected tasks. **24-hour operations** generally require a premium to the labor force under labor law, and **state-specific laws** must also be considered.
 
 :::check
-Q: A pre-negotiated agreement making certain indirect rates/factors available for a specified period, for pricing costs not easily tied to a specific contract or task, is a:
+Q: A pre-negotiated agreement making certain rates/factors available for a specified period, for pricing costs not easily tied to a specific contract or task, is a:
 * Forward Pricing Rate Agreement (FPRA)
 - Forward Pricing Agreement (FPA)
 - Cost Plus Award Fee contract
@@ -377,7 +393,11 @@ Q: Using CEBoK's Fig. 11.4 skill-mix table (Eng1 \$25×1000h, Eng2 \$30×500h, E
 
 ### Skill Mix Effects
 
-A shift toward higher-skill labor raises the composite rate **even when each individual rate stays the same**. It is vital for the estimator to determine the appropriate skill mix (skill mix by analogy is a good comparison method) — recalculate the composite if the mix shifts with quantity, design maturity, or automation.
+It is vital for the cost estimator to determine the appropriate skill mix required to estimate the cost of a particular element accurately. Skill mix by analogy is an excellent method of comparison.
+
+:::tip Beyond CEBoK: skill mix shifts
+A shift toward higher-skill labor raises the composite rate **even when each individual rate stays the same**. Recalculate the composite if the mix shifts with quantity, design maturity, or automation.
+:::
 
 :::check
 Q: At start of production, labor is 80% assembler (\$40/hr), 20% engineer (\$80/hr). At mid-production, design stabilizes and mix shifts to 60% assembler, 40% engineer. Which rate is higher?
@@ -427,7 +447,7 @@ Attributed to the work of **H.P. Maynard**:
 
 $$\text{Standard Time} = \frac{\text{Measured Time} \times \text{Pace}}{1 - \text{PF\&D}}$$
 
-**PF&D** (Personal, Fatigue, and Delay) covers personal needs, unavoidable delays, and a general slow-down from fatigue; PF&D can run **as high as 25%**. **Pace** rates how fast/slow a worker performs relative to normal: 90% = slower than normal, 100% = normal, 110% = faster than normal — normally determined by an industrial engineer. Pace may correct for exogenous effects (shifting workforce composition) or endogenous effects (workforce experience, learning-curve unit, unit maturity); pace and unit/maturity corrections are a significant danger area in standards-based estimation.
+**PF&D** (Personal, Fatigue, and Delay) covers personal needs, unavoidable delays, and a general slow-down from fatigue; PF&D can run **as high as 25%**. **Pace** rates how fast/slow a worker performs relative to normal: 90% = slower than normal, 100% = normal, 110% = faster than normal — normally calculated and determined by an industrial engineer. The pace factor should correct to a speed at which any trained employee could complete the task. Pace may correct for exogenous effects (shifting workforce composition) or endogenous effects (workforce experience, learning-curve unit, unit maturity); pace and unit/maturity corrections are a significant danger area in standards-based estimation.
 
 :::check
 Q: Measured time 2.0 hr, pace 1.05, PF&D 12%. Standard time?
@@ -450,7 +470,7 @@ Standard hours were developed at 10% PF&D (covered assembly). The new assembly i
 | Fit | 2.5 | 2.25 | 3.0 | 2,250 |
 | Weld | 1.7 | 1.53 | 2.04 | 1,530 |
 | Grind | 0.8 | 0.72 | 0.96 | 720 |
-| **Total** | **6.0** | | | **4,500** |
+| **Total** | **5.0** | **4.50** | **6.0** | **4,500** |
 
 Total hours of 4,500 across a combined new-standard of 6.0 hr/lf implies **750 linear feet** of assembly (4,500 ÷ 6.0), consistent with CEBoK's description of estimating total manhours for 750 linear feet.
 
@@ -502,7 +522,7 @@ Q: Standard = 2.5 hr/unit, historically shop's efficiency (FE) = 0.83. Expected 
     {
       id: 'learning', title: 'Learning curves in manufacturing', summary: 'What learns and what doesn\'t; production runs, breaks, P3I, anomalies',
       body: String.raw`:::primer:::
-Repetition makes workers faster, so some costs shrink as units are built. Others never budge.
+Repetition makes workers faster, so some costs shrink as units are built. Others never budge. (This split is a common convention beyond CEBoK.)
 
 :::sort
 Q: Which costs follow a manufacturing learning curve?
@@ -520,17 +540,21 @@ buckets: Learns | Does not learn
 
 ### Production Runs and Learning
 
-For a group to be a single production run, the design should stay almost constant. The longer a run uses the same design, the more learning occurs and the more costs decrease. Each production stage has unique learning characteristics — learning on a **major assembly** (e.g., final integration of a fighter jet airframe) differs from learning on a **minor assembly** (e.g., a bomber's auxiliary power unit subsystem, with much lower integration cost).
+For a group to be a single production run, the design should stay almost constant. The longer a run uses the same design, the more learning occurs and the more costs decrease. Each production stage has unique learning characteristics — learning on a tube-bending operation will be much different than learning on a major assembly operation. Example of a **major assembly**: final integration of a fighter jet airframe. Example of a **minor assembly**: a subsystem assembly such as a bomber's auxiliary power unit, with much lower integration costs than final assembly.
 
-### What Learns: Touch Labor
+### What Learns
 
-Learning applies to **recurring touch labor** that improves with repetition under consistent conditions. Typical manufacturing learning curves: 75–90% slopes.
+The learning curve is a mathematical function which captures the decreasing cost required to accomplish any repetitive operation as the operation is continued. Analysts should always investigate repetitive manufacturing processes for the presence of learning (CEBoK says this of scrap rates).
+
+:::tip Beyond CEBoK: what learns and what does not
+Learning applies to **recurring touch labor** that improves with repetition under consistent conditions. Typical manufacturing learning curves have 75–90% slopes.
 
 **What does NOT learn**:
 - **Material cost per unit**: a physical/engineering quantity (same raw material needed regardless of repetition), though scrap rates may improve slightly and bulk discounts are a separate mechanism
 - **Non-recurring costs**: setup, tooling, facilities are one-time
 - **Prototype/engineering units**: different task, different process maturity
 - **Support labor** (QC, planning): not given its own learning curve; when estimated as a factor of touch labor it simply moves with touch labor's learning
+:::
 
 {{primer}}
 
@@ -538,7 +562,7 @@ Learning applies to **recurring touch labor** that improves with repetition unde
 
 ### Production Breaks and Learning Loss
 
-Production breaks occur when a design change requires tooling/setup changes, or when production is interrupted for repair/retrofit (re-inserted at the original production point). If the break is long enough, needed machines, materials, or parts may no longer be available — this can cause a **complete loss of learning**.
+Production breaks occur when a design change requires tooling/setup changes, or when production is interrupted for repair/retrofit (re-inserted at the original production point). If the production break is for a considerable amount of time, needed machines, materials, or parts may no longer be available. Figure 11.6 demonstrates a learning curve with a production break that caused a **complete loss of learning**.
 
 **Equipment utilization rate** measures how efficiently manufacturing equipment is used; reducing unused capacity is a common IE goal.
 
@@ -560,7 +584,7 @@ Q: Which costs are most affected by a production break?
 - Material cost per unit
 - Non-recurring tooling
 - Facilities overhead allocation
-> Breaks disrupt learning in labor; material, setup, and facilities are unaffected per se (though facilities costs may still accrue during idleness).
+> Breaks disrupt learning in labor; material, setup, and facilities are unaffected per se (though facilities costs may still accrue during idleness). (Beyond CEBoK inference: CEBoK says only that a long break can cause a complete loss of learning, as in Fig. 11.6.)
 :::
 
 :::check
@@ -601,8 +625,12 @@ Q: T1 = 800 hr, 90% curve. Hours for unit 20? ($b = -0.1520$)
 
 ### Rate Changes and Design Changes
 
+CEBoK Module 11 only points to Module 7 (Related & Advanced Topics) for the new-work approach; the equations below are Module 7 carry-over.
+
+:::tip Beyond CEBoK: Module 7 carry-over
 - **Rate theory** adds production rate (units/month) as a second variable: $Y = aX^b R^c$. Watch for **multicollinearity** (X and R often move together, inflating standard errors).
 - **New work** mid-production: $Y_X = a_1 X^{b_1} + a_2(X - X_{last})^{b_2}$ (new component starts its own curve).
+:::
 
 :::widget lc-explorer:::`
     },
@@ -649,7 +677,7 @@ Exotic materials (e.g., radar-absorbing material, first introduced in stealth te
 
 ### Scrap Rates and Material Usage Allowance
 
-A **scrap rate** expresses, **as a percentage of the material in the end item** (i.e., of the *delivered* weight, not the raw input), the amount of scrap material also consumed/discarded in production. CEBoK notes this is **perfectly analogous to the distinction between fee and margin**: scrap rate is not a percentage of the total material used. On government contracts, scrap rates are called **Material Usage Allowances (MUA)**, negotiated between contractor and government from historical trends of material needed beyond the finished product.
+A **scrap rate** expresses, **as a percentage of the material in the end item** (i.e., of the *delivered* weight, not the raw input), the amount of scrap material also consumed/discarded in production. CEBoK notes this is **perfectly analogous to the distinction between fee and margin**: scrap rate is not a percentage of the total material used. CERs are developed to estimate scrap rates for various types of raw material. On government contracts, scrap rates are called **Material Usage Allowances (MUA)**, negotiated between contractor and government from historical trends of material needed beyond the finished product.
 
 **CAD/CAM** enable automatic generation of a **Material Take-off List (MTOL)**: quantities, dimensions, materials, etc. corresponding to a drawing.
 
@@ -729,7 +757,7 @@ Q: Per CEBoK's Testable Topics table for this module, which content is NOT testa
     {
       id: 'makebuy', title: 'Make-or-buy decisions', summary: 'Cost comparison, breakeven analysis, decision factors',
       body: String.raw`:::primer:::
-Making in-house is cheaper per unit, but you must buy tooling first. At some quantity the tooling pays for itself.
+Making in-house is cheaper per unit, but you must buy tooling first. At some quantity the tooling pays for itself. (This breakeven framing is beyond CEBoK.)
 
 :::check
 Q: Make cost is \$90/unit, buy price is \$102/unit, and tooling for making costs \$40,000. Roughly where does making become cheaper?
@@ -741,11 +769,10 @@ Q: Make cost is \$90/unit, buy price is \$102/unit, and tooling for making costs
 
 +++
 
-A **make-or-buy** decision chooses whether to produce an item in-house ("make") or purchase from a supplier ("buy"). Responsibility typically belongs to the **IPT lead**, who exercises creativity with available resources and assesses whether a part is more economical to buy outside than make in-house. The cost estimator develops a cost estimate to support this assessment (typically from historical data) and must assess any outside vendor quote for realism and reasonableness — buying may be faster than in-house fabrication, and schedule may matter as much as cost.
+A **make-or-buy** decision chooses whether to produce an item in-house ("make") or purchase from a supplier ("buy"). The make or buy decision process is a common method to maintain budget control. When product manufacturing and delivery responsibility belongs primarily to the **IPT lead**, the IPT lead will often exercise creativity with available resources to get the job done and assess whether a part is more economical to buy from outside the company than to make in-house. The cost estimator plays a key role by developing a cost estimate to assess this cost, typically based on historical data. When an outside vendor provides a quote, the estimator must assess the vendor quote for realism and reasonableness. Buying from an outside vendor may be faster than in-house fabrication, and depending on program constraints, the schedule may be as or more important than cost.
 
-### Decision Drivers
-
-Beyond cost:
+:::tip Beyond CEBoK: decision drivers
+CEBoK does not list formal make-or-buy drivers. A common checklist beyond cost:
 
 - **Cost**: compare in-house fully burdened cost vs. supplier price (plus procurement overhead)
 - **Capacity**: in-house capability and available capacity
@@ -755,12 +782,14 @@ Beyond cost:
 - **Strategic sourcing**: industrial base, source diversification, government sourcing preferences
 
 **Caution**: lowest unit price does NOT always drive the decision.
+:::
 
 +++
 
 ### Cost Breakeven Analysis
 
-Simple case: make requires incremental tooling investment, but has lower per-unit cost.
+:::tip Beyond CEBoK: breakeven analysis
+CEBoK gives no breakeven formula for make-or-buy. Simple case: make requires incremental tooling investment, but has lower per-unit cost.
 
 **Breakeven quantity:**
 
@@ -773,6 +802,7 @@ $$Q_{breakeven} = \frac{\text{Incremental Tooling Cost}}{\text{Buy Price} - \tex
 - Breakeven: \$40,000 / (\$102 − \$90) = 3,333.3 units
 
 Sensitivity: if tooling rises to \$60,000, breakeven = \$60,000 / \$12 = 5,000 units.
+:::
 
 {{primer}}
 
@@ -786,10 +816,12 @@ Q: Make cost \$75/unit (no tooling investment in hand), buy \$85/unit, new tooli
 
 ### Mixed Make/Buy Strategies
 
-Programs often use mixed strategies:
+:::tip Beyond CEBoK: mixed make/buy strategies
+CEBoK does not describe mixed make/buy strategies. Programs often use them:
 - **Buy** long-lead components and COTS items, focusing in-house on **core/critical items**
 - **Allocate buy items** in the bill of materials as purchased parts (distinct cost line), **make items** go through the manufacturing cost buildup (labor, material, overhead)
 - **Sum both** at the total cost level
+:::
 
 :::check
 Q: When an item is marked "buy," how does it typically enter the cost estimate?
@@ -1015,15 +1047,15 @@ Q: A Laser Tracker tracks distance and angle to a:
   cards: String.raw`
 ## Process and Lifecycle
 Q: Hardware development cycle stages
-A: Concept/Design → Engineering & Prototyping → Production Setup → Production Run → Sustainment/Spares.
+A: (Figure-only; stages not stated in CEBoK text) Concept/Design → Engineering & Prototyping → Production Setup → Production Run → Sustainment/Spares.
 Q: Manufacturing functional cost elements (recurring vs. non-recurring)
-A: Non-recurring: engineering, prototyping, facilities, special tooling. Recurring: production labor, material, QC.
+A: Engineering and prototyping; setup (procedures, tooling, test equipment, facilities; non-recurring or recurring functions); production run (labor, materials, support labor, overheads; primarily recurring, may include some non-recurring or semi-recurring).
 Q: Why are prototype/engineering unit hours excluded from production learning curves?
-A: Prototypes are hand-built with design changes and rework, not process-representative of repetitive production; including them distorts T1 and slope.
+A: Prototype manufacturing is frequently thought of as a laboratory environment with considerable engineering oversight and analysis, much different than a full-rate or limited-rate production environment, so it must be considered separately in the estimate.
 Q: Manufacturing operations sequence (CEBoK)
-A: Receiving → Tool crib → Machining → Sub-assembly area → Assembly → Finishing → Shipping (to next higher level of integration).
+A: Typical operations: Receiving, Tool crib, Machining, Sub-assembly area, Assembly, Finishing, Shipping (to next higher level of integration or customer distribution center).
 Q: What is the key difference between prototype and production unit labor?
-A: Prototypes are engineering-driven with rework; production is repetitive and standardized (learning applies to production only).
+A: Prototype manufacturing is a laboratory environment (frequently thought of as such) with considerable engineering oversight and analysis, much different than a full-rate or limited-rate production environment, so it must be considered separately in the estimate.
 Q: What does each CEBoK prototype model confirm (XDM, ADM, EDM, PPM)?
 A: XDM: cardinal system concepts. ADM: form, fit, and function of modules and subsystems. EDM: reliability, maintainability, etc. PPM: producibility of design.
 Q: Typical step-up factor range between prototype tiers (ADM->EDM, EDM->production)
@@ -1053,23 +1085,23 @@ A: Soft tooling = one-time-use prototype tooling (e.g., silicone-injected molds)
 Q: Tool/equipment recapitalization cycle
 A: Computer workstations ~3-5 years; mechanical crane assemblies ~10 years.
 Q: IPT
-A: Integrated Product Team: interdisciplinary team for review/decision-making in complex programs; make-or-buy decision typically falls to the IPT lead.
+A: Integrated Product Team: interdisciplinary team for review/decision-making in complex programs; when manufacturing and delivery responsibility is primarily the IPT lead's, the IPT lead often makes the make-or-buy assessment.
 R: yes
 
 ## Labor Rates and Burdening
 Q: Burdening structure (order and base)
-A: Direct Labor → + Fringe (% of DL) → + Overhead (% of L+F) → + G&A (% of total cost) → + Fee (% of total).
+A: (Beyond CEBoK convention) Direct Labor → + Fringe (% of DL) → + Overhead (% of L+F) → + G&A (% of total cost) → + Fee (% of total).
 Q: What is a "fully burdened rate" or "wrap rate"?
 A: The cost per hour of labor charged to a program, including all burdens (fringe, overhead, G&A, fee).
 R: yes
 Q: DL \$40/hr, overhead 110%, G&A 12%, fee 8%. Wrap rate?
 A: 40 × (1 + 1.10) × (1 + 0.12) × (1 + 0.08) = 40 × 2.10 × 1.12 × 1.08 ≈ \$101.61
 Q: Why does each burden % apply to a different base?
-A: Burdens are compounded sequentially; fringe is on direct labor, overhead is on labor+fringe, G&A is on total cost. Applying all to direct labor is incorrect.
+A: (Beyond CEBoK convention) Burdens are compounded sequentially; fringe is on direct labor, overhead is on labor+fringe, G&A is on total cost. Applying all to direct labor is incorrect.
 Q: Approximate fringe rate as % of direct salary
 A: About 50% of direct salary cost, heavily influenced by union benefit packages (health care, pension).
 Q: What is an FPRA?
-A: Forward Pricing Rate Agreement (FAR 15.801): pre-negotiated labor and indirect rates/factors made available for a specified period, used in contractor proposal pricing.
+A: Forward Pricing Rate Agreement (FAR 15.801): written agreement between contractor and government making certain rates and factors available for a specified period for use in pricing contracts or modifications.
 R: yes
 Q: FPRA vs. FPA
 A: FPRA covers rates/factors not easily tied to a specific contract/task. FPA sets a pricing methodology with a large-volume contractor that can determine a complete final order price (e.g., spares).
@@ -1077,8 +1109,6 @@ Q: Two companies bidding the same total price can still differ in what metric (F
 A: Fully burdened (wrap) rate — Company B's wrap rate was 20% lower than Company A's despite an identical bid.
 Q: Organized labor / 24-hour operations considerations
 A: Union rates/benefits may differ from corporate-wide rates; 24-hour operations generally require a labor premium under labor law; state-specific laws also apply.
-Q: Direct labor rate escalation is covered in which module?
-A: Module 5 (Escalation).
 
 ## Composite Rates
 Q: Composite (blended) labor rate formula
@@ -1087,9 +1117,9 @@ R: yes
 Q: CEBoK Fig. 11.4 composite vs. unweighted average rate
 A: Composite = \$31.25/hr (weighted); unweighted average of the four rates = \$36.25 (CEBoK states \$36); composite is lower because junior engineers logged more hours.
 Q: When is a composite rate used?
-A: When a program has multiple labor categories (assembler, machinist, engineer, inspector, etc.) with different rates and the skill mix is expected to remain stable.
+A: When the skill mix (relative mix of junior/senior artisans for a task) requires a single labor rate: use the weighted average of the junior/senior artisan rates. The estimator must determine the appropriate skill mix; skill mix by analogy is an excellent comparison method.
 Q: Effect of skill mix shift on composite rate
-A: Shift toward higher-skill labor raises the composite rate even if individual rates stay the same.
+A: (Beyond CEBoK) Shift toward higher-skill labor raises the composite rate even if individual rates stay the same.
 
 ## Time Standards
 Q: Time standard definition
@@ -1104,7 +1134,7 @@ Q: PF&D
 A: Personal, Fatigue, and Delay allowance; can run as high as 25%.
 R: yes
 Q: Pace factor
-A: Rating of worker speed vs. normal: 90% = slower, 100% = normal, 110% = faster; usually set by an industrial engineer.
+A: Rating of worker speed vs. normal: 90% = slower, 100% = normal, 110% = faster; should correct to a speed at which any trained employee could complete the task; normally calculated and determined by an industrial engineer.
 R: yes
 Q: Beyond CEBoK: multiplicative allowance convention
 A: Some systems (MTM, MOST) use Standard Time = Measured × Pace × (1 + Allowance) instead of dividing by (1 − Allowance); gives a different result for the same stated %, e.g. 25% is ×1.25 vs ÷0.75 (×1.333).
@@ -1119,13 +1149,13 @@ R: yes
 Q: Estimated actual hours (divisor convention): standard = 2.5 hr, efficiency = 0.83
 A: 2.5 / 0.83 = 3.01 hours (workers 20% slower than standard).
 Q: Relationship between realization factor and learning curves
-A: Standards are roughly the mature/steady-state production rate; realization/efficiency factors model early inefficiency; learning curves model the transition to the standard.
+A: The estimator must know what unit the standards were developed at, since the unit likely affects the time to do the work (not absolute, but implicit in learning theory); FE and FR may be closely related to the pace term.
 
 ## Learning in Manufacturing
 Q: Which recurring manufacturing costs follow learning curves?
-A: Touch labor (assembly, fabrication); NOT material (fixed per unit), NOT non-recurring (setup, tooling), NOT support labor (gets no separate curve; when factored off touch labor it follows touch labor).
+A: The learning curve captures the decreasing cost required to accomplish any repetitive operation as the operation continues; its genesis and purest application is in manufacturing. Analysts should always investigate repetitive manufacturing processes for the presence of learning.
 Q: Why does material cost NOT follow learning curves?
-A: Material consumption is a physical/engineering quantity (part requires the same raw material regardless of repetition); scrap may improve but this is separate from the learning curve mechanism.
+A: (Beyond CEBoK) Material consumption is a physical/engineering quantity (part requires the same raw material regardless of repetition); scrap may improve but this is separate from the learning curve mechanism.
 Q: Major vs. minor assembly example
 A: Major: final integration of a fighter jet airframe. Minor: a bomber's auxiliary power unit subsystem assembly (much lower integration cost).
 Q: P3I
@@ -1134,20 +1164,20 @@ R: yes
 Q: Three approaches to a mid-run anomaly (e.g., new environmental regulation)
 A: (1) treat post-imposition units as a separate production run with a new curve; (2) normalize the new units' data and continue the same curve; (3) treat the added steps as new work with a second overlapping curve.
 Q: Production break effects on learning
-A: Long breaks can cause complete loss of learning (turnover, process drift, unavailable machines/materials); short breaks may allow continuation.
+A: If a production break is for a considerable amount of time, needed machines, materials, or parts may no longer be available; Fig. 11.6 shows a break that caused a complete loss of learning.
 Q: Rate theory equation
-A: $Y = aX^b R^c$, where R = production rate and c is regression coefficient; watch for multicollinearity between X and R.
+A: (Beyond CEBoK; Module 7 carry-over) $Y = aX^b R^c$, where R = production rate and c is regression coefficient; watch for multicollinearity between X and R.
 R: yes
 Q: New work added mid-production (equation)
-A: $Y_X = a_1 X^{b_1} + a_2(X - X_{last})^{b_2}$ (new component starts its own curve).
+A: (Beyond CEBoK; Module 7 carry-over) $Y_X = a_1 X^{b_1} + a_2(X - X_{last})^{b_2}$ (new component starts its own curve).
 
 ## Material Cost Estimating
 Q: Three categories of manufacturing materials
-A: Raw materials (e.g., steel hull plates), purchased parts (e.g., doors/hatches), subcontracted items (major assemblies, determined by make/buy).
+A: Raw materials (e.g., steel hull plates), purchased parts (e.g., doors/hatches), subcontractor costs (external company producing a product or performing a service, e.g., power plant or armament subcontract; determined by make/buy analysis).
 Q: Long-lead material examples
 A: Ship propulsion system, specialized satellite chips/boards, specialized IT servers/processors.
 Q: Challenges of exotic/composite materials (cost estimating)
-A: Higher raw cost, harder to machine (tool wear, scrap), longer lead times; must adjust labor/tooling standards, not borrow from metal-fabrication analogs.
+A: Exotic materials: special handling, very expensive; high-performance materials (titanium) cost more than low-performing (aluminum) and are costlier to manufacture; material defects are very costly. Composites: near-final shape with little rework or machining, increasing the importance of tooling versus metal parts.
 Q: Scrap rate / MUA definition
 A: Scrap expressed as a % of the delivered (end-item) material, not the raw input — CEBoK compares this to the fee-vs-margin distinction. On government contracts called Material Usage Allowance (MUA).
 R: yes
@@ -1161,25 +1191,25 @@ R: yes
 Q: Fig. 11.9 design-vs-scrap example
 A: 4" plate machined to 3" cover = most machining/scrap; 3" plate to same cover = less; square plate needing no machining = no scrap, most cost-effective.
 Q: Material cost and learning curves (relationship)
-A: Material cost generally does NOT follow learning curves; consumption per unit is constant (physical quantity); bulk discounts are separate.
+A: (Beyond CEBoK) Material cost generally does NOT follow learning curves; consumption per unit is constant (physical quantity); bulk discounts are separate.
 Q: Testable Topics per CEBoK for this module
 A: All main content is testable; less-emphasized topics N/A; the Related & Advanced Topics section is explicitly not testable.
 
 ## Make-or-Buy
 Q: Make-or-buy decision: what is it?
-A: Choosing whether to produce a component/subassembly in-house or purchase from a supplier; typically the IPT lead's call.
+A: Choosing whether to produce a component/subassembly in-house or purchase from a supplier; a common method to maintain budget control. When manufacturing and delivery responsibility is primarily the IPT lead's, the IPT lead often makes this assessment.
 R: yes
 Q: Key decision drivers for make-or-buy
-A: Cost (fully burdened in-house vs. supplier quote), capacity, core competency, quality/schedule risk, sunk tooling/facility investment, strategic sourcing.
+A: The estimator develops an in-house cost estimate (typically from historical data) and assesses any vendor quote for realism and reasonableness; buying may be faster than in-house fabrication, and schedule may be as or more important than cost.
 Q: Breakeven quantity formula (make-or-buy)
-A: Q = Incremental Tooling Cost / (Buy Price − Make Cost/Unit)
+A: (Beyond CEBoK) Q = Incremental Tooling Cost / (Buy Price − Make Cost/Unit)
 R: yes
 Q: Incremental tooling \$40,000, buy price \$102, make cost \$90/unit: breakeven?
-A: 40,000 / (102 − 90) = 3,333 units; above this, make is cheaper; below, buy is cheaper.
+A: (Beyond CEBoK) 40,000 / (102 − 90) = 3,333 units; above this, make is cheaper; below, buy is cheaper.
 Q: Why is lowest unit price not always the make-or-buy driver?
-A: Capacity, core competency, risk, and sunk investment considerations often outweigh pure unit cost.
+A: Schedule may be as or more important than cost; buying from a vendor may be faster than in-house fabrication.
 Q: In a mixed make-buy program, how are costs combined?
-A: Buy items → purchased part cost line from supplier quote; make items → full labor/material/overhead buildup; sum both at total cost level.
+A: (Beyond CEBoK) Buy items → purchased part cost line from supplier quote; make items → full labor/material/overhead buildup; sum both at total cost level.
 
 ## Advanced Topics (not testable per CEBoK)
 Q: DD Form 1921-1

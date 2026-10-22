@@ -1,9 +1,9 @@
 PCEA.addModule({
   id: 'm14', num: 14, title: 'Contract Pricing', short: 'Contract Pricing', source: 'guide',
   blurb: 'Contract types allocate cost risk; FPIF and CPIF use share ratios and PTA/RIE; proposals rest on a traceable BOE.',
-  intro: String.raw`Contract pricing is the **negotiated agreement** on price and payment method between buyer and seller. It flows downstream of cost estimation (Modules 1-13): once an independent estimate exists, it becomes the basis for a **cost proposal** and **basis of estimate**, which are evaluated and negotiated into a contract with a specific **contract type** that allocates risk.
+  intro: String.raw`Contract pricing establishes a **fair and reasonable price** for the effort. It flows downstream of cost estimation (Modules 1-13): once an independent estimate exists, it becomes the basis for a **cost proposal** and **basis of estimate**, which are evaluated and negotiated into a contract with a specific **contract type** that allocates risk.
 
-**Core principle:** the **contract type** (Firm Fixed Price, FPIF, CPIF, CPFF, etc.) determines how cost growth is shared and who bears the risk, via a **shareline** - a piecewise-linear function that changes slope at one or more points. The **proposal and BOE** document the rationale for the price. **Price and cost analysis** verify fairness.`,
+**Core principle:** the **contract type** (Firm Fixed Price, FPIF, CPIF, CPFF, etc.) determines how cost growth is shared and who bears the risk, via a **shareline** - the line (a piecewise linear function, which changes its slope at one or more points) reflecting the sharing of risk between the government and the contractor. The **proposal and BOE** document the rationale for the price. **Price and cost analysis** verify fairness.`,
   sections: [
     {
       id: 'overview', title: 'Basics of contract pricing', summary: 'Acquisition process, purpose, evaluation',
@@ -31,10 +31,10 @@ The path from need to contract award spans:
 2. **Acquisition planning** - strategy, contract type selection
 3. **Solicitation** (RFP/RFQ) - request for proposals
 4. **Proposal preparation** - contractor builds cost/price proposal with BOE
-5. **Proposal evaluation** - government does technical, cost/price, and past-performance review
+5. **Proposal evaluation** - government does technical, cost, and schedule evaluation, including the comparative analysis
 6. **Negotiation** - parties reach agreement
 7. **Contract award** - terms and price become binding
-8. **Administration** - performance tracking, especially critical for cost and incentive contracts
+8. **Administration** - after award, cost support continues: actuals vs. estimate, updating the baseline, pricing contract modifications
 
 Cost estimators work **both sides**: contractors build proposals; government builds the **Independent Government Cost Estimate (IGCE)** and evaluates.
 
@@ -89,7 +89,7 @@ buckets: Fixed-price | Cost-reimbursement
 
 +++
 
-Contracting rests on **commensurate risk and reward**: the more difficult and riskier the work, the greater the expected profit, tempered by more uncertainty in the outcome. FAR Part 16 defines a **spectrum of contract types**, differentiated by how cost risk is allocated. Contract type is the **primary mechanism** for managing that risk.
+Contracting rests on **commensurate risk and reward**: the more difficult and riskier the work, the greater the expected profit, tempered by considerable uncertainty in outcomes. FAR Part 16 defines a **spectrum of contract types**, differentiated by how cost risk is allocated. Contract types vary by the degree and timing of cost responsibility assumed by the contractor and the profit incentive offered.
 
 The two broad categories are **fixed-price** contracts (price is determined first, then cost is subtracted, resulting in profit - which may be negative) and **cost-reimbursement** contracts (the government reimburses total allowable cost, to which a determined fee is added to result in price).
 
@@ -119,7 +119,7 @@ $$\text{Margin \%} = \frac{\text{Fee \%}}{1 + \text{Fee \%}} \qquad \text{Fee \%
 | **Cost Plus Fixed Fee (CPFF)** | Low | High | Fixed dollar fee; essentially a 100/0 shareline | High uncertainty (R&D, basic research) |
 | **Time & Materials (T&M) / Labor Hour (LH)** | Low | High | Built-in labor rates + materials; no cost-control incentive | Scope/duration can't be estimated |
 
-**General rule:** as requirements/cost uncertainty increase, contract type moves **from fixed-price toward cost-reimbursement**, shifting risk from contractor to government. The contractor earns a **risk premium** (higher profit) for bearing more risk.
+**General rule:** as requirements/cost uncertainty increase, contract type moves **from fixed-price toward cost-reimbursement**, shifting risk from contractor to government. This reflects **commensurate risk and reward**: more risk, greater expectation of profit, tempered by considerable uncertainty in outcomes.
 
 {{primer}}
 
@@ -127,13 +127,13 @@ $$\text{Margin \%} = \frac{\text{Fee \%}}{1 + \text{Fee \%}} \qquad \text{Fee \%
 
 ### Other contract vehicles
 
-- **FPI Successive Targets**: specifies a target cost, target profit, shareline(s), a *production point* at which firm targets will later be negotiated, and a ceiling price. Becomes an FFP or FPIF contract once that point is reached. Used when cost/pricing data is insufficient to set a firm target cost before award but will exist afterward.
-- **Indefinite delivery contracts** (used when exact quantities/timing of future deliveries are unknown): **definite quantity** (a set amount for a fixed period), **requirements** (fills all actual needs of designated activities during a period, with min/max quantities), and **Indefinite Delivery/Indefinite Quantity (IDIQ)** (a flexible number within stated limits). Work is issued via **delivery orders** (supplies) or **task orders** (performance of tasks); FFP task orders are common.
-- **Letter contracts**: preliminary written instruments authorizing immediate work when a binding commitment is needed and there isn't time to negotiate a definitive contract first. The authorized amount **must not exceed 50% of the estimated cost of the definitive contract**.
+- **FPI Successive Targets**: specifies a target cost, target profit, shareline(s), a *production point* at which firm targets will later be negotiated, and a ceiling price. Becomes either an FFP (if appropriate) or an FPIF contract once that point is reached (usually before delivery or shop completion of the first item). Used when cost/pricing data is insufficient to set a firm target cost before award but will exist afterward.
+- **Indefinite delivery contracts** (used when exact quantities/timing of future deliveries are unknown): **definite quantity** (a set amount for a fixed period), **requirements** (fills all actual purchase needs of designated government activities during a specified period; the contract may also specify maximum or minimum order quantities), and **Indefinite Delivery/Indefinite Quantity (IDIQ)** (a flexible number within stated limits). Work is issued via **delivery orders** (supplies) or **task orders** (performance of tasks); FFP task orders are common.
+- **Letter contracts**: preliminary written instruments authorizing immediate work when a binding commitment is needed and there isn't time to negotiate a definitive contract first. The authorization should anticipate the estimated amount necessary to cover the contractor's requirements for funds before definitization and **should not exceed 50% of the estimated cost of the definitive contract**.
 
 ### The share ratio
 
-Written **Government/Contractor**, e.g., **80/20**: for each dollar of cost overrun above target, the government pays 80 cents and the contractor absorbs 20 cents (profit falls by that amount); for each dollar of underrun, the contractor gains 20 cents in profit while the government saves 80 cents. The government's share is listed first and is usually the larger of the two. **This ratio is live** until a cap (ceiling in FPIF, min/max fee in CPIF) is hit.
+Written **Government/Contractor**, e.g., **80/20**: for each dollar of cost overrun above target, the government pays 80 cents and the contractor absorbs 20 cents (profit falls by that amount); for each dollar of underrun, the contractor gains 20 cents in profit while the government saves 80 cents. The government's share is **always** listed first and is usually the larger of the two. **This ratio is live** until a cap (ceiling in FPIF, min/max fee in CPIF) is hit.
 
 **Choosing a share ratio**: a more conservative ratio (e.g., **90/10**) is appropriate for high-risk programs; a more aggressive ratio (e.g., **50/50**) gives the contractor maximum incentive to control cost. A contract can use **multiple share ratios** - one for underruns, a different one for overruns.
 
@@ -187,7 +187,7 @@ buckets: Above target profit | Below target profit
 
 +++
 
-FPIF contracts set a **target cost (TC)**, **target profit (TP)**, a **ceiling price (CP)**, and a **share ratio**. Cost performance is shared via the ratio up to the ceiling; beyond the ceiling, the contractor absorbs 100% of further growth (the contract effectively becomes FFP at that point).
+FPIF contracts set a **target cost (TC)**, **target profit (TP)**, a **ceiling price (CP)**, and a **share ratio**. An FPIF has a price ceiling but not a profit ceiling or floor. Cost performance is shared via the ratio up to the Point of Total Assumption (where price equals the ceiling price); at the PTA the contractor assumes responsibility for all additional costs and the contract converts to an FFP.
 
 ### FPIF elements
 
@@ -266,6 +266,8 @@ All three scenarios share: TC = \$90M, TP = "10%" of TC = \$9M (so target price 
 
 **Scenario 3 - overrun beyond PTA, FC = \$105M** (PTA = \$102.86M): price is capped at the ceiling, \$108M. $AP = FP - FC = 108 - 105 = \$3M$ (equivalently, $AP = TP + S(TC - PTA) - (FC - PTA) = 9 + 0.30(90 - 102.86) - (105 - 102.86) = 9 - 3.86 - 2.14 = \$3M$).
 
+**Scenario 4 - final cost exceeds the price ceiling:** the contractor's adjusted profit is a loss equal to the final cost minus the price ceiling. (CEBoK gives no figure-based example; Figure 14.8 covers scenarios 1-3.)
+
 {{primer}}
 
 :::note Source note
@@ -309,15 +311,19 @@ buckets: FPIF | CPIF
 
 +++
 
-Cost-reimbursement contracts reimburse the contractor's **allowable, allocable, reasonable costs** (per FAR Part 31) plus a **fee**. They require an adequate contractor accounting system plus government surveillance, and are used when uncertainty is too high for fixed-price.
+Cost-reimbursement contracts provide for payment of **allowable incurred costs** plus a **fee**, with an estimate of total cost to obligate funds and a ceiling the contractor may not exceed except at its own risk and without the contracting officer's approval. They are suitable **only** when uncertainties inhibit costs from being estimated with sufficient accuracy to use any fixed-price contract, and only if the contractor's accounting system is adequate for determining costs applicable to the contract and government surveillance gives reasonable assurance that efficient methods and effective cost controls are used.
+
+:::tip Beyond CEBoK
+Allowability, allocability, and reasonableness of costs are judged under FAR Part 31 cost principles. CEBoK's text does not cite Part 31 here.
+:::
 
 ### CPFF (Cost Plus Fixed Fee)
 
 - Contractor paid: **all allowable costs + a fixed fee in dollars** (set at award; a function of TC at negotiation, e.g., 10% of cost)
 - Fee stays the same even if costs overrun, so **fee percentage falls** with overruns; it does not vary with actual cost, though it may be adjusted if the *scope* of work changes
 - Government covers all costs regardless of overrun - essentially a **100/0 shareline**
-- **Minimal cost-control incentive** for the contractor - though a *goodwill* risk exists: chronic overruns erode the relationship and can cost the contractor future business
-- Used for high-risk work (basic R&D, early development, one-of-a-kind) when CPIF is not practical and objective incentive targets cannot yet be set
+- **Minimal cost-control incentive** for the contractor - though a *goodwill* risk exists: a cost plus program that overruns substantially erodes the relationship with the government and the public; consequences range from conversion to fixed price for future production units to loss of future business
+- Used for research or preliminary exploration and study (not development of major systems) when CPIF is not practical, and when uncertainties involved in contract performance do not allow the vendor to estimate costs with a high degree of accuracy
 - **Fee limits** (FAR 15.404-4): **R&D 15%**, **Production & Services (non-R&D) 10%**, **Architecture/Engineering 6%**. A fixed fee is a **fixed dollar amount** - the FAR specifically **prohibits a fixed-percentage fee**.
 - At target cost, revenue (ROS) is the same 9.09% as the FFP base case (\$1M fee / \$11M price); as the contractor overruns, price rises dollar-for-dollar with cost but revenue *declines* (fixed fee over a growing price)
 
@@ -388,8 +394,13 @@ Q: Can a CPFF fee be structured as a fixed percentage of actual (not target) cos
 
 ### CPAF (Cost Plus Award Fee)
 
-- Contractor paid: **allowable costs + base fee + award fee**, where award fee is determined **subjectively** by a government Award Fee Board incentivizing cost, schedule, and technical performance, evaluated on a percent scale against criteria in an Award Fee Plan
-- Chosen when uncertainty makes it hard to forecast costs *and* performance is hard to measure with objective, formula-driven metrics
+- Contractor paid: **allowable costs + earned award fee**, where the award fee is determined by a **subjective** (judgmental) government evaluation, on a percent scale, of cost, schedule, and technical performance (or a combination of the three); CPAF incentivizes cost, delivery (schedule), and performance
+- Chosen due to uncertainties that inhibit the ability to forecast costs
+- The final price equals the final cost plus the earned award fee
+
+:::tip Beyond CEBoK
+In practice, CPAF contracts often also include a base fee, and an Award Fee Board evaluates performance against criteria in an Award Fee Plan. CEBoK's text does not name these.
+:::
 - The ceiling here is a **cost ceiling** (not a price ceiling as in FPIF): the government covers costs up to that ceiling, no more
 
 **CEBoK's CPAF worked example**: TC = \$90M, potential award fee (TP) = 10% = \$9M, cost ceiling = \$108M. The same \$8.2M award fee is carried through all three scenarios for consistency.
@@ -401,7 +412,7 @@ Q: Can a CPFF fee be structured as a fixed percentage of actual (not target) cos
 - **Scenario 3, FC = \$115M**, which **exceeds the \$108M cost ceiling**: the government pays only up to the ceiling, so price = ceiling + fee = 108 + 8.2 = **\$116.2M**. Contractor profit is reduced by \$7M (the overrun above the ceiling that the government does not cover) to only **\$1.2M**.
 
 :::note Source figure discrepancy
-Figure 14.9's box for Scenario 3 shows \$115M + \$8.2M = \$123.2M, but the text's own math (price capped at the \$108M ceiling) supersedes the figure - cost above the ceiling requires written government authorization and is otherwise the contractor's loss.
+Figure 14.9's box for Scenario 3 shows \$115M + \$8.2M = \$123.2M, but the text's own math (price capped at the \$108M ceiling) supersedes the figure - the government covers costs up to the cost ceiling, but none above.
 :::
 
 +++
@@ -409,9 +420,9 @@ Figure 14.9's box for Scenario 3 shows \$115M + \$8.2M = \$123.2M, but the text'
 :::check
 Q: CPAF differs from CPIF in that the fee adjustment is...
 - Calculated by a formula
-* Determined subjectively by an award board
+* Determined subjectively through a judgmental government evaluation
 - Fixed in dollars
-> CPIF uses a formula (share ratio); CPAF uses subjective evaluation against an Award Fee Plan.
+> CPIF uses a formula (share ratio); CPAF uses a subjective, judgmental government evaluation.
 :::
 
 :::check
@@ -465,7 +476,11 @@ Reference the RFP's Section L (Instructions to Offerors) for page-count and incl
 
 ### Level of detail
 
-BOE detail must be **proportional to** the element's dollar value and risk/uncertainty. Driving to a lower level of detail can seem more credible but the data to support it is often unavailable - strike the right balance and obey the RFP.
+Teams are tempted to drive to a lower level of detail than required; it seems to increase credibility by showing familiarity with the program, but data is rarely available at that level. Strike the right balance for a fair estimate and obey the RFP (BOEs are written at the level of detail determined by the SOW).
+
+:::tip Beyond CEBoK
+A common rule of thumb is to put the most BOE detail where dollar value and risk are highest. CEBoK does not state this.
+:::
 
 +++
 
@@ -479,7 +494,7 @@ Some BOE authors default to analogies even for Other Direct Costs (ODCs), which 
 
 ### Estimating Methodologies
 
-Proposal BOEs use the estimating methods from earlier modules: **analogy, parametric (CER), and engineering (build-up)** are the three essential methods (Module 2); a fourth, **standard cost models**, refers to commercial cost models. Other methods (less preferred): **company standard bidding systems** (may need contracting-entity certification), **expert opinion**, and **commercial/catalog/market price**. Use anything else only in the most unusual circumstances.
+Proposal BOEs use the estimating methods from earlier modules: **analogy, parametric (CER), and engineering (build-up)** are the three essential methods (Module 2); a fourth, **standard cost models**, refers to commercial cost models. Other possible methods: **company standard bidding systems** (would generally require some certification by the contracting entity), **expert opinion** (explicitly a less-preferred method), and **commercial price** (a catalog price, a market price, or determined by other methods). Use other methodologies only in the most unusual circumstances when none of the standard methodologies applies.
 
 ### The Three Equations of the Basis of Estimate
 
@@ -505,16 +520,16 @@ Labor BOEs frequently stay in hours, with dollarization happening later in prici
 
 The FAR (Section 2.1) defines cost or pricing data as more than historical accounting data: *"all the facts that can be reasonably expected to contribute to the soundness of estimates of future costs and the validity of determinations of costs already incurred."*
 
-**Estimate quality**: the right content (matching the technical baseline and WBS), accepted methodologies, historical data, appropriate statistics, CERs with the best available fit. The estimate should be **unbiased** (neither overly optimistic nor conservative), **comprehensive** (nothing left out) but **not redundant**, with documented ground rules/assumptions, and **replicable** - the best cross-check for documentation.
+**Estimate quality**: the right content (matching the technical baseline and WBS), accepted methodologies, historical data, appropriate statistics, CERs with the best available fit. The estimate should be **unbiased** (neither overly optimistic nor conservative) and a reasonable assessment of most likely cost, **comprehensive** (nothing left out) but **not redundant**, with documented ground rules/assumptions, and **replicable** - the best cross-check for documentation.
 
 **Estimate validity**: cross-check results across methodologies (e.g., validate a parametric estimate with an analogy) - the numbers need not match exactly but should be the same order of magnitude. Include more information rather than less, attach (don't merely cite) supporting studies, and show all work.
 
 :::check
-Q: Which element typically requires the most detailed BOE support?
-- Small purchases
-- Administrative overhead
-* High-dollar, high-risk elements
-> Detail is proportional to dollar value and risk. Effort goes where it matters most.
+Q: A BOE team is tempted to drive to a lower level of detail than required. What does CEBoK advise?
+- Always go to the lowest level; more detail always adds credibility
+* Strike the right balance for a fair estimate and obey the RFP
+- Ignore the RFP and follow company practice
+> Extra detail seems to increase credibility, but data is rarely available at that lower level. Strike the right balance and obey the RFP.
 :::
 
 :::check
@@ -548,10 +563,9 @@ Government evaluators can look at a proposal's bottom line only, or open up ever
 Q: Does each description fit price analysis or cost analysis?
 buckets: Price analysis | Cost analysis
 - Evaluates the total price without examining separate cost elements = Price analysis
-- Used when adequate price competition exists = Price analysis
+- Used where cost justification is not included in the proposal = Price analysis
 - Evaluates labor hours, rates, material, overhead, G&A, and profit = Cost analysis
-- Verifies reasonableness, allocability, and allowability under FAR Part 31 = Cost analysis
-> Price analysis looks at total price, typically under adequate competition. Cost analysis evaluates the individual cost elements and is required when adequate competition is absent or certified data was obtained.
+> Price analysis looks at total price, used where cost justification is not included, without evaluating lower-level cost and profit elements. Cost analysis evaluates the individual cost elements.
 :::
 
 +++
@@ -560,15 +574,14 @@ buckets: Price analysis | Cost analysis
 
 **Price Analysis:**
 - Evaluate the **total price** without examining separate cost elements
-- Used when **adequate price competition** exists, or where cost justification simply was not submitted as part of the proposal
-- Compare to: competing proposals, prior prices for similar items, published market indices, or parametric models
+- Conducted on proposals where **cost justification is not included** as part of the documentation; the price is evaluated without evaluating the lower-level cost and profit elements
 
 **Cost Analysis:**
 - Evaluate the **individual cost elements** (labor hours, rates, material, overhead, G&A, profit)
-- Required when adequate competition does not exist, or certified cost or pricing data has been obtained
-- Verifies reasonableness, allocability, and allowability under FAR Part 31 cost principles
 
-**Cost Realism** (for cost-type contracts): is the proposed cost realistic for the work described? Government may adjust the proposed cost to a **most probable cost** for evaluation purposes.
+:::tip Beyond CEBoK
+Price analysis is typically used when adequate price competition exists, comparing against competing proposals, prior prices for similar items, or published market indices. Cost analysis is typically required when adequate competition does not exist or certified cost or pricing data has been obtained, and checks reasonableness, allocability, and allowability under FAR Part 31 cost principles. Cost realism (for cost-type contracts) adjusts proposed cost to a most probable cost for evaluation. CEBoK's text does not cover these triggers.
+:::
 
 {{primer}}
 
@@ -579,7 +592,7 @@ buckets: Price analysis | Cost analysis
 The primary purpose of a cost/price comparative analysis is to evaluate proposals for reasonableness and provide an objective basis for comparison - it also supports decisions like **Cost As an Independent Variable (CAIV)** or **Cost/Benefit Analysis (CBA)**, and helps quantify program risk for negotiation and long-range planning. CEBoK defines **four** steps:
 
 1. **Technical Understanding**: what is the proposal for (initial development, re-plan, added requirements, extension)? How does it relate to program history? How will it affect scheduled work? The analyst is not the systems engineer but cannot ignore technical scope.
-2. **BOE Review**: verify data, methodology, calculations, and assumptions using the 5W+H (see the Proposal section), watching for common errors (below).
+2. **BOE Review**: ask Who is submitting the proposal/estimate, What is being proposed, When the work will be done (ensure the historical data has been escalated), Why the data is being used, and How the data was adjusted or normalized; then check for common errors (below).
 3. **Independent Assessment**: the analyst builds an **Independent Cost Estimate (ICE)** of the same solution, or an **Independent Cost Assessment (ICA)** of the differences between competing proposals. If a different method reaches the **same answer**, treat that agreement as a **strong cross-check**.
 4. **Comparative Analysis**: summarize and document assumptions, resources, and results for both sides; identify and explain **each delta over a predetermined threshold (e.g., 20%)**. Key questions: are the big differences explainable (e.g., comparable software development scope)? Do both estimates contain the same cost elements? Are underlying assumptions different, and why?
 
@@ -612,7 +625,7 @@ Q: Price analysis is conducted on proposals where...
 * Cost justification was not submitted as part of the documentation
 - The government wants a faster review regardless of documentation
 - Certified cost or pricing data has been obtained
-> Price analysis evaluates total price without inspecting lower-level cost/profit elements - appropriate when no cost breakdown was submitted (often because of adequate competition).
+> Price analysis evaluates total price without inspecting lower-level cost/profit elements - appropriate when cost justification is not included in the proposal documentation.
 :::
 
 :::check
@@ -678,7 +691,7 @@ buckets: Testable | Not testable
 - Types of contracts (names and basics of each one) = Testable
 - Computing FPIF adjusted profit and PTA, or CPIF adjusted fee and RIE = Testable
 - Anything specific about the FAR unless otherwise noted = Not testable
-> The table marks contract types and profit/loss calculations as testable. Anything specific about the FAR is not testable unless a number is explicitly called out elsewhere in the module.
+> The table marks contract types and profit/loss calculations as testable. Anything specific about the FAR is not testable unless otherwise noted.
 :::
 
 +++
@@ -691,7 +704,7 @@ CEBoK publishes an explicit testable-topics table for this module:
 | Understanding balance of risk/reward in each contract type | | Names of US government organizations and their roles |
 | Calculating vendor profit (loss) in various scenarios | | |
 
-In short: know the contract types (FFP through CPFF and their variants), how each allocates risk and reward, and how to compute contractor profit/loss under a given scenario (FPIF's adjusted profit and PTA, CPIF's adjusted fee and RIE, CPAF's award-fee mechanics). The Basis of Estimate is tested, but less heavily than the contract-type math. Specific FAR citations (thresholds, section numbers) and the names/roles of government organizations (NCCA, CAIG, DCAA, etc.) are background reading, not exam content, unless a specific number is explicitly called out elsewhere in this module (e.g., the CPFF fee caps, the letter-contract 50% rule).
+In short: know the contract types (FFP through CPFF and their variants), how each allocates risk and reward, and how to compute contractor profit/loss under a given scenario (FPIF's adjusted profit and PTA, CPIF's adjusted fee and RIE, CPAF's award-fee mechanics). The Basis of Estimate is tested, but less heavily than the contract-type math. Anything specific about the FAR (unless otherwise noted) and anything relating to the names of US government organizations and their roles are not testable.
 
 {{primer}}
 
@@ -700,7 +713,7 @@ Q: Per CEBoK's testable-topics table for this module, which is explicitly called
 - Calculating vendor profit or loss in a given scenario
 - The balance of risk and reward across contract types
 * The names and roles of specific US government organizations
-> Contract type names/mechanics and profit/loss calculations are core testable material; org names and general FAR trivia are not, unless a number is specifically called out (like the CPFF fee caps).
+> Contract type names/mechanics and profit/loss calculations are core testable material; org names and FAR specifics are not, unless otherwise noted.
 :::
 
 :::check
@@ -741,7 +754,7 @@ Per FAR 15.204: *"The use of a uniform contract format facilitates the preparati
 
 ### CAS coverage exceptions
 
-Full CAS coverage originally applied to all contracts over a threshold, but exceptions now exist, including: FFP and FFP with Economic Price Adjustment for commercial items; FFP contracts awarded on adequate price competition without submitted cost/pricing data; sealed-bid contracts; negotiated contracts/subcontracts under \$650K; contracts/subcontracts with small businesses; subcontracts/contracts to a foreign concern; contracts performed entirely outside the US; contracts/subcontracts where law or regulation sets the price; contracts/subcontracts under \$7.5M (unless the contractor already performs CAS-covered contracts over \$7.5M); and NATO PHM Ship program subcontracts performed outside the US by a foreign concern.
+Full CAS coverage originally applied to all contracts over a threshold, but exceptions now exist, including: FFP and FFP with Economic Price Adjustment for commercial items (CEBoK's text reads "Economic Analysis"; the FAR term is Economic Price Adjustment); FFP contracts awarded on adequate price competition without submitted cost/pricing data; sealed-bid contracts; negotiated contracts/subcontracts under \$650K; contracts/subcontracts with small businesses; subcontracts/contracts to a foreign concern; contracts performed entirely outside the US; contracts/subcontracts where law or regulation sets the price; contracts/subcontracts under \$7.5M (unless the contractor already performs CAS-covered contracts over \$7.5M); and NATO PHM Ship program subcontracts performed outside the US by a foreign concern.
 
 +++
 
@@ -749,9 +762,9 @@ Full CAS coverage originally applied to all contracts over a threshold, but exce
 
 Plotting **profit**, **price**, and **revenue** functions for FFP, FPI, CPIF, and CPFF on the same axes shows that the two extreme types bound (form the "envelope" of) all possible outcomes:
 
-- **Profit function**: CPFF is invariant (flat); FFP rises or falls dollar-for-dollar with under/overruns. CPIF and FPI sit *between* them, parallel to CPFF at their min/max fee (or PTA) and matching FFP's slope elsewhere.
-- **Price function**: CPFF rises/falls dollar-for-dollar with cost; FFP is invariant. Again, CPIF parallels CPFF at min/max fee, FPI parallels FFP at the PTA.
-- **Revenue (ROS) function**: CPFF slowly erodes with overruns; FFP declines linearly. CPIF and FPI again sit between, matching the same parallel pattern.
+- **Profit function**: CPFF is invariant (flat); FFP rises or falls dollar-for-dollar with under/overruns. CPIF and FPI are identical between the maximum fee on the left and the minimum fee (or PTA, whichever comes first) on the right. CPIF goes parallel to CPFF at the minimum and maximum fee; FPI goes parallel to FFP at the PTA.
+- **Price function**: CPFF rises/falls dollar-for-dollar with cost; FFP is invariant. CPIF and FPI are identical between maximum fee on the left and minimum fee (or PTA, whichever comes first) on the right; CPIF goes parallel to CPFF at the minimum and maximum fee, and FPI goes parallel to FFP at the PTA.
+- **Revenue (ROS) function**: CPFF slowly erodes with overruns; FFP declines linearly. CPIF and FPI are again identical between maximum fee on the left and minimum fee (or PTA, whichever comes first) on the right, with the same parallel pattern.
 
 **Takeaway**: CPIF is CPFF with a share-ratio-driven zone in the middle (between the min and max fee); FPI is FFP with a share-ratio-driven zone in the middle (up to the PTA). Everything else is a blend that behaves like whichever bound it's closest to once outside its own incentive range.
 
@@ -837,7 +850,7 @@ A: FFP (Firm Fixed Price).
 Q: Contract type when cost is uncertain and incentive is desired
 A: FPIF or CPIF (incentive types share cost risk via a share ratio).
 Q: When is CPFF appropriate?
-A: High uncertainty (basic R&D, early development), used when CPIF is not practical and objective incentive targets can't yet be set.
+A: High uncertainty - research or preliminary exploration and study, not development of major systems - when CPIF is not practical.
 Q: Share ratio meaning (e.g., 70/30)
 A: Written Govt/Contractor: the govt absorbs 70% of each cost-growth dollar; contractor absorbs 30%.
 Q: Choosing a conservative vs. aggressive share ratio
@@ -856,14 +869,14 @@ R: yes
 Q: Incentive fee vs. award fee
 A: Incentive fee = quantitative, formula-driven; award fee = qualitative, subjectively judged.
 Q: FPI Successive Targets contract
-A: Specifies target cost/profit, shareline(s), a later production point for negotiating firm targets, and a ceiling price; becomes FFP or FPIF once negotiated.
+A: Specifies target cost/profit, shareline(s), a later production point for negotiating firm targets, and a ceiling price; becomes FFP (if appropriate) or FPIF once the production point is reached.
 R: yes
 Q: Indefinite delivery contract types
-A: Definite quantity (set amount, fixed period); Requirements (fills all actual needs of designated activities); IDIQ (flexible number within stated limits).
+A: Definite quantity (set amount, fixed period); Requirements (fills all actual purchase needs of designated government activities); IDIQ (flexible number within stated limits).
 Q: Task order vs. delivery order
 A: Delivery order = issuance of orders for delivery of supplies; task order = issuance of orders for performance of tasks. FFP task orders are common.
 Q: Letter contract dollar limit
-A: The authorized amount must not exceed 50% of the estimated cost of the definitive contract.
+A: The authorization should not exceed 50% of the estimated cost of the definitive contract.
 Q: T&M and LH contracts
 A: Time & Materials and Labor Hour; contractor bills fixed labor rates times actual hours (+ materials for T&M). No positive cost-control incentive.
 R: yes
@@ -900,6 +913,8 @@ Q: \$90M FPIF example, Scenario 3 (FC \$105M, past PTA \$102.86M): price and pro
 A: Price capped at ceiling \$108M; profit = 108 − 105 = \$3M.
 Q: No ceiling price on FPIF
 A: False; FPIF always has a ceiling price, which caps total government payment.
+Q: FPIF scenario 4: final cost exceeds price ceiling
+A: Adjusted profit is a loss equal to final cost minus price ceiling.
 
 ## CPIF and RIE
 Q: CPIF elements
@@ -937,18 +952,18 @@ A: Fixed dollar amount; the FAR specifically prohibits a fixed-percentage fee.
 Q: CPFF revenue at target cost (using the \$10M/\$1M base case)
 A: 9.09% (\$1M / \$11M) - same ratio as the FFP base case at TC.
 Q: Why does CPFF carry a "goodwill risk" despite low cost risk?
-A: Chronic overruns erode the contractor-government relationship and can cost the contractor future business, even though the fee itself is unaffected.
+A: A substantially overrunning cost plus program erodes the relationship with the government and the public; consequences range from conversion to fixed price for future production units to loss of future business.
 
 ## CPAF
 Q: CPAF (Cost Plus Award Fee)
-A: Cost + base fee + award fee, where award fee is earned via subjective evaluation by an Award Fee Board against an Award Fee Plan.
+A: Cost + earned award fee; award fee set by subjective (judgmental) government evaluation, on a percent scale.
 R: yes
 Q: What kind of ceiling does a CPAF contract have?
 A: A cost ceiling (not a price ceiling) - government covers allowable cost only up to that limit.
 Q: CEBoK's CPAF example (TC \$90M, cost ceiling \$108M, award fee \$8.2M held constant): Scenario 3, FC \$115M
 A: Price = ceiling + fee = 108 + 8.2 = \$116.2M; profit reduced by the \$7M uncovered overrun to \$1.2M.
 Q: When is CPAF used?
-A: When performance is hard to quantify objectively (quality, responsiveness, management) and cost is also hard to forecast.
+A: When uncertainties inhibit forecasting costs; the government judgmentally evaluates cost, schedule, and performance to award the fee.
 Q: Indefinite Delivery/Indefinite Quantity (IDIQ)
 A: A contract vehicle for a flexible quantity of supplies/services within stated limits over a period; work ordered via task/delivery orders.
 R: yes
@@ -959,9 +974,9 @@ A: 1,776 × 1.19 = 2,113.4 hrs; 2,113.4 × 42 = \$88,763.
 Q: Types of cost elements and their principal risk
 A: Scaled-by-a-driver (risk in the scaling factor) · M-to-N (risk usually in N, the count) · Fixed (easily justified, but can be over-relied on).
 Q: The four essential/common BOE estimating methodologies
-A: Analogy, parametric (CER), engineering (build-up), and standard cost models.
+A: Four common acceptable types: analogy, parametric (CER), engineering (build-up), standard cost models (commercial cost models). The first three are the three essential methods from Module 2.
 Q: Less-preferred BOE estimating methods
-A: Company standard bidding systems, expert opinion, commercial/catalog/market price.
+A: Other methodologies (company standard bidding systems - may need certification by the contracting entity; expert opinion - explicitly less preferred; commercial/catalog/market price) - use only in the most unusual circumstances.
 Q: FAR's definition of cost or pricing data
 A: More than historical accounting data - all facts reasonably expected to contribute to the soundness of future-cost estimates and the validity of already-incurred cost determinations.
 R: yes
@@ -981,11 +996,9 @@ R: yes
 Q: What does agreement between two independent estimating methods indicate?
 A: A strong cross-check of the proposal, per CEBoK.
 Q: When is price analysis conducted?
-A: When cost justification was not submitted with the proposal (often due to adequate price competition) - total price is evaluated without inspecting cost elements.
-Q: When is cost analysis required?
-A: When adequate competition is absent, or certified cost/pricing data has been obtained.
+A: On proposals where cost justification is not included in the documentation - the price is evaluated without evaluating lower-level cost and profit elements.
 Q: Common risk-related BOE errors
-A: Missing risks, incorrect risk-register roll-up, misunderstanding MR's relationship to the register, buried MR, missing technical risks, no/improper SLA analysis.
+A: Missing risks implied by BOEs, missing/incorrect risk-register roll-up, not understanding register-to-MR relationship, buried MR, missing technical risks, improperly characterized risks, improper/no SLA analysis, no risk register at all.
 Q: Common pricing-related BOE errors
 A: Out of sync with BOEs, missing BOEs/WBS, insufficient escalation, lack of inflation clauses, mischaracterized currency-hedging risk.
 Q: CAIV and CBA in the context of comparative analysis

@@ -1,7 +1,7 @@
 PCEA.addModule({
   id: 'm16', num: 16, title: 'Cost Management', short: 'Cost Management', source: 'guide',
   blurb: 'Treat cost as a design constraint, not just an outcome. TOC, CAIV, target costing, and ABC shape acquisition decisions.',
-  intro: String.raw`**Cost management** is the planning, controlling, motivating, and evaluating of products, processes, and personnel involved with system/product development from a cost perspective. It helps organizations produce profitable, functional products while maintaining a competitive advantage in cost, quality, functionality, and timeliness.
+  intro: String.raw`**Cost management** is the planning, controlling, motivating, and evaluating of products, processes, and personnel involved with system/product development from a cost perspective. It helps organizations produce profitable, functional services or products while creating and maintaining a competitive advantage in terms of cost, quality, functionality, and timeliness.
 
 **The shift**: Historically, cost was a *dependent variable* — an outcome of performance and schedule decisions made elsewhere. Modern cost management treats cost as an *independent variable* — a constraint that requirements, design, and performance must fit within.
 
@@ -26,6 +26,8 @@ buckets: R&D | Production | O&S
 +++
 
 **Cost management** is the planning, controlling, motivating, and evaluating of products, processes, and personnel involved with system/product development from a cost perspective. It identifies the cost of resources consumed in performing significant activities, determines the efficiency and effectiveness of those activities, and evaluates new activities that can improve future performance.
+
+Practical applications of cost management typically fall into one of two major areas: trade-offs as part of a rigorous design process, or cost reduction initiatives funded by some sort of central office, either government or corporate.
 
 CEBoK deliberately avoids the term **"cost control"** — it implies costs can be managed by sheer force of will. Instead, management decisions alter the program's course of action in a meaningful way. Cost estimators are vital participants throughout the program life cycle.
 
@@ -79,24 +81,28 @@ Q: In cost/performance trade-off analysis, what does the "exchange rate" represe
 
 ### Locked-in vs. spent cost
 
-By the end of design, a large majority of life-cycle cost is already determined (locked in) by design decisions, even though only a small fraction has actually been expended. This is the central justification for CAIV and target costing: influence cost early, while flexibility still exists, rather than trying to cut cost late in production or sustainment when options are limited.
+The greatest program management leverage over Life Cycle Costs (LCC) occurs early in a program as, over time, opportunities to avoid costs evaporate disproportionately more quickly than expenditures accumulate.
+
+:::tip Beyond CEBoK
+The common "locked in vs. spent" framing goes further than the CEBoK text: by the end of design, a large majority of life-cycle cost is already determined (locked in) by design decisions, even though only a small fraction has actually been expended. The specific percentages in the curve below are illustrative only, not from CEBoK.
+:::
 
 :::check
-Q: True or false: Most of a system's total life-cycle cost is spent during the design and development phase.
+Q: (Beyond CEBoK) True or false: Most of a system's total life-cycle cost is spent during the design and development phase.
 - True
 * False
 > Most LCC is *locked in* during design, but most money is actually *spent* during production and O&S. This distinction drives the need for early cost management.
 :::
 
 :::challenge lockin x=5
-Q: Scrub along the life cycle to where the gap between **committed** and **spent** cost is largest (at least 80 percentage points).
+Q: (Beyond CEBoK, illustrative) Scrub along the life cycle to where the gap between **committed** and **spent** cost is largest (at least 80 percentage points).
 goal: gap >= 0.8
 show: x=35
 > On this illustrative curve the gap peaks around the end of design: about 90% of life-cycle cost is committed while only about 10% has been spent. After that, spending catches up, but the decisions have already been made.
 :::
 
 :::challenge lockin x=35 lock=x
-Q: At the end of design, which statement matches the "locked in vs. spent" principle?
+Q: (Beyond CEBoK, illustrative) At the end of design, which statement matches the "locked in vs. spent" principle?
 * Most life-cycle cost is committed, but little has been spent
 - Most life-cycle cost has been spent, with little left to commit
 - Committed and spent cost rise together
@@ -129,16 +135,16 @@ Cost management targets both **product costs** (the cost of system design — ha
 
 ### How to make things cheaper
 
-Programs emphasize minimizing production cost but struggle to find practical strategies, since a solution often costs performance. Example approaches (all with an undesirable effect on performance if used alone):
+Programs emphasize minimizing production cost but struggle to find practical strategies, since a solution often costs performance. Example approaches (all of these options have an undesirable effect on performance):
 
 - **Producing less**
 - **Reducing scope**
 - **Allocating fewer resources**
 
-**Lean and Six Sigma** approach cost management differently — executing a project in a more disciplined, methodical manner to find efficiencies, though these are difficult to achieve, especially later in the development life cycle. Deploying process improvements or new development techniques to retain performance, scope, and schedule at lower cost requires innovation; organizations that devote larger budgets and effort to R&D are more successful at it.
+**Lean and Six Sigma** approach cost management differently — executing a project in a more disciplined, methodical manner to find efficiencies, though these are difficult to achieve, especially later in the development life cycle. Deploying process improvements or new development techniques to retain performance, scope, and deployment at a lower cost requires innovation; organizations that devote larger budgets and effort to R&D are more successful at it.
 
 :::check
-Q: Which of these directly reduces performance if used alone to cut production cost?
+Q: Which of these has an undesirable effect on performance when used to cut production cost?
 * Producing less, reducing scope, or allocating fewer resources
 - Applying Lean/Six Sigma
 - Investing more in R&D
@@ -179,7 +185,7 @@ The organizational perspective is **DoD Total Ownership Cost (DoD TOC)**, define
 
 > "...the sum of all financial resources necessary to organize, equip, train, sustain, and operate military forces sufficient to meet national goals in compliance with all laws, all policies applicable to DoD, all standards in effect for readiness, safety, and quality of life, and all other official measures of performance for DoD and its Components. DoD TOC is comprised of costs to research, develop, acquire, own, operate, and dispose of weapon and support systems, other equipment and real property, the costs to recruit, train, retain, separate and otherwise support military and civilian personnel, and all other costs of business operations of the DoD."
 
-Analysts call this **Big TOC**, to distinguish it from the program-level perspective, **Little TOC** (Defense Systems TOC). Industry commonly uses the analogous term **Total Cost of Ownership (TCO)**, especially for IT systems.
+Analysts sometimes refer to this as **Big TOC** to distinguish it from the second perspective, **Little TOC** or Defense Systems TOC. Industry commonly uses the analogous term **Total Cost of Ownership (TCO)**, especially for IT systems.
 
 +++
 
@@ -189,7 +195,7 @@ The program-level subset of DoD TOC for defense systems is **Defense System TOC*
 
 LCC estimates span the entire life cycle: R&D, production, O&S, and disposal. Commercial definitions are similar. Life cycle is often confused with just O&S, but the **Life Cycle Cost Estimate (LCCE)** covers **all costs associated with the program for its complete life cycle, regardless of funding source**.
 
-Analysts must keep **both** TOC perspectives in mind: most TOC reduction efforts are worked at the program/project level, but analysts must avoid program/project decisions that fail to reduce overall TOC, or that increase it.
+Analysts must keep **both** TOC perspectives in mind: most TOC reduction efforts are worked at the program/project level, but analysts must avoid program or project decisions that do not reduce TOC or that cause an increase in overall TOC.
 
 {{primer}}
 
@@ -225,13 +231,11 @@ Q: What does the Life Cycle Cost Estimate (LCCE) cover, and what is it commonly 
 
 ### Linked Indirect Costs
 
-TOC comprises **direct costs** and **indirect costs**. Many indirect costs can only be considered at the organizational level, but those attributable to a specific program or project are **linked indirect costs**, included in the program's TOC perspective. They include the infrastructure that plans, manages, and executes a program, plus common support items and systems over its full life.
-
-Examples: incremental depot/repair infrastructure for a new system; base operating support or training infrastructure driven by fielding a new system; the *marginal* increment of shared cross-program infrastructure attributable to this program.
+TOC comprises **direct costs** and **indirect costs**. Many indirect costs can only effectively be considered at the organizational level, but those attributable to a program or project are often referred to as **linked indirect costs** and are included in the program/project perspective on TOC. Linked indirect costs include the infrastructure that plans, manages, and executes a program as well as common support items and systems over its full life.
 
 :::check
 Q: What are "linked indirect costs"?
-* Indirect costs causally attributable to a specific program (e.g., support infrastructure it drives), even though budgeted elsewhere
+* Indirect costs attributable to a program or project, including the infrastructure that plans, manages, and executes it and common support items and systems over its full life
 - Direct labor charged straight to the program's contract
 - Costs unrelated to any specific program
 > Linked indirect costs are the indirect costs traceable to a program's existence — the piece of TOC an analyst can attribute to that program.
@@ -264,7 +268,7 @@ The overarching process for managing and reducing all life-cycle costs has been 
 
 ### Why organizations adopt R-TOC
 
-Best-practice organizations adopt sound management practices proactively, but many others adopt cost management only when facing a crisis:
+Some best-practice organizations strive to adopt sound management practices before they run into trouble, but many organizations adopt a cost management approach because they face a crisis of some kind:
 
 - In **DoD**, the crisis is **affordability** — aging systems and rising O&S costs threaten funds needed for R&D and modernization.
 - **Commercial** organizations face crises such as declining profitability and dwindling market share.
@@ -285,14 +289,14 @@ Organizations outline the R-TOC process differently, but key steps include:
 
 The best time to reduce TOC is **early** in the acquisition process. Earlier decisions have more effect on life-cycle cost and, made wisely, reduce cost across all phases. With old systems, by contrast, most cost has already been designed in, making reduction difficult — the only opportunity for significant savings once a system is fielded is **modernization**.
 
-Inserting new technology can lower TOC: new technology increases reliability, which decreases support costs. Process changes that improve support-process efficiency also lead to less costly maintenance and operating requirements.
+Inserting new technology can lower TOC: new technology increases reliability, which decreases support costs. Implementing process changes to improve the efficiency of support processes can also lead to less costly maintenance and operating requirements.
 
-The two primary methods for affecting cost early are **CAIV** (DoD) and **Target Costing** (commercial) — covered next.
+To affect costs early, apply **CAIV** within DoD or **Target Costing** commercially — covered next.
 
 {{primer}}
 
 :::key
-**High-leverage point**: Because R&D/design decisions lock in the largest share of downstream TOC, the highest-leverage point to reduce TOC is early in the program, before the design is fixed. Once a system is fielded, modernization is the only path to significant savings.
+**High-leverage point**: Earlier decisions have more effect on life cycle cost and, if made wisely, reduce cost in all phases; once a system is in use, modernization is the only opportunity for significant savings.
 :::
 
 :::check
@@ -308,7 +312,7 @@ Q: What commonly triggers an organization to adopt a cost-management/R-TOC appro
 * A crisis — affordability pressure in DoD, or declining profitability/market share commercially
 - A change in the fiscal year
 - A new cost estimator joining the program office
-> Best-practice organizations act proactively, but CEBoK notes many organizations adopt cost management in response to a crisis of some kind.
+> Some best-practice organizations strive to adopt sound practices before trouble, but CEBoK notes many organizations adopt a cost management approach because they face a crisis of some kind.
 :::
 
 :::check
@@ -340,9 +344,11 @@ Q: Put the traditional acquisition sequence in order.
 
 Reducing TOC requires a comprehensive process, **CAIV**, to anticipate and reduce cost throughout the life cycle, especially during development. **CAIV is the primary acquisition process and strategy for meeting requirements while reducing TOC.** CAIV is a DoD term; the analogous commercial process is **target costing** (next section).
 
-### Traditional vs. CAIV approach
+### Traditional vs. CAIV approach (Beyond CEBoK)
 
-| | **Traditional** | **CAIV** |
+The comparison below is a standard summary; the CEBoK text here states only that CAIV is the primary acquisition process and strategy for meeting requirements while reducing TOC (the detailed CAIV page is not in the module text).
+
+| |**Traditional** | **CAIV** |
 |---|---|---|
 | Flow | Define requirements -> Design -> Measure cost | Define affordable cost -> Trade requirements/performance to fit cost |
 | Cost role | **Dependent variable** (output) | **Independent variable** (input/constraint) |
@@ -350,7 +356,7 @@ Reducing TOC requires a comprehensive process, **CAIV**, to anticipate and reduc
 | Trade space | None; cost floats | Deliberately manage trade space among cost, schedule, performance |
 
 :::key
-CAIV **reverses the traditional sequence**: instead of "define requirements -> design -> determine cost," CAIV asks "define affordable cost -> determine what requirements/performance can be achieved within that cost."
+(Beyond CEBoK detail) CAIV **reverses the traditional sequence**: instead of "define requirements -> design -> determine cost," CAIV asks "define affordable cost -> determine what requirements/performance can be achieved within that cost."
 :::
 
 {{primer}}
@@ -364,7 +370,7 @@ Q: What best describes CAIV?
 :::
 
 :::check
-Q: Under CAIV, which of the following must the cost estimator do?
+Q: (Beyond CEBoK) Under CAIV, which of the following must the cost estimator do?
 - Provide only a final cost estimate after design is complete
 * Engage early and continuously in requirements and design decisions to support cost-trade studies
 - Focus solely on minimizing the development budget
@@ -426,9 +432,13 @@ Q: Customers will pay \$250 per unit and company policy requires a 20% profit ma
 
 +++
 
-Due to increasingly competitive market pressures, organizations use **target costing** to reduce cost while concurrently increasing customer value. Traditionally, organizations focused on satisfying customer requirements and viewed product cost as a **dependent variable** — an after-the-fact result of decisions about a product's functions, features, and performance. Target costing orients products to **customer affordability or market-driven pricing**, treats product cost as an **independent variable** during requirements definition, and proactively works to achieve the target cost during product and process development.
+Due to increasingly competitive market pressures, organizations are learning more about **target costing** to reduce costs while concurrently increasing customer value. Until recently, the focus of organizations has been on satisfying customer requirements and viewing product cost as a **dependent variable** that is an after-the-fact result of the decisions made about a product's functions, features, and performance capabilities. Target costing uses a different approach that orients products to **customer affordability or market-driven pricing**, treats product cost as an **independent variable** during the definition of a product's requirements, and proactively works to achieve target cost during product and process development.
 
-### Core formula
+:::tip Beyond CEBoK
+The formula, cost-plus contrast, CAIV comparison, and value-engineering note below are standard target-costing treatment, not stated in the CEBoK module text.
+:::
+
+### Core formula (Beyond CEBoK)
 
 $$\text{Target Cost} = \text{Target Price} - \text{Target Profit}$$
 
@@ -436,7 +446,7 @@ $$\text{Target Cost} = \text{Target Price} - \text{Target Profit}$$
 - **Target Profit**: The profit margin required by policy or investor requirements, often expressed as a percentage of price.
 - **Target Cost**: The residual — what the product must be designed and produced for.
 
-### Contrast: cost-plus pricing
+### Contrast: cost-plus pricing (Beyond CEBoK)
 
 Traditional **cost-plus pricing** works differently:
 
@@ -467,10 +477,10 @@ Q: Market research says customers will pay \$500 per unit, and the company requi
 
 ### Relationship to CAIV
 
-Target costing is the commercial-sector analog of CAIV — both set a cost constraint early and manage design to fit within it. The key difference is that target costing derives the constraint from market price and required profit, while CAIV typically derives the constraint from program affordability/budget realities.
+Target costing is the commercial analog of CAIV (CEBoK: CAIV is a DoD term and the analogous commercial process is called target costing).
 
-:::tip
-Both target costing and CAIV require **value engineering** and cross-functional collaboration to identify design changes, process improvements, or scope adjustments that close the cost gap without sacrificing essential value.
+:::tip Beyond CEBoK
+Both set a cost constraint early and manage design to fit within it. The key difference is that target costing derives the constraint from market price and required profit, while CAIV typically derives the constraint from program affordability/budget realities. Both also require **value engineering** and cross-functional collaboration to identify design changes, process improvements, or scope adjustments that close the cost gap without sacrificing essential value.
 :::`
     },
     {
@@ -487,24 +497,28 @@ buckets: Resource | Activity | Cost Object
 - Inspection = Activity
 - Customers = Cost Object
 - Contracts = Cost Object
-> Resources are inputs like labor, equipment, utilities, and facilities. Activities are work like machine setup, purchasing, and inspection. Cost objects are end items like products, services, customers, or contracts.
+> (Beyond CEBoK examples) Resources are inputs like labor, equipment, utilities, and facilities. Activities are work like machine setup, purchasing, and inspection. Cost objects are end items like products, services, customers, or contracts.
 :::
 
 +++
 
-**Activity Based Costing and Management (ABC/M)** consists of two elements: cost accounting and management. ABC/M is a methodology for understanding activities, processes, services, and products — it identifies **activities and drivers** that consume resources and affect performance, and associates them with products or services. ABC/M applies to right-sourcing decisions in government and private companies, to product-line rationalization, and, as a key cost-management tool, to the entire life cycle.
+**Activity Based Costing and Management (ABC/M)** consists of two elements: cost accounting and management. ABC/M is a methodology for understanding activities, processes, services, and products — it identifies **activities and drivers** that consume resources and affect performance (output), and associates them with products or services. ABC/M represents a powerful cost reduction tool to reduce overhead and process costs. It applies to right sourcing in government and private companies and can be used for product line rationalization; as a key cost management tool, it applies to the entire life cycle.
 
-**Activity Based Costing (ABC)** is a method of costing in which **activities are the primary cost objects**. ABC measures activity cost and performance and assigns the costs of those activities to other cost objects (products, customers) based on their use of the activities — captured as quantified cost and time data translated into decision information.
+**Activity Based Costing (ABC)** is a method of costing in which **activities are the primary cost objects**. ABC measures activity cost and performance and assigns the costs of those activities to other cost objects (products, customers) based on their use of the activities — ABC captures quantified cost and time data and translates this into decision information. ABC captures organizational costs for the factors of production and administrative expenses and applies them to the defined activity structure. The application can be as rigorous as a definite mathematical distribution or as creative as a selective assignment using a surrogate indicator. Regardless of the method, ABC simplifies and clarifies decision making required by the process evaluators and senior management by using activity costs rather than gross allocations.
 
 **Activity Based Management (ABM)** uses activity cost data to *manage* activities: ABM analyzes whether activities add value to customers and determines how to perform them to maximize customer value and profit. Analysts generally apply ABC to measure the true cost of a single product or service; ABM uses that information across a range of products/services to evaluate the total cost of managing an entire operation. **ABC and ABM work in concert to eliminate non-value-added activities.**
 
-### Key definitions
+### Key definitions (Beyond CEBoK)
+
+:::tip Beyond CEBoK
+The standard ABC glossary below is not defined in the CEBoK module text, which names only resource drivers, activity drivers, cost objects, and cost drivers.
 
 - **Resources**: The inputs consumed by an organization (labor, equipment, utilities, facilities) that generate cost.
 - **Activities**: The work performed within an organization (e.g., machine setup, purchasing, inspection, material handling) that consumes resources.
 - **Cost Objects**: The end items to which cost is ultimately assigned — products, services, customers, or contracts.
 - **Cost Drivers**: The factors that cause the cost of an activity to increase or decrease (e.g., number of setups, purchase orders, inspections). Cost drivers assign activity costs to cost objects in proportion to each cost object's actual consumption of that activity.
 - **Cost Pools**: Groupings of costs associated with a particular activity, accumulated before being allocated to cost objects using the relevant cost driver.
+:::
 
 +++
 
@@ -512,18 +526,18 @@ buckets: Resource | Activity | Cost Object
 
 $$\textbf{Resources} \rightarrow \textbf{Activities} \rightarrow \textbf{Cost Objects}$$
 
-Resources are consumed by activities (traced via **resource drivers**); activities are consumed by cost objects (traced via **activity/cost drivers**).
+ABC assigns and measures resources to activities via **resource drivers** (first-stage assignment), and activities to outputs (or cost objects) via **activity drivers** (second-stage assignment).
 
-**Example**: A factory spends \$100,000 on setup labor per year. That's a *resource*. The setup activity consumes the labor. Individual products (cost objects) consume setups at different rates (the *activity driver*). ABC traces the \$100,000 to each product based on how many setups it requires.
+**Example (illustrative, not from CEBoK)**: A factory spends \$100,000 on setup labor per year. That's a *resource*. The setup activity consumes the labor. Individual products (cost objects) consume setups at different rates (the *activity driver*). ABC traces the \$100,000 to each product based on how many setups it requires.
 
 {{primer}}
 
 :::check
 Q: In the ABC chain Resources -> Activities -> Cost Objects, what links activity costs to products?
 - Resource drivers
-* Activity (cost) drivers
+* Activity drivers
 - Direct labor hours only
-> Resource drivers assign resources to activities; activity drivers (cost drivers) assign activities to cost objects based on actual consumption.
+> Resource drivers assign resources to activities (first-stage assignment); activity drivers assign activities to cost objects (second-stage assignment).
 :::
 
 :::check
@@ -567,7 +581,9 @@ Ultimately, ABC: **improves customer value, increases profit, clarifies cost, an
 
 Organizations feel pressure to enhance value through cost reduction, but overhead is often ignored in cost-reduction efforts. Traditional accounting does not give management the information needed to improve an organization, because **Generally Accepted Accounting Principles (GAAP) hide overhead**. **ABC exposes overhead.** ABC can be used for business-process improvement, strategic planning, target pricing, product rationalization, product quotation, business simulation, budgeting, and manpower planning.
 
-ABC adds a different perspective from other cost views — organizations may need to manage the cost of performing a mission and the cost of specific products/services simultaneously. ABC's focus on cost drivers improves the realism and clarity of costs rolled up or broken down elsewhere.
+ABC was cited as the method for improving the visibility of cost information for management purposes. ABC adds a different perspective from other cost views — organizations may need to manage the cost of performing a mission and the cost of specific products/services simultaneously. ABC's focus on cost drivers improves the realism and clarity of costs rolled up or broken down elsewhere.
+
+Fundamentally, ABC provides visibility and causes of costs, enables understanding of process and product quality as a function of cost, provides robust capability to relate cost to performance, and improves the ability to manage cost and performance over time strategically and operationally.
 
 +++
 
@@ -640,6 +656,9 @@ Q: Once ABC assigns the overhead by number of setups, what happens to Product B'
 
 ### The problem: traditional volume-based allocation
 
+:::tip Beyond CEBoK
+CEBoK states only that GAAP hides overhead, ABC exposes overhead, and ABC uses activity costs rather than gross allocations. The volume-based distortion below is the standard explanation of why.
+
 Traditional overhead allocation assigns indirect/overhead costs to products using a **single, often volume-based allocation base** — commonly direct labor hours, machine hours, or units produced — applied at one uniform overhead rate.
 
 **When products differ significantly in complexity, batch size, or support activities (setups, inspections, engineering changes)**, a single volume-based driver **distorts** the true cost of each product:
@@ -648,6 +667,7 @@ Traditional overhead allocation assigns indirect/overhead costs to products usin
 - **Low-volume, complex/specialty products** tend to be **under-costed** (absorb less overhead than they actually cause), because they consume disproportionate amounts of support activity
 
 This can lead to bad pricing, product-mix, and investment decisions because product profitability appears reversed from reality.
+:::
 
 The following worked example is an illustrative (not from CEBoK) classroom-style scenario used to demonstrate the distortion; the underlying arithmetic is correct.
 
@@ -773,46 +793,33 @@ ABC/M is another method of performing cost estimates. Rather than breaking produ
 
 ### Better historical cost data
 
-ABC-derived costs more accurately reflect the true cost of activities and products, improving the quality of historical data used to build **Cost Estimating Relationships (CERs, Module 3)**.
-
-**Problem**: Traditional volume-allocated overhead can distort historical unit costs. If you use distorted historical data to build a CER, the resulting regression carries the distortion forward into future estimates.
-
-**Solution**: ABC produces historical costs that more accurately reflect true resource consumption by cost driver, giving estimators cleaner, more defensible historical data.
+:::tip Beyond CEBoK
+ABC-derived costs more accurately reflect the true cost of activities and products, which can improve the quality of historical data used to build Cost Estimating Relationships (CERs). Traditional volume-allocated overhead can distort historical unit costs, and a CER built on distorted data carries the distortion forward. The CEBoK module text does not make this argument.
+:::
 
 +++
 
 ### Identifying true cost drivers
 
-ABC's focus on cost drivers directly parallels the cost estimator's search for independent variables in regression-based CER development (Module 8). Both disciplines ask: **"What factors actually explain/cause this cost to vary?"**
-
-A cost estimator might discover through ABC analysis that:
-- Number of engineering changes, not labor hours, best explains engineering cost variation
-- Number of parts or configurations, not production volume, drives assembly cost
-- Support personnel requirements scale with maintenance visits, not operational hours
-
-These insights lead to more accurate CERs.
-
-+++
-
-### Supporting CAIV and target costing trade studies
-
-Understanding which activities drive cost lets estimators and engineers evaluate design/process trade-offs with better insight into which changes will actually reduce cost. If setup activity drives 80% of overhead, reducing setups is a high-leverage target; if direct labor drives cost, process automation is the lever.
-
-### Improved indirect cost estimates
-
-ABC ties overhead to activities and drivers rather than a flat volume-based rate, supporting more defensible estimates of how indirect/overhead costs will change as production volume, product mix, or complexity changes — an important input to estimating linked indirect costs and TOC.
-
-+++
-
-:::warn
-**Caution**: ABC/M is a **costing and management technique, not itself a forecasting method**. It explains historical/current cost causality; CERs or other estimating relationships are still needed to project ABC-informed costs into the future.
+:::tip Beyond CEBoK
+ABC's focus on cost drivers parallels the cost estimator's search for independent variables in regression-based CER development. Both disciplines ask: **"What factors actually explain/cause this cost to vary?"** Illustrative discoveries: number of engineering changes (not labor hours) may best explain engineering cost variation; number of parts or configurations (not production volume) may drive assembly cost.
 :::
 
++++
+
+### Supporting trade studies and indirect cost estimates
+
+:::tip Beyond CEBoK
+Understanding which activities drive cost can help estimators and engineers judge which design/process changes will actually reduce cost, and can support estimates of how indirect/overhead costs change with volume, mix, or complexity. These uses go beyond the CEBoK text, which says only that ABC/M breaks product cost into activities so savings are readily seen.
+:::
+
++++
+
 :::check
-Q: How can ABC improve a cost estimator's historical cost data used for CER development?
+Q: (Beyond CEBoK) How can ABC improve a cost estimator's historical cost data used for CER development?
 - It replaces the need for CERs entirely
 * It removes distortions from volume-based allocation, providing cleaner historical unit costs and better insight into true cost drivers
-- It is a forecasting method that predicts future costs directly
+- It predicts future costs with no need for any estimating relationship
 > ABC reveals how overhead is actually caused/consumed, not how traditional accounting allocates it. This gives estimators better baseline data and better driver identification for CERs.
 :::`
     },
@@ -831,9 +838,9 @@ Q: Which earlier Unit V modules does the summary say are applied alongside CAIV,
 
 +++
 
-We discussed a holistic approach to cost management that seeks to manage and reduce TOC by applying **CAIV, Target Costing, and ABC**, along with **Economic Analysis, Contracting, and EVM** from earlier Unit V modules.
+We have discussed a holistic approach to cost management which seeks to manage and reduce TOC by applying key methodologies such as **CAIV, Target Costing, or ABC**, all introduced in the module, and **Economic Analysis, Contracting, and EVM**, all discussed in previous modules of Unit V Management Applications.
 
-Cost management employs extensive cost modeling to capture how the interaction of dynamic systems drives cost. It rigorously applies cost estimating throughout the life cycle and better integrates the management processes across the discipline, providing a realistic and impartial assessment of cost objectives relative to other program objectives.
+Cost management employs extensive cost modeling to capture how the interaction of dynamic systems drives costs. It thoroughly and rigorously applies cost estimating throughout the life cycle and better integrates the management processes we have discussed in this final unit. Cost management provides a realistic and impartial assessment of cost objectives as they relate to other program objectives.
 
 {{primer}}
 
@@ -869,11 +876,11 @@ Q: Per CEBoK's Testable Topics table, which of these is explicitly marked NOT te
 :::
 
 :::check
-Q: What is the Fully Burdened Cost of Fuel (FBCF)?
+Q: (Beyond CEBoK) What is the Fully Burdened Cost of Fuel (FBCF)?
 * The price of the fuel itself plus the cost of the logistics and force protection needed to deliver it
 - The wholesale market price of fuel only
 - The cost of fuel storage infrastructure only
-> FBCF captures delivered cost, not just purchase price — logistics and force protection to get fuel to the point of use can dominate the total.
+> FBCF captures delivered cost, not just purchase price — logistics and force protection to get fuel to the point of use are included.
 :::`
     }
   ],
@@ -915,10 +922,10 @@ R: yes
 Q: Industry term for organizational-level TOC
 A: Total Cost of Ownership (TCO), especially for IT systems.
 Q: Linked indirect costs
-A: Indirect costs causally attributable to a specific program (e.g., infrastructure it drives), even though budgeted elsewhere.
+A: Indirect costs attributable to a program or project (often referred to as linked indirect costs); include infrastructure that plans, manages, and executes the program and common support items and systems over its full life.
 R: yes
 Q: Why keep both TOC perspectives in mind?
-A: Most reduction efforts work at the program level, but analysts must avoid program decisions that fail to reduce (or that increase) overall organizational TOC.
+A: Most reduction efforts work at the program level, but analysts must avoid program/project decisions that do not reduce TOC or that cause an increase in overall TOC.
 
 ## Reducing TOC (R-TOC)
 Q: R-TOC key steps (5)
@@ -926,7 +933,7 @@ A: Establish a cost baseline; set reduction targets; develop initiatives; assess
 Q: What commonly triggers R-TOC adoption?
 A: A crisis — affordability pressure (DoD) or declining profitability/market share (commercial) — though best-practice orgs act proactively.
 Q: Best time to reduce TOC
-A: Early in the acquisition process, before design decisions lock in cost.
+A: Early in the acquisition process; earlier decisions have more effect on life cycle cost.
 Q: Only remaining lever once a system is fielded
 A: Modernization — inserting new technology to raise reliability and lower support costs, or improving support-process efficiency.
 Q: Two ways to affect cost early
@@ -934,10 +941,10 @@ A: CAIV (DoD) or Target Costing (commercial).
 
 ## CAIV
 Q: CAIV definition
-A: Cost As an Independent Variable: the primary DoD acquisition process/strategy for meeting requirements while reducing TOC; cost is a design constraint on equal footing with performance/schedule.
+A: Cost As an Independent Variable: the primary DoD acquisition process and strategy for meeting requirements while reducing TOC; anticipates and reduces costs throughout the life cycle, especially during development.
 R: yes
 Q: CAIV flow vs. traditional flow
-A: CAIV: define affordable cost -> determine what requirements/performance fit within it. Traditional: define requirements -> design -> measure cost.
+A: (Beyond CEBoK) CAIV: define affordable cost -> determine what requirements/performance fit within it. Traditional: define requirements -> design -> measure cost.
 Q: Commercial analog of CAIV
 A: Target costing.
 Q: Curves of equal preference (Beyond CEBoK)
@@ -949,17 +956,17 @@ R: yes
 
 ## Target Costing
 Q: Target costing formula
-A: Target Cost = Target Price − Target Profit.
+A: (Beyond CEBoK) Target Cost = Target Price − Target Profit.
 R: yes
 Q: Target costing vs. cost-plus pricing
-A: Target costing: price and profit are fixed, cost is variable. Cost-plus: cost is determined first, price/profit follow.
+A: (Beyond CEBoK) Target costing: price and profit are fixed, cost is variable. Cost-plus: cost is determined first, price/profit follow.
 Q: What is the "target cost gap"?
 A: The difference between the engineering team's current design cost and the allowable target cost; closed via design/process/sourcing changes.
 R: yes
 Q: Market price \$250, required profit 20% on price: target cost?
 A: \$200 (illustrative example). Profit = \$250 x 0.20 = \$50; Cost = \$250 − \$50 = \$200.
 Q: Relationship: target costing and CAIV
-A: Both set a cost constraint early and manage design to fit. Target costing derives it from market price/profit; CAIV from program affordability/budget.
+A: (Beyond CEBoK) Both set a cost constraint early and manage design to fit. Target costing derives it from market price/profit; CAIV from program affordability/budget.
 
 ## ABC Fundamentals
 Q: Activity Based Costing (ABC) definition
@@ -972,13 +979,13 @@ Q: ABC chain
 A: Resources -> Activities -> Cost Objects.
 R: yes
 Q: Resource driver (first-stage assignment)
-A: Measure used to assign resource costs to activities.
+A: Assigns resources to activities (first-stage assignment).
 R: yes
 Q: Activity (cost) driver (second-stage assignment)
-A: Measure of how much of an activity a cost object uses; allocates activity costs to cost objects.
+A: Assigns activities to outputs/cost objects (second-stage assignment).
 R: yes
 Q: Cost pool
-A: Accumulated cost associated with a particular activity, gathered before allocation to cost objects.
+A: (Beyond CEBoK) Accumulated cost associated with a particular activity, gathered before allocation to cost objects.
 R: yes
 Q: Activity-Based Management (ABM)
 A: Uses ABC cost data to manage activities — determines how to perform them to maximize customer value and profit.
@@ -1000,7 +1007,7 @@ A: Traditional = what was bought (line items). ABC = what was done with it (acti
 
 ## ABC Allocation Example
 Q: Problem with traditional volume-based overhead allocation
-A: Single rate (e.g., per DL hour) distorts costs when products differ in complexity/batch size; high-volume simple products get over-costed, low-volume complex get under-costed.
+A: (Beyond CEBoK) Single rate (e.g., per DL hour) distorts costs when products differ in complexity/batch size; high-volume simple products get over-costed, low-volume complex get under-costed.
 Q: ABC worked example: setup costs \$100K for 20 setups. Product A (2 setups), Product B (18 setups). ABC cost per setup?
 A: \$5,000/setup (illustrative example).
 Q: Same example: Product A (8,000 units) ABC overhead cost total, and per unit?
@@ -1022,19 +1029,19 @@ A: CEBoK's Resources section says "Consortium for Advanced Manufacturing – Int
 
 ## ABC and Estimating
 Q: How does ABC improve historical cost data for CER development?
-A: Removes distortions from volume-based allocation; provides cleaner historical unit costs and better driver identification.
+A: (Beyond CEBoK) Removes distortions from volume-based allocation; provides cleaner historical unit costs and better driver identification.
 Q: What is the parallel between ABC and CER development?
-A: Both seek true cost drivers: ABC identifies what activities drive cost; CER development identifies what variables explain cost variation.
+A: (Beyond CEBoK) Both seek true cost drivers: ABC identifies what activities drive cost; CER development identifies what variables explain cost variation.
 Q: Is ABC itself a forecasting method?
-A: No. ABC explains historical/current cost causality. CERs and other estimating methods are still needed to project costs into the future.
+A: (Beyond CEBoK) CEBoK calls ABC/M another method of performing cost estimates, breaking cost into activities rather than labor, material, overhead; projecting future costs still relies on estimating relationships.
 Q: How does ABC help with CAIV trade studies?
-A: By identifying which activities consume cost, estimators can advise which design/process changes will actually reduce cost (high-leverage targets).
+A: (Beyond CEBoK) By identifying which activities consume cost, estimators can advise which design/process changes will actually reduce cost (high-leverage targets).
 
 ## Testable Topics
 Q: CEBoK's Testable Topics table for this module
 A: Testable = CAIV/design tradeoffs, optimal design in a hypothetical scenario, curves of equal preference, TOC vs. LCCE definitions. Less emphasized = FBCF. Not testable = names of US gov't initiatives (Nunn-McCurdy, WSARA, etc.).
 Q: Fully Burdened Cost of Fuel (FBCF)
-A: Price of fuel plus the cost of logistics and force protection to deliver it to the point of use (testable, less emphasized).
+A: (Beyond CEBoK definition) Price of fuel plus the cost of logistics and force protection to deliver it to the point of use. CEBoK lists FBCF only as testable, less emphasized.
 R: yes
 `
 });

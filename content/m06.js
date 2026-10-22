@@ -15,7 +15,7 @@ Q: How many variables does each situation involve?
 buckets: One variable | Two variables
 - Historical cost growth factors = One variable
 - Software cost vs. lines of code = Two variables
-- Monthly freight volume over time = Two variables
+- Cost growth vs. years since program initiation = Two variables
 > A univariate data set has one variable (such as historical cost growth factors). Bivariate data has one X (driver) and one Y (cost), and a time series is bivariate data with time as X.
 :::
 
@@ -28,7 +28,7 @@ Before calculating anything, ask: *how many variables am I looking at, and what 
 | **Univariate** | One variable | Historical cost growth factors | Histogram, box plot |
 | **Bivariate** | One X (driver), one Y (cost) | Software cost vs. lines of code | Scatter plot |
 | **Multivariate** | Several X's, one Y | Ship supply cost vs. crew size **and** hours underway | 3-D plot / pairwise scatters |
-| **Time series** | Bivariate with time as X | Monthly freight volume | Line / scatter over time |
+| **Time series** | Bivariate with time as X | Cost growth vs. years since program initiation | Line / scatter over time |
 
 {{primer}}
 
@@ -42,12 +42,12 @@ True univariate data is **rare** in cost estimating. Usually there is a driver h
 
 Time series is bivariate data where X is time, but three patterns need extra care:
 
-- **Paradigm shift**: the nature of the data changes sharply at some point (for example a new contract or new process).
+- **Paradigm shift**: a marked change in the nature of the data occurring at some point or over some period (e.g., lower cost growth after a change in acquisition law).
 - **Cycles**: repeating periodic trends (seasonal effects, maintenance schedules).
 - **Autocorrelation**: the current value is correlated with values from earlier periods.
 
 :::warn
-Regression finds **smooth trends**. It will **not** detect paradigm shifts or cycles. Plot the data first. Moving averages help spot them; dividing the series into subgroups (e.g. 1980-85, 1985-90, ...) and running an **ANOVA** (Analysis of Variance — testing whether the variation between subgroups is statistically significant) can confirm a paradigm shift.
+Regression finds **smooth trends**. It will **not** detect paradigm shifts or cycles. Plot the data first. Scatter plots and moving averages can help identify them. Dividing the series into subgroups (e.g. 1980-85, 1985-90, ...) enables comparison of descriptive statistics; **ANOVA** (Analysis of Variance, a statistical method in which the variation in a set of observations is divided into distinct components) can be used to test for statistically significant differences between the subgroups.
 :::
 
 :::check
@@ -75,7 +75,7 @@ Statistical software can compute these automatically, but it is better to build 
 
 ### Standard Factors
 
-Compare results to historical data whenever possible. The **standard factors handbook** from the Naval Center for Cost Analysis (NCCA) is one source of historical factors available to U.S. Navy analysts; similar heuristics exist for other services, commodities, and organizations. When no heuristics or standard factors exist, a **Subject Matter Expert (SME) or stakeholder review** helps eliminate inappropriate methodologies or erroneous results.
+Compare results to historical data whenever possible. The **standard factors handbook** from the Naval Center for Cost Analysis (NCCA) is one source of historical factors available to U.S. Navy analysts; similar heuristics exist for other services, commodities, and organizations. When no heuristics or standard factors exist, a **Subject Matter Expert (SME) or stakeholder review** will often help eliminate inappropriate methodologies or erroneous results.
 
 :::check
 Q: No standard factors handbook exists for your commodity. What should you do to validate your result?
@@ -95,7 +95,7 @@ Q: Take {2, 5, 7, 9, 25}. The median is 7. How will the mean compare?
 * The mean will be higher than 7
 - The mean will also be exactly 7
 - The mean will be lower than 7
-> The mean uses every value, so the outlier 25 pulls it up (it works out to 9.6). The median ignores how extreme the tails are, which is why it is preferred when there are outliers.
+> The mean uses every value, so the outlier 25 pulls it up (it works out to 9.6). The median ignores how extreme the tails are, which is why the median may be more representative when there are outliers.
 :::
 
 +++
@@ -146,13 +146,13 @@ Monthly average therms used: {37, 26, 13, 3, 3, 3, 3, 3, 4, 7, 21, 40}. Pick $c 
 - {2, 5, 7, 9, 25} → median = **7**
 - {3, 6, 8, 11, 13, 30} → median = (8 + 11)/2 = **9.5**
 
-The median ignores how extreme the tails are, so it is **preferred when there are outliers** (family income is the classic example).
+The mean is especially sensitive to outliers. When outliers exert undue influence on the mean, consider using the median; it may be more representative of the data set (family income is the example).
 
 {{primer}}
 
 ### Mode: the most frequent
 
-Best for **categorical / qualitative** data (most common color) and for finding the peak of a distribution. Its weakness: if the most frequent value is still rare, it tells you little.
+The mode is the most frequently occurring point and the least used of the three measures. It is often most useful in discrete sets, particularly qualitative or categorical ones (most common color); for a distribution, the mode is its peak. Its weakness: if the most frequent value is still rare, it tells you little.
 
 :::check
 Q: Which measure would you report for a data set with one huge outlier?
@@ -167,7 +167,7 @@ Q: Which measure would you report for a data set with one huge outlier?
 | Situation | Use |
 |---|---|
 | Symmetric data, no outliers | Mean |
-| Skewed data or outliers | Median |
+| Outliers exert undue influence on the mean | Median |
 | Categorical / qualitative data | Mode |
 
 Now try it. Load the **With outlier** preset and watch how far the mean moves compared to the median.
@@ -201,11 +201,14 @@ Two data sets can have the same mean and look nothing alike. Dispersion measures
 
 ### Variance
 
+Variance is the average squared distance of the data points from the mean; it is a measure of the spread of a distribution. A lower variance indicates less dispersion, or spread (i.e., tighter data).
+
 $$s^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1} \qquad\text{or}\qquad s^2 = \frac{\sum x_i^2 - n\bar{x}^2}{n-1}$$
 
 - Divide by $n-1$ (degrees of freedom): once you know $\bar{x}$ and $n-1$ of the values, the last value is fixed.
 - Units are **squared**, so the number is hard to interpret directly.
 - Symbol: $s^2$ (sample), $\sigma^2$ (population).
+- When the population distribution is not known, which is mostly the case in practical applications, find the sample variance.
 
 +++
 
@@ -213,7 +216,7 @@ $$s^2 = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1} \qquad\text{or}\qquad s^2 =
 
 $$s = \sqrt{s^2}$$
 
-Same units as the data, so it is much easier to interpret.
+The standard deviation is the square root of the variance and measures the absolute distance of the data points from their mean. The sample standard deviation $s$ is the estimate for the population standard deviation $\sigma$; dividing by $n-1$ also makes $s$ an unbiased estimator of $\sigma$. It has the same units as the data, so it is much easier to interpret.
 
 ### Coefficient of variation (CV)
 
@@ -223,8 +226,8 @@ The CV is **unitless**. It expresses spread as a percentage of the mean, so you 
 
 :::key CV thresholds
 - **CV < 15%**: desired for cost estimating (tight data)
-- **CV ≈ 5%**: the mean alone is a useful description
-- **CV > 15%**: something (a cost driver) is probably causing the variation. Consider developing a CER.
+- **Low CV (e.g., 5%)**: the mean is a useful description of the data set
+- **CV much higher (e.g., > 15%)**: there could be a cost driver causing the variation. This should prompt the analyst to develop CERs to find the cost driver.
 :::
 
 :::example Fig 6.6: same mean, different CV
@@ -271,17 +274,17 @@ A distribution can lean to one side. The mean and median reveal which.
 Q: Which shape does each go with?
 buckets: Symmetric | Right-skewed | Left-skewed
 - Normal distribution = Symmetric
-- Mean = median = mode = Symmetric
+- Mean = median = Symmetric
 - Lognormal distribution = Right-skewed
 - Beta distribution = Left-skewed
-> Symmetric data (e.g. normal) has mean = median = mode. The lognormal is the classic right-skewed example, with its tail extending right. The beta distribution is a classic left-skewed example.
+> Symmetric data (e.g. normal) has mean = median. The lognormal is the classic right-skewed example, with its tail extending right. The beta distribution is a classic left-skewed example.
 :::
 
 +++
 
 ### Skewness
 
-- **Symmetric** (e.g. normal): mean = median = mode
+- **Symmetric** (e.g. normal): mean = median
 - **Right-skewed** (positive skew): mean > median, the tail extends right (the lognormal is the classic example)
 - **Left-skewed** (negative skew): mean < median, the tail extends left (the beta distribution is a classic example)
 
@@ -303,7 +306,7 @@ The further from zero, the greater the left or right skew.
 
 ### Kurtosis
 
-Kurtosis describes the shape of a distribution's **tails** relative to the normal distribution — whether extreme values are more or less likely than normal. Statistical software usually reports **excess kurtosis** (raw kurtosis minus 3, so the normal distribution reads 0).
+Kurtosis describes the shape of a distribution's **tails** relative to the normal distribution — whether extreme values are more or less likely than normal. Statistical software often reports **excess kurtosis** (raw kurtosis minus 3, so the normal distribution reads 0).
 
 | Type | Excess kurtosis | Tails / peak | Example |
 |---|---|---|---|
@@ -343,6 +346,8 @@ Q: Mean = 50 and median = 45. Which way is the distribution skewed?
 
 ### Outliers and the normal distribution
 
+Outliers are data points that fall far from the central mass of the data and may distort both descriptive and inferential statistics.
+
 | Range | Share of data inside | Share outside (expected) |
 |---|---|---|
 | $\pm 2\sigma$ | 95.4% | 4.6% |
@@ -350,7 +355,8 @@ Q: Mean = 50 and median = 45. Which way is the distribution skewed?
 
 **Rules:**
 
-- **Review** points more than 3 standard deviations from the mean.
+- About 4.6% of normal data lies more than 2σ from the mean. This variation is expected; arbitrarily removing these points may falsely tighten the distribution.
+- **Review** points more than 3 standard deviations from the mean to determine if they should be included. Data outside this range is rare, and analysts use a variety of other methods to identify outliers.
 - **Never** remove an outlier without a justification, and document it.
 - Look for causes: data errors, program restructuring, or a characteristic mismatch (a helicopter in a missile data set).
 
@@ -372,7 +378,7 @@ Q: A data point sits 3.5 standard deviations from the mean. What should you do?
 :::
 
 :::example Evaluating outliers (ship shakedown hours/ton)
-An expert flagged DD 963 as an outlier (too low). Plotting all the data showed that **DD 980** was the real outlier. Looking at the data objectively prevented removing the wrong point.
+An expert discarded DD 963 (factor 0.29, thought too low for a first ship). Plotting showed all points except **DD 980** fall along a straight line, so the expert may have rejected the wrong outlier. The estimator should check whether DD 963 was rightly rejected for factors unknown to the estimator, and investigate DD 980. Outliers should not be removed unless truly unrepresentative of the data.
 :::
 
 +++
@@ -420,7 +426,7 @@ What you can't see in a table often jumps out of a chart.
 
 ### Scatter plots (bivariate)
 - **Y-axis**: dependent variable (usually cost). **X-axis**: independent variable (the cost driver).
-- Axis types: **unit space** (ordinary), **log-log** (both axes log), **semi-log** (one axis log).
+- Axis types: **unit space** (the standard Cartesian xy-plane), **log space** (plotting $(\ln x, \ln y)$; often called log-log), **semi-log space** (plotting $(x, \ln y)$).
 - Show $R^2$ and the regression equation on the chart.
 
 :::example Fig 6.7: strong, weak, and no correlation
@@ -428,7 +434,7 @@ Three scatter plots of cost against three candidate drivers: **Variable 1** show
 :::
 
 :::key There is no real threshold for R2
-People often cite a minimum "acceptable" $R^2$, but if a regression is statistically significant, **any** $R^2$ is meaningful because it represents a reduction in the variability of the prediction. $t$- and $F$-statistics, not $R^2$ alone, establish significance. $R^2$ is domain-dependent: it tends to run high in the physical sciences (where measurement error is nearly the only source of variability) and lower in the behavioral/medical sciences (due to irreducible variability in organisms and behavior); cost estimating's $R^2$ values tend to fall somewhere between the two.
+People often cite a minimum "acceptable" $R^2$, but if a regression is statistically significant, **any** $R^2$ is meaningful because it represents a reduction in the variability of the prediction. $t$- and $F$-statistics, not $R^2$ alone, establish significance. $R^2$ is domain-dependent: it tends to run high in the physical sciences (where variability can be mostly limited to measurement error or frictions) and lower in the behavioral/medical sciences (due to irreducible variability in organisms and behavior); cost estimating's $R^2$ values tend to fall somewhere between the two. $R^2$ can also be affected by outliers; it is not the single best indicator of a good CER or cost driver relationship.
 :::
 
 ### Histograms (univariate)
@@ -442,7 +448,7 @@ The same univariate cost data (monthly natural gas bills, simple average \$34.19
 :::widget bin-explorer:::
 
 :::tip Beyond CEBoK: bin width rules (testable, less emphasized)
-Rules of thumb such as Sturges' or Scott's formula suggest a bin count/width from the sample size and spread, but CEBoK treats these as a starting point only — always experiment rather than trusting a single formula.
+Rules of thumb such as Sturges' or Scott's formula suggest a bin count/width from the sample size and spread. Always experiment with bin width rather than trusting a single formula.
 :::
 
 +++
@@ -474,7 +480,7 @@ The **box** holds the middle 50% of the data (Q1 to Q3). The line in the box is 
 {{primer}}
 
 :::example Figs 6.13/6.14: the same gas-bill data as a box plot
-Q1 ≈ \$11–12, median = \$16.50, Q3 = \$37.00. So 25% of bills fall in the \$11–12 range, the next 25% from Q1 to the \$16.50 median, the next 25% from the median to the \$37.00 Q3, and the top 25% (including potential outliers) above that. The far-right outliers turned out to be winter-month (Dec/Jan/Feb) bills — 4-5× the summer bills, plausibly explained by heating demand (or an occupant home more often). Understanding *why* a point looks like an outlier matters more than the flag itself.
+Minimum ≈ \$11, Q1 = \$12, median = \$16.50, Q3 = \$37.00. 25% of bills fall between \$11 and \$12, 25% between \$12 and \$16.50, and 25% between \$16.50 and \$37.00; the last 25% lie to the right of the majority of the data, with potential outliers at the far right. Most Dec/Jan/Feb bills are 4-5 times the summer bills; possible explanations are bitter cold or the owner staying home more. The important thing is to understand why these points appear to be outliers.
 :::
 
 :::check
@@ -516,12 +522,12 @@ Regression fits straight lines, but cost data often curves.
 
 :::sort
 Q: In which space does each function plot as a straight line?
-buckets: Unit space | Log-log | Semi-log
+buckets: Unit space | Log space | Semi-log space
 - Linear function = Unit space
-- Power function = Log-log
-- Learning curve = Log-log
-- Exponential function = Semi-log
-> Linear is straight in unit space, a power function is straight in log-log space, and an exponential is straight in semi-log space. Learning curves are power functions with negative b.
+- Power function = Log space
+- Learning curve = Log space
+- Exponential function = Semi-log space
+> Linear is straight in unit space, a power function is straight in log space, and an exponential is straight in semi-log space. Learning curves are power functions with negative b.
 :::
 
 +++
@@ -530,12 +536,12 @@ Regression works on straight lines. When the data curves, we **transform** it un
 
 | Function | Form | Linear form | Straight in |
 |---|---|---|---|
-| Linear | $y = \beta_0 + \beta_1 x$ | as is | unit space |
-| Power | $y = ax^b$ | $\ln y = \ln a + b\ln x$ | **log-log** |
-| Exponential | $y = ae^{bx}$ | $\ln y = \ln a + bx$ | **semi-log** |
+| Linear | $y = a + bx$ ($a$ = y-intercept, $b$ = slope) | as is | unit space |
+| Power | $y = ax^b$ | $\ln y = \ln a + b\ln x$ | **log space** |
+| Exponential | $y = ae^{bx}$ | $\ln y = \ln a + bx$ | **semi-log space** |
 
 - **Linear** is the most basic form and the best first assumption.
-- **Power**: slope in log-log space equals the exponent $b$. Learning curves are power functions with negative $b$.
+- **Power**: slope in log space equals the exponent $b$. Learning curves are power functions with negative $b$.
 - **Exponential**: rapid growth or decay; less common in CERs.
 
 {{primer}}
@@ -554,7 +560,7 @@ $$\ln(e^x) = x \qquad e^{\ln x} = x \qquad \ln(xy) = \ln x + \ln y$$
 
 ### Generalized forms
 
-Real data often has a non-zero constant: $y = ax^b + c$ or $y = ae^{bx} + c$. Theoretical models usually assume $c = 0$. Learning curves are the exception, where $c = 0$ is standard.
+Generalized power and exponential equations contain a constant term $c$: $y = ax^b + c$ or $y = ae^{bx} + c$. Most theoretical power and exponential models use a constant term of zero. Real data usually has a non-zero constant, except for learning curves.
 
 :::check
 Q: Transform $y = 5x^{0.8}$ into a form suitable for linear regression.
@@ -562,7 +568,7 @@ Q: Transform $y = 5x^{0.8}$ into a form suitable for linear regression.
 * $\ln y = \ln 5 + 0.8 \ln x$
 - $\ln y = 5 + 0.8 \ln x$
 - $\ln y = \ln 5 + 0.8x$
-> A power function becomes linear in log-log space: take the natural log of both sides.
+> A power function becomes linear in log space: take the natural log of both sides.
 :::
 
 :::check
@@ -637,7 +643,7 @@ Q: A new point is 0.5 SD from Class A/B's weight mean (30.85% probability) and 0
 
 ### Decision trees
 
-Decision trees split data via yes/no questions, forming linear branches — good for grouped, nonlinear data. A depth-2 tree on the spacecraft data might read: "If power < 1046, then C/D; else if weight < 1482, then C/D; else A/B." **Depth** is a *tunable parameter*: shallow trees underfit, deep trees overfit. Unlike ordinary linear regression, ML models expose these tunable parameters directly, and analysts commonly loop through many depth values, tracking MSE, to pick the best.
+Decision trees split data via yes/no questions, forming linear branches — good for grouped, nonlinear data. A depth-2 tree on the spacecraft data might read: "If power < 1046, then C/D; else if weight < 1482, then C/D; else A/B." **Depth** (the maximum number of branch layers) is a *tunable parameter* that makes the model more or less complex, which can help prevent underfitting or overfitting. Unlike ordinary linear regression, ML models expose these tunable parameters directly, and analysts commonly loop through many depth values, tracking MSE, to pick the best.
 
 ### Random forests
 
@@ -663,7 +669,7 @@ New point (weight=1500, power=1000) to an existing point (weight=1200, power=900
 (CEBoK's text prints "$(100-900)^2$" — a typo for $(1000-900)^2$; the 316 result already uses the correct 1000.)
 :::
 
-Normalize variables that are on very different scales before computing distance. Euclidean distance is the common choice; Manhattan distance is an alternative. **Small $k$** (e.g. 3) is sensitive to outliers and prone to overfitting; **large $k$** overgeneralizes and underfits. kNN can also be used as an objective method for **estimating by analogy**: a weighted average of the $k$ nearest neighbors on objective criteria (weight, power, other technical/programmatic characteristics).
+Normalize variables that are on very different scales before computing distance. Euclidean distance is the common choice; Manhattan distance is an alternative. **Small $k$** (e.g. 3) is sensitive to outliers and prone to overfitting; **large $k$** overgeneralizes and underfits. kNN can also be used as an objective method for **estimating by analogy**: a weighted average of the $k$ nearest neighbors based on objective criteria such as weight, power, and other programmatic and technical characteristics.
 
 :::widget ml-classifier:::
 
@@ -691,7 +697,7 @@ Regression predicts a **numerical** outcome. Besides ordinary linear/multivariat
 
 - **Linear regression**: can even support classification, by mapping a continuous prediction to class labels via thresholds (logistic regression is the binary-probability special case).
 - **Decision tree regression**: splits on yes/no questions but predicts a number at each leaf — e.g. spacecraft cost predicted from weight and design life (duration in years).
-- **Random forest regression**: averages the predictions of many trees (commonly 100+), each on a random variable subset; more accurate than a single tree but more computationally expensive.
+- **Random forest regression**: averages the predictions of many trees (commonly 100 or more), each on a random variable subset; generally more accurate than a single tree, but can be computationally expensive.
 - **kNN regression**: predicts a continuous value as the (weighted) average of the $k$ nearest neighbors' outputs, or estimates probability of an outcome from neighbors' outputs (useful for binary classification too).
 
 :::check
@@ -708,11 +714,12 @@ Q: You want to predict spacecraft cost as a number, not a class, using weight an
 
 Unsupervised learning finds similarity in **unlabeled** data rather than predicting a known category (e.g., Netflix/Amazon/Spotify recommendations — there's no "correct" next item, just similar ones). $k$-means clustering steps:
 
-1. Start with the raw data set.
-2. Randomly place $k$ cluster centroids.
-3. Assign each point to its nearest centroid.
-4. Recalculate each centroid's location.
-5. Repeat until stable (centroid-to-point distances stop shrinking).
+1. Starting dataset.
+2. Randomly set cluster centroids.
+3. Assign each point to nearest centroid.
+4. Recalculate centroid location.
+5. Repeat until stable (distance between centroids and observations are minimized).
+6. End once stable.
 
 An analyst could use $k$-means to cross-check an estimate: find the most similar historical projects by feature and compare their costs to the project in question.
 
@@ -722,14 +729,14 @@ Neural networks are inspired by the brain: an **input layer**, one or more **hid
 
 ### Reinforcement learning
 
-Reinforcement learning has no labeled training set and no supervisor; instead, an agent interacts with a real-world (or simulated) environment in real time, making iterative decisions over a sequence of time-steps and receiving rewards or penalties. Examples: an autonomous vehicle, or a chess-playing agent. For cost estimating, this is an advanced technique that can help optimize resource allocation across projects or dynamically adjust estimates as conditions change; implementation details are beyond this module's scope.
+Reinforcement learning is an advanced ML approach that responds to an environment in real time, with a specified goal. Differences from supervised/unsupervised learning: no supervisor to guide the training; no training with a large pre-collected dataset (data arrives dynamically via feedback from the real-world environment); iterative decision making over a sequence of time-steps. In cost estimating, it can make sequential decisions by interacting with an environment and receiving rewards or penalties based on the outcomes of its actions. Examples: an autonomous vehicle, or a chess-playing agent. For cost estimating, this is an advanced technique that can help optimize resource allocation across projects or dynamically adjust estimates as conditions change; implementation details are beyond this module's scope.
 
 :::check
-Q: Which ML category best matches "no labeled training set, agent learns by interacting with the environment and receiving rewards/penalties over time"?
+Q: Which ML category best matches "no supervisor, no large pre-collected dataset, agent learns by interacting with the environment and receiving rewards/penalties over time"?
 - Supervised learning
 - Unsupervised learning
 * Reinforcement learning
-> Reinforcement learning learns from environment feedback (rewards/penalties), not from a pre-labeled data set.
+> Reinforcement learning learns from dynamic feedback from the real-world environment (rewards/penalties), not from a large pre-collected dataset.
 :::
 
 :::check
@@ -758,7 +765,7 @@ Q: You plot the historical data for ships 2, 3 and 4. What do you expect the tre
 * A trend pointing to a higher value, about 6%
 - A trend pointing right at 4%
 - A trend pointing to a lower value than 4%
-> The expert estimated 4% of the lead ship, but plotting historical data for ships 2, 3 and 4 showed a trend pointing to about 6%. The graph corrected the judgment.
+> The expert's 5th-ship guess (from the average of two classes) was 4%, "not too bad"; extrapolating the average line of ships 2, 3 and 4 shows 6% is much more likely, a significant difference.
 :::
 
 +++
@@ -767,26 +774,25 @@ Q: You plot the historical data for ships 2, 3 and 4. What do you expect the tre
 
 1. **Removing outliers without justification.** Investigate first and document any removal.
 2. **Poor histogram binning.** Don't accept the software default; experiment.
-3. **Ignoring skewness.** Check the distribution before applying normal-based outlier rules; use the median if the data is heavily skewed.
-4. **Relying too much on $R^2$.** Also check t- and F-statistics and whether the result makes operational sense.
-5. **Mixing data types.** Keep the data set homogeneous and document your selection criteria.
-
+3. **Ignoring skewness.** Do not apply the normal-based outlier heuristics to significantly skewed data.
+4. **Relying too much on $R^2$.** $R^2$ is not the single best indicator of a good CER or cost driver relationship; also check t- and F-statistics and whether the result makes operational sense.
+5. **Mismatched data points.** A data point that does not match the data set's characteristics (a helicopter in a missile data set) should be removed only with justification.
 +++
 
 ### Expert opinion biases
 
 | Bias | What it looks like |
 |---|---|
-| **Availability heuristic** | Overweighting memorable events |
-| **Conservatism** | Under-revising beliefs when new data arrives |
-| **Dunning-Kruger** | Overestimating one's own expertise |
-| **Optimism bias** | Underestimating risk and cost |
-| **Planning fallacy** | Underestimating task duration |
+| **Availability heuristic** | Overestimating events which have greater memory to the SME |
+| **Conservatism** | Insufficiently revising one's belief when presented with new data |
+| **Dunning-Kruger effect** | The SME may overestimate their ability |
+| **Optimism bias** | Insufficiently assessing risk or true cost |
+| **Planning bias** | Underestimating how long a task requires for completion |
 
 The fix: **validate with data analysis, cross-checks and documentation.**
 
 :::example Validating engineering judgment
-An expert estimated follow-on ship support at 4% of the lead ship. Plotting historical data for ships 2, 3 and 4 showed a trend pointing to about **6%**. The graph corrected the judgment.
+Follow-on support as a percentage of the lead ship was available for hulls 2, 3 and 4, but the program must report a 5th ship cost. The technical expert's 5th-ship guess (average of two classes) was 4%, "not too bad"; extrapolating the average line shows **6%** is much more likely, a significant difference. Graphing the data supports more objective estimates.
 :::
 
 {{primer}}
@@ -795,9 +801,9 @@ An expert estimated follow-on ship support at 4% of the lead ship. Plotting hist
 Q: An estimator insists a task will take 3 months "because it always goes smoothly," even though history shows 5. Which bias is this?
 - Conservatism
 - Availability heuristic
-* Planning fallacy
+* Planning bias
 - Dunning-Kruger effect
-> Underestimating how long a task will take is the planning fallacy (closely related to optimism bias).
+> Underestimating how long a task requires for completion is planning bias.
 :::
 
 +++
@@ -877,7 +883,7 @@ A quick rule of thumb rounds $t \approx 1$:
 - **95% CI** (≈±2 SD): range ≈ $2\,CV/\sqrt{n}$
 
 :::example Worked example, CV = 30%
-At $n = 4$, the 68.3% CI is the estimated mean ±17% — a 68.3% chance the true mean is within 17%. The source's goal is judgments within 5%; for a 95% CI, its Fig 6.45 table gives a sufficient sample of $n = 36$. The rule-of-thumb ($t\approx1$) results track the exact ($t$-distribution) results closely — well worth the simplicity.
+At $n = 4$, the 68.3% CI is the estimated mean ±17% — a 68.3% chance the true mean is within 17%. For a 95% CI, the source gives a sufficient sample of $n = 36$ (found in a figure only). The rule-of-thumb ($t\approx1$) results track the exact ($t$-distribution) results closely — well worth the simplicity.
 :::
 
 {{primer}}
@@ -923,7 +929,7 @@ Q: Time series data
 A: Bivariate data with **time** as the independent variable.
 R: yes
 Q: Three special considerations for time series data
-A: **Paradigm shifts** (sudden change), **cycles** (repeating periodic trends), **autocorrelation** (value correlated with prior periods).
+A: **Paradigm shifts** (marked change in the nature of the data at some point or over some period), **cycles** (repeating periodic trends), **autocorrelation** (value correlated with prior periods).
 Q: What will regression NOT detect in time series data?
 A: Paradigm shifts and cycles. It only finds smooth trends.
 Q: Key framework of descriptive statistics (past / present / future)
@@ -941,7 +947,7 @@ A: The sum of deviations from the mean always equals zero.
 Q: How do you find the median of an even-sized data set?
 A: Sort it, then average the two middle values. E.g., {3, 6, 8, 11, 13, 30} → (8+11)/2 = 9.5
 Q: When is the median preferred over the mean?
-A: When the data is skewed or has outliers (e.g., family income).
+A: When outliers exert undue influence on the mean (e.g., family income); the median may be more representative.
 Q: When is the mode most useful?
 A: Discrete/categorical or qualitative data (most common color) and finding a distribution's peak.
 Q: Main limitation of the mode
@@ -964,9 +970,9 @@ Q: Coefficient of Variation formula
 A: $CV = \dfrac{s}{\bar{x}} \times 100\%$
 R: yes
 Q: CV threshold desired for cost estimating
-A: CV < 15%. Around 5% means the mean alone describes the data well.
+A: CV < 15%. A low CV (e.g., 5%) means the mean is a useful description of the data set.
 Q: What does CV > 15% suggest?
-A: A cost driver may be causing the variation, so consider developing a CER.
+A: There could be a cost driver causing the variation; this should prompt the analyst to develop CERs to find it.
 Q: Key advantage of CV
 A: It is unitless, so you can compare dispersion across data sets with different units or scales.
 
@@ -976,7 +982,7 @@ A: Mean > median; the tail extends to the right (e.g., lognormal).
 Q: Left-skewed distribution: relationship of mean and median
 A: Mean < median; the tail extends to the left.
 Q: Symmetric distribution: mean, median, mode?
-A: All equal.
+A: Mean and median are equal.
 Q: The direction of skew follows the ___
 A: Tail (not the hump).
 Q: % of normal data within ±2σ and ±3σ
@@ -992,7 +998,7 @@ A: They can bias results, changing the slope and $R^2$. Document any removal.
 Q: Scatter plot axis convention
 A: Y (vertical) = dependent variable (cost); X (horizontal) = independent variable (cost driver).
 Q: Three types of scatter plot axes
-A: Unit space (Cartesian), log-log (both axes log), semi-log (one axis log).
+A: Unit space (standard Cartesian xy-plane), log space (ln x, ln y; often called log-log), semi-log space (x, ln y).
 Q: Main pitfall when making histograms
 A: Bin selection. Too few bins hide detail; too many create noise. Experiment with bin sizes.
 Q: Box plot five-number summary
@@ -1005,7 +1011,7 @@ A: Comparing categorical data or statistics (e.g., means ± std dev) across grou
 
 ## Functions
 Q: Power function and its linear form
-A: $y = ax^b$ → $\ln y = \ln a + b \ln x$ (linear in log-log space)
+A: $y = ax^b$ → $\ln y = \ln a + b \ln x$ (linear in log space)
 R: yes
 Q: Exponential function and its linear form
 A: $y = ae^{bx}$ → $\ln y = \ln a + bx$ (linear in semi-log space)
@@ -1013,30 +1019,30 @@ R: yes
 Q: In log-log space, the slope of a power function equals…
 A: The exponent $b$.
 Q: Which space straightens each function? Linear / power / exponential
-A: Linear → unit space. Power → log-log. Exponential → semi-log.
+A: Linear → unit space. Power → log space. Exponential → semi-log space.
 Q: Generalized (real-data) forms of power and exponential functions
-A: $y = ax^b + c$ and $y = ae^{bx} + c$. Real data usually needs a non-zero $c$; learning curves use $c = 0$.
+A: $y = ax^b + c$ and $y = ae^{bx} + c$. Most theoretical models use $c = 0$; real data usually has a non-zero $c$, except for learning curves.
 
 ## Pitfalls and biases
 Q: Availability heuristic
-A: Overweighting memorable events.
+A: Overestimating events which have greater memory to the SME.
 R: yes
 Q: Conservatism bias
-A: Under-revising beliefs when new data arrives.
+A: Insufficiently revising one's belief when presented with new data.
 R: yes
-Q: Planning fallacy
-A: Underestimating how long a task will take.
+Q: Planning bias
+A: Underestimating how long a task requires for completion.
 R: yes
 Q: Optimism bias
-A: Underestimating risk and cost.
+A: Insufficiently assessing risk or true cost.
 R: yes
 Q: Dunning-Kruger effect
-A: Overestimating one's own expertise.
+A: A SME may overestimate their ability.
 R: yes
 Q: Remedy for expert opinion biases
 A: Validate with data analysis, cross-checks, and documentation.
 Q: Ship support example: what did graphing reveal?
-A: 6% of lead ship was more appropriate than the expert's 4% estimate.
+A: Extrapolating the average line showed 6% of the lead ship was much more likely than the expert's 4% (5th ship).
 
 ## Skew, kurtosis, and outlier examples
 Q: Pearson's median skewness formula
@@ -1057,7 +1063,7 @@ A: Simple average \$34.19; \$15-wide bins hide that only one bill is under \$11.
 Q: Bar chart CGF-by-company example (Fig 6.12): SD values
 A: Company 1: 2.07, Company 2: 1.88, Company 3: 1.53, Company 4: 1.52, Company 5: 1.45 — whiskers are SDs, not CIs; divide by sqrt(n) for a CI on the mean.
 Q: Box plot gas-bill example (Figs 6.13/6.14) quartiles
-A: Q1 ≈ \$11-12, median = \$16.50, Q3 = \$37.00; winter-month bills explain the right-tail outliers.
+A: Min ≈ \$11, Q1 = \$12, median = \$16.50, Q3 = \$37.00; most Dec/Jan/Feb bills are 4-5x summer bills, a possible explanation for the right-tail outliers.
 Q: Heat map vs. correlogram
 A: Heat map: grid of colored cells across two axis variables, color = a third variable's value (e.g. Seattle precipitation by month/accumulation). Correlogram: both axes are numeric variables, cell = correlation between them (e.g. Iris petal/sepal measurements).
 Q: Waterfall chart use case
@@ -1078,7 +1084,7 @@ R: yes
 Q: Naive Bayes worked example: new point weight 1050 (0.5 SD from A/B, 1.5 SD from C/D), power 1525 (0.75 SD from A/B, 1.25 SD from C/D)
 A: Weight probabilities 30.85% (A/B) / 6.68% (C/D); power probabilities 22.66% (A/B) / 10.56% (C/D); products 6.99% / 0.71%; normalized 90.83% A/B / 9.17% C/D.
 Q: Decision tree "depth" parameter
-A: Maximum number of branch layers; a tunable parameter — shallow trees underfit, deep trees overfit. Analysts often loop over depth values and pick the lowest-MSE tree.
+A: Maximum number of branch layers; a tunable parameter that makes the model more or less complex, helping prevent underfitting or overfitting. Analysts often loop over depth values and pick the lowest-MSE tree.
 R: yes
 Q: Random forest definition
 A: An ensemble of many decision trees, each trained on a random subset of data/features, with results combined — reduces single-tree overfitting.
@@ -1093,14 +1099,14 @@ A: New point (1500,1000) to (1200,900): sqrt((1500-1200)^2+(1000-900)^2) = 316. 
 Q: Effect of small vs. large k in kNN
 A: Small k (e.g. 3): sensitive to outliers, prone to overfitting. Large k: over-generalizes, underfits.
 Q: kNN as "estimating by analogy"
-A: A weighted average of the k nearest neighbors' objective criteria (weight, power, technical/programmatic characteristics) used to estimate a new point.
+A: A weighted average of the k nearest neighbors, based on objective criteria such as weight, power, and other programmatic and technical characteristics.
 Q: Logistic regression equation
 A: $P = 1/(1+e^{-(\beta_0+\beta_1X_1+\dots+\beta_nX_n)})$; coefficients indicate direction/strength of each feature's influence.
 R: yes
 Q: ML regression techniques (besides ordinary linear regression)
 A: Decision tree regression (numeric leaf values, e.g. spacecraft cost from weight+design life), random forest regression (averages many trees), kNN regression (average of k nearest neighbors' outputs).
 Q: k-means clustering steps
-A: (1) start with data, (2) randomly place k centroids, (3) assign points to nearest centroid, (4) recompute centroids, (5) repeat until stable.
+A: (1) starting dataset, (2) randomly set cluster centroids, (3) assign each point to nearest centroid, (4) recalculate centroid location, (5) repeat until stable, (6) end once stable.
 R: yes
 Q: k-means use for cost analysts
 A: Cross-check an estimate by finding the most similar historical projects (by feature) and comparing their costs.
@@ -1108,7 +1114,7 @@ Q: Neural network layers
 A: Input layer (receives data), hidden layer(s) (computation), output layer (result); trained via forward and backward propagation.
 R: yes
 Q: Reinforcement learning — key differences from supervised/unsupervised
-A: No supervisor, no large pre-collected labeled data set; the agent learns iteratively from real-world (or simulated) feedback (rewards/penalties) over time-steps.
+A: No supervisor to guide the training; no training with a large pre-collected dataset (data arrives dynamically via feedback from the real-world environment); iterative decision making over a sequence of time-steps.
 R: yes
 
 ## Logistic regression risk example (Table 6.3/6.4)

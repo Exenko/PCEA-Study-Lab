@@ -1,7 +1,7 @@
 PCEA.addModule({
   id: 'm13', num: 13, title: 'Economic Analysis', short: 'Economic Analysis', source: 'guide',
   blurb: 'The 7-step EA process, discounting, NPV vs. alternatives, EUAC, and depreciation methods.',
-  intro: String.raw`An **economic analysis (EA)** compares the **costs and benefits of competing alternatives** over their life cycles, accounting for the **time value of money**, to support a decision.
+  intro: String.raw`An **economic analysis (EA)** is an **objective study** performed to compare the **costs and benefits of multiple alternatives**. It aims to give decision makers the data needed to select the best solution, compare **time-phased, economically-adjusted** costs and benefits, and assess their timing and adjust the data economically for the **present value of money**.
 
 Where a cost estimate answers "what will this cost?", EA answers "which alternative is the best economic choice, and why?" EA takes life-cycle cost estimates as input and applies discounting, present-value math, and comparison metrics to rank alternatives fairly.
 
@@ -26,20 +26,21 @@ Q: Put the EA steps in order.
 
 +++
 
-Every EA follows a formal seven-step sequence. Exam questions frequently ask you to identify which step a described activity belongs to.
+Every EA follows a formal seven-step sequence.
 
 **Step 1: Define the Objective**
 - State clearly what decision the analysis supports and what question it answers.
-- A poorly defined objective is the most common root cause of a flawed EA.
+- An ill-defined objective makes the EA results questionable and possibly unusable. The statement must be broad enough not to constrain the analysis unnecessarily, yet narrow enough to focus it on a discrete number of relevant alternatives.
+- A common mistake is to address a symptom of the problem rather than the problem itself.
 - **Key rule**: state the *need* without presupposing a solution (e.g., "move X tons per month" not "buy 10 trucks").
 
 **Step 2: Formulate the Assumptions and Ground Rules**
-- Establish the **analysis period** (time horizon), **base year**, **discount rate**, inflation treatment, and other common assumptions.
-- Ground rules ensure all alternatives are compared on a level playing field.
-- Document assumptions explicitly — they are frequently the most scrutinized part of an EA.
+- **Ground rules** are concise statements that describe the basis from which the estimate is made; they are generally established upfront.
+- **Assumptions** are suppositions about unknown variables required to complete the analysis; they are gathered throughout the process and fall into two categories: mathematical/methodological assumptions and bounding assumptions.
+- Document assumptions carefully and reevaluate them throughout the analysis.
 
 **Step 3: Identify and Examine Alternatives**
-- Develop a comprehensive, mutually exclusive, feasible set of alternatives; do not limit the brainstorming — the best solutions sometimes come from innovative thinking, and an alternative left off the list will not be examined.
+- Include all possible alternatives, then down select: examine them for infeasibilities. Alternatives must be distinct solutions, not variations of one solution. Do not limit the brainstorming — the best solutions sometimes come from innovative thinking, and an alternative left off the list will not be examined.
 - **Minimum**: every EA needs at least **two** alternatives — the **status quo / baseline** ("do nothing") and one possible solution. With only two choices these are sometimes called the **as is** and **to be** systems. If the status quo includes minor modifications it may be called **status quo plus** (or baseline plus).
 - **Recommended**: consider at least **four** alternatives, usually one from each category:
   - **Status quo (or status quo plus)** — change nothing, or make only minor modifications.
@@ -52,10 +53,9 @@ Every EA follows a formal seven-step sequence. Exam questions frequently ask you
 +++
 
 **Step 4: Develop the Cost and Benefits Estimates**
-- Develop full **life-cycle cost estimates** (R&D, procurement, O&S, disposal) for each alternative.
-- Use consistent methods and data sources across alternatives so differences reflect real alternative differences, not estimating artifacts.
+- Develop a comprehensive cost estimate capturing all anticipated expenses for each alternative (development, acquisition, operations, support, maintenance, disposal, plus opportunity and imputed costs).
 - Express costs in **constant (real) dollars** of the chosen base year unless the analysis specifically requires then-year dollars.
-- Quantify benefits where possible in monetary terms (cost avoidance, revenue, productivity); describe qualitatively otherwise.
+- Quantify benefits in monetary terms where possible (cost savings, cost avoidance, productivity improvements); describe qualitatively otherwise.
 
 **Step 5: Compare and Rank the Alternatives**
 - Time-phase: lay out each alternative's costs and benefits by year.
@@ -66,14 +66,13 @@ Every EA follows a formal seven-step sequence. Exam questions frequently ask you
 +++
 
 **Step 6: Test Sensitivity of the Alternative's Rankings**
-- Vary key assumptions (discount rate, cost estimates, analysis period, inflation rate) one at a time.
-- Find **break-even** values where the ranking of alternatives changes.
-- If small, plausible changes flip the ranking, the decision is **not robust** — flag it prominently.
+- Test the assumptions to see whether any significantly influences the outcome; limit the analysis to the most critical and important factors.
+- Recalculate as many times as needed and re-rank the alternatives using the new data.
+- Sensitivity analysis highlights recommendation strengths and weaknesses.
 
 **Step 7: Formulate the Recommendation**
-- State the recommended alternative and the basis for it (primary metric and value for each alternative).
-- Document caveats from sensitivity analysis and any non-quantifiable factors (risk, policy, qualitative benefits).
-- Make the analysis defendable and traceable.
+- Synthesize all data (baseline comparisons, sensitivity cases, benefits); present the recommended action with a solid foundation of analysis. Have justification ready for second and third place alternatives.
+- The decision rests on qualitative as well as quantitative factors; document all calculations and data sources down to the most basic inputs so the report is auditable and stand-alone.
 
 {{primer}}
 
@@ -97,10 +96,10 @@ Q: In which step do you identify cost drivers and benefits parameters?
 
 :::check
 Q: Why is the status quo always included as an alternative?
-* It is the baseline against which other alternatives' costs and benefits are measured
+* Every EA must have at least two alternatives: the status quo/baseline and one possible solution
 - Regulations forbid excluding it
 - It is always cheapest
-> Every alternative's value is judged relative to continuing as is.
+> The status quo/baseline is the existing system/program with no changes made; the second alternative is a possible solution with the desired capabilities.
 :::`
     },
     {
@@ -122,7 +121,7 @@ buckets: Shortest life | Common denominator life | Uniform Annual Cost (UAC)
 
 ### EA period of analysis
 
-Each alternative has an **economic life** (bounded by physical, mission, and/or technological life) and a **period of analysis** (economic life plus any lead time to develop/implement, often ending at Initial Operating Capability). Alternatives frequently have different economic lives, so once each alternative's period of analysis is known, choose one overall **EA period of analysis** using one of three methods:
+Each alternative has an **economic life** (bounded by physical, mission, and/or technological life) and a **period of analysis** (economic life plus any lead time required to develop or implement the system; for many government systems the lead time is defined by when the project achieves Initial Operating Capability (IOC), when most systems begin to offer some benefits). The economic life is the period during which an alternative is providing benefits. Alternatives frequently have different economic lives, so once each alternative's period of analysis is known, choose one overall **EA period of analysis** using one of three methods:
 
 - **Shortest life**: use the shortest alternative's period of analysis; estimate and include a **residual value** for the other alternatives to account for the benefits they still had left.
 - **Common denominator life**: assume each system keeps replacing itself until all alternatives end at the same time (technically the **least common multiple** of the individual periods). Example: lives of 3, 4, and 6 years → a 12-year common denominator; the 3-year system is replaced 3 times, the 4-year system 2 times, the 6-year system once.
@@ -171,7 +170,7 @@ Monetary benefits break down further into:
 - **Terminal value**: value of an asset at the *end* of its economic life. Equals salvage value if physical life defines the end of economic life; can exceed salvage value if mission or technological life defines the end instead.
 - **Salvage value**: value of an asset at the end of its *physical* life (e.g., scrap value).
 
-**Exclude from benefits**: societal benefits outside the organization, benefits already realized by one or more alternatives, and any monetary benefit already captured in the cost estimate (double-counting risk — keep the cost and benefits teams in sync).
+**Exclude from benefits**: societal benefits outside the organization that are incidental to accomplishing the objective, benefits already realized by one or more alternatives, and any monetary benefit already captured in the cost estimate (double-counting risk — keep the cost and benefits teams in sync).
 
 :::check
 Q: Three alternatives have economic lives of 3, 4, and 6 years. Under the common denominator life method, what is the EA period of analysis?
@@ -226,7 +225,7 @@ $$DF_n = \frac{1}{(1+r)^n} \qquad PV = \sum_{n=0}^{N} CF_n \times DF_n$$
 
 where $r$ = discount rate (as a decimal) and $n$ = years from the base period.
 
-**End-of-year convention** (used for discrete Year 0 costs, e.g., procurement) assumes each year's cash flow occurs on the last day of that year. **Mid-year convention** (used for costs spread throughout the year, e.g., recurring O&M) assumes flows occur on average at mid-year:
+**End-of-year factors** assume all costs/benefits accrue at the end of the year. **Mid-year factors** assume costs/benefits accrue throughout the year (the exponent becomes $n - 0.5$ instead of $n$):
 
 $$DF_n^{mid} = \frac{1}{(1+r)^{n-0.5}}$$
 
@@ -245,10 +244,10 @@ The **Fisher equation** (exact):
 $$(1 + r_{nominal}) = (1 + r_{real})(1 + i)$$
 where $i$ = inflation rate.
 
-**Critical rule**: real rate ↔ constant dollars; nominal rate ↔ then-year dollars. Mismatching is one of the most common EA errors.
+**Critical rule**: real rate ↔ constant dollars; nominal rate ↔ then-year dollars. Never mix constant and current year dollars in the same analysis.
 
 :::key U.S. government guidance
-**OMB Circular A-94** is the standard source for prescribed federal discount rates, published annually in Appendix C as part of the president's budget submission. Rates are based on the government's cost of borrowing (Treasury notes with maturities of 3, 5, 7, 10, 20, and 30 years, extrapolated linearly for other periods) and are always in the BY of the budget submission. It publishes separate real and nominal rates by maturity; real rates are used with constant-dollar EAs (the most common case), nominal rates with current-dollar analyses such as lease-purchase and asset-acquisition studies. Always match the rate type to the dollar type.
+**OMB Circular A-94** is the standard source for prescribed federal discount rates, published annually in Appendix C as part of the president's budget submission. Rates are based on the government's cost of borrowing (Treasury notes with maturities of 3, 5, 7, 10, 20, and 30 years, extrapolated linearly for other periods) and are always in the BY of the budget submission. It publishes separate real and nominal rates by maturity; real rates are used with constant-dollar EAs (the most common case), nominal rates (which include an inflationary adjustment) with current-year dollars. Always match the rate type to the dollar type.
 :::
 
 :::tip Beyond CEBoK
@@ -278,7 +277,7 @@ Q: Real rate 3%, inflation 2%. What is the nominal rate? (2 decimals)
 :::
 
 :::check
-Q: Nominal rate of return is 5%, inflation is 3% (CEBoK's own escalation-vs-discounting example). What is the (approximate) real rate?
+Q: Nominal rate of return is 5%, inflation is 3% (CEBoK's own escalation-vs-discounting example). What is the exact real rate?
 = 1.94 ±0.02
 > $1.05 / 1.03 = 1.0194$, i.e., a 1.94% real return — not simply $5\% - 3\% = 2\%$, though that is a close approximation.
 :::
@@ -308,25 +307,25 @@ Q: Which alternative creates more total value (PV of benefits minus PV of costs)
 
 | Technique | Formula | Use when | Decision rule |
 |---|---|---|---|
-| **PV of costs** | $\sum CF_n / (1+r)^n$ | Benefits are **equal** across alternatives | Choose **lowest** PV |
 | **NPV** | $PV(Benefits) - PV(Costs)$ | Benefits **differ** and can be monetized | Choose **highest** NPV; NPV > 0 is favorable |
-| **Benefit-cost ratio (BCR)** | $PV(Benefits) / PV(Costs)$ | Independent projects under budget constraint | BCR > 1.0 is favorable |
+| **Benefit-cost ratio (BCR)** | $PV(Benefits) / PV(Costs)$ | Unequal costs and unequal benefits (efficiency measure; NPV preferred for ranking) | BCR > 1.0 is favorable |
 | **Savings-to-investment ratio (SIR)** | $PV(Savings) / PV(Investment)$ | Investment that generates savings | SIR > 1.0 is favorable |
-| **EUAC / UAC** | $PV \times \dfrac{r(1+r)^N}{(1+r)^N - 1}$ | Alternatives with **unequal lives** | Choose **lowest** UAC |
-| **Payback period** | Years until cumulative savings = investment | **Quick screen only** (undiscounted) | Shorter is better; ignores post-payback flows |
+| **EUAC / UAC** | $UAC = \dfrac{PV(\text{Costs})}{\sum DF}$ (sum of discount factors; UAB likewise) | Alternatives with **unequal lives** | Choose **lowest** UAC |
+| **Payback period** | Years until discounted cash flows net out to zero (NPV turns from negative to positive) | Supplementary; organization rule-of-thumb limit | Shorter is better; ignores post-payback flows |
 | **ROI / IRR** | Rate where NPV = 0 | Supplementary metric | Higher is better; ignores scale |
 
 +++
 
 ### NPV is the preferred primary technique
 
-**Net Present Value** is generally preferred because:
-- It directly reflects the time value of money.
-- It produces a single, unambiguous measure of economic worth in present-value dollars.
-- Among mutually exclusive alternatives, the one with the **highest NPV** creates the most total value.
+**Net Present Value** is the primary comparison technique per OMB Circular A-94, DoDI 7041.3 and the DoD FMR. It can be used with both monetary and non-monetary benefits (for non-monetary benefits, discount cost only and consider benefits by relative value, e.g., a weighting system).
+- Generally, pick the alternative with the **highest NPV**.
 - $NPV > 0$ means the alternative is economically favorable (benefits exceed costs in PV terms).
+- NPV analysis is the generally accepted methodology for project-level analyses.
 
-When benefits are **equal** across alternatives (e.g., all provide the same operational capability), compare **PV of costs** and choose the lowest — this is a cost-minimization analysis.
+:::tip Beyond CEBoK
+When benefits are **equal** across alternatives (e.g., all provide the same operational capability), comparing **PV of costs** and choosing the lowest is a cost-minimization analysis. BCR is also commonly used to rank independent projects under a budget constraint.
+:::
 
 +++
 
@@ -381,7 +380,7 @@ When choosing what to test in sensitivity analysis, focus on:
 
 ### Payback and ROI: supplementary only
 
-- **Payback period** ignores the time value of money (unless discounted) and ignores all cash flows after payback, potentially favoring a fast-payback alternative with poor long-term economics.
+- **Payback period** (CEBoK: discounted payback) ignores all cash flows after payback, potentially favoring a fast-payback alternative with poor long-term economics; it has no decision rule for projects with identical payback periods and no generally accepted required number of years.
 - **ROI** is a ratio and can favor a smaller, higher-percentage-return alternative over a larger alternative that creates more total value.
 - **Best practice**: use NPV as the primary ranking criterion, and report payback and ROI as supplementary context.
 
@@ -445,7 +444,7 @@ CEBoK's core worked example runs the full seven-step process on a deliberately s
 
 ### Steps 1–3: Objective, Assumptions, Alternatives
 
-**Objective**: Of five candidate objectives brainstormed (minimize mowing time, maximize mowing efficiency, identify an optimal lawn maintenance program, improve quality of life, get someone else to mow), CEBoK selects **"Identify the optimal lawn maintenance program"** — broad enough to be solution-neutral, narrow enough to focus the analysis. ("Minimize mowing time" addresses a symptom, not the problem; "get someone else to mow" presupposes a solution; "improve quality of life" is too broad.)
+**Objective**: Of five candidate objectives brainstormed (minimize mowing time, maximize mowing efficiency, identify an optimal lawn maintenance program, improve quality of life, get someone else to mow), CEBoK notes either #2 or #3 would be fine provided the objective is continually revisited; for the module it assumes #3, **"Identify the optimal lawn maintenance program"**. ("Minimize mowing time" addresses a symptom, not the problem; "get someone else to mow" presupposes a solution; "improve quality of life" is too broad.)
 
 **Assumptions**: only mowing is in scope (not weeding/fertilizing); the lawn is mowed 10 times/year.
 
@@ -513,7 +512,7 @@ Both alternatives' costs and benefits increase, but the outcome is unchanged: **
 
 ### Step 7: Recommendation
 
-**Recommend outsourcing** — it has the highest NPV in the base case and remains the winner under every sensitivity case tested (fuel/outsourcing costs, mower's time value), so the recommendation is **robust**. The ecological benefit of a newer, cleaner mower is not realized under this alternative — a qualitative caveat worth noting alongside the quantitative result.
+**Recommend outsourcing** — it has the highest NPV in the base case and remains the winner under every sensitivity case tested (fuel/outsourcing costs, mower's time value), and CEBoK notes that increased outsourcing and fuel prices are both probable. The ecological benefit of a newer, cleaner mower is not realized under this alternative — a qualitative caveat worth noting alongside the quantitative result.
 
 :::widget mower-npv:::
 
@@ -556,7 +555,7 @@ Q: In the lawn-mower example, why are mid-year discount factors used instead of 
 * Costs and benefits (mowing, fuel, labor) are spread throughout the year, not concentrated at year-end
 - Mid-year factors are always required by OMB A-94
 - The BY is mid-fiscal-year
-> End-of-year factors are for discrete Year-0-style costs; recurring costs spread through the year use mid-year factors.
+> End-of-year factors assume costs/benefits accrue at the end of the year; mid-year factors assume they accrue throughout the year.
 :::
 
 :::check
@@ -598,13 +597,13 @@ Q: A \$140,000 asset with \$20,000 salvage is depreciated over 5 years, once str
 
 +++
 
-**Depreciation** allocates the cost of a capital asset over its useful life for accounting and tax purposes. It is **not a cash flow** in itself, but it matters for tax-effect analysis, asset-replacement decisions, and lease-vs-buy comparisons.
+**Depreciation** is the phenomenon wherein assets with finite lives lose value over time, roughly corresponding to normal wear and tear. It is a **non-cash expenditure** important for accounting, tax, and capital planning purposes.
 
 **Key terms:**
-- **Cost basis**: original cost of the asset (including costs to place it in service).
-- **Salvage value**: estimated value at the end of useful life.
-- **Useful life ($N$)**: depreciation period, often set by accounting/tax convention.
-- **Book value**: cost basis minus accumulated depreciation.
+- **Cost**: original cost of the asset.
+- **Salvage value (residual value)**: estimated value at the end of useful life.
+- **Useful life ($N$)**: depreciation period.
+- **Book value**: Cost minus accumulated depreciation.
 
 Depreciation = (Cost − Residual value) / Useful life, and cumulative depreciation = Initial value − Current value.
 
@@ -628,8 +627,6 @@ An **accelerated method**: applies a constant rate to the **remaining book value
 
 $$\text{Rate}_{200\%\,DDB} = \frac{1}{N} \times 200\% \qquad \text{Rate}_{150\%\,DDB} = \frac{1}{N} \times 150\%$$
 
-**Never depreciate below salvage value** — cap the final year so book value ends exactly at salvage.
-
 **Same \$140,000/\$20,000/5-year asset, 200% DDB** (rate = $1/5 \times 200\% = 40\%$), still prorating the first partial year:
 
 | Year | Book Value (beginning) | Rate | Depreciation | Book Value (end) |
@@ -640,7 +637,11 @@ $$\text{Rate}_{200\%\,DDB} = \frac{1}{N} \times 200\% \qquad \text{Rate}_{150\%\
 | 2009 | \$35,280 | 40% | \$14,112 | \$21,168 |
 | 2010 | \$21,168 | 40% | \$1,168 (capped) | \$20,000 |
 
-Without the salvage cap, 2010's 40% depreciation would be \$8,467, dropping book value below the \$20,000 salvage floor — so the final year is capped at whatever brings book value exactly to salvage (\$21,168 − \$20,000 = \$1,168).
+The text gives only the 40% rate (20% × 200%); the year-by-year table above is from the figure, not the text, and is unverified against it.
+
+:::tip Beyond CEBoK
+Standard practice is to never depreciate below salvage value. Without the cap, 2010's 40% depreciation would be \$8,467, dropping book value below the \$20,000 salvage floor, so the final year is capped to bring book value exactly to salvage (\$21,168 − \$20,000 = \$1,168).
+:::
 
 :::widget depreciation:::
 
@@ -690,7 +691,7 @@ Across straight-line, DDB, and SYD, total depreciation always equals (Cost − S
 
 {{primer}}
 
-:::warn Important rule
+:::tip Beyond CEBoK
 **Never depreciate an asset below its salvage value.** Cap the final-year depreciation so book value exactly equals (not less than) salvage value.
 :::
 
@@ -825,7 +826,7 @@ A broader, formal **acquisition-milestone study**, running an effectiveness anal
 
 ### Lease vs. Purchase Decisions
 
-Compares $PV(\text{Lease})$ vs. $PV(\text{Purchase} + O\&S - \text{Residual Value})$. Less involved than major-system EAs, but with special considerations: ancillary services (property acquisition/prep, repair/improvements or operations if bundled into the lease, imputed property taxes, imputed insurance), tax effects, and the correct discount-rate/dollar type.
+A special form of EA with two alternatives: lease or purchase of equipment or a facility. Costs and benefits are usually less involved than major acquisitions, but special considerations apply: tax implications and costs of ancillary services (costs of acquiring property and preparing it for use, repair/improvements costs if included in lease, operations costs if included in lease, imputed property taxes, imputed insurance premiums).
 
 ### Special cases not covered in depth
 
@@ -902,12 +903,8 @@ Q: An A-76 (Commercial Activities) study's EA component differs from a standard 
 > A-76 studies assume comparable performance and focus mainly on cost comparison; the EA is one smaller part of the overall study.
 :::
 
-:::check
-Q: A ranking flips only if cost grows 60%, far beyond historical experience. The recommendation is…
-* Robust: the decision holds across plausible assumption ranges
-- Fragile: it should not be trusted
-- Correct only at the base-case assumptions
-> Break-even far outside plausible range means the decision is not sensitive to realistic variation.
+:::tip Beyond CEBoK
+Practitioners often look for **break-even** values, the assumption values at which the ranking of alternatives flips. If the ranking flips only at extreme values, the recommendation is commonly called **robust**; if small, plausible changes flip it, it is **fragile** and should be flagged. CEBoK itself does not use these terms; it says sensitivity analysis highlights recommendation strengths and weaknesses.
 :::`
     }
   ],
@@ -919,14 +916,14 @@ R: yes
 Q: What makes a good EA objective?
 A: States the need without presupposing a solution (e.g., "move X tons/month" not "buy trucks").
 Q: What is the status quo alternative?
-A: The baseline "do nothing" option against which all others are measured.
+A: The baseline alternative: the existing system/program with no changes made (also "do nothing").
 R: yes
 Q: Treatment of sunk costs in an EA
 A: Excluded. Only future, differential costs that vary between alternatives matter.
 Q: What are ground rules and why matter?
-A: Common assumptions (analysis period, discount rate, base year, inflation treatment) applied consistently to level the comparison.
-Q: Name 3 components of ground rules
-A: Analysis period, discount rate, base year, inflation treatment, cost estimation conventions.
+A: Ground rules are concise statements describing the basis from which the estimate is made; generally established upfront.
+Q: Name the 2 categories of assumptions
+A: Mathematical/methodological assumptions and bounding assumptions.
 Q: Minimum number of alternatives an EA must have
 A: Two — the status quo/baseline and one possible solution (the "as is"/"to be" pair when there are only two).
 Q: The four recommended alternative categories
@@ -966,16 +963,16 @@ R: yes
 Q: Why use discounting in EA?
 A: Time value of money: a dollar available now can be invested to earn returns, so it is worth more than a dollar received later.
 Q: When do you use mid-year vs. end-of-year discount factors?
-A: End-of-year for discrete costs (e.g., Year 0 procurement); mid-year for recurring costs spread through the year (e.g., O&M).
+A: End-of-year factors assume all costs/benefits accrue at the end of the year; mid-year factors assume they accrue throughout the year.
 Q: Which discount factor is always larger, mid-year or end-of-year for the same year?
 A: Mid-year, because the cash flow occurs earlier on average.
 Q: Why must you match discount rate type to dollar type?
-A: Real rate is for constant dollars; nominal rate is for then-year dollars. Mismatching is a common error.
+A: Real rate is for constant dollars; nominal rate is for then-year dollars. Never mix constant and current year dollars in the same analysis.
 Q: Fisher equation (exact)
 A: $(1 + r_{nominal}) = (1 + r_{real})(1 + i)$, where $i$ = inflation rate.
 R: yes
 Q: What does OMB Circular A-94 specify?
-A: Federal guidance on discount rates (real and nominal, by maturity), updated annually; prescribes rates for government cost-effectiveness and lease-purchase analysis.
+A: Federal guidance on discount rates: real (constant-year dollars) and nominal (current-year dollars) rates by Treasury-note maturity, published annually with the President's budget.
 R: yes
 Q: CEBoK's own escalation vs. discounting example: nominal rate 5%, inflation 3%. Real rate?
 A: $1.05/1.03 = 1.0194$, a 1.94% real return (not simply $5\%-3\%=2\%$, though close).
@@ -986,8 +983,6 @@ A: Escalation applies inflation's effects to a cost stream; discounting converts
 Q: Net Present Value (NPV)
 A: $NPV = PV(Benefits) - PV(Costs)$; choose the highest; favorable if > 0.
 R: yes
-Q: When is PV of cost alone sufficient to rank alternatives?
-A: When benefits are equal across alternatives (cost-minimization comparison).
 Q: Benefit-cost ratio (BCR)
 A: $BCR = \dfrac{PV(Benefits)}{PV(Costs)}$; BCR > 1.0 is favorable.
 R: yes
@@ -1000,14 +995,14 @@ Q: Annuity PV factor formula and its use
 A: $\sum_{n=1}^{N} \dfrac{1}{(1+r)^n} = \dfrac{1-(1+r)^{-N}}{r}$; multiply annual amount by factor to get PV of uniform stream.
 R: yes
 Q: Payback period
-A: Time (usually in years) until cumulative savings/benefits equal the initial investment.
+A: Time (usually in years) until the initial investment is recovered; in CEBoK, the point where discounted cash flows net out to zero.
 R: yes
 Q: Is simple payback period discounted or undiscounted?
-A: Usually undiscounted. Discounted payback accounts for time value and is always longer.
+A: CEBoK defines payback as discounted payback: the point where discounted cash flows net out to zero (NPV switches negative to positive).
 Q: Why is NPV preferred over BCR/ROI for ranking mutually exclusive alternatives?
 A: NPV measures total absolute value created; ratios like BCR and ROI can favor smaller, higher-ratio alternatives over larger, higher-NPV ones.
 Q: Payback period weaknesses
-A: Ignores time value of money (unless discounted), ignores cash flows after payback point, favors early-payback alternatives with poor long-term economics.
+A: Ignores cash flows after payback point, favors early-payback alternatives with poor long-term economics; no generally accepted number of years (organizations set their own rules of thumb).
 Q: ROI weakness for ranking
 A: It is a ratio and ignores investment scale; 50% ROI on \$1K creates less total value than 20% on \$10M.
 Q: C/BR paradox example: Alt 1 = \$2 benefit/\$1 cost, Alt 2 = \$6 benefit/\$4 cost. Which wins NPV, which wins C/BR?
@@ -1062,7 +1057,7 @@ A: Relevant US legislation (e.g., Clinger-Cohen Act) and names of cost products 
 
 ## Depreciation
 Q: Depreciation definition and purpose
-A: Allocation of an asset's cost over its useful life for accounting and tax purposes; not a cash flow itself.
+A: Assets with finite lives lose value over time (roughly normal wear and tear); a non-cash expenditure important for accounting, tax, and capital planning purposes.
 R: yes
 Q: Depreciable base formula
 A: Cost − Salvage (residual) value
@@ -1090,8 +1085,6 @@ Q: SYD Year 1 depreciation for \$100K asset, \$10K residual (CEBoK's SYD example
 A: $(5/15) \times (100{,}000 - 10{,}000) = 30{,}000$
 Q: Do straight-line, DDB, and SYD all total to the same amount over the asset's life?
 A: Yes; all sum to (Cost − Salvage). Only the **timing** differs.
-Q: Critical rule about salvage value in DDB
-A: Never depreciate an asset below its salvage value; cap the final year's depreciation so book value equals salvage exactly.
 Q: Which method allocates MORE depreciation to LATER years?
 A: Sinking fund depreciation — the exception, along with straight-line's flat schedule, to the usual front-loaded pattern.
 Q: Fixed percentage depreciation method
@@ -1100,19 +1093,19 @@ R: yes
 
 ## Special Topics
 Q: Functional Economic Analysis (FEA)
-A: EA applied to business-process decisions, emphasizing full cost accounting (overhead, indirect) and function-wide impact.
+A: EA focused on business process improvement: traditional EA calculations plus considerations for strategic plans, processes, and other business functions; goal is improved efficiency and streamlined processes (cost reductions if possible); alternatives are often incremental variations on one basic set of changes.
 R: yes
 Q: Analysis of Alternatives (AoA)
-A: Broader acquisition study evaluating operational effectiveness, cost, and risk of materiel solutions; EA is a core input but AoA also weighs non-cost factors.
+A: Special study with EA-type comparisons plus more: an operational effectiveness analysis (military worth in performing Mission Tasks) run in parallel with, and equal in importance to, a cost analysis (total Life Cycle Cost); results combined to identify the best-value alternative(s).
 R: yes
 Q: Lease vs. purchase comparison
-A: Compare PV(Lease payments) vs. PV(Purchase + O&S − Residual Value); attention to discount rate type (often prescribed Treasury rates), tax effects, residual value.
+A: Special EA with two alternatives, lease or purchase; special considerations are tax implications and ancillary-service costs (property acquisition/prep, repairs/improvements and operations if in lease, imputed property taxes and insurance).
 Q: Three types of benefits in benefits analysis
-A: Monetizable (cost savings, revenue), quantifiable non-monetary (availability, response time), qualitative (readiness, safety, morale).
+A: Quantifiable and monetary; quantifiable and non-monetary; non-quantifiable but qualitative. (Monetary benefits: cost savings, cost avoidance, productivity improvements.)
 Q: What should you do with benefits that cannot be monetized?
-A: Describe them qualitatively and present **alongside** the quantitative result; do not omit or force a dollar figure that overstates precision.
-Q: Why would cost-effectiveness analysis be used?
-A: When benefits cannot be monetized; compare PV of cost per unit of non-monetary effectiveness measure (e.g., cost per operational hour).
+A: Address the benefit, and how to compare alternatives, in the EA documentation; ranking or weighting them is also useful.
+Q: How can NPV be used with non-monetary benefits?
+A: Discount cost only, and consider benefits by relative value (e.g., a weighting system for the highest overall benefits rating).
 Q: Commercial Activities / A-76 studies
 A: Outsourcing/privatization studies governed by OMB Circular A-76; the EA within them is smaller/less detailed and usually skips a formal benefits estimate, assuming either performer can do the work equally well.
 R: yes
@@ -1128,15 +1121,8 @@ A: No generally accepted rule for how many years is acceptable, and it gives no 
 
 ## Sensitivity and Robustness
 Q: Purpose of sensitivity analysis (Step 6)
-A: Test whether the ranking of alternatives changes when key assumptions (discount rate, cost, life, benefits) vary; find break-even points.
-Q: What is a break-even point in sensitivity analysis?
-A: The value of an assumption at which two alternatives have equal cost (or at which NPV = 0); the ranking flips.
-R: yes
+A: Test the assumptions to see whether any significantly influences the outcome; recalculate and re-rank the alternatives. It highlights recommendation strengths and weaknesses.
 Q: What makes a recommendation robust?
-A: The ranking holds across plausible ranges of key assumptions; small changes in assumptions do not flip the winner.
-Q: If ranking flips only at extreme assumption values, the recommendation is…
-A: Robust; the decision is not sensitive to realistic variation and can be defended.
-Q: If ranking flips at small, plausible assumption changes, the recommendation is…
-A: Fragile or not robust; flag this in the recommendation and note that the decision depends heavily on those assumptions.
+A: Recommendation strength = whether the winner stays the same across the tested cases.
 `
 });

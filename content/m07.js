@@ -1,7 +1,7 @@
 PCEA.addModule({
   id: 'm07', num: 7, title: 'Learning Curves', short: 'Learning Curves', source: 'guide',
   blurb: 'Each doubling of quantity cuts cost by a constant percentage. CUMAV vs. unit theory, lot midpoints, and breaks.',
-  intro: String.raw`Learning curves quantify **cost improvement**: the cost reduction you get from producing many units of the same system under consistent conditions.
+  intro: String.raw`Learning curves quantify **cost improvement**: the reduction of cost with the production of multiple units of the same system, produced under the same processes in the same facility by a consistent workforce with no undue delays or production breaks.
 
 **Core principle:** each time the quantity **doubles**, cost falls by a constant percentage. That percentage is set by the **learning curve slope (LCS)**.
 
@@ -85,7 +85,11 @@ show: lcs=0.8
 :::
 
 :::tip
-Lower LCS (70–80%) = **steeper** learning: lots of touch labor, complex manual work. Higher LCS (90–95%) = **flatter**: automated, simple, mature processes.
+Steepest (fastest) learning = **low LCS**, more negative $b$: a great deal of touch labor, little automation. Flattest (slowest) learning = **high LCS** (just under 100%), $b$ near zero: highly automated, little touch labor.
+:::
+
+:::tip Beyond CEBoK
+Process complexity and technology level are sometimes used as rules of thumb for steep vs. flat learning, but CEBoK notes such rules are often not based in documented analysis and can contradict one another.
 :::
 
 +++
@@ -137,7 +141,7 @@ Both theories use $Y = aX^b$. They disagree about **what $Y$ is**.
 | Lot data | Works directly | Needs **lot midpoints** |
 | Preference | Generally **not** preferred | Generally **preferred** (default) |
 
-**CEBoK rule of thumb:** for data with more than about a 2% Coefficient of Variation (CV), CUMAV will likely produce the better statistical fit, even if the true process is ULC. That said, ULC's objections to CUMAV stand: CUMAV uses a synthetic (not observed) variable, obscures the true error and variation of the observed cost, and produces artificially favorable statistics. ULC is generally **preferred** in practice now that spreadsheets make its extra bookkeeping easy.
+**CEBoK rule of thumb:** for data with more than about a 2% Coefficient of Variation (CV), CUMAV will likely produce the better statistical fit, even if the true process is ULC. That said, ULC's objections to CUMAV stand: CUMAV uses a synthetic (not observed) variable, confuses the true estimating error (producing an artificial error), obscures the variation of the observed variable, and produces artificially favorable statistics. ULC is generally **preferred** in practice now that spreadsheets make its extra bookkeeping easy.
 
 {{primer}}
 
@@ -193,7 +197,7 @@ With **unit data**, ULC gives unit 20 = \$49.54 (coincidentally the same number 
 CEBoK prints the CUMAV total as both 990.72 and 990.69, depending on how $b$ is rounded. With the exact $b$ the totals are 990.79 (CUMAV) and 1240.23 (ULC), which is what the widget shows. The differences are rounding only.
 :::
 
-With **lot data**, ULC needs lot midpoints. The heuristic gives an initial $b = -0.2402$; regressing again with refined LMPs gives $b = -0.2345$ (85%, matching the true curve). Because the fit isn't exact with approximated LMPs, the actual total of the first 10 units, \$711.61, differs slightly from the model's predicted \$709.78.
+With **lot data**, ULC needs lot midpoints. The heuristic gives an initial $b = -0.2402$; the underlying data fits $b = -0.2345$ (85% learning), which is within an acceptable range of the initial $b$, so no further iteration was needed. Because the fit isn't exact with approximated LMPs, the actual total of the first 10 units, \$711.61, differs slightly from the model's predicted \$709.78.
 
 :::check
 Q: 85% curve, T1 = 100: Which is larger: the ULC total of the first 20 units, or the CUMAV total?
@@ -284,7 +288,7 @@ Q: CUMAV, T1 = 100, 85%. Using the totals-difference method, what is the cost of
 :::
 
 :::warn
-**Don't round the LCS.** Keep 4+ decimals. The difference between 85% and 85.23% compounds over many units.
+**Do not round the LCS.** As with inflation calculations, rounding important factors like LCSs can have significant effects on total life cycle cost.
 :::
 
 +++
@@ -362,11 +366,11 @@ Q: In step 6, the slope $\beta$ from log space becomes…
 
 ### T1 and the T1 adder
 
-**T1 is the regression's first-unit value**, not necessarily what unit 1 actually cost. Sometimes unit 1 sits well above the curve (ships, prototypes). A **T1 adder** handles that first-unit premium separately. You need at least 3 data points to estimate a curve.
+**T1 is the regression's first-unit value**, not necessarily what unit 1 actually cost. Sometimes unit 1 sits well above the curve (ships, prototypes). A **T1 adder** handles that first-unit premium separately. With a T1 adder there is another variable to estimate, making 3 units the minimum quantity.
 
 ### When learning curves apply
-- ✓ Many units of the same system, the same facility, a stable workforce, the same processes, significant direct labor, no big breaks, enough data (3 minimum, 8+ preferred)
-- ✗ Highly automated work, one-of-a-kind systems, big changes between units, different facilities, major turnover, very short runs, little direct labor
+- ✓ Many units of the same system, the same facility, a stable workforce, the same processes, significant direct labor, no big breaks, enough data
+- ✗ Highly automated work, changed processes, facility or workforce between units, production breaks or delays, direct labor not the majority of price, price too low to warrant analysis, production too short for sufficient data, standard items without measurable learning
 
 CEBoK's own screening criteria, use the methodology only when:
 - direct labor comprises the **majority of the total price**,
@@ -434,7 +438,7 @@ Why is the arithmetic mean too high? Early units in the lot cost more than later
 
 ### The chicken-and-egg problem
 
-To compute the LMP you need $b$. To estimate $b$ you need the LMPs. The fix is to **start with a heuristic, then iterate**.
+To compute the LMP you need $b$. To estimate $b$ you need the LMPs. The fix is to **start with a heuristic (or a $b$ from an analogous system), then iterate**.
 
 **Heuristic (no b needed):**
 $$LMP \approx \frac{1}{2}\left[\sqrt{FL} + \frac{F+L}{2}\right]$$
@@ -442,7 +446,7 @@ $$LMP \approx \frac{1}{2}\left[\sqrt{FL} + \frac{F+L}{2}\right]$$
 **Refined (needs b):**
 $$LMP = \left[\frac{(L+\tfrac12)^{b+1} - (F-\tfrac12)^{b+1}}{(b+1)(L-F+1)}\right]^{1/b}$$
 
-Process: heuristic LMPs → regress for $b$ → refined LMPs → regress again. One pass is usually enough.
+Process: heuristic LMPs → regress for $b$ → refined LMPs (closed-form formula) → regress again. Iterate if the new $b$ is significantly different from the $b$ used to generate the LMPs.
 
 +++
 
@@ -496,10 +500,10 @@ Production stops for a while, then restarts. How much of the learning workers ha
 Q: Which kind of learning loss does each situation lead to?
 buckets: No change | Partial loss | Complete loss
 - A short break; the process continues as if it never stopped = No change
-- The typical case, best addressed analytically = Partial loss
-- A long break with complete workforce turnover = Complete loss
+- Some learning lost; the approach best for addressing production breaks = Partial loss
+- Production halted for an extended period, or complete turnover of staff = Complete loss
 - Cost goes back to T1 = Complete loss
-> Short breaks mean no change, the typical case is partial loss, and long breaks with complete turnover send you back to T1.
+> Short breaks mean no change, partial loss is the approach best for addressing breaks, and extended halts or complete staff turnover may send you back to T1.
 :::
 
 +++
@@ -509,8 +513,8 @@ buckets: No change | Partial loss | Complete loss
 Breaks come from customer rate/quantity changes, over-production, supply-chain gaps, strikes, design or process changes. After a break, some learning may be lost:
 
 1. **No change**: short breaks; the process continues as if it never stopped.
-2. **Partial loss**: the typical case, and the one best addressed analytically.
-3. **Complete loss**: back to T1 (long breaks, complete workforce turnover).
+2. **Partial loss**: some learning is lost, restarting at a higher point on the curve; the approach best for addressing production breaks.
+3. **Complete loss**: back to T1; may apply when production is halted for extended periods or staff completely turns over.
 
 There are two mathematically equivalent ways to view a break: as a percentage of learning lost on the **cost axis**, or as a number of units of learning lost on the **unit axis**. Both amount to moving back up the curve.
 
@@ -583,7 +587,7 @@ Q: In the Retrograde Method, what do the five weighted categories represent?
 RAND Corporation first proposed rate theory in 1974. It adds production rate as a second independent variable to the ULC model:
 $$Y = a\,X^b R^c$$
 
-$R$ is the annualized production rate and $c$ is its regression coefficient (found the same way as $b$). Rate theory lets analysts see the cost effect of budget-driven rate changes — but in practice the rate term is **rarely found to be statistically significant**, and it's popular with program offices but unpopular with oversight groups. Always check the rate term's significance, and watch for **multicollinearity** between X and R (cumulative quantity and rate often move together).
+$R$ is the annualized production rate and $c$ is its regression coefficient (found the same way as $b$). Rate theory lets analysts see the cost effect of budget-driven rate changes — but in practice the rate term is **rarely found to be statistically significant**, and it's popular with program offices but unpopular with oversight groups. Always check the rate term's significance, and check **multicollinearity** (correlation) between unit number X and rate R. If they are highly correlated they are effectively predicting the same thing, and rate theory should not be used.
 
 ### New work
 
@@ -594,7 +598,7 @@ where $a_1, b_1$ describe the original work and $a_2, b_2$ the new work (often t
 
 :::check
 Q: Why must you check multicollinearity in rate theory?
-* Cumulative quantity and production rate tend to move together
+* High correlation means the two predict the same thing, so rate theory should not be used
 - Rate is always negatively correlated with cost
 - The model has no intercept
 > If X and R are highly correlated, the regression can't separate their effects, which inflates standard errors.
@@ -612,7 +616,7 @@ When OLS regression is done in log space, the resulting prediction intervals bec
 
 ### Choosing a theory for real (imperfect) data
 
-Real data rarely specifies a theory. Fit both CUMAV and ULC, compare $R^2$, $t$-, and $F$-statistics — CUMAV is inherently biased toward a better fit (its smoothing effect), so a marginally higher CUMAV $R^2$ doesn't automatically mean CUMAV is "truer," just a better statistical match. The **CUMAV iterative method** treats each lot's data independently (rather than using cumulative totals), which avoids problems with missing/concurrent lots, gives more realistic goodness-of-fit statistics, and makes outliers easier to spot — at the cost of complexity similar to ULC.
+Real data rarely specifies a theory. Fit both CUMAV and ULC, compare $R^2$, $t$-, and $F$-statistics — CUMAV is inherently biased toward a better fit (its smoothing effect), so a marginally higher CUMAV $R^2$ doesn't automatically mean CUMAV is "truer," just a better statistical match. The **CUMAV iterative method** treats each lot's data independently (rather than using cumulative totals), which avoids problems with missing/concurrent lots, gives more realistic goodness-of-fit statistics, and makes outliers easier to spot — at the cost of procedures at least as complicated as ULC but less intuitive, so ULC remains the preferred theory.
 
 For estimating **new programs**, two alternatives to a single fitted curve: run a steady-state **should-cost** estimate for the flat, far-down-the-curve "follow units" and run it back up the curve; or use **Quantity As an Independent Variable (QAIV)**, where quantity becomes another independent variable in a Cost Estimating Relationship (CER) that estimates the whole production run or lot directly, instead of estimating T1 and applying a separate learning curve.
 
@@ -654,7 +658,7 @@ buckets: Common trap | Sanity check
 
 ### Sanity checks
 - Cost falls as units increase (except around breaks)
-- LCS is usually between 0.70 and 0.95
+- Reasonable LCSs in CEBoK's examples run from about 70% to 95%
 - $b$ is negative
 - The LMP lies between F and L
 - T1 may not equal the actual first-unit cost
@@ -707,7 +711,7 @@ Q: You're given unit 10 costs 58.27 on an 85% unit curve. Cost of unit 20?
   cards: String.raw`
 ## Fundamentals
 Q: What does a learning curve quantify?
-A: Cost improvement: the cost reduction from producing multiple units of the same system under consistent conditions.
+A: Cost improvement: the reduction of cost with the production of multiple units of the same system, produced under the same processes in the same facility by a consistent workforce with no undue delays or production breaks.
 Q: Core principle of learning curves
 A: Each doubling of quantity reduces cost by a constant percentage (set by the LCS).
 Q: Basic learning curve equation
@@ -734,9 +738,9 @@ A: −0.1520
 Q: b for an 80% curve
 A: −0.3219
 Q: Low LCS (70–80%) indicates…
-A: Steep learning: high touch labor, complex processes, low automation.
+A: Steep learning (low LCS, more negative b): much touch labor, little automation.
 Q: High LCS (90–95%) indicates…
-A: Flat learning: high automation, simple processes, mature technology.
+A: Flat learning (high LCS just under 100%, b near zero): highly automated, little touch labor.
 Q: T1 unit 1 = 200, 80% unit curve. Cost of unit 4?
 A: $200 \times 0.8^2 = 128$
 
@@ -758,8 +762,8 @@ A: Wright curves / Crawford curves
 R: yes
 Q: CEBoK rule of thumb for choosing CUMAV vs. ULC by fit
 A: For data with CV greater than about 2%, CUMAV will likely have the better statistical fit, even if ULC is the true process.
-Q: Three objections to CUMAV
-A: Uses a synthetic (not observed) variable; obscures true error/variation of the observed cost; produces artificially favorable fit statistics.
+Q: Objections to CUMAV
+A: Four: (1) uses a synthetic variable (cumulative average unit cost) instead of the observed variable (unit cost); (2) confuses the true estimating error of the observed variable by producing an artificial error; (3) obscures the variation of the observed variable, which the analyst is responsible for understanding; (4) produces artificially favorable statistics.
 Q: Other names for the learning curve concept
 A: Cost Improvement Curve (CIC), cost/quantity relationship, manufacturing progress function, experience curve, product improvement function.
 R: yes
@@ -796,7 +800,7 @@ A: $a = e^{\alpha}$ (and b = β)
 Q: CUMAV, T1=100, 85%: CAUC at 20 units and total?
 A: CAUC = $100 \cdot 20^{-0.2345} = 49.54$; total = 990.72
 Q: Why must you not round the LCS?
-A: Small rounding errors (85% vs 85.23%) compound over many units. Keep 4+ decimals.
+A: Do not round the LCS: as with inflation calculations, rounding important factors like LCSs can have significant effects on total life cycle cost.
 Q: Fig 7.4 (T1=\$1,000, 85%): unit 2, unit 4, unit 8 costs
 A: u2 = \$850.00, u4 = \$722.50, u8 = \$614.13
 Q: Fig 7.4: cumulative cost and CAUC through unit 8
@@ -814,7 +818,7 @@ A: (170.00+172.84)/5 = 68.57
 Q: Same CUMAV lot example: cost of the 4th lot (units 11–20)?
 A: Total(20) − first 3 lots = 990.72 − 582.82 = 407.90
 Q: ULC lot data example: heuristic b vs. refined b
-A: Heuristic b = −0.2402; refined (iterated) b = −0.2345 (85%).
+A: Heuristic b = −0.2402; underlying data fits b = −0.2345 (85%), within acceptable range of the initial b.
 Q: ULC lot data example: actual vs. predicted total of first 10 units
 A: Actual = $711.61; model-predicted = $709.78 (small gap from LMP approximation error).
 
@@ -827,10 +831,10 @@ A: A separate first-unit adjustment when unit 1 falls well above the curve (comm
 R: yes
 Q: Is T1 the actual cost of unit 1?
 A: Not necessarily. It is the regression-derived theoretical first unit.
-Q: Minimum and preferred data points for a learning curve
-A: Minimum 3; 8+ preferred.
+Q: Minimum number of units when a T1 adder is used
+A: 3 units (the adder is another variable to estimate beyond a and b).
 Q: Name 3 situations where learning curves are inappropriate
-A: Highly automated production; one-of-a-kind systems; different facilities; major workforce turnover; very short runs; minimal direct labor.
+A: Highly automated production; changed processes, facility or workforce, or production breaks and delays; direct labor not the majority of price; price too low to warrant analysis; production too short for sufficient data; standard item without measurable learning.
 Q: Normalizations needed before learning curve analysis
 A: Constant-year dollars; remove labor-mix changes, change orders, and production timing irregularities.
 Q: CEBoK's 4 criteria for when to apply learning curve methodology
@@ -860,7 +864,7 @@ A: The arithmetic mean always overestimates the LMP, so it underestimates lot co
 Q: Geometric mean vs. true LMP
 A: The geometric mean always underestimates the LMP, so it overestimates lot cost.
 Q: The LMP dilemma and its solution
-A: You need b to get the LMP and the LMP to get b. Start with the heuristic, regress, refine the LMPs with b, and iterate (once is usually enough).
+A: You need b to get the LMP and the LMP to get b. Start with the heuristic, regress, refine the LMPs with b, and iterate if the resulting b differs significantly from the b used for the LMPs.
 Q: Heuristic LMP for units 4–8
 A: ½(5.657 + 6) = 5.83 (true value ≈ 5.79 at 85%)
 Q: Refined LMP formula (needs b)
@@ -873,7 +877,7 @@ A: First lot < 10 units: ≈0.5N. First lot ≥ 10 units: ≈0.3N. Successive lo
 
 ## Special topics
 Q: Three possible effects of a production break
-A: No change (short break), partial learning loss (typical), complete loss / return to T1 (long break, turnover).
+A: No change (short break), partial learning loss (best approach for addressing breaks), complete loss / return to T1 (extended halt or complete staff turnover).
 Q: Break-unit cost formula
 A: $a' = aN^b + L(a - aN^b) = La + (1-L)aN^b$, where L = fraction of learning lost, N = break-unit number.
 R: yes
@@ -899,7 +903,7 @@ A: The RAND Corporation, 1974.
 Q: Is the rate term usually statistically significant?
 A: Rarely, in practice — despite the theory's popularity with program offices.
 Q: Two checks required with rate theory
-A: The rate term must be statistically significant; check multicollinearity between X and R.
+A: Check significance of the rate term and multicollinearity between X and R; high correlation means rate theory should not be used.
 Q: New work effects equation
 A: $Y_X = a_1X^{b_1} + a_2(X - L)^{b_2}$. New work starts its own curve at the last unit L of the original work.
 R: yes

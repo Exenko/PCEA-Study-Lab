@@ -4,7 +4,7 @@ PCEA.addModule({
   intro: String.raw`**Probability** quantifies the likelihood of uncertain future outcomes (0 to 1). **Statistics** draws conclusions from sample data about populations. Together they let you:
 - Quantify variability and confidence in point estimates.
 - Test whether a CER or cost growth factor is statistically significant, not noise.
-- Build probability distributions around cost drivers for risk/uncertainty analysis (Module 12).
+- Build probability distributions around cost drivers for risk/uncertainty analysis (Module 9).
 - Make defensible claims like "80% confident true cost is below \$X."
 
 This module extends Module 6 (descriptive statistics: mean, median, mode, CV) into **inferential statistics** and hypothesis testing — and, unlike CV in Module 6, teaches the coefficient of variation's role in distribution choice directly (Measures of Dispersion, below).`,
@@ -28,19 +28,32 @@ buckets: Discrete | Continuous
 
 ### Core definitions
 
-**Probability** is mathematics describing likelihood of events (0 = impossible, 1 = certain). **Statistics** infers what populations look like from sample data (the inverse problem).
+**Probability** is the mathematical study of the future and attempts to measure the chance of an event, outcome, or the range of possible outcomes. While probability looks to the future, **statistics** studies the past: it is used to describe historical outcomes and to use those outcomes to determine an underlying probability model.
+
+Statistics is generally divided into two areas:
+- **Descriptive statistics** describe and summarize the outcomes represented by the data set. They involve the portrayal of data sets themselves and their derived rates, averages, and the like. Measures include central tendency and variation (e.g., mean, median, mode, weighted average, standard deviation, and coefficient of variation).
+- **Inferential statistics** perform tests to determine if a given probabilistic model might apply, what the value of a parameter might be, or testing whether two sets of outcomes are differentiable. Measures include Analysis of Variance (ANOVA), t-tests, and F tests.
+
+Another dichotomy is parametric vs. non-parametric:
+- **Parametric statistics** make assumptions about the underlying probability distributions (e.g., the cost is normally distributed).
+- **Non-parametric statistics** make few or no assumptions about the underlying model.
+
+This module focuses mainly on parametric statistics and one commonly applied non-parametric test, the Kolmogorov-Smirnov test.
 
 | Term | Meaning |
 |---|---|
 | **Population** | The entire set of items/values of interest (all historical programs) |
 | **Sample** | A subset actually observed (the programs we have data for) |
-| **Random variable** | A quantity whose value is uncertain (next year's cost; number of defects) |
+| **Random variable** | A variable that cannot be fully controlled or accurately predicted; it takes on values that represent outcomes in the sample space (e.g., cost of repair parts for a fighter plane under development) |
 | **Discrete** | Countable outcomes (defects per batch: 0, 1, 2, ...) |
 | **Continuous** | Any value in a range (cost, weight, time) |
 | **Probability Distribution** | A function describing likelihood of each possible value |
 | **Parameter** | A numerical characteristic of a population ($\mu$, $\sigma$) — usually unknown |
 | **Statistic** | A number computed from sample data ($\bar x$, $s$) — estimates a parameter |
-| **Independence** | Occurrence of one event doesn't change probability of another |
+
+:::tip Beyond CEBoK: independence
+CEBoK uses "independent, identically distributed (iid)" without defining independence. Standard definition: events are independent when the occurrence of one does not change the probability of the other.
+:::
 
 {{primer}}
 
@@ -48,10 +61,12 @@ buckets: Discrete | Continuous
 
 ### Role in cost estimating
 
-- **Probability**: Model input uncertainty, build S-curves, simulate total program cost.
-- **Statistics**: Are CER coefficients significant? How wide are confidence intervals? Do data fit a lognormal distribution?
+The three main sets of practical applications of probability and statistics in cost estimating and risk analysis are:
+- **Module 6 Basic Data Analysis Principles**: calculation of descriptive statistics to give an initial feel for the data set.
+- **Module 8 Regression Analysis**: mathematical tools to perform ordinary least squares (OLS) regression in the development of cost estimating relationships (CERs).
+- **Module 9 Cost and Schedule Risk Analysis**: modeling of uncertainty using probability distributions.
 
-Taken together: estimate confidently with risk quantified.
+Those modules provide the applications; this module focuses on the requisite mathematics for them.
 
 :::check
 Q: Which is a population parameter and which is a sample statistic?
@@ -66,6 +81,10 @@ Q: Which is a population parameter and which is a sample statistic?
 ### Quick link to Module 6
 
 **Module 6 covered**: mean, median, mode; standard deviation; coefficient of variation (CV). Module 10 assumes you know these cold and builds the probability framework around them. (Mean becomes "expected value" of a random variable; standard deviation becomes the "scale" of a distribution; CV becomes a key parameter for lognormal distributions.)
+
+**Skew**: If the mean and median of a distribution are not equal, it is said to be skewed. If the median is lower than the mean, the distribution is skewed right (it stretches out to the right); a median higher than the mean indicates it is skewed left. The direction of skew follows the tail of the data and not the hump.
+
+**Median and mode**: the median is not affected by outliers. The mode is the least used of the three measures of central tendency.
 
 :::check
 Q: For a symmetric distribution like the normal, how do mean, median, and mode relate?
@@ -118,9 +137,9 @@ Rolling two dice, the sum ranges from 2 to 12. Its **mean** is 7 and its **varia
 
 $$CV = \frac{\sigma}{\mu}$$
 
-CV is unitless, so it lets you compare dispersion across datasets with different scales. Low CV → data clustered tightly around the mean; high CV → more dispersed, and the mean is a poorer stand-in for the whole distribution (a high CV may also flag outliers — see Module 6).
+CV is unitless, so it lets you compare dispersion across datasets with different scales. Low CV → data clustered tightly around the mean; high CV → more dispersed. Large CVs indicate that the mean is a poor representation of the distribution, so specify the distribution using the complete set of parameters if possible and include other moments such as variance. A high CV may also be an indication of outliers in the data set (see Module 6).
 
-**Estimate-quality rule**: Cost estimates should have a **CV of less than 15%**. If the CV of a cost dataset exceeds that, consider alternatives to a simple average of historical costs — most often, regression against a cost driver (Module 8), where the regression's own CV (SEE / $\bar y$) is often substantially lower.
+**Estimate-quality rule**: Cost estimates should have a **CV of less than 15%**. If the CV of the cost data set is greater than that, consider other options besides using a simple average of historical costs as the estimate. Most often, analysts can conduct regression analysis against potential cost drivers to find a CER where the regression CV (the Standard Error of the Estimate, SEE, divided by $\bar y$) is substantially lower (Module 8).
 
 **Worked example (Fig. 10.8)**: Two normal distributions share a mean of 10. One has CV = 10% → $\sigma = 0.10 \times 10 = 1$ (tight). The other has CV = 30% → $\sigma = 0.30 \times 10 = 3$ (much more spread out), even though both center on the same value.
 
@@ -153,9 +172,9 @@ Q: A cost dataset of historical analogous programs has CV = 22%. What should the
 **Standardize with z-score** to look up probabilities in a standard table:
 $$z = \frac{x - \mu}{\sigma}$$
 
-**When used**: Sums of many independent random elements; CER residuals; sums of cost drivers tend toward normal via the Central Limit Theorem (CLT).
+**When used**: The most commonly used distribution; it occurs in many natural phenomena (e.g., the height of people is normally distributed). Sums of many iid random variables approach normal via the Central Limit Theorem (CLT).
 
-**Limitation**: Allows negative values. For cost (which is never negative), use lognormal instead.
+**Negatives**: The domain (support) of the normal is all real numbers, and its extension into the negatives can raise some concerns when dealing with variables like cost and weight. Generally, however, the chance of the model actually producing a negative value is negligible. If the possibility of a negative value cannot be allowed, the cost estimator can truncate the normal distribution at zero and redistribute the weight that would have been negative among the positive support of the distribution.
 
 :::check
 Q: A cost element has $\mu = 100$, $\sigma = 15$. What is the z-score for $x = 130$?
@@ -167,7 +186,7 @@ Q: A cost element has $\mu = 100$, $\sigma = 15$. What is the z-score for $x = 1
 
 ### Central Limit Theorem (CLT)
 
-The CLT states that the sum of a large number of **independent, identically distributed (iid)** random variables approaches a normal distribution — generally by $n = 30$. Correlation among the summed variables slows convergence slightly but doesn't stop it (as long as no small subset of highly correlated elements dominates the sum).
+The CLT states that the sum of a large number of **independent, identically distributed (iid)** random variables approaches a normal distribution. The number of variables needed depends on the distribution of the variables being summed; generally, the sum will converge to normal by the time $n = 30$. Sometimes correlation exists between some of the variables. As long as the sum is not dominated by a few large elements that are highly correlated, the CLT will still hold. A reasonable amount of correlation may slow the convergence slightly, but the sum will still approach normal.
 
 **Why it matters**: Most cost estimates sum more than 30 WBS elements. If those elements are roughly iid, the CLT says the *top-level* total is normal — even if individual elements are triangular, lognormal, or something else entirely.
 
@@ -189,7 +208,7 @@ Q: A WBS sums 35 independent, similarly-scaled cost elements, none dominating th
 
 **Shape**: Like normal but with **fatter tails**, reflecting extra uncertainty when you estimate $\sigma$ from a small sample.
 
-**When used**: Whenever $\sigma$ is unknown and estimated as $s$ from a small sample (the typical cost data situation).
+**When used**: When the sample size is small. t-distributions arise when normal distributions are standardized by dividing by $s$ for hypothesis testing and regression.
 
 **Convergence**: As sample size $n$ grows, t approaches the normal (at df > ~30, very close).
 
@@ -212,15 +231,17 @@ Use **t when $\sigma$ is estimated from data** (standard in cost estimating). Us
 
 **Key properties**:
 - **Always positive** (cannot be negative, unlike normal) — support is $x \in [0, \infty)$.
-- **Right-skewed** (long tail to the right), so **Mean > Median > Mode**.
+- **Skewed to the right** (median lower than the mean).
 - **Mean** $= e^{\mu + \sigma^2/2}$ (this formula is in CEBoK's core text)
 
-**Why it fits cost**: Cost is bounded at zero and grows multiplicatively (e.g., "cost is 50% over" is easier than "50% under zero"). Log-space CER errors produce lognormal distributions.
+**Where it is used**: The lognormal is sometimes used in risk analysis (see Module 9) and often occurs in CERs that are based on power models.
 
-:::tip Beyond CEBoK: median and mode formulas
+:::tip Beyond CEBoK: median, mode, ordering, and cost fit
 CEBoK gives the lognormal mean formula but not median/mode formulas directly. Standard results (used here for the worked examples):
 - **Median** $= e^{\mu}$
 - **Mode** $= e^{\mu - \sigma^2}$
+- **Ordering**: Mean > Median > Mode for the right-skewed lognormal.
+- **Why it can fit cost**: it is positive-only and grows multiplicatively (e.g., "cost is 50% over" is easier than "50% under zero"); log-space CER errors produce lognormal distributions.
 :::
 
 :::check
@@ -253,7 +274,7 @@ CEBoK's core text covers the triangular distribution in depth but not PERT formu
 
 ### Beta (PERT) Distribution
 
-**Bounded** on $[a, b]$; shape set by two positive shaping parameters ($\alpha,\beta$), mean $= \alpha/(\alpha+\beta)$; can be skewed either direction. Used in schedule risk analysis and in PERT/critical-path methods. A Beta(1,1) is identical to a Uniform(0,1).
+Takes many different shapes depending on its two parameters ($\alpha,\beta$), including skewed either direction; mean $= \alpha/(\alpha+\beta)$. The distribution is only defined for $x \in (0, 1)$, and Beta($\alpha,\beta$) is symmetric to Beta($\beta,\alpha$). Applications include schedule risk analysis; it is part of the Program Evaluation and Review Technique (PERT) and the critical path method. A Beta(1,1) is identical to a Uniform(0,1). (CEBoK covers the formal Beta under Related and Advanced Topics, which is not testable.)
 
 :::check
 Q: PERT: low 10, most likely 16, high 28. Using the PERT approximation, what is the mean?
@@ -270,7 +291,7 @@ Q: PERT: low 10, most likely 16, high 28. Using the PERT approximation, what is 
 - **Mean**: $E(X) = p$
 - **Variance**: $Var(X) = p(1-p)$
 
-**Use in cost risk**: Model binary events (technology matures: yes/no) and as a building block for risk models.
+**Use in cost risk**: Bernoulli distributions are commonly used in the risk cube methodology. The sum of $n$ Bernoullis is Binomial($n, p$).
 
 :::check
 Q: A risk event has probability $p = 0.2$. What is its variance as a Bernoulli variable?
@@ -287,8 +308,12 @@ $$F_{m,n} = \frac{\chi^2(m)/m}{\chi^2(n)/n}$$
 
 - **Mean** $= \dfrac{n}{n-2}$ (for $n>2$)
 - **Variance** $= \dfrac{2n^2(m+n-2)}{m(n-2)^2(n-4)}$ (for $n>4$)
-- Always right-skewed and non-negative; approaches normal as both $m,n \to \infty$.
-- Used in regression (overall-significance F-test) and ANOVA.
+- As $m$ and $n$ tend to infinity, the F tends to the normal distribution.
+- Useful in hypothesis testing, in regression analysis (the F test denotes whether the regression model, as a whole, is statistically significant), and in ANOVA.
+
+:::tip Beyond CEBoK: shape of the F
+The F-distribution is non-negative and right-skewed (a ratio of two squared quantities).
+:::
 
 :::check
 Q: An F-distribution has denominator df $n = 6$. What is its mean?
@@ -305,9 +330,9 @@ Q: An F-distribution has denominator df $n = 6$. What is its mean?
 - **t** = a standard normal divided by $\sqrt{\chi^2(n)/n}$; **t** → **Normal** as df → ∞
 - **F** = ratio of two chi-squared distributions (each divided by its df)
 - **Lognormal** = exponential transform of Normal ($\ln X$ is normal)
-- **Triangular** and **Beta** both model bounded three-point estimates; Beta is more flexible but harder to fit
+- **Triangular** is set by a min, mode, and max; **Beta** takes many shapes depending on $\alpha,\beta$ and is defined on $(0,1)$
 - **Beta(1,1)** = **Uniform(0,1)** exactly
-- **Rayleigh**($a=1$) squared = **chi-squared** with 2 degrees of freedom (Rayleigh(1) itself is chi with 2 df); more generally, $\sqrt{X^2+Y^2}$ for independent $X,Y \sim N(0,\sigma^2)$ is Rayleigh — used in time-phasing R&D cost curves
+- **Rayleigh**(1) has a **chi-squared** distribution with 2 d.f. (CEBoK's wording; strictly, it is the square of a Rayleigh(1) variate that is chi-squared with 2 d.f.); more generally, $\sqrt{X^2+Y^2}$ for independent $X,Y \sim N(0,\sigma^2)$ is Rayleigh — used in time-phasing R&D cost curves
 
 See the distribution explorer to watch mean, median, mode separate as skew changes:
 
@@ -339,37 +364,40 @@ Q: You add two positively correlated cost elements but ignore the correlation. W
 
 ### Covariance
 
-Measures how two random variables move together:
-$$Cov(X,Y) = \frac{\sum(x_i - \bar x)(y_i - \bar y)}{n-1}$$
+Covariance is a way to see if two variates fluctuate together:
+$$Cov(X,Y) = E[(X-\mu_x)(Y-\mu_y)] = E[XY] - \mu_x\mu_y$$
 
-- **Positive**: variables tend to move in the same direction
-- **Negative**: variables tend to move in opposite directions
-- **Limitation**: Units are (unit of X) × (unit of Y), so hard to interpret on its own
+- **Positive**: both variates tend to be above their means together
+- **Negative**: the variates tend to be on opposite sides of their means together
+
+:::tip Beyond CEBoK: sample covariance and units
+Sample form: $Cov(X,Y) = \sum(x_i - \bar x)(y_i - \bar y)/(n-1)$. Units are (unit of X) × (unit of Y), so covariance is hard to interpret on its own.
+:::
 
 ### Correlation coefficient
 
-Standardizes covariance to $[-1, +1]$:
-$$r = \frac{Cov(X,Y)}{s_X \, s_Y}$$
+Correlation is a unitless measurement that describes the strength of the linear relationship between two variates: covariance divided by the product of their standard deviations:
+$$\rho_{x,y} = \frac{Cov(X,Y)}{\sigma_x \, \sigma_y}$$
 
 | Value | Meaning |
 |---|---|
-| $r = +1$ | Perfect positive linear relationship |
-| $r = 0$ | No linear relationship |
-| $r = -1$ | Perfect negative linear relationship |
+| $\rho = +1$ | Variates fall in a positive line with each other |
+| $\rho = 0$ | Little or no relationship |
+| $\rho = -1$ | Variates fall in a negatively sloped line (inversely related) |
 
-Note: $r^2 = R^2$ (coefficient of determination from regression).
+:::tip Beyond CEBoK: r squared
+$r^2 = R^2$ (coefficient of determination from regression).
+:::
 
 +++
 
-### Variance of sums (the critical formula)
+### Correlation and sums
 
-$$Var(X + Y) = \sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$$
+**Key insight** (CEBoK, Fig. 10.26): injecting positive correlation between lower-level WBS elements **increases** the dispersion of the top-level sum; negative correlation causes less dispersion. Ignoring positive correlation in a cost roll-up **understates risk**.
 
-where $\rho$ is the correlation coefficient.
-
-**Key insight**: Positive correlation **increases** the variance of the total. Ignoring correlation in a cost roll-up **understates risk**.
-
-Special case: If $\rho = 1$ (perfect correlation), $Var(X + Y) = (\sigma_X + \sigma_Y)^2$, so the standard deviations add directly: $SD(X+Y) = \sigma_X + \sigma_Y$.
+:::tip Beyond CEBoK: variance of a sum (Module 9)
+$Var(X + Y) = \sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$, where $\rho$ is the correlation coefficient. Special case: if $\rho = 1$ (perfect correlation), $Var(X + Y) = (\sigma_X + \sigma_Y)^2$, so the standard deviations add directly: $SD(X+Y) = \sigma_X + \sigma_Y$. The formula is correct but is not written out in Module 10's text.
+:::
 
 {{primer}}
 
@@ -405,13 +433,17 @@ Q: Put the steps of a hypothesis test in order.
 
 +++
 
-### The five-step framework
+### Hypothesis test process
 
-1. State $H_0$ (null: default claim, usually "no effect" or "equal to") and $H_a$ (alternative).
-2. Choose significance level $\alpha$ (commonly 0.05; sometimes 0.10 or 0.01).
-3. Compute the **test statistic** from the sample.
-4. Compare to the **critical value** from a table (or compare **p-value** to $\alpha$).
-5. **Reject** $H_0$ if the statistic is beyond the critical value ($p < \alpha$); otherwise **fail to reject**.
+Set up the null hypothesis ($H_0$) and the alternative ($H_1$ or $H_a$). The null hypothesis is assumed to be true unless proven otherwise; the alternative may only be accepted if there is enough evidence to conclusively reject the null. The norm is for the null hypothesis to involve equality: this is consistent with the need to see significant evidence of the difference and makes the calculations much easier.
+
+Then (CEBoK's process):
+1. **Specify a significance level** $\alpha$. Typical levels of $\alpha$ are 0.05 and 0.10, with 0.05 (or 5%) the customary level. Occasionally analysts use $\alpha = 0.10$, and rarely $\alpha = 0.01$ when the analyst requires a high level of certainty.
+2. Calculate the **test statistic**.
+3. Find the **critical values**.
+4. **Reject** the null hypothesis if the test statistic is above or below the critical values; otherwise fail to reject.
+
+Lower levels of $\alpha$ equate to a more stringent test, with stronger evidence needed to reject the null hypothesis. The $\alpha$ should always be chosen before conducting the test and should always be included when reporting the results of a statistical test. (The numbered ordering of the primer exercise above is a study aid.)
 
 The test never *proves* $H_0$ true — it either rejects it or doesn't.
 
@@ -423,10 +455,10 @@ The test never *proves* $H_0$ true — it either rejects it or doesn't.
 
 | | $H_0$ | $H_a$ | Rejection region |
 |---|---|---|---|
-| **Two-tailed** | $\mu = \mu_0$ | $\mu \neq \mu_0$ | Both tails; critical value larger in magnitude |
-| **One-tailed** | $\mu = \mu_0$ | $\mu > \mu_0$ (or <) | One tail; critical value smaller; easier to reject |
+| **Two-tailed** | $\mu = \mu_0$ | $\mu \neq \mu_0$ | Both tails (reject if the test statistic is less than $-c$ or greater than $c$) |
+| **One-tailed** | $\mu = \mu_0$ | $\mu > \mu_0$ (or <) | One tail |
 
-**Rule**: Use two-tailed unless the question is directional (e.g., "is the new process cheaper?" → one-tailed "less than"; "is the cost different?" → two-tailed "not equal").
+A one-tailed test assumes a direction of difference in the alternative hypothesis; a two-tailed test does not propose a direction. **Two-tailed tests are more common than one-tailed tests**; however, assumptions about the direction of differences do occur. For example, when comparing the O&M costs of an old aircraft with those of a recently designed plane, one might expect the new plane to have lower O&M costs, which would require a one-tailed test. "Is the cost different?" → two-tailed "not equal".
 
 :::check
 Q: A test asks "Is average unit cost different from \$100K?" (no direction specified). Should this be…
@@ -437,17 +469,20 @@ Q: A test asks "Is average unit cost different from \$100K?" (no direction speci
 
 +++
 
-### Error types and power
+### Error types
 
 | | $H_0$ true | $H_0$ false |
 |---|---|---|
-| **Reject** $H_0$ | **Type I Error** (probability $\alpha$) | Correct (power $= 1-\beta$) |
+| **Reject** $H_0$ | **Type I Error** (probability $\alpha$) | Correct |
 | **Fail to reject** $H_0$ | Correct | **Type II Error** (probability $\beta$) |
 
-- **Type I error** ($\alpha$) = False positive: reject a true $H_0$.
-- **Type II error** ($\beta$) = False negative: fail to reject a false $H_0$.
-- **Power** $= 1 - \beta$ = Probability of correctly rejecting a false $H_0$.
-- **Trade-off**: Lower $\alpha$ reduces false positives but increases $\beta$ (more false negatives), all else equal. More data ($n$) improves both.
+- **Type I error** ($\alpha$): rejecting the null hypothesis when it is in fact true (accepting a test as significant when it is not).
+- **Type II error** (probability $\beta$): accepting the null hypothesis when it is in fact false. $\beta$ relates to the power of a statistical test; the mathematics behind $\beta$ is somewhat complicated and beyond the scope of this module.
+- With a lower $\alpha$, there is a lower probability of committing a Type I error.
+
+:::tip Beyond CEBoK: power and trade-offs
+**Power** $= 1 - \beta$ = probability of correctly rejecting a false $H_0$. All else equal, lowering $\alpha$ reduces false positives but increases $\beta$ (more false negatives); more data ($n$) improves both.
+:::
 
 :::check
 Q: Rejecting a true null hypothesis is a…
@@ -461,7 +496,9 @@ Q: Rejecting a true null hypothesis is a…
 
 ### Test statistic and critical value
 
-**Test statistic** = standardized distance from hypothesized value:
+Hypothesis testing is a formal process used to measure confidence when making statistical inferences: the significance level is the tolerance for error, the critical values are the resulting bar to be cleared, and the test statistic is the accumulated evidence.
+
+A **test statistic** is a function of the sample data (such as the sample mean, sample standard deviation, or more complicated functions of these), calculated under the assumption that the null hypothesis is true. Each different type of test (equal means, equal variances, etc.) has a different test statistic. For a mean, it takes the general form (study aid):
 $$\text{Test Stat} = \frac{\text{Sample Statistic} - \text{Hypothesized Value}}{\text{Standard Error}}$$
 
 For a mean with unknown $\sigma$:
@@ -497,7 +534,13 @@ CEBoK rounds the pooled variance to 0.11; with that value the arithmetic gives $
 
 **Critical value**: $t$ with $df = n+m-2 = 38$, two-tailed $\alpha=0.05$ → critical value $\pm 2.02$. Since $-1.32$ is between $-2.02$ and $2.02$, **fail to reject** $H_0$ — no statistically significant difference, even though the raw means (19% vs. 33% average overrun) look quite different.
 
-**Why the "obvious" difference isn't significant**: the two datasets are fairly dispersed — CV of 29% for DoD and 22% for NAVAIR — and that dispersion creates enough uncertainty to swamp the 14-point gap in means. **p-value** (two-tailed) = 0.194: if $\alpha$ had been set to 0.194, you could reject $H_0$, but that would mean a 19.4% chance of incorrectly rejecting a true $H_0$ — too high to accept.
+**Why the "obvious" difference isn't significant**: the two datasets are fairly dispersed — CV of 29% for DoD and 22% for NAVAIR — and that dispersion creates enough uncertainty to swamp the 14-point gap in means. **p-value**: CEBoK defines it as the smallest $\alpha$ for which one could reject the null hypothesis with the calculated test statistic. Here the two-tailed p-value = 0.194: if the original $\alpha$ were 0.194, you could reject $H_0$, but there would be a 19.4% probability that $H_0$ was incorrectly rejected and the means really are equal — unacceptably high.
+
+**Reporting**: When reporting the results of a t-test, also include the p-value. Always be suspicious of reports that do not include the test statistic, the level of significance of the test, and the p-value. Remember to choose $\alpha$ beforehand and stick with it: never run the test, look at the p-value, and then choose $\alpha$ to get the desired result. Odd-looking $\alpha$ values are a warning signal that this method of backing into a result may have occurred.
+
+:::tip Beyond CEBoK: textbook reading of the p-value
+The common textbook reading is the probability of data at least this extreme, assuming $H_0$ is true. Either way, it is NOT the probability that $H_0$ is true.
+:::
 
 **95% CI for the mean DoD CGF**: $\bar x \pm t_{0.025,19}\cdot s/\sqrt n = 1.19 \pm 2.093 \cdot 0.34/\sqrt{20} = (1.03,\ 1.35)$. Since this interval *contains* 1.33 (the NAVAIR mean), that's the same conclusion from another angle: not enough evidence the means differ.
 
@@ -521,7 +564,7 @@ Q: In the DoD/NAVAIR example, df = 38 and the two-tailed critical value is ±2.0
 
 ### Confidence intervals
 
-A **confidence interval (CI)** gives a range of plausible values for a population parameter at a stated confidence level (e.g., 95%), instead of a point estimate.
+A **confidence interval (CI)** indicates $(1-\alpha) \times 100\%$ confidence that the true parameter value is contained within the calculated range. The endpoints of the interval are equivalent to the critical values calculated for a two-tailed hypothesis test. There is a $(1-\alpha)$ probability of the true parameter being within the two critical values and an $\alpha/2$ chance of being above or below them. For example, a 95% CI has a 95% chance of containing the true value of the parameter and a 2.5% chance each of being too low or too high.
 
 **General form**:
 $$\text{CI} = \text{Point Estimate} \pm (\text{Critical Value}) \times (\text{Standard Error})$$
@@ -529,7 +572,11 @@ $$\text{CI} = \text{Point Estimate} \pm (\text{Critical Value}) \times (\text{St
 **For a mean with unknown $\sigma$** (t-distribution):
 $$\bar x \pm t_{\alpha/2,\,n-1} \cdot \frac{s}{\sqrt n}$$
 
-**Interpretation**: Over repeated sampling, 95% of intervals constructed this way contain the true $\mu$. (NOT: "95% probability this specific interval contains $\mu$.")
+**Interpretation (CEBoK)**: roughly speaking, a 95% CI has a 95% certainty of containing the true mean.
+
+:::tip Beyond CEBoK: the strict frequentist reading
+Strictly, the 95% describes the procedure: over repeated sampling, 95% of intervals constructed this way contain the true $\mu$, and any one fixed interval either contains it or not. This is the reading the coverage simulation below demonstrates.
+:::
 
 **Worked example**: $n = 16$, $\bar x = 50$, $s = 8$, 95% CI, df = 15, $t_{0.025,15} \approx 2.131$.
 $$\text{Margin of Error} = 2.131 \times \frac{8}{4} = 4.262$$
@@ -569,12 +616,12 @@ Each statistical test answers a different kind of question.
 Q: Which test fits each question?
 buckets: t-test | Chi-squared | F-test
 - Does a sample mean differ from a hypothesized value? = t-test
-- Are matched before/after observations different on average? = t-test
+- Is a regression coefficient significantly different from zero? = t-test
 - Do observed frequencies match expected frequencies? = Chi-squared
 - Are contract type and overrun related? = Chi-squared
 - Do two datasets have different variances? = F-test
 - Do the independent variables in a regression jointly explain variation? = F-test
-> The t-tests compare means (one-sample or paired). Chi-squared tests goodness-of-fit and independence of categorical variables. F-tests compare two variances and test overall regression significance.
+> The t-tests compare means (one-sample or two-sample) and test regression coefficients. Chi-squared tests goodness-of-fit (and variance). Beyond CEBoK, it is also used for independence of categorical variables. F-tests compare two variances and test overall regression significance.
 :::
 
 +++
@@ -587,14 +634,14 @@ $$t = \frac{\bar x - \mu_0}{s/\sqrt n}$$
 **Two-sample t**: Tests if means of two independent samples differ (assuming equal variances).
 $$t = \frac{\bar x_1 - \bar x_2}{s_p\sqrt{1/n_1 + 1/n_2}} \quad \text{where} \quad s_p^2 = \frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}, \quad df = n_1+n_2-2$$
 
-When variances are unequal, the **Welch test** uses $\sqrt{s_1^2/n_1 + s_2^2/n_2}$ in the denominator and adjusted (non-integer) degrees of freedom.
-
-**Paired t**: When observations are matched (e.g., before/after), test the mean of the differences.
+The usual version assumes equal variances; unless the sample variances are markedly different, this assumption is probably reasonable (check that the two sample variances are reasonably close). Versions that allow distinct variances use variations of the name Welch-Smith-Satterthwaite t-test.
 
 **In regression** (Module 8/9): $H_0: b_i = 0$ vs. $H_1: b_i \ne 0$. Test statistic $t = \hat{\beta}_i/SE(\hat\beta_i)$, $df = n-k$ ($k$ = number of parameters estimated, including the intercept) — tests whether a CER coefficient is significantly different from zero.
 
 :::tip Beyond CEBoK: unequal variances
-The standard two-sample t assumes equal population variances (the usual case unless sample variances differ markedly). When they don't, a variant — often called the **Welch-Satterthwaite** (or Welch-Smith-Satterthwaite) t-test — uses each sample's own variance in the denominator and an adjusted, typically non-integer, degrees of freedom.
+The standard two-sample t assumes equal population variances (the usual case unless sample variances differ markedly). When they don't, a variant — often called the **Welch-Satterthwaite** (or Welch-Smith-Satterthwaite) t-test — uses each sample's own variance in the denominator ($\sqrt{s_1^2/n_1 + s_2^2/n_2}$) and an adjusted, typically non-integer, degrees of freedom.
+
+A **paired t-test** is also standard practice when observations are matched (e.g., before/after): test the mean of the differences. CEBoK lists only the one-sample, two-sample, and regression t-tests.
 :::
 
 :::check
@@ -607,19 +654,23 @@ Q: A sample of $n = 25$ has $\bar x = 52$ and $s = 10$. Test statistic against $
 
 ### Chi-Squared ($\chi^2$) Tests
 
-**Goodness-of-fit**: Do observed frequencies match expected frequencies under a hypothesized distribution?
-$$\chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}$$
+The chi-squared ($\chi^2$) test, often referred to as Pearson's chi-squared test, investigates goodness of fit.
 
-**Test of independence**: Do two categorical variables relate (e.g., contract type vs. overrun)?
+**Chi-squared test for variance**: assumes the data is normally distributed in a normal population of size $n$ and can be one-tailed or two-tailed. The null hypothesis assumes the variance is equal to a predetermined amount, $\sigma_0^2$:
+- $H_0: \sigma^2 = \sigma_0^2$
+- $H_1: \sigma^2 \ne \sigma_0^2$, or $\sigma^2 < \sigma_0^2$, or $\sigma^2 > \sigma_0^2$
+- Test statistic: $T = (n-1)s^2/\sigma_0^2$
 
-**Degrees of freedom**: Goodness-of-fit: $df = k - 1$ (k = categories); independence: $df = (r-1)(c-1)$.
+The null hypothesis is rejected when $T$ is less than the corresponding $\chi^2$ value for two-tailed and lower one-tailed tests, or when $T$ is greater than the corresponding $\chi^2$ for upper one-tailed tests, all of which can be found in a lookup table.
 
-**Worked example**: Observed overruns across 4 program types: O = {20, 15, 25, 10}; expected (equal likelihood, total 70) E = {17.5, 17.5, 17.5, 17.5}.
-$$\chi^2 = \frac{(20-17.5)^2}{17.5} + \frac{(15-17.5)^2}{17.5} + \frac{(25-17.5)^2}{17.5} + \frac{(10-17.5)^2}{17.5} = 7.14$$
-With $df = 3$, critical $\chi^2_{0.05,3} \approx 7.815$. Since $7.14 < 7.815$, fail to reject $H_0$.
+:::tip Beyond CEBoK: goodness-of-fit calculation and independence
+Goodness-of-fit statistic: $\chi^2 = \sum (O_i - E_i)^2/E_i$ with $df = k - 1$ ($k$ = categories). A test of independence for two categorical variables (e.g., contract type vs. overrun) uses $df = (r-1)(c-1)$.
+
+Worked example: observed overruns across 4 program types O = {20, 15, 25, 10}; expected (equal likelihood, total 70) E = {17.5, 17.5, 17.5, 17.5}. $\chi^2 = 7.14$. With $df = 3$, critical $\chi^2_{0.05,3} \approx 7.815$. Since $7.14 < 7.815$, fail to reject $H_0$.
+:::
 
 :::check
-Q: Observed {30, 25, 20, 25}; expected (equal, total 100) {25, 25, 25, 25}. Calculate $\chi^2$.
+Q: Using the Beyond-CEBoK goodness-of-fit formula: observed {30, 25, 20, 25}; expected (equal, total 100) {25, 25, 25, 25}. Calculate $\chi^2$.
 = 2
 > $(30-25)^2/25 + (25-25)^2/25 + (20-25)^2/25 + (25-25)^2/25 = 25/25 + 0 + 25/25 + 0 = 2.0$
 :::
@@ -628,19 +679,20 @@ Q: Observed {30, 25, 20, 25}; expected (equal, total 100) {25, 25, 25, 25}. Calc
 
 ### F-tests
 
-**For comparing two variances**:
-$$F = \frac{s_1^2}{s_2^2} \quad \text{(larger variance in numerator)}$$
+**F test for variances**: a two-sample test that checks whether the variance of one group equals the variance of another, assuming both groups are normally distributed. The null hypothesis is that the variances are equal and the alternative is that they are not equal (it may be one- or two-tailed). The test statistic is the sample variance of one group divided by the sample variance of the other group:
+$$F = \frac{s_x^2}{s_y^2}$$
+This test has an F-distribution with $(m-1)$ and $(n-1)$ d.f., where $m$ and $n$ are the sample sizes.
 
 **In regression** (Module 8/9): $H_0: b_1=b_2=\cdots=b_k=0$ vs. $H_1$: at least one $b_i \ne 0$. Test statistic $F = \text{MSR}/\text{MSE}$ tests overall significance (do the independent variables jointly explain variation?).
 
-The F-distribution is always right-skewed and non-negative (ratio of two squared quantities).
-
-**Degrees of freedom**: Two values needed — numerator df and denominator df.
+:::tip Beyond CEBoK: F conventions
+Convention puts the larger sample variance in the numerator; the F-distribution is right-skewed and non-negative (ratio of two squared quantities); it has two degrees-of-freedom values (numerator and denominator).
+:::
 
 {{primer}}
 
 :::check
-Q: Two datasets have variances $s_1^2 = 64$ and $s_2^2 = 16$. Calculate the F-statistic.
+Q: Group 1 has variance $s_1^2 = 64$ and group 2 has $s_2^2 = 16$. Calculate the F-statistic (group 1 variance divided by group 2 variance).
 = 4
 > $F = 64/16 = 4.0$
 :::
@@ -649,20 +701,26 @@ Q: Two datasets have variances $s_1^2 = 64$ and $s_2^2 = 16$. Calculate the F-st
 
 ### Kolmogorov-Smirnov (K-S) Test
 
-A **goodness-of-fit test** comparing the empirical CDF (observed data) to a theoretical CDF (e.g., lognormal).
+The K-S test is used to determine whether sample data is representative of a distribution. It is the one commonly applied **non-parametric** test in this module, and it only applies to continuous distributions.
+- $H_0$: the data follow a specified distribution
+- $H_1$: the data do not follow a specified distribution
+- Test statistic, where $F$ is the theoretical cumulative distribution being tested:
+$$D = \max_{1 \le i \le n}\left(F(Y_i) - \frac{i-1}{n},\ \frac{i}{n} - F(Y_i)\right)$$
 
-$$D = \max |F_{\text{empirical}}(x) - F_{\text{theoretical}}(x)|$$
+The critical value is found using lookup tables for specific values of $\alpha$. The null hypothesis is rejected if $D$ is greater than the critical value.
 
-Works directly on continuous data without binning (unlike chi-square). More powerful for continuous distributions.
+**Use in cost estimating**: In the CLT example, the sum of three triangular distributions was tested for normality with the K-S test.
 
-**Use in cost estimating**: Check whether cost growth data or CER residuals fit a normal or lognormal distribution before building a risk model.
+:::tip Beyond CEBoK: K-S intuition
+$D$ is the maximum vertical distance between the empirical and theoretical CDFs. K-S works directly on continuous data without binning (unlike chi-square) and is generally more powerful for continuous distributions.
+:::
 
 :::check
-Q: The Kolmogorov-Smirnov test compares…
-- Means of two samples
-* Empirical CDF to a theoretical CDF
-- Observed and expected frequencies in bins
-> K-S uses the maximum vertical distance between the empirical and theoretical CDFs.
+Q: The Kolmogorov-Smirnov test is used to determine…
+- Whether the means of two samples are equal
+* Whether sample data is representative of a specified (continuous) distribution
+- Whether two variances are equal
+> K-S tests H0: the data follow a specified distribution; reject H0 if D exceeds the critical value.
 :::
 `
     },
@@ -676,24 +734,26 @@ Q: You want to cut the simulation's error in half. How many times more trials do
 - 2 times as many
 * 4 times as many
 - 8 times as many
-> Error shrinks like 1 over the square root of N, so to cut error in half you need 4 times more trials.
+> Beyond CEBoK: error shrinks like 1 over the square root of N, so to cut error in half you need 4 times more trials.
 :::
 
 +++
 
+:::note Not testable per CEBoK
+Monte Carlo simulation, the inverse CDF technique, normal vs. lognormal, and the bivariate normal all sit under CEBoK's **Related and Advanced Topics**, which is not testable. They are practiced here for completeness.
+:::
+
 ### Monte Carlo simulation
 
-**Procedure**:
-1. Define uncertain inputs (e.g., labor cost, material cost) and their probability distributions (normal, lognormal, triangular).
-2. Sample each input independently, thousands of times, from its distribution.
-3. Compute the output (total program cost) for each trial.
-4. The collection of outputs approximates the output distribution: mean, percentiles, S-curve.
+A simulation is a tool used to imitate a real-life event as best as possible for analysis and evaluation. One type of simulation, **Monte Carlo simulation**, adds the dimension of probability to this concept. Potential real-life events are assigned a probability distribution. Using a random number generator and the inverse Cumulative Distribution Function (CDF) technique, outcomes are assigned to these events.
 
-**Accuracy**: Error shrinks like $1/\sqrt{N}$ — to cut error in half, need 4× more trials.
+:::tip Beyond CEBoK: procedure and accuracy
+Typical procedure: (1) define uncertain inputs and their distributions; (2) sample each input thousands of times from its distribution, reflecting any correlation between inputs; (3) compute the output (total program cost) for each trial; (4) the collection of outputs approximates the output distribution (mean, percentiles, S-curve). Accuracy: error shrinks like $1/\sqrt{N}$, so cutting the error in half takes 4× more trials.
+:::
 
 {{primer}}
 
-**Use in cost risk** (Module 12): Build a probability distribution for total cost to answer "what's the confidence level at \$X?" or "what's the cost at the 80th percentile?"
+**Use in cost risk** (Module 9): Build a probability distribution for total cost to answer "what's the confidence level at \$X?" or "what's the cost at the 80th percentile?"
 
 +++
 
@@ -716,13 +776,13 @@ Q: Uniform(20, 60), random draw $u = 0.3$. What value does the inverse CDF produ
 
 +++
 
-### Normal vs. lognormal for cost
+### Normal vs. lognormal for cost (not testable per CEBoK)
 
 | | Normal | Lognormal |
 |---|---|---|
-| **Allows negatives?** | Yes | No (bounded at 0) |
-| **Skew** | Symmetric | Right-skewed (Mean > Median > Mode) |
-| **Good for cost?** | Only if CV is small | Yes, especially for cost growth |
+| **Allows negatives?** | Yes (support is all reals; chance of a negative is generally negligible) | No (support $[0, \infty)$) |
+| **Skew** | Symmetric | Skewed right |
+| **Role in cost** | Top-level sum of 30+ iid WBS elements is normal by the CLT | Sometimes used in risk analysis; often occurs in CERs based on power models |
 
 **The 25% rule (indistinguishability)**: For CV under 25%, normal and lognormal PDFs look nearly identical, and statistical goodness-of-fit tests cannot tell them apart — data would pass a normality test *and* a lognormality test. Above 25% CV, the lognormal visibly skews away from the normal and the tests can distinguish them. Most cost data has CV under 25%, so **if a large sum of WBS elements tests as lognormal, it is likely just because CV is low — not because the CLT (which predicts normal) has failed.**
 
@@ -731,11 +791,11 @@ This is a different rule from Module 10's earlier **CV < 15%** guideline (Measur
 :::widget normal-vs-lognormal:::
 
 :::check
-Q: Why is lognormal often preferred to normal for modeling total program cost?
-* Cost is bounded below zero and tends to be right-skewed
+Q: Why might lognormal be considered instead of normal for a cost variable?
+* It is positive-only (support $[0, \infty)$) and right-skewed
 - It is symmetric like cost growth
 - It has lighter tails than normal
-> A lognormal is positive, right-skewed, and fits multiplicative (percentage) growth, matching typical cost behavior.
+> The lognormal's support is $[0, \infty)$ and it is skewed right, whereas the normal allows negatives. But CEBoK notes that the top-level sum of many WBS elements is normal by the CLT.
 :::
 
 :::check
@@ -750,11 +810,11 @@ Q: A cost dataset has CV = 18%. Can a statistical test reliably tell whether it'
 
 ### Bivariate normal
 
-The joint distribution of two correlated normal random variables, characterized by $\mu_X$, $\mu_Y$, $\sigma_X$, $\sigma_Y$, and correlation $\rho$. Regression can be viewed as the conditional mean of Y given X under a bivariate normal model.
+The joint distribution of two correlated normal random variables, characterized by $\mu_X$, $\mu_Y$, $\sigma_X$, $\sigma_Y$, and correlation $\rho$. It has important implications in regression and risk analysis (Modules 8 and 9).
 
-+++
-
-Related topics: Additional distributions (uniform, exponential, Poisson) and advanced tests (Anderson-Darling, Shapiro-Wilk for normality) are available for specialized situations but are outside the core exam scope. Prioritize the main distributions and tests above.
+:::tip Beyond CEBoK: regression and other tests
+Regression can be viewed as the conditional mean of Y given X under a bivariate normal model. Other distributions (uniform, exponential, Poisson) and normality tests (Anderson-Darling, Shapiro-Wilk) exist for specialized situations but are not covered by CEBoK's Module 10.
+:::
 `
     },
     {
@@ -765,9 +825,9 @@ You get a small p-value from a test. It is tempting to read it as a verdict on t
 :::check
 Q: What does a p-value actually measure?
 - The probability that the null hypothesis is true
-* The probability of data at least this extreme, assuming the null hypothesis is true
+* The smallest alpha at which the null hypothesis could be rejected with the calculated test statistic
 - The probability that the sample mean equals the hypothesized value
-> The p-value is the probability of the observed (or more extreme) data, given H0 is true. It is NOT the probability that H0 is true.
+> CEBoK: the p-value is the smallest alpha for which one could reject H0 with the calculated test statistic. (The textbook reading is the probability of data at least this extreme given H0.) It is NOT the probability that H0 is true.
 :::
 
 +++
@@ -775,13 +835,14 @@ Q: What does a p-value actually measure?
 ### Top pitfalls to avoid
 
 1. **Confusing z and t**: Use t when $\sigma$ is estimated from the sample (almost always in cost). Use z only when $\sigma$ is known in advance (rare).
-2. **Misinterpreting CIs**: A 95% CI does NOT mean "95% probability the true value is in this interval." It means over repeated sampling, 95% of such intervals contain the true value.
-3. **Misreading p-values**: p-value is the probability of the observed (or more extreme) data, *given* $H_0$ is true. It is NOT the probability $H_0$ is true.
-4. **One-tail vs. two-tail confusion**: Use one-tail only if the question is directional; two-tail is the conservative default.
-5. **Ignoring Type I / Type II trade-off**: Lower $\alpha$ reduces false positives but increases false negatives. More data ($n$) improves both.
+2. **Misinterpreting CIs**: CEBoK reads a 95% CI as a 95% chance of containing the true value (2.5% each of being too low or too high), "roughly speaking" a 95% certainty. Beyond CEBoK, the strict reading is that over repeated sampling, 95% of such intervals contain the true value.
+3. **Misreading p-values**: CEBoK: the p-value is the smallest $\alpha$ for which one could reject $H_0$ with the calculated test statistic. Beyond CEBoK, the textbook reading is the probability of data at least this extreme *given* $H_0$ is true. It is NOT the probability $H_0$ is true.
+4. **One-tail vs. two-tail confusion**: Use one-tail only if the question is directional; two-tailed tests are more common.
+5. **Ignoring Type I / Type II trade-off** (Beyond CEBoK): Lower $\alpha$ reduces false positives but increases false negatives. More data ($n$) improves both.
 6. **Wrong degrees of freedom**: Always use $df = n-1$ for a single sample; confirm the correct df before consulting tables.
-7. **Assuming normality without checking**: Use goodness-of-fit tests (K-S, chi-square) or lognormal if data is skewed. Do not assume normal.
-8. **Ignoring correlation in cost rolls**: Positive correlation between cost elements increases total variance beyond the simple sum.
+7. **Assuming normality without checking**: Use goodness-of-fit tests (K-S, chi-square) to check the assumed distribution.
+8. **Ignoring correlation in cost rolls**: Positive correlation between cost elements increases the dispersion of the top-level sum.
+9. **Choosing $\alpha$ after the fact**: Choose $\alpha$ beforehand and stick with it; never run the test, look at the p-value, and then choose $\alpha$. Odd-looking $\alpha$ values are a warning signal. Always report the test statistic, $\alpha$, and the p-value.
 
 {{primer}}
 
@@ -790,23 +851,23 @@ Q: What does a p-value actually measure?
 ### What to memorize cold
 
 - **Z-score**: $z = (x - \mu)/\sigma$
-- **Empirical rule**: 68/95/99.7% within ±1/±2/±3σ
+- **Empirical rule**: 68.3/95.5/99.7% within ±1/±2/±3σ (and 95% within ±1.96σ)
 - **t-statistic**: $t = (\bar x - \mu_0)/(s/\sqrt n)$, $df = n-1$
 - **CI formula**: Point estimate ± (critical value × standard error)
 - **Type I = $\alpha$** (reject true $H_0$); **Type II = $\beta$** (fail to reject false $H_0$)
 - **One-tail vs. two-tail**: Directional → one-tail; "different" → two-tail
 - **Which distribution when**:
   - Normal: symmetric, unbounded
-  - Lognormal: right-skewed, positive, good for cost
+  - Lognormal: skewed right, positive; sometimes used in risk analysis, often arises in power-model CERs
   - Triangular: three-point expert estimate
-  - Beta: flexible bounded distribution
+  - Beta: many shapes, defined on (0,1)
   - Bernoulli: binary event (occur/don't)
   - t: small-sample mean inference
-- **Chi-square**: $\chi^2 = \sum (O_i - E_i)^2 / E_i$ for categorical/goodness-of-fit
-- **F-test**: Variance ratio; also overall regression significance
-- **K-S**: Max distance between empirical and theoretical CDF
+- **Chi-square**: Pearson's goodness of fit; test for variance $T = (n-1)s^2/\sigma_0^2$ (the $\sum (O_i - E_i)^2 / E_i$ form is Beyond CEBoK)
+- **F-test**: Sample variance of one group over the other; also overall regression significance
+- **K-S**: Tests whether sample data follow a specified continuous distribution; reject $H_0$ if $D$ exceeds the critical value
 - **Triangular mean**: $(a + m + b)/3$
-- **Variance of sum**: $\sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$
+- **Variance of sum** (Beyond CEBoK, Module 9): $\sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$
 
 +++
 
@@ -826,11 +887,11 @@ Q: What does a p-value actually measure?
 - Triangular: $(60 + 75 + 105)/3 = 240/3 = 80K$
 
 :::check
-Q: Which correctly interprets a 95% confidence interval?
-- 95% probability the true mean lies in this interval
-* Over repeated sampling, 95% of such intervals contain the true mean
-- The interval will contain the true mean 95 times out of 100
-> The CI is a statement about the procedure (repeated sampling), not this specific interval.
+Q: Per CEBoK, which statement describes a 95% confidence interval?
+* It has a 95% chance of containing the true parameter value, and a 2.5% chance each of being too low or too high
+- Its endpoints are the critical values of a one-tailed hypothesis test
+- It has a 5% chance of being too low and a 5% chance of being too high
+> CEBoK: a (1 - alpha) x 100% CI has that much confidence of containing the true parameter; its endpoints equal the two-tailed critical values, with alpha/2 chance of being above or below. (Strictly, the confidence describes the repeated-sampling procedure.)
 :::
 
 +++
@@ -840,7 +901,7 @@ The distribution of *sample means* approaches normal as $n$ grows, regardless of
 :::
 
 :::note CEBoK's Testable Topics
-CEBoK's own summary table (Testable Topics) is blunt: **Testable** = all of this module's main content (definitions, distributions, hypothesis testing, statistical tests, confidence intervals). **Testable, but less emphasized** = N/A (nothing in this module gets that middle tier). **Not testable** = the Related and Advanced Topics section (derivations, additional distributions, additional tests) — covered here anyway for completeness, but lower priority for exam prep.
+CEBoK's own summary table (Testable Topics) is blunt: **Testable** = all of this module's main content (definitions, distributions, hypothesis testing, statistical tests, confidence intervals). **Testable, but less emphasized** = N/A (nothing in this module gets that middle tier). **Not testable** = the Related and Advanced Topics section (Monte Carlo simulation, inverse CDF technique, derivations, normal vs. lognormal, bivariate normal, additional distributions, additional tests) — covered here anyway for completeness (including the "Monte Carlo and simulation" section), but lower priority for exam prep.
 :::
 
 :::check
@@ -917,7 +978,7 @@ Q: Two WBS elements are bivariate normal with $\rho$ close to $-1$. What happens
 
 **Chi-squared**: one parameter (df $=n$); mean $=n$, variance $=2n$; approaches normal as $n\to\infty$. Used in goodness-of-fit testing.
 
-**Rayleigh**: one parameter $a$; mean $=a\sqrt{\pi/2}$, variance $=(2-\pi/2)a^2$. Rayleigh($a=1$)² is chi-squared with 2 df. Used in time-phasing R&D cost/EAC curves.
+**Rayleigh**: one parameter $a$; mean $=a\sqrt{\pi/2}$, variance $=(2-\pi/2)a^2$. Rayleigh(1) has a chi-squared distribution with 2 d.f. (CEBoK's wording; strictly, the square of a Rayleigh(1) variate). Used in time-phasing R&D cost/EAC curves.
 
 **Beta** (formal): shape parameters $\alpha,\beta > 0$ on support $(0,1)$; mean $=\alpha/(\alpha+\beta)$; $\text{Beta}(\alpha,\beta)$ is symmetric to $\text{Beta}(\beta,\alpha)$; $\text{Beta}(1,1) = \text{Uniform}(0,1)$.
 
@@ -969,7 +1030,7 @@ Full treatment (multivariate case, SEE substitution) is in Module 8 Regression A
 
 ### Confidence intervals and sample size
 
-CI and PI width shrink with $\sqrt n$, but never hit zero the way a CI eventually can — the *next single value of X* is always limited by $\sigma$, while the *mean* can, in principle, be known with near-perfect precision as $n\to\infty$. **The penalty for not knowing $\sigma$ (comparing PI/CI width at higher vs. lower confidence) is roughly 2-4×** worse at higher confidence levels — this is exactly what gives the t-distribution its fat tails.
+The CI and the PI tighten rapidly with increasing $n$; the effect is inexorable but tapers off with $\sqrt n$. For example, the width of the 95% PI is asymptotic to $3.92\sigma$ (and the 68.3% PI to $2\sigma$), but the width of both CIs closes to zero as $n$ grows large. The *next value of X* cannot be known any more precisely than $\sigma$ allows, while the *mean* can be known with near-perfect precision. **The penalty for not knowing $\sigma$ (comparing PI/CI width at higher vs. lower confidence) is roughly 2-4×** worse at higher confidence levels — this is exactly what gives the t-distribution its fat tails.
 
 {{primer}}
 
@@ -1006,24 +1067,24 @@ Q: A 95% CI for $\sigma$ from a small sample is noticeably asymmetric. Which way
   cards: String.raw`
 ## Fundamentals
 Q: Probability vs. Statistics in one sentence each
-A: Probability: likelihood of future/uncertain events. Statistics: drawing conclusions from sample data about populations.
+A: Probability: mathematical study of the future; measures the chance of an event, outcome, or range of possible outcomes. Statistics: studies the past; describes historical outcomes and uses them to determine an underlying probability model.
 Q: Population vs. sample
 A: Population: entire set of interest (all programs); Sample: subset actually observed (programs with data).
 Q: Parameter vs. statistic
 A: Parameter: a characteristic of the population ($\mu$, $\sigma$) — unknown. Statistic: computed from sample ($\bar x$, $s$) — estimates the parameter.
 Q: Role of probability in cost estimating
-A: Model input uncertainty, build probability distributions for risk analysis, simulate total program cost via Monte Carlo.
+A: Module 9: modeling uncertainty using probability distributions (one of CEBoK's three main applications, with Module 6 descriptive statistics and Module 8 OLS regression for CERs).
 Q: Role of statistics in cost estimating
-A: Test whether CER coefficients and growth factors are statistically significant; quantify confidence in estimates via intervals.
+A: Module 6: descriptive statistics for an initial feel for the data set; Module 8: OLS regression to develop CERs (alongside Module 9's probability-distribution risk modeling).
 Q: Random variable definition
-A: A quantity whose value is uncertain (e.g., next year's cost, number of defects).
+A: A variable that cannot be fully controlled or accurately predicted; it takes on values that represent outcomes in the sample space (e.g., cost of repair parts for a fighter plane under development).
 R: yes
 Q: Discrete vs. continuous random variable
 A: Discrete: countable outcomes (0, 1, 2, ...); Continuous: any value in a range.
 Q: PDF vs. CDF
 A: PDF (probability density function): relative likelihood of each value (area under = 1). CDF (cumulative): $P(X \le x)$, runs 0 to 1.
 Q: Independence of events
-A: Occurrence of one event does not change the probability of another.
+A: (Beyond CEBoK) Occurrence of one event does not change the probability of another. CEBoK uses the term only as "independent, identically distributed (iid)".
 R: yes
 
 ## Normal Distribution
@@ -1040,9 +1101,9 @@ R: yes
 Q: Interpretation of $z = 1.5$ from a z-table with $P(Z < 1.5) = 0.9332$
 A: About 93.32% of outcomes fall below that value; 6.68% exceed it.
 Q: When is normal distribution appropriate for cost?
-A: When data is symmetric; below CV 25% a normality test can't reliably distinguish normal from lognormal anyway, so either is defensible.
+A: It is the most commonly used distribution, and the top-level sum of 30+ iid WBS elements is normal by the CLT; below CV 25% a normality test can't reliably distinguish normal from lognormal.
 Q: Can normal distribution be negative?
-A: Yes, which is unrealistic for cost; lognormal is better for cost modeling (or truncate the normal at zero and redistribute the weight).
+A: Support is all reals, so yes; for cost/weight the chance of a negative value is generally negligible, and if negatives cannot be allowed, truncate at zero and redistribute the weight over the positive support.
 Q: PDF vs. CDF worked example: F(5)=0.18, F(10)=0.58. What is P(5<x<10)?
 A: F(10) - F(5) = 0.58 - 0.18 = 0.40.
 Q: Probability a continuous random variable equals one exact point (e.g. cost = exactly the point estimate)
@@ -1053,7 +1114,7 @@ Q: Coefficient of variation (CV) formula
 A: $CV = \sigma/\mu$ — unitless, so it's comparable across datasets of different scale.
 R: yes
 Q: CV estimate-quality rule (CEBoK)
-A: Cost estimates should have CV < 15%; above that, consider regression against a cost driver instead of a simple average.
+A: Cost estimates should have CV < 15%; above that, consider other options besides a simple average of historical costs; most often regression against cost drivers (a CER whose regression CV is substantially lower). Large CVs: the mean is a poor representation, so specify the full set of parameters and include other moments such as variance.
 Q: Fig. 10.8 example: mean 10, CV 10% vs. CV 30% — what are the standard deviations?
 A: CV 10% → σ = 1; CV 30% → σ = 3 (σ = CV × μ in both cases).
 Q: A high CV may indicate what, besides general dispersion?
@@ -1061,15 +1122,15 @@ A: Outliers in the data set.
 Q: CLT example: three right-skewed triangulars, (0.5,1.0,3.0), (3.5,4.5,7.5), (6.5,8.0,12.0), summed
 A: The sum tests as normal by the Kolmogorov-Smirnov test — the CLT takes effect quickly even for skewed triangulars.
 Q: CLT requirement (iid) and typical convergence point
-A: Independent, identically distributed elements; sum generally converges to normal by about n = 30.
+A: Independent, identically distributed elements; the number needed depends on the distribution of the variables being summed, and generally the sum converges to normal by n = 30.
 Q: Does correlation between summed elements break the CLT?
-A: Not usually — as long as the sum isn't dominated by a few highly correlated large elements, the CLT still holds (convergence may just be slightly slower).
+A: Not as long as the sum is not dominated by a few large elements that are highly correlated; a reasonable amount of correlation may slow the convergence slightly, but the sum still approaches normal.
 
 ## t-Distribution
 Q: t-distribution vs. normal
 A: t has fatter tails (extra uncertainty from estimating σ with small-sample s); converges to normal as df → ∞.
 Q: When to use t-distribution
-A: Whenever σ is unknown and estimated from a small sample (the typical cost data case).
+A: When the sample size is small; t-distributions arise when normal distributions are standardized by dividing by s (hypothesis testing and regression).
 Q: Degrees of freedom for a one-sample t-test
 A: df = n − 1
 Q: When to use z vs. t
@@ -1078,7 +1139,7 @@ Q: One-sample t-statistic formula
 A: $t = (\bar x - \mu_0)/(s/\sqrt n)$, df = n − 1
 R: yes
 Q: Two-sample t-statistic formula
-A: $t = (\bar x_1 - \bar x_2)/\sqrt{s_1^2/n_1 + s_2^2/n_2}$
+A: $t = (\bar x_1 - \bar x_2)/(s_p\sqrt{1/n_1 + 1/n_2})$ with pooled $s_p^2 = [(n_1-1)s_1^2+(n_2-1)s_2^2]/(n_1+n_2-2)$, df = $n_1+n_2-2$
 R: yes
 Q: Formal definition of the t-distribution
 A: $t = N(0,1) / \sqrt{\chi^2(n)/n}$ — a standard normal divided by the square root of a chi-squared over its df.
@@ -1093,7 +1154,7 @@ Q: Definition: X is lognormal if…
 A: ln(X) is normally distributed.
 R: yes
 Q: Lognormal key properties
-A: Always positive; right-skewed; Mean > Median > Mode.
+A: Domain [0, ∞) (positive); skewed right (median lower than mean). (Beyond CEBoK: Mean > Median > Mode.)
 Q: Lognormal median formula
 A: $e^{\mu}$ (where μ is the mean of ln(X))
 R: yes
@@ -1104,9 +1165,9 @@ Q: Lognormal mode formula
 A: $e^{\mu - \sigma^2}$ (always < median)
 R: yes
 Q: Why lognormal fits cost data
-A: Cost is bounded at zero and grows multiplicatively (50% over is easier than 50% under zero); log-space CER errors produce lognormal.
+A: CEBoK: sometimes used in risk analysis; often occurs in CERs based on power models. (Beyond CEBoK: positive-only and multiplicative growth.)
 Q: Normal vs. lognormal: which for cost?
-A: Lognormal is usually preferred for cost (positive, right-skewed, fits multiplicative growth); below CV 25% the two are statistically indistinguishable, so either passes.
+A: CEBoK does not say one is preferred: the top-level sum of 30+ iid WBS elements is normal by the CLT; the lognormal is sometimes used in risk analysis and often occurs in power-model CERs; below CV 25% the two are statistically indistinguishable.
 Q: Normal-vs-lognormal indistinguishability rule
 A: Below CV 25%, statistical tests can't reliably tell normal from lognormal data apart; at or above 25%, they can.
 Q: If a sum of 30+ WBS elements tests as lognormal, what's the likely explanation?
@@ -1124,7 +1185,7 @@ R: yes
 Q: When is triangular used in cost estimating?
 A: Expert elicitation: only three intuitive inputs needed (best/worst/most likely).
 Q: Beta (PERT) distribution: key property
-A: Flexible, bounded on [a, b]; can be skewed either direction.
+A: Many shapes depending on α and β (can be skewed either direction); defined on (0, 1); mean α/(α+β); used in schedule risk analysis and PERT/critical path.
 Q: PERT mean approximation
 A: $(a + 4m + b)/6$
 R: yes
@@ -1136,9 +1197,9 @@ A: Success (1) with probability p; failure (0) with probability 1 − p.
 Q: Bernoulli mean and variance
 A: Mean = p; Variance = p(1 − p)
 Q: Bernoulli use in cost risk
-A: Models binary risk events (technology matures: yes/no).
+A: Commonly used in the risk cube methodology.
 Q: Relationships between distributions
-A: Binomial = sum of n Bernoulli trials; Normal = limit of many distributions (CLT); t → Normal as df → ∞; F = ratio of two chi-squareds; Lognormal = exp(Normal); Beta(1,1) = Uniform(0,1); Rayleigh(1)² is chi-squared(2 df).
+A: Binomial = sum of n Bernoulli trials; Normal = limit of many distributions (CLT); t → Normal as df → ∞; F = ratio of two chi-squareds; Lognormal = exp(Normal); Beta(1,1) = Uniform(0,1); Rayleigh(1) has a chi-squared distribution with 2 d.f.
 Q: F-distribution: mean and variance
 A: Mean = $n/(n-2)$ for $n>2$; Variance = $2n^2(m+n-2) / [m(n-2)^2(n-4)]$ for $n>4$ (m, n = numerator/denominator df).
 Q: F-distribution definition
@@ -1147,28 +1208,28 @@ R: yes
 Q: Beta(1,1) is identical to…
 A: Uniform(0,1).
 Q: Rayleigh(a=1) is identical to…
-A: Chi-squared with 2 degrees of freedom.
+A: Chi-squared with 2 degrees of freedom (CEBoK: "a Rayleigh(1) has a chi-squared distribution with two d.f."; strictly, the square of a Rayleigh(1) variate).
 
 ## Covariance and Correlation
 Q: Covariance formula
-A: $Cov(X,Y) = \sum(x_i - \bar x)(y_i - \bar y) / (n-1)$
+A: $Cov(X,Y) = E[(X-\mu_x)(Y-\mu_y)] = E[XY]-\mu_x\mu_y$ (Beyond CEBoK, sample form: $\sum(x_i - \bar x)(y_i - \bar y)/(n-1)$)
 R: yes
 Q: Correlation coefficient formula
-A: $r = Cov(X,Y) / (s_X \, s_Y)$, range [−1, +1]
+A: $\rho = Cov(X,Y) / (\sigma_X \, \sigma_Y)$, range [−1, +1]
 R: yes
 Q: Interpretation of r = +1, 0, −1
 A: +1: perfect positive relationship; 0: no linear relationship; −1: perfect negative relationship.
 Q: Relationship between r and R²
-A: $R^2 = r^2$ (coefficient of determination in regression).
+A: (Beyond CEBoK) $R^2 = r^2$ (coefficient of determination in regression).
 Q: Variance of a sum of two random variables
-A: $\sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$
+A: (Beyond CEBoK, Module 9) $\sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$
 R: yes
 Q: Effect of positive correlation on the variance of a sum
-A: Increases it (beyond the sum of individual variances).
+A: Increases the dispersion of the top-level sum (negative correlation decreases it).
 Q: Cost risk modeling: importance of correlation
 A: Ignoring positive correlation between cost elements *understates* total program risk.
 Q: SD of sum when ρ = 1 (perfect correlation)
-A: $\sigma_X + \sigma_Y$ (the SDs add directly, not in quadrature).
+A: (Beyond CEBoK) $\sigma_X + \sigma_Y$ (the SDs add directly, not in quadrature).
 
 ## Hypothesis Testing
 Q: Null hypothesis definition
@@ -1181,9 +1242,9 @@ Q: Significance level α definition
 A: Pre-set threshold for probability of rejecting H₀ when it is true (Type I error).
 R: yes
 Q: Common significance levels
-A: α = 0.10, 0.05, 0.01 (lower = more conservative)
+A: Typical α: 0.05 (customary) and 0.10; 0.10 used occasionally, 0.01 rarely (when a high level of certainty is required). Lower α = more stringent test, stronger evidence needed to reject H₀.
 Q: p-value definition
-A: Probability of observing the data (or more extreme), *given* H₀ is true.
+A: The smallest α at which H₀ could be rejected with the calculated test statistic (CEBoK definition). Textbook reading: probability of data at least this extreme given H₀ is true; NOT the probability H₀ is true.
 R: yes
 Q: Decision rule: reject H₀ when
 A: The test statistic falls beyond the critical value (or p < α)
@@ -1194,14 +1255,14 @@ Q: Type II error definition
 A: Failing to reject H₀ when H₀ is actually false (false negative); probability = β.
 R: yes
 Q: Power of a test
-A: 1 − β: probability of correctly rejecting a false H₀.
+A: (Beyond CEBoK) 1 − β: probability of correctly rejecting a false H₀. CEBoK says only that β relates to power and its math is beyond the module's scope.
 R: yes
 Q: Trade-off between Type I and Type II error
-A: Lowering α reduces Type I but increases Type II (all else equal); more data improves both.
+A: CEBoK: with a lower α there is a lower probability of a Type I error. (Beyond CEBoK: all else equal, this increases Type II error; more data improves both.)
 Q: Two-tailed test: when and why
 A: When H_a is "different" (no direction specified, e.g., $\mu \ne \mu_0$); rejection region split between both tails.
 Q: One-tailed test: when and why
-A: When H_a is directional (e.g., $\mu > \mu_0$); all rejection region in one tail; easier to reject H₀ at same α.
+A: When H_a assumes a direction of difference (e.g., $\mu > \mu_0$; a new aircraft expected to have lower O&M costs); rejection region in one tail. Two-tailed tests are more common.
 Q: Test statistic general form
 A: (Sample Statistic − Hypothesized Value) / Standard Error
 R: yes
@@ -1213,7 +1274,7 @@ A: The data do not provide enough evidence to reject H₀; does NOT prove H₀ t
 
 ## Confidence Intervals
 Q: Confidence interval definition
-A: A range of plausible values for a population parameter at a stated confidence level (e.g., 95%).
+A: Indicates (1 − α) × 100% confidence that the true parameter value is contained within the calculated range; its endpoints equal the critical values of a two-tailed hypothesis test.
 R: yes
 Q: General CI formula
 A: Point Estimate ± (Critical Value) × (Standard Error)
@@ -1225,7 +1286,7 @@ Q: CI for a mean (σ known, z-distribution)
 A: $\bar x \pm z_{\alpha/2} \times (\sigma/\sqrt n)$
 R: yes
 Q: Correct interpretation of a 95% CI
-A: Over repeated sampling, 95% of such intervals contain the true parameter.
+A: CEBoK: a 95% CI has a 95% chance of containing the true value, and a 2.5% chance each of being too low or too high. (Beyond CEBoK, strict reading: over repeated sampling, 95% of such intervals contain the true parameter.)
 Q: Relationship between CI and two-tailed test
 A: If μ₀ falls outside a (1−α) CI, a two-tailed test at α would reject H₀: μ = μ₀.
 Q: CI width increases with…
@@ -1235,33 +1296,35 @@ A: Lower confidence level, less variability, larger sample size.
 
 ## Statistical Tests
 Q: t-test uses
-A: Test means (one-sample, two-sample, paired) and regression coefficients.
+A: Test means (one-sample, two-sample) and regression coefficients.
 Q: Chi-squared test uses
-A: Categorical data, goodness-of-fit, independence, variance tests.
+A: Pearson's chi-squared investigates goodness of fit; the chi-squared test for variance tests H0: σ² = σ0² for normal data. (Beyond CEBoK: independence of categorical data.)
+Q: Chi-squared test for variance: statistic and rejection rule
+A: $T = (n-1)s^2/\sigma_0^2$; reject H0 when T is less than the corresponding χ² value (two-tailed and lower one-tailed) or greater than it (upper one-tailed), from a lookup table.
 Q: Chi-squared goodness-of-fit formula
-A: $\chi^2 = \sum (O_i - E_i)^2 / E_i$ (observed vs. expected frequencies)
+A: (Beyond CEBoK) $\chi^2 = \sum (O_i - E_i)^2 / E_i$ (observed vs. expected frequencies)
 R: yes
 Q: Chi-squared degrees of freedom: goodness-of-fit
-A: df = k − 1 (k = number of categories)
+A: (Beyond CEBoK) df = k − 1 (k = number of categories)
 Q: Chi-squared degrees of freedom: test of independence
-A: df = (r − 1)(c − 1) (r rows, c columns)
+A: (Beyond CEBoK) df = (r − 1)(c − 1) (r rows, c columns)
 Q: F-test uses
-A: Compare two variances; test overall regression significance.
+A: Compare two variances (two-sample, both groups assumed normal); test overall regression significance.
 Q: F-statistic formula
-A: $F = s_1^2 / s_2^2$ (larger variance in numerator)
+A: $F = s_x^2 / s_y^2$: sample variance of one group divided by that of the other; F-distribution with (m − 1) and (n − 1) d.f., m and n = sample sizes. H0: variances equal; H1: not equal (one- or two-tailed).
 R: yes
 Q: F-distribution shape
-A: Always right-skewed, non-negative (ratio of two squared quantities).
+A: (Beyond CEBoK) Right-skewed, non-negative (ratio of two squared quantities). CEBoK: F tends to normal as m and n tend to infinity.
 Q: Kolmogorov-Smirnov (K-S) test
-A: Goodness-of-fit test comparing empirical CDF to theoretical CDF.
+A: Used to determine whether sample data is representative of a distribution; only applies to continuous distributions; a non-parametric test. H0: data follow the specified distribution.
 R: yes
 Q: K-S test statistic
-A: $D = \max |F_{\text{empirical}}(x) - F_{\text{theoretical}}(x)|$ (maximum vertical distance)
+A: $D = \max_{1 \le i \le n}(F(Y_i) - (i-1)/n,\ i/n - F(Y_i))$; critical value from lookup tables for α; reject H0 if D is greater than the critical value.
 R: yes
 Q: K-S advantage over chi-squared
-A: Works on continuous data directly without binning; generally more powerful.
+A: (Beyond CEBoK) Works on continuous data directly without binning; generally more powerful.
 Q: K-S use in cost estimating
-A: Check whether historical cost/growth data or CER residuals fit normal/lognormal before risk modeling.
+A: Check whether data fit a distribution, e.g., CEBoK tests whether a sum of three right-skewed triangular distributions is normal (it passes).
 Q: Regression t-test: H0 and test statistic
 A: H0: $b_i = 0$; test statistic = estimated coefficient / standard error, $t$ with $df = n-k$.
 Q: Regression F-test: H0 and test statistic
@@ -1283,9 +1346,9 @@ A: Testable = all main content; Testable but less emphasized = N/A; Not testable
 
 ## Monte Carlo and Simulation
 Q: Monte Carlo simulation: basic procedure
-A: 1. Define distributions for uncertain inputs. 2. Sample each, thousands of times. 3. Compute outputs. 4. Analyze the output distribution.
+A: CEBoK: assign potential real-life events a probability distribution; using a random number generator and the inverse CDF technique, assign outcomes to the events. (Beyond CEBoK: define inputs, sample thousands of times, compute outputs, analyze the output distribution.)
 Q: Monte Carlo accuracy: how does error shrink?
-A: Error ∝ $1/\sqrt N$ (to cut error in half, need 4× trials)
+A: (Beyond CEBoK) Error ∝ $1/\sqrt N$ (to cut error in half, need 4× trials)
 Q: Inverse CDF technique: basic steps
 A: 1. Draw u ~ Uniform(0,1). 2. Return x = F⁻¹(u).
 R: yes
@@ -1294,7 +1357,7 @@ A: CDF F maps values uniformly to [0,1]; inverting maps uniform draws back to th
 Q: Inverse CDF for Uniform(a, b)
 A: $F^{-1}(u) = a + u(b - a)$
 Q: Normal vs. lognormal for modeling cost
-A: Lognormal: positive, right-skewed, fits cost growth (especially large CV). Normal: symmetric, allows negatives; below CV 25% tests can't tell it from lognormal.
+A: Lognormal: support [0, ∞), skewed right. Normal: symmetric, support all reals (negatives generally negligible). Below CV 25% tests can't tell them apart; the top-level sum of many WBS elements is normal by the CLT.
 Q: Bivariate normal distribution
 A: Joint distribution of two correlated normal variables, characterized by two means, two SDs, and correlation ρ.
 R: yes
@@ -1342,7 +1405,7 @@ Q: Standard error of the mean
 A: $s/\sqrt n$ (or $\sigma/\sqrt n$ if σ known)
 R: yes
 Q: Variance of sum of two correlated variables
-A: $\sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$
+A: (Beyond CEBoK, Module 9) $\sigma_X^2 + \sigma_Y^2 + 2\rho\sigma_X\sigma_Y$
 R: yes
 `
 });

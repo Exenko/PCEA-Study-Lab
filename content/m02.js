@@ -3,9 +3,9 @@ PCEA.addModule({
   blurb: 'Analogy, parametric, build-up, and other techniques: when to use each, how to cross-check, and why uncertainty matters.',
   intro: String.raw`An estimate is never a single "true" number — it is a range built from data, relationships, or logic, always accompanied by uncertainty.
 
-**The core challenge:** select a technique (or blend of techniques) appropriate to **data availability**, **program maturity**, and **required accuracy**.
+**The core challenge:** select the technique (or techniques) to use depending upon the **level of fidelity required**.
 
-**The four families**: analogy, parametric, build-up, and other (expert opinion and extrapolation from actuals).`,
+**Three primary techniques** (analogy, parametric, build-up) plus **other techniques** (expert opinion, extrapolation from actuals). Cost estimators typically use multiple techniques: one to derive the primary estimate and one or more to provide a cross-check to give confidence to the estimate.`,
   sections: [
     {
       id: 'uncertainty', title: 'Uncertainty and Risk', summary: 'Why estimates are uncertain and what risk means',
@@ -26,15 +26,13 @@ An estimate predicts the future, so it is always uncertain. Separate that uncert
 
 ### Sources of Uncertainty
 
-A point estimate is one value drawn from a distribution. Uncertainty comes from:
+Uncertainty captures the range of possible outcomes of the estimate, which characterizes its precision. This is best done as a probability distribution, usually an empirical one resulting from a Monte Carlo simulation, which can then be summarized with a confidence interval.
 
-- **Data uncertainty**: natural scatter in historical data (CER prediction interval, sample variation)
-- **Model uncertainty**: the technique itself (analogy, CER, build-up) is an imperfect representation
-- **Requirements uncertainty**: the system is not fully defined, especially early
-- **Schedule uncertainty**: slips or accelerations change phased costs
-- **Technical risk**: technology may not mature as planned, driving rework
+:::tip Beyond CEBoK
+Common sources of uncertainty in practice: data scatter (sample variation, prediction interval), model uncertainty (the technique is an imperfect representation), requirements uncertainty (the system is not fully defined early), schedule uncertainty (slips change phased costs), and technical risk (technology may not mature as planned).
 
-Cost distributions are **right-skewed**: large overruns are possible, but underruns are limited. So a point estimate built from "most likely" values usually falls **below** the mean.
+Cost distributions are often right-skewed: large overruns are possible, but underruns are limited. So a point estimate built from "most likely" values usually falls below the mean.
+:::
 
 ### Past, Present, Future
 
@@ -44,14 +42,14 @@ Cost estimating draws on the **past** (historical cost and other data collected 
 
 **Precision** is the spread of the range of outcomes the estimate produces (a narrow range is more precise). **Accuracy** is whether that range is centered on the true value. Both are desirable, but **accuracy is more important** — precision can give a false sense of security.
 
-**Example**: NOAA's preseason forecasts of North Atlantic hurricanes (1999–2007) captured the actual count within the predicted range in only 3 of 8 years (a ~37.5% confidence interval) — the forecasts looked precise (a narrow range) but weren't, because the true value fell outside the range most of the time. The average prediction, however, understated the actual average by less than one hurricane per year — the forecasters were better with risk (the central tendency) than with uncertainty (the spread).
+**Example**: NOAA's preseason forecasts of North Atlantic hurricanes (1999–2007) captured the actual count within the predicted range in only 3 of 8 years (a ~37.5% confidence interval) — the forecasts looked precise (a narrow range) but weren't, because the true value fell outside the range most of the time. The forecasters were not including enough uncertainty in the estimates, and only gave the illusion of precision. They were better with risk: the average prediction understated the actual average by less than one hurricane per year. The unusually high 2005 season (Katrina and Rita) should not be removed from the data set as an outlier unless there is an analytical explanation (a trend such as increasing temperatures, an error in prediction such as an error band that should have been wider, or an error in data collection). The figure is an example of a track record which estimating organizations should adopt, with a feedback mechanism, so that the data gathered can be used to improve cost estimating and risk analysis.
 
 +++
 
 ### Risk vs. Uncertainty
 
-- **Uncertainty**: natural statistical variability in an estimate given the data and method — describable with a distribution (e.g., ± prediction interval)
-- **Risk** (CEBoK's definition in this module): the **upward shift** applied to the cost estimate range because unadjusted estimates tend to be **systematically low**. It corrects an inherent bias and improves accuracy. Example: if costs come in on average 20% higher than the estimates, add 20% to the estimate — not atypical of historical cost growth.
+- **Uncertainty**: the range of possible outcomes of the estimate, which characterizes its precision; best expressed as a probability distribution (usually empirical, from Monte Carlo simulation) summarized with a confidence interval (e.g., one million dollars, plus or minus 15 percent)
+- **Risk** (CEBoK's definition in this module): the **upward shift** applied to the cost estimate range to account for the fact that unadjusted estimates tend to be **systematically low**. The adjustment is intended to eliminate what appears to be an inherent bias in estimates and improves the estimate's accuracy. Example: if costs come in on average 20% higher than the estimates, cost estimators may want to add 20% to the estimate — not atypical of historical cost growth on some programs.
 
 {{primer}}
 
@@ -63,14 +61,9 @@ Both must be reflected in the final estimate. Report a **range or distribution**
 
 +++
 
-### Common Sources of Cost Growth
-
-- Requirements creep / scope changes
-- Immature technology (low Technology Readiness Level)
-- Optimistic assumptions (schedule, learning, vendor quotes)
-- Poor analogy selection (too dissimilar)
-- Small sample sizes or inadequate historical data
-- External factors (funding instability, inflation, regulatory change)
+:::tip Beyond CEBoK
+Common sources of cost growth cited in practice: requirements creep / scope changes; immature technology (low Technology Readiness Level); optimistic assumptions (schedule, learning, vendor quotes); poor analogy selection (too dissimilar); small samples or inadequate historical data; external factors (funding instability, inflation, regulatory change).
+:::
 
 :::check
 Q: Historically, a program type's actual costs come in about 20% above its estimates. Per CEBoK Module 2, adding 20% to a new estimate of that type accounts for…
@@ -82,11 +75,11 @@ Q: Historically, a program type's actual costs come in about 20% above its estim
 :::
 
 :::check
-Q: Why does a point estimate from "most likely" values usually fall below the mean cost?
+Q: (Beyond CEBoK) Why does a point estimate from "most likely" values usually fall below the mean cost?
 * Cost distributions are right-skewed; overruns can be large but underruns are limited
 - The estimate method is biased low
 - Optimism bias in the data
-> Asymmetry: large upside surprises outweigh large downside, pulling the mean above the mode.
+> Beyond CEBoK: asymmetry. Large upside surprises outweigh large downside, pulling the mean above the mode.
 :::`
     },
     {
@@ -96,23 +89,25 @@ Estimating from one similar historical system is a short, ordered recipe.
 
 :::order
 Q: Put the analogy process steps in order.
-1. Identify an analogous system (similar function, technology, design)
-2. Obtain the historical cost, normalized for inflation and quantity
-3. Identify differences between the analogy and the new system
-4. Apply an adjustment, a ratio scaled from a shared parameter
-> Find the analog, get its normalized cost, identify the differences, then apply the ratio adjustment.
+1. Identify a similar (analogous) item
+2. Obtain the older item's cost (inflation adjustments are part of data normalization)
+3. Identify key cost drivers and how the old item relates to the new
+4. Adjust the old item's cost for how those cost drivers relate
+> Find the similar item, get its cost, identify the key cost drivers and how old relates to new, then adjust the old item's cost.
 :::
 
 +++
 
-Estimate a new system from **one** (or a few) similar, historical systems, adjusted for differences in size, performance, complexity, or technology. Analogy is a one-for-one comparison, and is useful even alongside more detailed techniques as a cross-check (the estimates should at least be the same order of magnitude).
+Use an estimate for an **existing item** to develop an estimate for a **similar item**. Generally, some adjustments must be made to the costs of the older item: programmatic information (e.g., quantity or schedule), physical characteristics (e.g., weight or materials), performance characteristics (e.g., power or pointing accuracy), government or commercial practices, or contract type (e.g., fixed price or cost plus). Economic adjustments for inflation are normally considered part of data normalization. Objectivity is important when making an adjustment, and the source of the analogy and any adjustments must be logical, credible, and acceptable to an informed party. Analogy is a one-for-one comparison, and is useful even alongside more detailed techniques as a cross-check (in this case, the estimates should have the same order of magnitude).
+
+Cost estimators develop analogies at the system, subsystem, or component level, and may use multiple analogies at the lower WBS levels to create a higher level estimate.
 
 ### Process
 
-1. Identify an analogous system (similar function, technology, design)
-2. Obtain the historical cost, normalized for inflation and quantity
-3. Identify differences between the analogy and the new system
-4. Apply an adjustment (a ratio, scaled from a parameter the two systems share)
+1. Identify a similar (analogous) item
+2. Obtain the older item's cost (inflation adjustments are part of data normalization)
+3. Identify key cost drivers and how the old item relates to the new
+4. Adjust the old item's cost for how those cost drivers relate (a ratio, in the scaling formula below)
 
 {{primer}}
 
@@ -144,9 +139,9 @@ An analogy works best when there are many similarities between old and new syste
 
 ### Pros and Cons
 
-**Pros**: Fast and cheap; based on real data; works early with little design detail; easy to defend when the systems are very similar and a sufficient database exists.
+**Pros**: Can be used before detailed program requirements are known; the more similar the systems, the stronger the analogy and the easier it is to stand up to review; easy to use if a sufficient database exists on an analogous system.
 
-**Cons**: A single (or few) data point(s); too easy to make overly subjective adjustments; a good analog may not exist; estimating with an adjusted analogy is inherently estimating outside the range of the data.
+**Cons**: Tendency to be too subjective (analogies that require too many subjective adjustments are not appropriate); difficult to find sufficient cost, technical, and programmatic data; any estimate using an adjusted analogy constitutes estimating outside the range of the data (a single data point).
 
 :::tip Beyond CEBoK
 Some analysts instead scale by a power law, $Cost_{new} = Cost_{analogy} \times (Param_{new}/Param_{analogy})^{b}$, treating $b$ as a parametric-style curve-fitting exponent. This is not the source's linear-ratio treatment: a single analog point can't determine a curve's exponent any more than it can determine a line's slope from data — $b$ has to come from somewhere else (e.g., an assumed economy-of-scale curve).
@@ -188,50 +183,45 @@ A CER fit to many historical data points has strengths and weaknesses.
 :::sort
 Q: Which of these are strengths of parametric estimating, and which are weaknesses?
 buckets: Pro | Con
-- Statistically defensible when properly built = Pro
-- Gives uncertainty measures = Pro
-- Fast to apply = Pro
-- Requires a sufficient, normalized historical dataset = Con
-- Risk of extrapolating outside the data range = Con
-- Can be a "black box" if the relationship isn't understood = Con
-> The text lists these as parametric pros (defensible, objective, repeatable, uncertainty measures, fast) and cons (needs enough normalized data, extrapolation risk, black-box risk).
+- Versatile: can be developed at any level when there is enough data = Pro
+- Quickly reflects design changes by modifying the input parameters = Pro
+- Objective measures of validity (statistical significance, standard error) = Pro
+- Underlying database must be consistent and sufficiently robust = Con
+- Black box syndrome: blindly accepting output without understanding it = Con
+- Must be updated to current data; a dated CER can be exactly wrong = Con
+> The text lists these as parametric advantages (versatility, quick reflection of design changes and sensitivity analysis, objective measures of validity) and disadvantages (consistent, robust, thoroughly normalized database; black box syndrome; CERs must be updated).
 :::
 
 +++
 
-Use a **statistical relationship** (a Cost Estimating Relationship, or **CER**) built from **many** historical data points relating cost to measurable parameters (e.g., weight, power, lines of code).
+Use a **mathematical relationship** based on historical data (a Cost Estimating Relationship, or **CER**) to relate cost to one or more technical, performance, cost, or programmatic parameters (the **cost drivers**, e.g., weight, thrust, or power), using **multiple systems** to cover a broader range than an analogy. Parametric relationships are commonly referred to as CERs, which include rates, factors, and ratios. A parametric relationship ranges from a simple rule of thumb (e.g., dollars per pound) to a complex regression equation. Develop CERs using regression whenever possible to enable statistical inferences; note, however, that many rates, factors, and ratios in use may not be statistically based.
 
-### CER Forms
+The independent variables (cost drivers) could be physical characteristics, performance or operational parameters, programmatic variables, or even other costs. The system's cost is the dependent variable.
 
-**Linear:**
-$$Cost = a + bX$$
+:::tip Beyond CEBoK
+Two common CER forms: linear, $Cost = a + bX$, and power, $Cost = aX^b$. Both can be fit via regression (see Module 8), and a good CER has acceptable $R^2$, t-statistics, and F-statistics.
+:::
 
-**Power (most common):**
-$$Cost = aX^b$$
-
-Both can be fit via **regression** (see Module 8). A good CER has acceptable $R^2$, t-statistics, and F-statistics.
+CEBoK's statistical validity language: a parametric relationship derived through statistical analysis generally has objective measures of validity (the statistical significance of each estimated coefficient and the model as a whole) and a calculated standard error (a measure used in cost risk analysis).
 
 ### Example
 
-CER for trucks: $Cost (\$K) = 15 + 2.5 \times Payload\ (tons)$
+A CER for the site activation cost element for a Major Automated Information System (MAIS) was developed from 11 data points corresponding to similar systems, where installations ranged from seven to 47 workstations, inclusive. The number of workstations is the cost driver:
 
-For a truck with 12-ton payload:
-$$Cost = 15 + 2.5(12) = \$45K$$
+$$SiteAct\ (\$K) = 82.8 + 26.5 \times NumWkstn$$
+
+This CER might provide good estimates provided that the number of workstations in the new installation is between about five and 50. It should not be used for values much outside the range of the data on which it was originally based. In an extreme case, the cost of site activation for an installation with no workstations is about \$82.8K, as this is what the equation gives mathematically.
 
 +++
 
 ### Building a CER
 
-A parametric relationship must be:
+- Cost estimators generally need an **adequate number of relevant data points**
+- **Normalize** data so it can be used to develop a parametric equation that is consistent and complete
+- Ensure the system being estimated does not fall too far outside the range of the data or parameters used to develop the equation (**and preferably not at all**). Example: if the new spacecraft is expected to weigh 250 kg and the CER was based on a spacecraft that weighed 2000 kg and higher, then use another CER
+- The underlying assumption is that the **historical framework** on which the relationship is based will remain the same for the new system (e.g., the technology and manufacturing processes are not drastically changing)
 
-- **Statistically valid** (good $R^2$, significant slope)
-- **Operationally reasonable** (does it make physical sense?)
-- **Derived from comparable systems** (homogeneous data)
-- **Checked for extrapolation risk** (only valid within the data range)
-
-Sources: in-house regression, published models, vendor parametric tools.
-
-:::tip
+:::tip Beyond CEBoK
 High $R^2$ (>0.90) looks good, but always check that the slope makes sense physically. A strong statistical fit can hide a physically nonsensical relationship.
 :::
 
@@ -239,9 +229,15 @@ High $R^2$ (>0.90) looks good, but always check that the slope makes sense physi
 
 ### Pros and Cons
 
-**Pros**: Statistically defensible (if properly built); objective and repeatable; gives uncertainty measures; fast to apply; good for trade/sensitivity analysis.
+**Pros**: Versatile (can be developed at any level when there is enough data); cost estimators can quickly and easily capture the effects of design changes by modifying the input parameters; supports sensitivity analysis; objective measures of validity (statistical significance, standard error).
 
-**Cons**: Requires a sufficient, normalized historical dataset; risk of extrapolating outside the data range; can be a "black box" if the relationship isn't understood.
+**Cons**: The underlying database must be consistent and sufficiently robust (verify the data were thoroughly normalized); black box syndrome (plugging in inputs and blindly accepting the output without understanding how it is generated); relationships must be updated to capture the most current cost, technical, and programmatic data, since a dated CER can be exactly wrong.
+
+### Uncertainty and Risk
+
+Parametric estimates have the advantage of using statistics to capture the uncertainty in estimating beyond the range of data. The uncertainty is in the intercept and slope of the regression line and can be measured by the **standard error**; there is also uncertainty in the distribution around the regression line, which can be estimated by a **Prediction Interval (PI)**.
+
+Risks can be characterized as those **not included in the historical data set**: new technologies, economic conditions (e.g., inflation), and the labor environment. There may also be risk characterized by **historical growth of the cost driver** (e.g., size, power, weight, lines of code).
 
 {{primer}}
 
@@ -276,20 +272,18 @@ buckets: Touch labor | Support labor
 
 +++
 
-Estimate cost at a **low level of detail** (labor hours, material, tooling) and **roll up** the Work Breakdown Structure (WBS).
+Build estimates for higher-level cost elements by **summing or rolling up** detailed estimates for lower-level cost elements. Roll-up is common to estimates produced by any combination of the three techniques; build-up is characterized by estimating at the **lowest definable level at which data exists**.
 
 ### Process
 
-At each WBS element, estimate:
+- **Labor hours are multiplied by labor rates** to determine costs
+- A **detailed parts list or material costs** is also required; the parts required for a task are identified at the lowest level possible, often down to the nut and bolt level
+- Consideration is made for **quantity and schedule** to capture the effects of learning curves and production rate
+- The **stage of the program** is also important because the processes and standards used to manufacture prototypes are generally different than those for full rate production
 
-1. Labor hours by category (engineering, manufacturing, quality, etc.)
-2. Hourly rates (burdened or fully-loaded)
-3. Material costs
-4. Other direct costs (ODC: tooling, test, travel)
-
-Then sum:
-
-$$Cost = \sum_{i=1}^{n}(Hours_i \times Rate_i) + \sum_{i=1}^{n} Materials_i + ODC$$
+:::tip Beyond CEBoK
+A general form of the roll-up at one WBS element: $Cost = \sum (Hours_i \times Rate_i) + \sum Materials_i + ODC$, where other direct costs (ODC) such as tooling, test, or travel are often added, and rates are often burdened (fully loaded).
+:::
 
 ### Standards and Variance Factors
 
@@ -322,12 +316,16 @@ Labor rates then convert these hours to cost. Note build-up often borrows from t
 
 ### Pros and Cons
 
-**Pros**: Detailed and precise (given accurate inputs); highly traceable/auditable; useful for negotiation; shows exactly what drives cost.
+**Pros**: Cost estimators can show exactly what the estimate covers and it helps determine if anything was overlooked; if time and motion studies are involved, there is a fairly accurate depiction of the actual process; variance factors applied to standards are based on verifiable actual cost data; unique to a specific program and manufacturer (contractor).
 
-**Cons**: Time- and labor-intensive; requires mature design; small errors compound; only captures *known* tasks — misses unknown-unknowns unless an explicit risk allowance is added.
+**Cons**: Can be expensive to implement if companies develop their own standards; requires extensive data collection and monitoring for variance factors; the product specification must be well known and stable and all product/process changes must be reflected in the estimate; many costs (e.g., rework, tooling, quality) are calculated as a percentage of touch labor, so small errors at the touch labor level can be magnified into much larger errors; omissions are likely, since it is very difficult to anticipate all the actual costs.
+
+### Uncertainty and Risk
+
+**Uncertainty** may be in the design specifications, in the performance to standards (usually associated with the labor estimate), and in the unit costs and scrap rates of materials. **Risk** may include an adjustment for potential omissions, the historical growth of design specifications, and the difficulty associated with the integration of lower-level estimates and/or systems or sub-systems.
 
 :::warn
-Build-up is defensible for **defined** work. But a detailed estimate built only from known tasks **systematically excludes unknown-unknowns** (integration, rework, unforeseen problems). Always add a management reserve / risk allowance on top.
+Build-up is defensible for **defined** work, but **omissions are likely**: it is very difficult to anticipate all the actual costs. Risk may include an adjustment for potential omissions, growth of design specifications, and difficulty integrating lower-level estimates.
 :::
 
 :::check
@@ -338,10 +336,10 @@ Q: Build-up for a subassembly: Engineering 150 hrs @ \$90/hr; Manufacturing 300 
 
 :::check
 Q: A build-up estimate omits risk. Why is this a problem, even if the line-item estimates are accurate?
-* It captures only defined tasks and misses unknown-unknowns (integration, rework, unforeseen scope)
+* Omissions are likely, and risk includes potential omissions, design-specification growth, and integration difficulty
 - The hourly rates are probably too high
 - It will never converge with a parametric estimate
-> Bottom-up is built from what you *know*. Historically unplanned work still happens.
+> It is very difficult to anticipate all the actual costs, so omissions are likely. Risk for build-up may include an adjustment for potential omissions, the historical growth of design specifications, and integration of lower-level estimates.
 :::
 
 :::check
@@ -361,7 +359,7 @@ predict: total ±0.5%
     {
       id: 'other', title: 'Other Techniques and Data', summary: 'Expert opinion, extrapolation from actuals, and factor/ratio estimating',
       body: String.raw`:::primer:::
-Experts are used when data is missing, but human memory is imperfect.
+Expert opinion is grounded in anecdotal experience, and human memory is imperfect.
 
 :::check
 Q: An expert recalls a past report taking "a week" (40 hours). What is the actual effort most likely to have been?
@@ -377,13 +375,17 @@ Two supplementary methods fill gaps or validate the primary techniques: **expert
 
 ### Expert Opinion / Engineering Judgment
 
-Use expert opinion only as a last resort, when other methods aren't available or valid — it is hard to justify as a primary method and hard to run risk around. Use it when no data exists, or to corroborate/adjust objective data (as in analogy adjustments) and to explain an apparent outlier. Named elicitation approaches:
+Expert opinion is generally viewed as too subjective. Use it only as a last resort, when other methods are not available or not valid for the situation — it is hard to justify as a primary method and difficult to run risk around. It may be used to corroborate or adjust (as in the analogy technique) objective data, to explain an apparent outlier, or early in a program's life cycle for a quick, high-level Rough Order-of-Magnitude (ROM) estimate. It is often used as a secondary method to offer a cross-check. Use the insights of functional experts in conjunction with one of the three established costing techniques. Approaches include:
 
 - **One-on-one interviews**: request any available documentation from the expert; iterate if possible
 - **Round-table discussion**: multiple experts present all sides of an issue and stay in the room until they reach consensus, documenting areas of risk
-- **Delphi technique**: a group of experts answers **anonymously** (so no single person dominates), the results are summarized and sent back for another round, iterating toward convergence on a single number or a tighter range — a specific Operations Research technique
+- **Delphi technique**: a group of experts answers **anonymously** (so no single person dominates), the results are summarized and sent back out for coordination/comments; this generates a range of opinions and generally results in convergence to a single number or at least tighter range of possible outcomes — a specific technique from Operations Research (OR)
 
-Don't ask experts to estimate outside the bounds of their experience; get another expert for areas outside their scope; validate credentials; formulate consensus after individual consultation. Always dig into *what data the opinion is based on* and document that source — expert opinion with no accompanying rationale is neither a valid technique nor sound practice.
+Don't ask experts to estimate outside the bounds of their experience; get another expert for areas outside their scope; validate credentials; formulate consensus after individual consultation. Always dig into *what data the opinion is based on* and document that source — expert opinion with no accompanying rationale is neither a valid technique nor sound estimating practice.
+
+**Advantage**: it can provide a sanity check or cross-check of an estimate produced using established techniques; SMEs usually provide a different perspective and may point out things not previously considered; interaction with experts allows a better understanding of the product or process.
+
+**Disadvantage**: expert opinion is completely subjective and can be refuted using objective data; it holds little, if any, credibility when not used in conjunction with one of the costing techniques.
 
 :::tip Beyond CEBoK
 Common ways experts go wrong: the availability heuristic (recent/memorable cases bias the estimate), Dunning-Kruger (overconfidence in one's own knowledge), and the planning fallacy (underestimating duration or difficulty).
@@ -401,7 +403,11 @@ An umbrella term for using actual costs from past or current items to predict fu
 - **Learning curves**: the most common variant — cumulative-average or unit theory, Learning Curve Slope (LCS), theoretical first-unit cost (Module 7)
 - **Estimate at Completion (EAC)**: uses actual cost and schedule data with Earned Value Management to project cost at completion (Module 15)
 
-**Advantage**: Most credible once actuals exist; based on the *same* program, not analogies.
+Extrapolation from actuals can be used in conjunction with one of the three basic costing techniques; for example, actual data may be used to construct a parametric estimate or as the basis for an analogy.
+
+:::tip Beyond CEBoK
+Extrapolation from the program's own actuals is generally regarded as highly credible once actuals exist, since it is based on the same program rather than an analogy.
+:::
 
 :::tip Beyond CEBoK
 **Should-cost estimating** is a related, build-up-like technique focused on what a system *should* cost under efficient operations, rather than what historical data says it *has* cost — used to find cost-reduction opportunities and set aggressive but achievable targets. It's a program-management tool alongside the core techniques, not one of the "other" techniques itself.
@@ -438,11 +444,11 @@ Choosing a technique for an element is a deliberate, staged process.
 
 :::order
 Q: Put the technique selection steps in order.
-1. Research all potential techniques from every source
-2. Compare candidate techniques against each other and the requirements
-3. Avoid outdated techniques and verify the technique fits the program phase
-4. Select the most appropriate technique, plus a secondary technique as a cross-check
-> Research the options, compare them, screen out outdated or ill-fitting ones, then select a primary technique plus a secondary cross-check.
+1. Research which techniques are available from all potential sources
+2. Compare the techniques against the requirements and against each other
+3. Select the technique most appropriate for the estimate (or develop one)
+4. Select a secondary technique as a cross-check
+> Research the options, compare them (avoiding outdated techniques and checking program phase), select the most appropriate technique, then select a secondary technique as a cross-check.
 :::
 
 +++
@@ -454,7 +460,6 @@ Before selecting a technique, understand why the estimate is being done — this
 - **Purpose**: milestone decisions, budget development, ROM estimates, alternatives comparisons, proposal development/evaluation
 - **How much detail is required**, and how soon the estimate is needed
 - **What data is available**
-- **Audience**: who reviews, and what level of defensibility do they require
 
 An estimate for a milestone decision, for example, requires more detail than a ROM.
 
@@ -464,26 +469,26 @@ Rules of thumb sometimes used in practice: ROM (rough order of magnitude) accura
 
 ### Top-Down vs. Bottom-Up
 
+There are two main ways to structure a cost estimate. Any of the costing techniques may be used with either approach.
+
 | Aspect | Top-Down | Bottom-Up |
 |---|---|---|
-| **Techniques** | Analogy, parametric | Build-up |
-| **Program phase** | Early (concept/design) | Later (detailed design/production) |
-| **Speed** | Fast | Slow |
-| **Detail/traceability** | Low | High |
-| **Unknown-unknowns unique to the new system** | Not captured — analogy/parametric are based on what an *old* system cost, which never included the new system's own new-technology, economic, or labor-environment risks | Also not captured — only known, defined tasks; needs an explicit risk allowance |
+| **Techniques** | Generally associated with parametric or analogy (any technique may be used) | Most closely associated with the build-up technique (multiple techniques may be used) |
+| **Approach** | Known top-level requirements (e.g., weight or power) or parameters are used to develop an estimate for an entire system | Work from information at the lowest level to develop an estimate for an entire system: develop discrete estimates for each element (labor hours, materials, other costs, with direct and indirect rates), then roll up |
 
-**Key caveat (from the source)**: neither approach is safe from unknown-unknowns. Top-down (analogy, parametric) estimates are built on the *old* system's actual costs, which by definition never captured risks unique to the *new* system — new technology, economic conditions, the labor environment. Bottom-up (build-up) captures only known, defined scope. Either way, an explicit risk/uncertainty treatment is required — see Module 9.
+:::tip Beyond CEBoK
+Practical caveat: top-down (analogy, parametric) estimates are built on the *old* system's actual costs, which by definition never captured risks unique to the *new* system, while bottom-up (build-up) captures only known, defined scope. Either way, an explicit risk/uncertainty treatment is required; see Module 9.
+:::
 
 +++
 
 ### Cost Element Structure (CES)
 
-Organize the estimate hierarchically (aligned with the WBS) so that:
+A good way to break down the estimate into manageable pieces is to develop a **Cost Element Structure (CES)**. The CES is the framework for an estimate in a **hierarchical tree structure** where the costs of children sum up to the cost of their parent or, conversely, the cost of the parent can be allocated to the children. The **CES dictionary** defines what is included in each element of the CES.
 
-1. Each element can be assigned the **most appropriate technique**
-2. Nothing is **missed or double-counted**
-3. The estimate **maps to** how data is collected and tracked
-4. The structure is **consistent** across the program life cycle, enabling historical database development
+:::tip Beyond CEBoK
+In practice, a CES aligned with the WBS helps ensure each element can be assigned the most appropriate technique, nothing is missed or double-counted, and the estimate maps to how data is collected and tracked.
+:::
 
 Different WBS elements in the *same* estimate may use *different* techniques (e.g., build-up for hardware, parametric for software, analogy for a subsystem lacking detail). Cost elements are also classified by:
 
@@ -497,10 +502,10 @@ Different WBS elements in the *same* estimate may use *different* techniques (e.
 
 ### Technique Selection
 
-1. **Research** all potential techniques from every source: customer-mandated models, an estimator's own library of techniques, and developing new ones where needed.
-2. **Compare** candidate techniques against each other and against the requirements: look at the underlying data, run statistical comparisons, and make sure nothing is overlooked.
-3. **Avoid outdated techniques** — a technique built on old data may not accurately estimate new technology — and **verify the technique fits the program phase**.
-4. **Select** the technique most appropriate for the element (or develop one), plus a **secondary technique as a cross-check**.
+1. **Research** which techniques are available from all potential sources: some customers may have specific models they want you to use, many cost estimators maintain a library of costing techniques, and consider developing new ones.
+2. **Compare** the techniques against the requirements and against each other: look at the underlying data, do statistical comparisons, and make sure nothing is overlooked or left out. Be careful not to use outdated techniques (a technique developed from old data may not accurately estimate new technology), and make sure the technique is for the appropriate program phase.
+3. **Select** the technique most appropriate for the estimate, or develop a technique that fills the needs. Multiple techniques can be used in the same estimate.
+4. In addition to selecting a primary technique, **select a secondary technique as a cross-check**.
 
 {{primer}}
 
@@ -508,11 +513,13 @@ Different WBS elements in the *same* estimate may use *different* techniques (e.
 
 Three levels of rigor, increasing in detail, fidelity, and persuasiveness:
 
-- **Cross-check**: a test of reasonableness — doesn't need the exact same number, just the same order of magnitude
-- **Validation**: more detailed — the intent is to get *nearly* the same result using a different technique or tool
-- **Independent Cost Estimate (ICE)**: the most detailed and persuasive level of corroboration
+- **Cross-check**: a test of reasonableness — it does not have to result in the exact same number, but should be a similar number; at a minimum, it should be the same order of magnitude
+- **Validation**: more detailed than a cross-check — the intent is to get *nearly* the same result using different techniques
+- **Independent Cost Estimate (ICE)**: cross-check, validation, and ICE reflect increasing levels of detail, fidelity, and persuasiveness in corroborating a cost estimate
 
-**Never average** divergent results; **investigate** the cause (data quality, assumptions, scope definition, technique misapplication).
+:::tip Beyond CEBoK
+When results diverge, do not average them; investigate the cause (data quality, assumptions, scope definition, technique misapplication).
+:::
 
 :::widget techniques-compare x=110 showAvg=1 showAnalogy=1 analogyPt=2 showParam=1 showCal=1 calPt=5:::
 
@@ -520,7 +527,7 @@ Three levels of rigor, increasing in detail, fidelity, and persuasiveness:
 Q: All four legitimate techniques run on the *same* illustrative dataset. Turn all four on and watch the spread between their estimates grow past 20.
 goal: spread > 20
 show: showAvg=1 showAnalogy=1 showParam=1 showCal=1
-> Even with no bad data, an average, an analogy through one point, an OLS fit, and a CER calibrated through a different point disagree — a large spread signals to investigate (data quality, assumptions, technique fit), never to average.
+> Even with no bad data, an average, an analogy through one point, an OLS fit, and a CER calibrated through a different point disagree — a large spread is a reason to investigate (data quality, assumptions, technique fit) rather than average (Beyond CEBoK guidance).
 :::
 
 ### Documentation
@@ -528,11 +535,11 @@ show: showAvg=1 showAnalogy=1 showParam=1 showCal=1
 Document the ground rules, assumptions, data, and calculations behind the estimate — if in doubt, include it. **Replicability is the acid test**: another analyst should be able to recreate the estimate from the documentation alone. A well-documented estimate is more credible.
 
 :::check
-Q: Your primary estimate is a detailed build-up (\$15M). A parametric cross-check yields \$18M. You should…
+Q: (Beyond CEBoK) Your primary estimate is a detailed build-up (\$15M). A parametric cross-check yields \$18M. You should…
 - Split the difference at \$16.5M
 - Discard the parametric estimate as less detailed
 * Investigate why they diverge; check data quality, assumptions, scope, and technique application
-> Convergence confirms; divergence signals a problem that must be resolved.
+> Beyond CEBoK guidance: convergence confirms; divergence signals a problem to investigate. CEBoK says a cross-check should be a similar number, at a minimum the same order of magnitude.
 :::
 
 :::check
@@ -540,7 +547,7 @@ Q: Rank cross-check, validation, and ICE from least to most rigorous.
 * Cross-check, validation, ICE
 - Validation, cross-check, ICE
 - ICE, validation, cross-check
-> Cross-check only needs the same order of magnitude; validation seeks nearly the same result via a different technique; ICE is the most detailed and persuasive.
+> Cross-check should be a similar number (at a minimum the same order of magnitude); validation seeks nearly the same result using different techniques; cross-check, validation, and ICE reflect increasing levels of detail, fidelity, and persuasiveness.
 :::
 
 :::check
@@ -560,19 +567,19 @@ Q: Prime mission equipment cost = \$200M. An illustrative SEITPM factor of 12% i
     {
       id: 'lifecycle', title: 'Life Cycle and Technique Progression', summary: 'Early techniques to late techniques as data matures',
       body: String.raw`:::primer:::
-Estimates are redone as a program matures and data replaces assumptions.
+Early in a program, gross estimates are expected; they get more detailed as the program matures.
 
 :::check
-Q: As a program matures, what happens to the confidence range around its estimates?
-- It stays the same, because it depends only on the technique
-- It widens, because more detail means more places to be wrong
-* It can tighten, but risk and growth allowances are still needed
-> Early estimates carry wide confidence ranges; later estimates can tighten ranges but must still add risk/growth allowances.
+Q: As a program matures, what happens to its cost estimates?
+- They stay gross, because detailed estimates are never possible
+- They become less detailed as the design changes
+* They get more detailed, as the program becomes more defined and more data is collected
+> Early on, gross estimates are expected because detailed estimates are not usually possible (poor program definition, changing requirements, scarce cost data). As the program matures, it becomes more defined, additional data is collected, and the estimates get more detailed.
 :::
 
 +++
 
-As a program matures, design detail and actual data grow, and the preferred technique shifts.
+At the beginning of a program, there is more emphasis on using analogies and parametric relationships. In these early phases, gross estimates are expected as detailed estimates are not usually possible due to poor program definition, changing requirements, and scarce cost data. As the program matures, it becomes more defined, additional data is collected, and the estimates get more detailed. Engineering build-up and extrapolation from actuals are used more frequently in the production and deployment phase and O&S phase.
 
 ### Technique by Phase
 
@@ -582,17 +589,19 @@ As a program matures, design detail and actual data grow, and the preferred tech
 | **Technology Development** | Some preliminary design | Parametric, refined analogy |
 | **Engineering & Manufacturing Development** | Detailed design, early prototypes | Parametric transitioning to build-up |
 | **Production & Deployment** | Detailed drawings, vendor quotes, early actuals | Build-up, extrapolation from actuals |
-| **Operations & Support** | Operating history accumulating | Actuals-based trends, parametric O&S drivers |
+| **Operations & Support** | Operating history accumulating | Engineering build-up, extrapolation from actuals |
+
+The per-phase detail in this table is a study aid derived from CEBoK's Figure 2.10 (approximate proportional usage of techniques by phase); the text itself states only the early and late emphasis above.
 
 ### Key Principle
 
-- **Early** (concept phase): **top-down** — analogy, parametric. Quick, works with little detail. Top-down estimates carry wide ranges because historical data may not reflect the new system's unique risks.
-- **Late** (production): **bottom-up** — build-up, actuals. Detailed, defensible, but needs mature design and explicit risk reserves.
-- **Credibility grows** as real data replaces assumptions.
+- **Early** (beginning of a program): more emphasis on **analogies and parametric relationships**; **gross estimates are expected**.
+- **Later** (production and deployment, and O&S): **engineering build-up and extrapolation from actuals** are used more frequently.
+- As the program matures, it becomes more defined, additional data is collected, and the estimates get more detailed.
 
-### When to Re-estimate
-
-Technique selection is not "set and forget." **Update at each milestone** to reflect the data and method appropriate at that time. Early estimates carry **wide confidence ranges**; later estimates can **tighten ranges** but must still add risk/growth allowances.
+:::tip Beyond CEBoK
+In practice, update the estimate at each milestone, expect wide confidence ranges early (tightening later), and keep risk/growth allowances and reserves even for late, bottom-up estimates.
+:::
 
 {{primer}}
 
@@ -620,7 +629,7 @@ Q: Slide through the phases. In which phase does engineering build-up first beco
 - Engineering & Manufacturing Development
 - Technology development
 - Operations & support
-> In EMD the estimate is still mostly parametric while build-up grows. By production, detailed drawings, vendor quotes and early actuals make build-up the main technique. In O&S, actuals-based trends take over.
+> In EMD the estimate is still mostly parametric while build-up grows. By production, detailed drawings, vendor quotes and early actuals make build-up the main technique. In O&S, build-up and extrapolation from actuals continue to be used more frequently.
 :::`
     },
     {
@@ -646,7 +655,7 @@ buckets: Analogy | Parametric | Build-up
 
 Below-the-line (BTL) factors are also known as **cost-on-cost CERs**: they use the cost of another element to predict cost through a simple multiplicative relationship. They're **unitless**, often expressed as a **percentage**, and typically model support functions — SEITPM (systems engineering, integration & test, program management) — as a percentage of the program's **prime mission equipment**.
 
-BTL factors are similar in application to burdens like overhead and G&A, but **less deterministic** — they may **not** be statistically based. They should vary by system/program and, ideally, be **derived statistically from history**. Because a BTL-derived cost is based on an already-estimated cost (with its own risk and uncertainty), that must be carried through the risk analysis (model with functional correlation).
+Beware that BTL factors **may not be statistically based**. BTL factors are similar in application to burdens like overhead and General and Administrative (G&A) costs, but BTL factors are **less deterministic**. They should vary based on the system or program being estimated, and should be **based on historical information and derived through statistical methods**. Because a BTL-derived cost is based on an already-estimated cost (with its own risk and uncertainty), that must be carried through the risk analysis (model with functional correlation).
 
 :::tip Beyond CEBoK
 Contract pricing sometimes layers burdens multiplicatively on a base cost: $Price = Base \times (1+OH) \times (1+G\&A) \times (1+Fee)$, applied in sequence (base -> OH -> G&A -> fee). This pricing-burden formula belongs to contract pricing (Module 14), not to BTL cost-on-cost CERs.
@@ -662,7 +671,7 @@ The same three techniques used for cost can predict a project's **schedule** —
 
 ### Operations & Support Estimating
 
-O&S costs are normally a large portion of total life-cycle cost — **some sources cite 70-80% for certain types of systems** — and are often excluded or overlooked in decision-making. O&S includes costs for:
+O&S costs are defined as **all of the costs associated with operating, maintaining, and supporting a system**. They are normally a large portion of the total life cycle cost for a system (**some sources say 70-80% for certain types of systems**) and are often excluded or overlooked in the decision making process. They are necessary and important to include in Life Cycle Cost Estimates (LCCEs) so that users and decision makers understand the total cost of a system or program. The acronym O&S may refer to traditional O&S, operations and sustainment costs, or Operations and Maintenance (O&M) costs; here, assume the definition for all of these is the same. O&S costs can include costs for:
 
 - Personnel
 - Consumable and repairable materials
@@ -673,20 +682,23 @@ O&S costs are normally a large portion of total life-cycle cost — **some sourc
 **Technique examples**:
 
 - **Analogy**: System A is analogous to System B for annual software maintenance cost. System A: 2.5M SLOC, \$7.5M/yr. System B: 5M SLOC. Rate view: $\$7.5M / 2.5M = \$3/SLOC$, so $\$3 \times 5M = \$15M$. Ratio view: SLOC ratio $5M/2.5M = 2.0$, so $2.0 \times \$7.5M = \$15M$ — both mathematically equivalent.
-- **Parametric**: ship overhaul cost vs. average ship age shows a **non-linear** relationship.
-- **Build-up**: a reliability-based logistics model, such as the Army's Cost Analysis Strategy Assessment (CASA) — a bottom-up total-ownership-cost tool built from lower-level logistics costs, ideally derived from standard relationships and reliability data like Mean Time Between Failures (MTBF) and Mean Time To Repair (MTTR).
+  Another common approach to estimating software maintenance is to determine the amount of code that can be maintained by each maintainer on an ongoing basis and divide that ratio into the total code base to determine the size of the maintenance staff required. That ratio should be based on historical data from comparable programs.
+- **Parametric**: for ship overhaul cost vs. average ship age, it **appears** that a **non-linear** relationship exists.
+- **Build-up**: a reliability-based logistics model, such as the Army's Cost Analysis Strategy Assessment (CASA) — a bottom-up total-ownership-cost decision support tool that provides a total cost estimate based on lower-level logistics costs across 25 listed categories. Each lower-level estimate needs a strong basis; to qualify as a true build-up, the lower-level estimates should be derived from standard relationships and reliability data such as Mean Time Between Failures (MTBF) and Mean Time To Repair (MTTR).
 
 {{primer}}
 
-**Key point**: As actual sustainment data accumulates over the system's life, O&S estimates should be **updated/refined** using that experience (extrapolation from actuals).
+:::tip Beyond CEBoK
+As actual sustainment data accumulates over a system's life, O&S estimates can be updated and refined using that experience (extrapolation from actuals).
+:::
 
 :::check
-Q: Which life-cycle phase usually accounts for the largest share of total ownership cost for long-lived weapon systems?
+Q: Which life-cycle phase's costs are normally a large portion of a system's total life cycle cost, yet are often excluded or overlooked in decision making?
 - Research and development
 - Production
 * Operations & Support
 - Disposal
-> Some sources cite 70-80% for certain types of systems; O&S runs for decades while R&D and production are one-time.
+> O&S costs are normally a large portion of the total life cycle cost (some sources say 70-80% for certain types of systems) and are often excluded or overlooked in the decision making process.
 :::
 
 :::check
@@ -721,21 +733,21 @@ Q: Why does a build-up schedule estimate usually need Monte Carlo simulation, un
   cards: String.raw`
 ## Uncertainty & Risk
 Q: Uncertainty vs. risk in cost estimating
-A: Uncertainty: natural statistical variability in an estimate given the data/method (describable with a distribution). Risk (CEBoK Module 2): the upward shift applied to the estimate range because unadjusted estimates tend to be systematically low (e.g., add 20% if costs historically run 20% high).
+A: Uncertainty: the range of possible outcomes of the estimate (characterizes precision), best expressed as a probability distribution (usually empirical, from Monte Carlo simulation) summarized with a confidence interval. Risk (CEBoK Module 2): the upward shift applied to the estimate range to account for unadjusted estimates tending to be systematically low (e.g., if costs come in on average 20% higher than estimates, cost estimators may want to add 20%).
 Q: Why does a point estimate from "most likely" values usually fall below the mean?
-A: Cost distributions are right-skewed; overruns can be large but underruns are limited.
+A: Beyond CEBoK: cost distributions are right-skewed; overruns can be large but underruns are limited.
 Q: Opportunity (in risk/uncertainty terms)
-A: An uncertain event with a positive effect on cost or schedule.
+A: Beyond CEBoK: an uncertain event with a positive effect on cost or schedule.
 R: yes
 Q: Common sources of cost growth
-A: Requirements creep, immature technology (low TRL), optimistic assumptions, poor analogy selection, inadequate data, external factors (inflation, funding instability).
+A: Beyond CEBoK: requirements creep, immature technology (low TRL), optimistic assumptions, poor analogy selection, inadequate data, external factors (inflation, funding instability).
 Q: Right-skewed cost distribution
-A: Mean > mode; possible large overruns, but limited underruns. Point estimate from most-likely falls below mean.
+A: Beyond CEBoK: mean > mode; possible large overruns, but limited underruns. Point estimate from most-likely falls below mean.
 R: yes
 
 ## Analogy
 Q: Definition of analogy technique
-A: Estimate a new system from one (or a few) similar historical systems, adjusted for differences in size, complexity, technology.
+A: Use the estimate for an existing item to develop an estimate for a similar item, with adjustments (programmatic, physical, performance, government/commercial practices, contract type) made objectively.
 R: yes
 Q: Analogy scaling formula
 A: $Cost_{new} = Cost_{analogy} \times (Parameter_{new}/Parameter_{analogy})$; a ratio equivalent to a linear equation through the origin.
@@ -749,50 +761,50 @@ A: A mathematical, scientific, or logical reason for the ratio parameter; adjust
 Q: Analogy uncertainty and risk
 A: Uncertainty in whether the point of departure is truly analogous and in the assumed linear relationship; risk from new-system factors the old system's costs never captured (new technology, economic conditions, labor environment) and from historical growth in the scaling quantity.
 Q: Analogy pros and cons
-A: Pros: fast, cheap, based on real data, works early, easy to defend with similar systems. Cons: one (or few) data point(s), subjective adjustments, a good analog may not exist, inherently estimates outside the data range.
+A: Pros: can be used before detailed program requirements are known; the more similar the systems, the stronger the analogy and the easier to stand up to review; easy if a sufficient database exists on an analogous system. Cons: tendency to be too subjective; difficult to find sufficient cost, technical, and programmatic data; estimating outside the range of the data (single data point).
 Q: Analogy power-law exponent (Beyond CEBoK)
 A: Some analysts scale by $Cost_{new} = Cost_{analogy} \times (Param_{new}/Param_{analogy})^b$; not the source's linear-ratio method — a single analog point can't determine the exponent $b$ either.
 R: yes
 
 ## Parametric
 Q: Definition of parametric technique
-A: Use statistical relationships (CERs) built from many historical data points relating cost to measurable parameters.
+A: Use mathematical relationships (CERs) based on historical data from multiple systems to relate cost to one or more technical, performance, cost, or programmatic parameters.
 R: yes
 Q: Cost Estimating Relationship (CER)
-A: A statistical equation $Cost = f(parameters)$ derived from regression on historical data.
+A: A mathematical relationship between cost drivers (independent variables) and cost (dependent variable); CERs include rates, factors, and ratios, ideally developed using regression (many in use are not statistically based).
 R: yes
 Q: Linear CER form
-A: $Cost = a + bX$; constant intercept and slope. a = fixed cost, b = cost per unit of X.
+A: Beyond CEBoK: $Cost = a + bX$; constant intercept and slope. a = fixed cost, b = cost per unit of X.
 R: yes
 Q: Power CER form
-A: $Cost = aX^b$; proportional relationship. Preferred for technical cost drivers (weight, power, lines of code).
+A: Beyond CEBoK: $Cost = aX^b$; a common nonlinear form for technical cost drivers (weight, power, lines of code).
 R: yes
 Q: CER validity requirements
-A: Good $R^2$ and t/F statistics; operationally reasonable (makes physical sense); derived from comparable, homogeneous data.
+A: Objective measures of validity: statistical significance of each estimated coefficient and the model as a whole, and a calculated standard error. Also: adequate number of relevant data points, thoroughly normalized data, system not too far outside the data range, historical framework assumed to remain the same.
 Q: Parametric pros and cons
-A: Pros: statistically defensible, objective, repeatable, quantifies uncertainty, fast. Cons: needs sufficient normalized data, risk of extrapolation outside data range.
+A: Pros: versatile (any level with enough data); quickly reflects design changes via input parameters; supports sensitivity analysis; objective measures of validity. Cons: database must be consistent and sufficiently robust; black box syndrome; must be updated (a dated CER can be exactly wrong).
 Q: Extrapolation risk
 A: Applying a CER far outside the range of historical data used to build it produces unreliable predictions.
 R: yes
 
 ## Build-up
 Q: Definition of build-up (engineering / bottom-up)
-A: Estimate at the lowest WBS level (labor hours × rates, materials, ODC) and sum to total.
+A: Estimate at the lowest definable level at which data exists and sum/roll up to higher-level cost elements (roll-up itself is common to all three techniques).
 R: yes
 Q: Build-up formula
-A: $Cost = \sum (Hours_i \times Rate_i) + \sum Materials_i + ODC$
+A: Beyond CEBoK: $Cost = \sum (Hours_i \times Rate_i) + \sum Materials_i + ODC$. CEBoK: labor hours are multiplied by labor rates; a detailed parts list or material costs is also required.
 R: yes
 Q: Labor cost element calculation
-A: Hours × burdened hourly rate; include all overhead, fringe, and indirect costs in the rate.
+A: Labor hours are multiplied by labor rates to determine costs; quantity and schedule are considered for learning curves and production rate.
 Q: Other direct costs (ODC)
-A: Tooling, test, travel, and special equipment; direct to the task but not labor or material.
+A: Beyond CEBoK: tooling, test, travel, and special equipment; direct to the task but not labor or material.
 R: yes
 Q: Build-up pros and cons
-A: Pros: detailed, precise, highly traceable, good for negotiation. Cons: slow, needs mature design, small errors compound, misses unknowns.
+A: Pros: shows exactly what the estimate covers and helps find overlooked items; accurate depiction of the process (with time and motion studies); variance factors based on verifiable actual data; unique to a program and manufacturer. Cons: expensive if company develops own standards; extensive data collection; product specification must be well known and stable; small touch-labor errors magnified; omissions likely.
 Q: Build-up and unknown-unknowns
-A: A bottom-up estimate is built only from known, defined tasks; it systematically excludes unforeseen problems and integration risks unless an explicit reserve is added.
+A: Omissions are likely because it is very difficult to anticipate all the actual costs; risk may include an adjustment for potential omissions, growth of design specifications, and integration difficulty.
 Q: Management reserve
-A: An explicit allowance added on top of a build-up estimate to cover unknowns, unidentified scope, and risk — essential for realism.
+A: Beyond CEBoK: an explicit allowance added on top of a build-up estimate to cover unknowns, unidentified scope, and risk.
 R: yes
 Q: Build-up standards
 A: Developed from time-and-motion studies in an optimal, controlled production environment; capture how long a task takes.
@@ -810,12 +822,12 @@ A: Uncertainty in design specifications, performance-to-standard, and unit costs
 
 ## Other Techniques
 Q: Expert opinion / engineering judgment
-A: A subject matter expert (or experts) estimates directly; use only as a last resort or to corroborate/adjust objective data. Always dig into what data the opinion is based on and document it.
+A: A subject matter expert (or experts) estimates directly; generally viewed as too subjective. Use only as a last resort, or to corroborate/adjust objective data, as a ROM or cross-check, in conjunction with one of the three established techniques. Always dig into what data the opinion is based on and document it.
 R: yes
 Q: Expert opinion elicitation methods
 A: One-on-one interviews (with iteration); round-table discussion (experts stay until consensus, documenting risk); Delphi technique (anonymous answers, iterated to convergence).
 Q: Delphi technique
-A: A group of experts answers anonymously to avoid one person dominating; results are summarized and recirculated, iterating toward convergence on a number or tighter range (an Operations Research technique).
+A: A group of experts answers anonymously to avoid one person dominating; results are summarized and sent back out for coordination/comments; generates a range of opinions and generally results in convergence to a single number or at least a tighter range of possible outcomes (an Operations Research technique).
 R: yes
 Q: Expert opinion uncertainty and risk
 A: People understate both variance (spread) and randomness; faulty recollection of anecdotal experience tends to understate effort.
@@ -832,62 +844,62 @@ A: Cost as a percentage/ratio of another element; SEITPM (Systems Engineering, I
 
 ## Technique Selection
 Q: Estimate requirements that drive technique choice
-A: Purpose (milestone decision, budget, ROM, alternatives comparison, proposal), how much detail/how soon it's needed, data available, audience/defensibility level.
+A: Purpose (milestone decision, budget, ROM, alternatives comparison, proposal), how much detail is required, how soon the estimate is needed, and what data is available.
 Q: ROM and budget-quality accuracy (Beyond CEBoK)
 A: Rules of thumb sometimes cited: ROM ~±30-50%, budget-quality ~±10-15%; not source-defined standards, treat as illustrative.
 Q: Top-down vs. bottom-up techniques
-A: Top-down: analogy, parametric. Bottom-up: build-up. Neither reliably captures unknown-unknowns unique to the new system — top-down is built on an old system's costs, bottom-up only on known tasks.
+A: Any technique may be used with either approach. Top-down: generally associated with parametric or analogy; uses known top-level requirements or parameters for an entire system. Bottom-up: most closely associated with build-up; works from lowest-level information, with discrete estimates rolled up to the entire system.
 Q: Cost Element Structure (CES) classification characteristics
 A: Program phase (development/production/O&S), appropriation (RDT&E/procurement/O&M), funding source, non-recurring vs. recurring, direct vs. indirect.
 Q: Technique selection steps
-A: Research all potential techniques (customer models, personal libraries, new ones); compare them (data, statistics); avoid outdated techniques for new technology; verify fit to program phase; select a primary plus a secondary cross-check.
+A: Research available techniques from all sources (customer models, libraries, new ones); compare against requirements and each other (data, statistics; avoid outdated techniques; appropriate program phase); select the most appropriate technique (or develop one); also select a secondary technique as a cross-check.
 Q: Cross-check vs. validation vs. ICE
-A: Increasing rigor: cross-check (reasonableness, same order of magnitude) < validation (nearly the same result via a different technique/tool) < Independent Cost Estimate (ICE, most detailed and persuasive).
+A: Increasing levels of detail, fidelity, and persuasiveness: cross-check (test of reasonableness; similar number, at minimum same order of magnitude) < validation (nearly the same result using different techniques) < Independent Cost Estimate (ICE).
 Q: What to do when two techniques give divergent results
-A: Investigate the cause (data quality, assumptions, scope, technique misapplication); do not average them.
+A: Beyond CEBoK: investigate the cause (data quality, assumptions, scope, technique misapplication); do not average them.
 Q: Documentation's "acid test"
 A: Replicability — another analyst should be able to recreate the estimate from the documentation alone.
 R: yes
 
 ## Life Cycle
 Q: Technique progression across the program life cycle
-A: Early (concept): top-down analogy/parametric. Mid (EMD): parametric transitioning to build-up. Late (production): build-up and actuals.
+A: Early: more emphasis on analogies and parametric relationships (gross estimates expected). As the program matures, estimates get more detailed; engineering build-up and extrapolation from actuals are used more frequently in production and deployment and O&S.
 Q: Early estimate confidence ranges
-A: Top-down analogy/parametric estimates carry wide ranges because historical data from past programs reflects their integration effects, but may not reflect the new system's unique unknown-unknowns and risks.
+A: Beyond CEBoK: top-down analogy/parametric estimates carry wide ranges because historical data may not reflect the new system's unique risks. CEBoK: early on, gross estimates are expected (poor program definition, changing requirements, scarce cost data).
 Q: Late estimate confidence ranges
-A: Build-up estimates can support tighter ranges but must still add risk/growth allowances for unknowns.
+A: Beyond CEBoK: build-up estimates can support tighter ranges but should still carry risk/growth allowances. CEBoK: as the program matures, it becomes more defined, more data is collected, and estimates get more detailed.
 Q: When to re-estimate
-A: At each program milestone to reflect updated data, design maturity, and the technique appropriate to that phase.
+A: Beyond CEBoK: at each program milestone, to reflect updated data, design maturity, and the technique appropriate to that phase.
 Q: Concept phase techniques (Materiel Solution Analysis)
-A: Analogy, high-level parametric, expert opinion. Minimal design detail; focus on rapid ROM.
+A: Analogy, high-level parametric, expert opinion (figure-derived study aid). Early phases emphasize analogies and parametric relationships; gross estimates are expected.
 Q: Production phase techniques
-A: Build-up, extrapolation from actuals, parametric on production efficiency drivers.
+A: Engineering build-up and extrapolation from actuals are used more frequently in production and deployment and in O&S.
 Q: O&S phase estimation
-A: Parametric on operating tempo (flight hours, operating hours), analogy to similar fielded systems, actuals from accumulated sustainment data.
+A: Engineering build-up and extrapolation from actuals are used more frequently in the O&S phase; O&S cost estimating techniques are the same three (analogy, parametric, build-up).
 
 ## Related Topics
 Q: Below-the-line (BTL) factors
 A: Cost-on-cost CERs: unitless, often a percentage, typically modeling SEITPM as a percentage of prime mission equipment; may not be statistically based.
 R: yes
 Q: BTL factors vs. burdens like OH/G&A
-A: Similar in application, but BTL factors are less deterministic; they should vary by system/program and ideally be derived statistically from history.
+A: Similar in application, but BTL factors are less deterministic; they should vary by system/program and should be based on historical information and derived through statistical methods (beware: they may not be statistically based).
 Q: Below-the-line factor formula (Beyond CEBoK)
 A: Contract pricing burdens (Module 14): $Price = Base \times (1 + OH) \times (1 + G\&A) \times (1 + Fee)$, applied multiplicatively in sequence — not part of this module's BTL/cost-on-cost CER definition.
 Q: SEITPM
 A: Systems Engineering, Integration & Test, and Program Management, taken together; commonly estimated as a factor of prime mission equipment (hardware and software) cost.
 R: yes
 Q: O&S cost elements
-A: Personnel, consumable/repairable materials, organizational/intermediate/depot maintenance (hardware and software), facilities, sustainment.
+A: O&S costs can include personnel, consumable/repairable materials, organizational/intermediate/depot maintenance (hardware and software), facilities, sustainment. O&S costs are all of the costs associated with operating, maintaining, and supporting a system.
 Q: O&S as share of life-cycle cost
 A: Some sources cite 70-80% for certain types of systems; O&S is often excluded or overlooked in decision-making despite this.
 Q: O&S analogy example (software maintenance)
 A: System A: 2.5M SLOC, \$7.5M/yr. System B: 5M SLOC. Rate view: \$3/SLOC x 5M = \$15M. Ratio view: SLOC ratio 2.0 x \$7.5M = \$15M — same result.
 Q: O&S parametric example
-A: Ship overhaul cost vs. average ship age shows a non-linear relationship.
+A: Ship overhaul cost vs. average ship age: it appears a non-linear relationship exists.
 Q: O&S build-up example
-A: A reliability-based logistics model, e.g., the Army's CASA (Cost Analysis Strategy Assessment), built from lower-level logistics costs using MTBF/MTTR-type reliability data.
+A: A reliability-based logistics model, e.g., the Army's CASA (Cost Analysis Strategy Assessment), built from lower-level logistics costs; to qualify as a true build-up, derived from standard relationships and reliability data (MTBF/MTTR).
 Q: Updating O&S estimates
-A: As actual sustainment data accumulates, update/refine O&S forecasts using extrapolation from actuals.
+A: Beyond CEBoK: as actual sustainment data accumulates, update/refine O&S forecasts using extrapolation from actuals.
 Q: Schedule estimating by analogy
 A: System A: 10 components / 40 months (4 months/component). System B: 15 components -> 15 x 4 = 60 months. Caveat: complexity may not scale linearly with component count.
 Q: Schedule Estimating Relationship (SER) example

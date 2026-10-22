@@ -30,9 +30,9 @@ EVM rests on three core data elements, all measured at the same point in time:
 |---|---|---|
 | **PV**, planned value | **BCWS** | Budgeted cost of work **scheduled** to be done by now |
 | **EV**, earned value | **BCWP** | **Budgeted** cost of work **actually performed** to date |
-| **AC**, actual cost | **ACWP** | The real cost incurred for the work completed |
+| **AC**, actual cost | **ACWP** | The actual costs incurred to date (the sum of all costs associated with the effort) |
 
-ACWP/BCWP/BCWS are the traditional government terms; AC/EV/PV are the terms preferred by the Project Management Institute College of Performance Management. Both sets are used interchangeably.
+ACWP/BCWP/BCWS are traditional terms; industry uses AC/EV/PV, the preferred terminology of the Project Management Institute College of Performance Management. Both sets are used interchangeably.
 
 :::key
 EV is the anchor. Compare EV to AC for **cost** efficiency. Compare EV to PV for **schedule** progress.
@@ -54,14 +54,14 @@ Without EV, the \$100 "underrun" looked like good news. EV reveals both problems
 {{primer}}
 
 :::tip
-Cumulative CPI usually stabilizes by 15–20% completion, and historically will not change by more than about 10% from its value at that point — in either direction. It is not a one-way ratchet: a CPI can drift slightly better as well as worse after that point, it just rarely moves far.
+Cumulative CPI is usually stable once a project is 15–20% complete and will not change more than 10% from its value at the 20% complete point. Historically, the CPI at completion is very close to or worse than the CPI at the 15–20% complete point.
 :::
 
 +++
 
 ### EVM on government contracts
 
-EVM is used on many contract types, most often cost-reimbursable and incentive contracts, to support integrated program planning and execution and to give the government an independent **surveillance tool**. The contractor's Control Account Managers (CAMs) report EV data; the government program manager and cost analyst use it as a cross-check on the contractor's own estimates.
+The use of EVM on a contract is a risk-based decision. Projects typically use EVM on cost-reimbursable and incentive contracts; the use of EV on LOE and time & materials contracts is discouraged.
 
 :::tip Beyond CEBoK
 Major U.S. DoD programs are required to use a formal EVM System (EVMS) above certain contract-value thresholds (roughly \$20M for EVMS application, \$100M for formal system validation), governed by the **EIA-748** standard's 32 guidelines across 5 categories (organization, planning/budgeting/scheduling, accounting, analysis/reports, revisions/data maintenance). CEBoK's testable material does not include these specific dollar thresholds or the guideline count — know that EVM compliance requirements exist and scale with contract size, but the exact figures are not exam content.
@@ -116,7 +116,7 @@ Projects should only employ EVM if the benefits outweigh the cost of running it.
 
 EVM is **less suited** to non-deliverable work such as LOE, to projects with open-ended or undefined objectives, and to short-duration projects. Larger projects can more easily absorb the cost of running an EVMS.
 
-The duration guideline is loose: an organization experienced with EVM can apply it cost-effectively even on a shorter effort, while one new to EVM may want a longer project until comfortable with the process. As a rough guideline, EVM works best on projects that run **about six months or longer**, though guidance varies by organization.
+The duration guideline is loose: an organization experienced with EVM can apply it cost-effectively even on a shorter effort, while one new to EVM may want a longer project until comfortable with the process. Analysts should use EVM on projects that are **at least six months** long, but guidance varies by organization.
 
 On the contract-type side, EVM is typically used on **cost-reimbursable and incentive contracts**; using it on LOE or Time & Materials contracts is discouraged, as is reporting EV to the government on **Firm Fixed Price (FFP)** contracts (a contractor may still track EV internally on an FFP contract to manage its own risk).
 
@@ -144,10 +144,10 @@ Q: Which project is the best fit for EVM?
 
 :::check
 Q: Why is EV reporting to the government discouraged on Firm Fixed Price contracts?
-* The contractor bears all cost risk on FFP already, so government EV surveillance adds little value
+* The source only says it is discouraged; the contractor owns all the risk on FFP and may use EV internally to mitigate it
 - FFP contracts are always too small to justify an EVMS
 - FFP contracts never have a WBS
-> On FFP, the contractor owns the risk; it may still track EV internally to manage that risk, but formal EV reporting to the government is discouraged.
+> Reporting EV to the government on FFP contracts is discouraged. The contractor owns all the risk on an FFP contract and may still use EV internally as a tool to mitigate that risk.
 :::`
     },
     {
@@ -158,10 +158,10 @@ The baseline that performance is measured against has some budget inside it and 
 :::sort
 Q: Is this budget inside the Performance Measurement Baseline (PMB) or outside it?
 buckets: Inside the PMB | Outside the PMB
-- Time-phased budgets assigned to control accounts = Inside the PMB
-- Budget for authorized work not yet assigned to control accounts = Inside the PMB
+- Time-phased budget planned for the work packages (BCWS) = Inside the PMB
+- Undistributed Budget (UB) = Inside the PMB
 - Management Reserve = Outside the PMB
-> PMB = Distributed Budget + Undistributed Budget. Management Reserve sits outside the PMB, and it is not time-phased or part of BAC.
+> The PMB includes a bucket of money called Undistributed Budget. Management Reserve is set aside over and above the PMB.
 :::
 
 +++
@@ -171,7 +171,7 @@ buckets: Inside the PMB | Outside the PMB
 The **Work Breakdown Structure (WBS)** is critical to EVM: its hierarchy lets the program manage and report at different levels. A project often has more than one WBS in play:
 
 - The **program WBS** — typically government-defined, referred to simply as "the WBS"
-- The **Contractor WBS (CWBS)** — how the contractor plans and manages the work; always at a lower (more detailed) level than the program WBS
+- The **Contractor WBS (CWBS)** — how the contractor plans and manages the work; the program WBS is always at least one level (usually several) higher than the CWBS, because it is the oversight level while the CWBS is the work management level
 - The **Cost Element Structure (CES)** — used for developing the cost estimate
 
 **Table 15.1 — Aquarium WBS sample:**
@@ -201,8 +201,8 @@ An **Organizational Breakdown Structure (OBS)** assigns work to the organization
 | Term | Scope | Traits |
 |---|---|---|
 | **Control Account** | WBS × OBS intersection, one CAM | Integration point for budget, schedule, actuals, and EV |
-| **Work Package** | Detailed, near-term tasks within a CA | Typically **4–6 weeks** long; specific EV technique assigned before work begins |
-| **Planning Package** | Far-term work, not yet detail-planned | Budget held at summary level; rolled into work packages as time approaches |
+| **Work Package** | Detailed, short-span tasks or material items required to accomplish the CA objectives | Typically **4–6 weeks** long; specific EV technique assigned before work begins |
+| **Planning Package** | Future work yet to be planned in detail as work packages | Always in the future; as time progresses, planning packages are detail planned and become work packages |
 
 +++
 
@@ -226,14 +226,15 @@ $$BCWR = BAC - BCWP \quad \text{(Budgeted Cost of Work Remaining)}$$
 
 ### Baseline: PMB, UB, MR, and CBB
 
-The Performance Measurement Baseline (PMB) is the **time-phased budget plan** used to measure performance:
+The Performance Measurement Baseline (PMB) is the **time-phased budget plan** used to measure performance — the total baseline against which EV is tracked. It includes a bucket of money called **Undistributed Budget (UB)**:
 
-$$PMB = \text{Distributed Budget} + \text{Undistributed Budget (UB)}$$
+- **Undistributed Budget (UB)**: used when a new effort is added to the contract after the work is progressing. It contains work that is associated with an activity but has not been detail planned and distributed to that activity's work packages. Most contracts strive to distribute UB within 60 days of acquiring the new funds.
 
-- **Distributed Budget**: time-phased budgets assigned to control accounts
-- **Undistributed Budget (UB)**: budget for authorized work not yet assigned to control accounts — temporary, and most contracts try to distribute it within 60 days
+**Management Reserve (MR)** is set aside by the PM **over and above** the PMB. It covers unanticipated in-scope changes and is up to the discretion of the PM to use as appropriate. Typically, a log of MR uses must be maintained and reported. The most typical MR range is **7–9%**, but it can be as low as **2–4%** for low-risk projects and cost-plus contracts or as high as **15% or more** for high-risk projects and FFP contracts.
 
-**Management Reserve (MR)** sits **outside** the PMB, set aside by the PM for in-scope work not originally planned (realized risk) and contingencies for unforeseeable problems — **not** for out-of-scope changes (those require contract mods), though CEBoK allows MR to cover a small scope-increase change when an ECP would be cost-prohibitive. Typical MR ranges from **7–9%**, running as low as **2–4%** for low-risk projects or cost-plus contracts, and as high as **15% or more** for high-risk projects or FFP contracts. MR is **not time-phased** and is **not part of BAC**.
+:::tip Beyond CEBoK
+Outside this source's wording: MR is generally not time-phased, and it is generally not counted in BAC. The CEBoK text does not say either.
+:::
 
 $$CBB = PMB + MR \quad \text{(Contract Budget Base)}$$
 
@@ -279,20 +280,20 @@ Q: A work package using the 0/100 technique is 80% complete at month end. How mu
 * None yet: 100% is earned only at completion
 - 80% of its budget
 - 50% of its budget
-> With 0/100, 100% of value is earned only at task completion and 0% until then. A work package earns nothing while merely in progress.
+> With 0/100, 100% of value is earned only at task completion and 0% until then. Under 0/100 a work package earns nothing until it is complete.
 :::
 
 +++
 
-Performance (EV/BCWP) must be **taken when the work is accomplished** — a work package earns full credit only once complete, and earns nothing while merely in progress. Analysts pick the measurement method for each work package **up front**, before work begins, and should minimize subjectivity wherever possible.
+Performance (EV/BCWP) must be **taken when the work is accomplished** — this rule creates an interesting situation for in-process work packages, since the contractor gets full credit for entirely complete work packages and no credit for those not started; how in-process packages earn credit depends on the method chosen. Analysts pick the measurement method for each work package **up front**, before work begins, and should minimize subjectivity wherever possible.
 
 ### The five methods
 
 - **Milestones**: best for work packages longer than **two months**. Objective milestones are set, ideally **at least one per month**; budget is divided by weighted milestone value and earned as each milestone completes. The most objective method, though not always practical.
 - **Percent complete**: measured from schedule duration data or a subjective CAM/PM assessment. The **most subjective** method — use it sparingly. Appropriate for procurement tasks where pieces of a fixed total cost are incurred over several months.
-- **0/100**: 100% of value is earned only at task completion, 0% until then. Best for very **short** work packages (under about a month), or for tasks whose costs aren't incurred until the end even if the task spans longer — e.g., a procurement item earned when purchased, a one-day meeting, or a trip.
+- **0/100**: 100% of value is earned only at task completion, 0% until then. Best for very **short** work packages, preferably less than one month, and for packages in which all costs are not incurred until the end, even if the task spans more than one month — e.g., a procurement item earned when purchased, a one-day meeting, or a trip.
 - **50/50 (or X%/Y%)**: for packages of **two months or less** with **no intermediate milestones**. X% (default 50%) is earned at task start, the remainder at task end.
-- **Level of Effort (LOE)**: performance is planned and **earned using a straight-line approach — EV always equals PV** for the period. Because of this, **SV can never occur** for LOE work. **CV can still occur**, though, if actual costs run higher than planned. LOE is reserved for time-related support work with no measurable output — it should **not** be used for any task whose schedule might slip, or for any task with defined deliverables (those have a real basis for measuring performance).
+- **Level of Effort (LOE)**: performance is planned and **earned using a straight-line approach — EV always equals PV** for the period. Performance always equals the scheduled amount, so **schedule variances should not occur**. **CV can still occur** if actual costs are higher than expected. LOE is primarily reserved for more time-related work than output-oriented (e.g., for tasks that have no measurable output). Since LOE does not show schedule variances, it should **not** be used for any task with a schedule that might slip or be variable in duration, or for any task with defined deliverables (there is a basis for measuring performance other than time).
 
 :::widget ev-method:::
 
@@ -317,11 +318,11 @@ Q: A work package is a one-day kickoff meeting. Which EV technique fits best?
 :::
 
 :::check
-Q: Why can Level of Effort generate a Cost Variance but never a Schedule Variance?
-* LOE earns EV exactly equal to PV by definition (so SV = 0), but AC can still differ from that EV, producing CV
+Q: Why can Level of Effort generate a Cost Variance but not a Schedule Variance?
+* LOE earns EV equal to PV (so schedule variances should not occur), but AC can still differ from that EV, producing CV
 - LOE always overruns
 - LOE is not allowed to report CV or SV at all
-> With LOE, BCWP is set equal to BCWS for the period, so SV = EV − PV is always zero — but actual costs can still run above or below that earned value, so CV can occur.
+> With LOE, performance always equals the scheduled amount, so schedule variances should not occur — but cost variance can occur if actual costs are higher than expected.
 :::
 
 :::check
@@ -387,7 +388,7 @@ $$SPI = \frac{EV}{PV} \quad \text{(Schedule Performance Index)}$$
 
 $$\%\text{Planned} = \frac{PV}{BAC} \quad \%\text{Complete} = \frac{EV}{BAC} \quad \%\text{Spent} = \frac{AC}{BAC}$$
 
-If % Spent > % Complete, the program is spending faster than it is accomplishing work — a red flag consistent with CV < 0. If % Planned is much greater than % Complete, the project is significantly behind schedule.
+If % Spent is much greater than % Complete, the project is significantly overrunning its cost budget. If % Planned is much greater than % Complete, the project is significantly behind schedule.
 
 :::example Secondary practice example
 - PV = \$400K, EV = \$350K, AC = \$420K
@@ -462,7 +463,13 @@ Perfect EV data with no variances at all is improbable — it usually signals a 
 
 ### Management Reserve trends
 
-MR should **not** be used to cover unfavorable cost overruns without review — though there are legitimate exceptions: using MR balance to cover an overrun near completion on a low-risk or cost-plus contract (rather than processing new funding), covering a small scope-increase change when an ECP is not cost-effective, or offsetting an overrun on an FFP contract so reported profit reflects the true estimate. Graphing SV, CV, and MR balance together shows how MR use tracks with performance; comparing **% MR remaining** to **% PMB remaining** is a useful unit-free check.
+Programs should **not** use MR to cover unfavorable cost variances. Any use of MR to offset or heal a cost growth overrun should be preceded by an examination of the course of action, including discussions between the government and the contractor, if applicable. There are several good reasons to use MR to heal cost overruns:
+
+- If a contract is **cost plus, near completion, or the risk is low**: the MR balance is used to cover a cost overrun, because it makes sense to use funds in hand rather than add dollars for the cost overrun and then reduce dollars for unused MR.
+- If a contract is **cost plus and the MR balance is more than sufficient** for remaining contract work: MR is used to cover a small scope increase change, because the cost and time involved in processing an Engineering Change Proposal (ECP) is prohibitive.
+- If a contract is **FFP and cost overrun is eating profit**: MR can be used to offset the overrun so that profit reports reflect the estimate of true profit at completion.
+
+Graphing SV, CV, and MR balance together shows how MR use tracks with performance; comparing **% MR remaining** to **% PMB remaining** is a useful unit-free check.
 
 +++
 
@@ -474,7 +481,7 @@ $$\%\text{Spent} = \frac{ACWP}{BAC} = \frac{300}{800} = 37.5\% \qquad \%\text{Co
 
 $$CPI = \frac{BCWP}{ACWP} = \frac{200}{300} = 0.67 \text{ (67 cents of value per dollar spent)}$$
 
-Note the identities: **%Complete ÷ %Spent = CPI**, and **%Complete ÷ %Planned = SPI**. Here, 50% of MR has been used while only 25% of the work is complete — the program is burning MR twice as fast as it is completing work, a real concern unless risk is known to be concentrated early.
+Note the identities: **%Complete ÷ %Spent = CPI**, and **%Complete ÷ %Planned = SPI**. In the source's example, 50% of MR has been used to date while 25% of the work is complete. Assuming risk is even throughout, the program should be concerned because it is using MR twice as fast as it is completing work. If all of the risks fall at the beginning of the program, the MR balance might be sufficient, but analysts should not assume that risk is distributed in this manner.
 
 :::check
 Q: Variances over what threshold are generally considered significant and worth examining?
@@ -493,7 +500,7 @@ Q: EV metrics suddenly jump back to on-cost, on-schedule after a period of poor 
 * A rebaseline has occurred
 - The program genuinely fixed all its problems overnight
 - A data entry error that can be ignored
-> A sudden full recovery in EV metrics is a classic sign of a rebaseline resetting the baseline, not real overnight performance improvement.
+> A quick healing spike, where EV metrics suddenly revert to on cost and on schedule, can indicate a rebaseline has occurred, rather than real overnight performance improvement.
 :::
 
 :::check
@@ -530,14 +537,14 @@ buckets: Always a mistake | Can be explained
 
 Analysts scan EV data for outliers or unusual conditions. Nine common anomalies:
 
-1. **BCWS = BCWP = ACWP**: EVM isn't really being applied to that task. Expected for LOE (BCWS = BCWP is normal there), but ACWP is normally different — if all three match, EVM may not be in use, which may be acceptable but should be understood.
+1. **BCWS = BCWP = ACWP**: EVM isn't really being applied to that task. Expected for LOE (BCWS = BCWP is normal there), but ACWP is normally different — if all three match, EVM is not being applied to that task; this may be allowed, but the nature of the task should be understood and the monitoring agencies should be comfortable with not using EVM.
 2. **BCWP > 0 but ACWP = 0**: over-performance, or a lag between incurring costs and their appearing in accounting (e.g., a travel claim taking 2-3 weeks to process). Can also result from a BCWP correction after a mistyped percent-complete entry.
 3. **BCWP > 0 but BCWS = 0**: should never appear in **cumulative** data, since performance requires a plan. In **current-period** data it can happen if a task is behind but catching up — the BCWS was incurred in a prior month.
 4. **ACWP > 0 but BCWP = 0**: costs incurred without any credited performance. Usually invoice lag, or effort performed against an incomplete task (no EV can be claimed yet).
 5. **BCWP or BCWS > BAC**: a mistake — you cannot plan or complete more than 100% of the work.
-6. **BAC > 0 and EAC = 0**: can occur if an effort is expected to be down-scoped but the contract action hasn't processed yet (only reasonable if ACWP is also 0).
+6. **BAC > 0 and EAC = 0**: if ACWP is also 0, this may happen if an effort is expected to be down-scoped but the ECP or action to implement that down-scope in the EV data has not occurred. If there is ACWP, it should not be seen, unless the charges are supposed to be moved to another WBS and that change has not occurred.
 7. **EAC > 0 and BAC = 0**: new work anticipated but the contract change hasn't landed yet; a contractor may load an EAC against a \$0 WBS line to capture the expected value.
-8. **BCWS, BCWP, ACWP all negative**: should only occur in current-period data — typically a WBS line used to capture rate adjustments, or error corrections/transfers between WBS lines.
+8. **BCWS, BCWP, ACWP all negative**: should only occur in current-period data. It has occurred in cumulative data only when a WBS line item captures rate adjustments that ended up less than estimated. Negatives in current-month data are commonly due to error corrections and transfers of work or cost between WBS line items.
 9. **BAC < 0 or EAC < 0**: should never happen — it would imply the contractor owes the government money for work performed.
 
 :::widget evm-anomaly:::
@@ -575,12 +582,12 @@ Q: How is it usually decided which variances need a written Variance Analysis Re
 
 +++
 
-When CV or SV — current-period or cumulative — exceeds a contractually set **threshold**, the Control Account Manager writes a **Variance Analysis Report (VAR)**. A VAR should answer four questions:
+Variance reports are critical to understanding true program status based on EV data, and should focus on how a CAM is managing the program. Thresholds are established upfront to govern the variance reporting process. Variance reports should answer four questions:
 
-1. **Where** is the variance? Which WBS element, and is it primarily labor, material, etc.?
-2. **What is the cause?** The issue, risk, or error behind it.
-3. **What is the impact?** Both current impact (CV/SV) and at-completion impact (VAC or projected slip).
-4. **What is the corrective action plan (CAP)?** What is being done to fix the problem, stop the trend, or reassess the at-completion impact.
+1. **Where** is the variance? What WBS number contains it, and is it primarily labor or material, etc.?
+2. **What is the cause?** The issue, risk, or error resulting in the variance.
+3. **What is the impact?** Both current impact (as seen in the CV/SV) and at-completion impact (as seen in the VAC or project slip).
+4. **What is the Action Plan?** What actions are being taken to fix the problem, to stop the trend, or reassess the full at-completion impact if that is not known at the time the variance is reported.
 
 +++
 
@@ -594,10 +601,10 @@ Variance reporting tends to focus on unfavorable variances, but **favorable vari
 
 :::check
 Q: What are the four questions a Variance Analysis Report should answer?
-* Where, what caused it, what is the impact, and what is the corrective action plan
+* Where, what caused it, what is the impact, and what is the action plan
 - Who, what, where, and why
 - Cost, schedule, technical, and risk
-> A VAR identifies the WBS location, root cause, current and at-completion impact, and the corrective action plan (CAP).
+> A variance report identifies the WBS location, cause, current and at-completion impact, and the action plan.
 :::
 
 :::check
@@ -625,7 +632,11 @@ Q: Compared with the CPI-only EAC, how will the CPI x SPI EAC come out for this 
 
 Analysts emphasize EACs to identify cost drivers and take corrective action, ensure contract ceilings and program budgets are sufficient, and avoid overpaying progress payments. Generally, **CV at completion will not improve** on the CV identified as early as the 20% complete point — problems are rarely fully correctable after that, even with early action.
 
-There is **no single correct formula** — always compute multiple EACs and understand the assumption each embeds.
+Using past performance data, one can project an independent EAC using several methods. Two common methods are the CPI forecast and the CPI-SPI forecast.
+
+:::tip Beyond CEBoK
+Good practice: compute more than one EAC and understand the assumption each embeds, rather than relying on a single formula. The CEBoK text does not state this rule.
+:::
 
 +++
 
@@ -651,7 +662,7 @@ $$VAC = BAC - LRE$$
 
 - VAC < 0: projected overrun. VAC > 0: projected underrun. Since VAC uses the LRE, it typically reflects the *contractor's* projection.
 
-Government program offices should also develop an EAC **independent** of EV data — technical input and a bottom-up estimate of remaining work — using the EV-based EAC as a cross-check rather than the sole answer.
+Government program offices should develop independent EACs that do not rely on EV data. The LRE represents the contractor's best estimate, which includes their assessment of risk and optimism and only covers what is on contract; the independent EAC can include the government's assessment of risk and optimism, plus factor in work to be put on the contract. Using the mathematically calculated EAC is useful, but technical input from the team is equally important. If the remaining work is large enough, the government EAC will be a revised cost estimate that uses traditional cost estimating techniques, and the government may do a modified form of a bottom-up estimate. When the EAC is not calculated using EV data, an EAC developed using EV data can be used as a cross-check.
 
 :::widget eac-range:::
 
@@ -719,12 +730,17 @@ $$TCPI_{\text{BAC}} = \frac{BCWR}{BAC - AC} \qquad TCPI_{\text{LRE}} = \frac{BCW
 - If **TCPI < CPI**: productivity is expected to *decrease* going forward — ask what's driving that and whether it can be mitigated.
 - If **TCPI > CPI** (the more common case): productivity is expected to *increase*. As a rule of thumb, a **TCPI more than 5% above cumulative CPI** is considered optimistic and needs further examination — ask whether the assumed improvement is realistic or overly rosy.
 
+**Other future performance considerations:**
+
+- Does ACWP exceed either the BAC or LRE? Usually it does not unless task completion is drawing near, and then it happens frequently. Another possibility is an ECP that is in progress but not yet on contract; if percent complete is less than 80%, an analyst should establish whether the effect is due to an unprocessed ECP or if it is all attributed to overrun.
+- Does ACWP exceed LRE? ACWP exceeding BAC occurs more often than ACWP exceeding LRE when the LRE is maintained on a reasonable basis. Due to the lag of getting estimates incorporated into the EVMS, ACWP exceeding LRE does occur often. Analysts should consider whether the forecast needs updating or whether an ECP is expected.
+
 {{primer}}
 
 +++
 
 :::key
-TCPI is your **best gut-check tool**. Compare "future performance required" to "past performance achieved" to judge whether a projected EAC or BAC is credible.
+TCPI_LRE is analyzed more than other TCPI indices because it reflects the contractor's position regarding future performance. Compare "future performance required" (TCPI) to "past performance achieved" (CPI).
 :::
 
 :::example Aquarium example — is the LRE reasonable?
@@ -782,14 +798,16 @@ Q: According to the module, what is the real key to a successful EVMS?
 
 ### Why programs use EVM
 
-- Improved planning, and a clear definition of work before it begins
-- Quick, early problem identification
-- Reduced cost and schedule risk
-- Reduced propensity to add work without adding budget (out-of-scope creep)
-- Objective performance measurement — true cost and schedule condition, not just anecdote
+- Improved planning
+- A clear definition of work before beginning work
+- Quick and early problem identification
+- Reduced cost and schedule risks
+- Reduced propensity to add work without adding budget (i.e., out of scope changes)
+- Objective performance measurement
+- True cost and schedule condition metrics
 - Accurate forecasting of cost to complete
-- Repeatable performance and lessons-learned data
-- Sound data to justify resource requests
+- Repeatable performance and lessons learned data
+- Sound data to justify requesting resources
 
 The real key to a successful EVMS is the **partnership and dialogue** it opens between government and contractor — EVM gives everyone on a project a sense of ownership in its success.
 
@@ -842,13 +860,13 @@ This section covers CEBoK's "Related and Advanced Topics" — useful background,
 
 ### EVM Gold Card
 
-The DoD **EVM Gold Card** is a pocket reference listing the standard formulas: CV, SV, CPI, SPI, EAC methods, VAC, TCPI, PMB, and CBB — essentially everything already covered in this module's core sections.
+The Defense Acquisition University (DAU) **EVM Gold Card** summarizes important EV information on one small card.
 
 +++
 
 ### Integrated Baseline Review (IBR)
 
-An IBR is a joint government/contractor review, held **shortly after contract award** (and after any major re-baseline), to verify the technical content of the PMB and the sufficiency of its budgets and schedules. It aims to:
+An IBR is a joint government/contractor review, held **shortly after contract award** (and after any major re-baseline), to verify the technical content of the PMB and the sufficiency of the related budgets and schedules. Among its objectives:
 
 - Confirm control-account technical content matches the contract scope/SOW and WBS
 - Confirm the PMB is complete and captures all work scope
@@ -865,7 +883,7 @@ An IBR is best viewed as a **continuing process**, not a one-time event — foll
 - **Front-loaded baseline**: too much budget and insufficient work planned in the early months, so the budget for later months is insufficient to complete that work — also masking cost variances until later.
 - **Out-of-date baseline**: legitimate baseline changes haven't been made in a timely fashion, so performance is measured against a baseline that no longer represents reality, over- or under-stating variances.
 
-**Rebaselining** itself is normal — usually at least once a quarter, from new contract work or MR use, and sometimes a significant, deliberate rebaseline once during a project's life for a major ECP, customer-directed scope change, or technical breakthrough. Rebaselining **to eliminate a large variance** should be avoided.
+Every baseline will need change at some point. Baseline **changes** usually occur at least once a quarter, due to the addition of new work to the contract or use of MR. Frequently a baseline will be significantly revamped, or rebaselined, at least once during a project's life, usually as the result of a major ECP or project change. Valid reasons to rebaseline include the addition of major new work, project scope changes directed by the customer, or a technical breakthrough or new approach to solving a problem. Rebaselining **to eliminate a large variance** should be avoided.
 
 An **Over Target Baseline (OTB)** is a rebaseline specifically negotiated to heal cost and schedule variances — for example when small amounts of related, unfunded additional work accumulate variances over time, or when an overrun becomes so extreme it obscures the ability to see new, still-controllable trends.
 
@@ -932,10 +950,10 @@ SPI(t) = 4.5 / 6 = **0.75** — 25% behind schedule in time, a figure that stays
 
 :::check
 Q: (Not testable per CEBoK) What is the primary purpose of an Integrated Baseline Review?
-* Confirm the PMB is realistic, complete, and its risks are understood by both sides
+* Verify the technical content of the PMB and the sufficiency of the related budgets and schedules
 - Audit the contractor's accounting system
 - Approve the contractor's fee
-> An IBR verifies scope, schedule, budget, and risk are aligned in an executable baseline — not an audit or a fee approval.
+> An IBR verifies the technical content of the PMB and the sufficiency of the related budgets and schedules — not an audit or a fee approval.
 :::
 
 :::check
@@ -966,10 +984,10 @@ Q: BCWP / EV definition
 A: Earned Value: the budgeted cost of work actually performed to date.
 R: yes
 Q: ACWP / AC definition
-A: Actual Cost of Work Performed: the real cost incurred for the work completed.
+A: Actual Cost of Work Performed: the actual costs incurred to date (the sum of all costs associated with the effort).
 R: yes
 Q: BAC definition
-A: Budget at Completion: the baseline plan (sum of the PMB) for the entire effort.
+A: Budget at Completion: the baseline plan for the entire effort (the sum of all planned work).
 R: yes
 Q: LRE vs. EAC
 A: LRE is the contractor's own latest revised estimate at completion; EAC generally refers to the government's independent estimate at completion. Related, not strictly synonymous.
@@ -978,17 +996,17 @@ A: EV is compared to AC for cost efficiency and to PV for schedule progress; bot
 Q: Aquarium intro example (CEBoK's primary worked example)
 A: PV=\$400, EV=\$200, AC=\$300 (only 2 of 4 planned aquariums built): CV = 200-300 = -\$100, even though raw spend (\$300) looked under the \$400 plan.
 Q: EVM benefits over simple budget tracking
-A: Improved planning, early problem identification, reduced cost/schedule risk, objective performance measurement, accurate forecasting, repeatable lessons-learned data.
+A: Improved planning; clear definition of work before beginning work; quick and early problem identification; reduced cost and schedule risks; reduced propensity to add work without adding budget; objective performance measurement; true cost and schedule condition metrics; accurate forecasting of cost to complete; repeatable performance and lessons learned data; sound data to justify requesting resources.
 Q: When is EVM best suited to a project?
-A: Defined deliverables, longer duration (roughly 6+ months as a loose guideline), strict budget limits or incentive contracts, little dependence on separately-contracted efforts.
+A: Defined deliverables, longer duration (at least six months, guidance varies by organization), strict budget limits or incentive contracts, little dependence on separately-contracted efforts.
 Q: When is EVM discouraged?
 A: Non-deliverable work like LOE, open-ended/undefined-objective projects, short-duration efforts; reporting EV to the government is discouraged on FFP contracts (contractor may still track internally).
 
 ## WBS, OBS, and Control Accounts
 Q: WBS role in EVM
-A: The Work Breakdown Structure decomposes technical scope; the program WBS is typically government-defined, and is always a higher (less detailed) level than the Contractor WBS (CWBS).
+A: The Work Breakdown Structure decomposes technical scope; the program WBS is typically government-defined, and is always at least one level (usually several) higher than the Contractor WBS (CWBS), because it is the oversight level.
 Q: CWBS definition
-A: Contractor WBS: how the contractor plans and manages the work, more detailed than the program WBS.
+A: Contractor WBS: how the contractor plans and manages the work; the work management level, at least one level (usually several) below the program WBS.
 R: yes
 Q: CES definition
 A: Cost Element Structure: the structure used for developing the cost estimate; level of detail varies by who develops it.
@@ -1000,10 +1018,10 @@ Q: Control Account definition
 A: The management control point where WBS and OBS intersect; budgets, schedules, actuals, and EV are integrated here, managed by a CAM.
 R: yes
 Q: Work Package duration guideline
-A: Typically 4-6 weeks long; detailed, near-term tasks within a control account with a specific EV technique assigned before work begins.
+A: Detailed, short-span tasks or material items, typically 4-6 weeks long, required to accomplish the control account objectives; a specific EV technique is assigned before work begins.
 R: yes
 Q: Planning Package definition
-A: Far-term work within a control account not yet detail-planned; budget held at summary level and rolled into work packages as work approaches.
+A: Future work yet to be planned in detail as work packages; always in the future. As time progresses, planning packages are detail planned and become work packages.
 R: yes
 
 ## Data Elements and Baseline
@@ -1011,18 +1029,18 @@ Q: BCWR definition and formula
 A: Budgeted Cost of Work Remaining: BCWR = BAC - BCWP, the planned cost of all work left to do.
 R: yes
 Q: PMB formula
-A: PMB = Distributed Budget + Undistributed Budget (time-phased budget for measurable work).
+A: The time-phased budget plan, the total baseline against which EV is tracked; it includes a bucket of money called Undistributed Budget (UB).
 R: yes
 Q: CBB formula
 A: CBB = PMB + Management Reserve.
 R: yes
 Q: Management Reserve definition
-A: Budget held outside the PMB for in-scope, unplanned work (realized risks) and contingencies, not for scope changes.
+A: Budget set aside by the PM over and above the PMB to cover unanticipated in-scope changes, at the PM's discretion; a log of MR uses must typically be maintained and reported.
 R: yes
 Q: Management Reserve typical ranges
 A: Typically 7-9%; as low as 2-4% for low-risk projects or cost-plus contracts; 15% or more for high-risk projects or FFP contracts.
 Q: Undistributed Budget definition
-A: Budget for authorized work not yet assigned to control accounts (temporary; most contracts try to clear it within 60 days).
+A: Budget used when a new effort is added to the contract after work is progressing; it contains work associated with an activity but not yet detail planned and distributed to that activity's work packages. Most contracts strive to distribute UB within 60 days of acquiring the new funds.
 R: yes
 
 ## EV Measurement Methods
@@ -1033,16 +1051,16 @@ Q: EV technique: Percent Complete
 A: Most subjective method - use sparingly; appropriate for procurement-type tasks where a fixed total cost is incurred over several months.
 R: yes
 Q: EV technique: 0/100
-A: 100% earned only at completion. Best for work packages under about a month, or tasks whose costs land at the end even if longer (procurement purchases, one-day meetings, trips).
+A: 100% earned only at completion. Best for very short work packages, preferably less than one month, and packages in which all costs are not incurred until the end, even if the task spans more than one month (procurement purchases, one-day meetings, trips).
 R: yes
 Q: EV technique: 50/50 (or X%/Y%)
 A: Best for packages of two months or less with no intermediate milestones; X% earned at start, remainder at end.
 R: yes
 Q: EV technique: Level of Effort (LOE)
-A: Performance earned on a straight-line basis, EV always equals PV (so SV can never occur), but CV can still occur if actual costs differ from plan. Reserved for time-related support work with no measurable output; not for tasks with defined deliverables or schedule risk.
+A: Performance planned and earned on a straight-line basis, EV always equals PV (so schedule variances should not occur), but CV can still occur if actual costs are higher than expected. Primarily reserved for time-related work rather than output-oriented work (e.g., tasks with no measurable output); not for tasks with defined deliverables or a schedule that might slip or be variable in duration.
 R: yes
 Q: Why can LOE still generate a Cost Variance despite never generating a Schedule Variance?
-A: EV is set equal to PV by definition (zeroing SV), but AC is independently determined by actual spending, so CV = EV - AC can still be nonzero.
+A: Performance always equals the scheduled amount, so schedule variances should not occur; but AC is determined by actual spending, so CV = EV - AC can still occur if actual costs are higher than expected.
 
 ## Variances and Indices
 Q: Cost Variance formula
@@ -1077,7 +1095,7 @@ A: Equals CPI.
 Q: Identity: % Complete / % Planned
 A: Equals SPI.
 Q: Diagnostic: if % Spent > % Complete
-A: Program is spending faster than it is completing work - consistent with CV < 0 (overrun).
+A: If % Spent is much greater than % Complete, the project is significantly overrunning its cost budget.
 Q: CPI definition and formula
 A: Cost Performance Index = EV / AC. Dollars of value earned per dollar spent. CPI < 1.0 = overrun, CPI > 1.0 = under budget.
 R: yes
@@ -1085,11 +1103,11 @@ Q: SPI definition and formula
 A: Schedule Performance Index = EV / PV. Rate of work accomplishment vs. plan. SPI < 1.0 = behind, SPI > 1.0 = ahead.
 R: yes
 Q: CPI stability rule
-A: Cumulative CPI by ~15-20% completion is a strong predictor of final CPI and historically will not change by more than ~10% from that value, in either direction.
+A: Cumulative CPI is usually stable once a project is 15-20% complete and will not change more than 10% from its value at the 20% complete point; historically the CPI at completion is very close to or worse than the CPI at 15-20% complete.
 Q: Variance significance threshold
 A: Variances (CV% or SV%) exceeding about 10% are considered significant and warrant examination.
 Q: Quick-healing spike
-A: EV metrics suddenly reverting to on-cost/on-schedule after poor performance - a classic sign a rebaseline occurred, not genuine overnight recovery.
+A: EV metrics suddenly reverting to on-cost/on-schedule after poor performance - can indicate a rebaseline has occurred.
 R: yes
 Q: Aquarium percentages worked example
 A: %Spent = 300/800 = 37.5%, %Complete = 200/800 = 25%, CPI = 200/300 = 0.67. Using MR twice as fast as completing work (50% MR used vs 25% complete) is a concern unless risk is known to cluster early.
@@ -1106,17 +1124,17 @@ A: Costs incurred without credited performance - invoice lag, or effort against 
 Q: Anomaly: BCWP or BCWS > BAC
 A: A mistake - you cannot plan or complete more than 100% of the work.
 Q: Anomaly: BAC > 0 and EAC = 0
-A: Effort expected to be down-scoped, contract action not yet processed (only reasonable if ACWP is also 0).
+A: If ACWP is also 0, an effort is expected to be down-scoped but the ECP or action implementing it in the EV data has not occurred. If there is ACWP, it should not be seen, unless charges are supposed to be moved to another WBS and that has not occurred.
 Q: Anomaly: EAC > 0 and BAC = 0
 A: New work anticipated but the contract change hasn't landed in the EVMS yet.
 Q: Anomaly: BCWS, BCWP, ACWP all negative
-A: Should only occur in current-period data - typically rate-adjustment WBS lines or error corrections/transfers between WBS elements.
+A: Should only occur in current-period data. In cumulative data it has occurred only when a WBS line item captures rate adjustments that ended up less than estimated. In current-month data it is commonly error corrections and transfers of work or cost between WBS line items.
 Q: Anomaly: BAC < 0 or EAC < 0
 A: Should never happen - would imply the contractor owes the government money for work performed.
 
 ## Variance Analysis Reports
 Q: Variance Analysis Report (VAR) - four questions
-A: Where is the variance (WBS/cost element)? What is the cause? What is the impact (current and at-completion)? What is the corrective action plan (CAP)?
+A: Where is the variance (WBS number; labor or material)? What is the cause? What is the impact (current and at-completion)? What is the Action Plan?
 R: yes
 Q: Variance threshold examples
 A: Common patterns: -10%, \$100K, or +/-10%, or +/-\$100K - set up front so not every variance requires a report.
@@ -1125,7 +1143,7 @@ A: They represent opportunities to reallocate funds to accelerate schedule, fix 
 
 ## Estimates at Completion
 Q: EAC general formula
-A: EAC = AC + ETC, where ETC (Estimate to Complete) is the cost of remaining work adjusted by efficiency.
+A: Using past performance data, an independent EAC can be projected by several methods; two common ones are the CPI forecast (EAC = ACWP + BCWR/CPI = BAC/CPI) and the CPI-SPI forecast (EAC = ACWP + BCWR/(CPI*SPI)).
 R: yes
 Q: CPI forecast (best case) formula
 A: EAC = AC + BCWR/CPI = BAC/CPI. Assumes cumulative CPI holds constant for the rest of the program.
@@ -1139,7 +1157,7 @@ Q: VAC formula and meaning
 A: VAC = BAC - LRE. Positive = projected underrun (good). Negative = projected overrun (bad); reflects the contractor's own projection since it uses LRE.
 R: yes
 Q: Why compute an EAC independent of EV data?
-A: Government offices develop independent EACs (technical input, bottom-up estimate) and use the EV-derived EAC only as a cross-check, since LRE reflects contractor optimism/risk assessment.
+A: Government offices should develop independent EACs that do not rely on EV data; the LRE reflects the contractor's risk and optimism and covers only what is on contract. Technical input is equally important, and the government may do a modified bottom-up estimate. An EV-based EAC can be a cross-check.
 Q: Aquarium best-case and worst-case EAC
 A: Best case (CPI forecast) = 800/(2/3) = \$1200. Worst case (CPI x SPI forecast, SPI=0.5) = 300 + 600/((2/3)(0.5)) = \$2100. Use the exact fraction 2/3, not rounded 0.67, or results drift slightly.
 
@@ -1206,14 +1224,14 @@ A: Remember: CV = EV − AC (cost), SV = EV − PV (schedule); NEVER the reverse
 Q: Common mistake: using current-period data for EACs
 A: Use cumulative data for EACs (smooths noise); use current-period for trend-spotting.
 Q: Common mistake: including MR in BAC
-A: BAC = sum of distributed + undistributed budgets only. MR is outside PMB/BAC. Including MR understates % complete.
+A: Per the source, MR is set aside over and above the PMB. Beyond CEBoK: BAC is generally taken to exclude MR (the source does not discuss this), since including it would understate % complete.
 Q: Common mistake: picking a single EAC formula
-A: Always compute multiple independent EACs (CPI forecast, CPI x SPI forecast, bottom-up/LRE) and reconcile. No single formula is correct.
+A: Several methods can project an EAC; two common ones are the CPI forecast and the CPI-SPI forecast. Beyond CEBoK: compute more than one and reconcile them.
 Q: Common mistake: ignoring TCPI
 A: A TCPI_BAC or TCPI_LRE far above historical CPI (more than ~5%) is a strong signal the target is not credible.
 Q: Sign error trap: CV% and SV% denominators
 A: CV% = CV / BCWP (EV), not BAC or AC. SV% = SV / BCWS (PV), not BAC. Wrong denominator gives a wrong percent.
 Q: Common mistake: treating LOE as risk-free
-A: LOE cannot show a schedule variance by construction, so overusing it masks true schedule health; it can still show a cost variance.
+A: LOE does not show schedule variances (they should not occur), so it should not be used for any task with a schedule that might slip or be variable in duration; it can still show a cost variance.
 `
 });

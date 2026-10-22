@@ -3,7 +3,7 @@ PCEA.addModule({
   blurb: 'Collect and normalize cost, technical, and programmatic data so historical data points are comparable with each other and with the new system.',
   intro: String.raw`**An estimate is only as good as its data.** This module covers what data to collect, where to find it, what makes data usable, and how to **normalize** it so historical data points can be compared with each other and with the new system.
 
-**Core principle**: raw cost numbers are meaningless without context (technical and programmatic data) and normalization (adjusting to a common time, quantity, content, and state of development basis). Poor data discipline is one of the most common sources of estimate error.
+**Core principle**: cost numbers alone are meaningless without context (technical and programmatic data), and data must be normalized to be consistent and comparable. Estimates have no credibility without a firm basis in historical data.
 
 **Links to other modules**: Module 5 (Inflation/Escalation) covers the detailed mechanics of cost normalization. Module 7 (Learning Curves) depends on properly normalized quantity data. Module 8 (Regression) and Module 9 (CERs) require normalized, homogeneous datasets before a valid CER can be fit.`,
   sections: [
@@ -17,14 +17,14 @@ Q: A skilled estimator feeds bad, irrelevant data into a strong estimating metho
 - The strong method corrects for the weak data
 * It is only as good as the data, so the method cannot rescue it
 - It stays credible as long as the model is well documented
-> The GAO guide and CEBoK stress that an estimate is only as good as its underlying data: strong methodology cannot compensate for bad, irrelevant, or misunderstood data.
+> CEBoK states that an estimate is only as good as the data used to produce it, so data collection and normalization must be a top priority for all cost estimators.
 :::
 
 +++
 
-Every estimating method — analogy, parametric/CER, and engineering build-up — ultimately rests on **historical data**. The GAO Cost Estimating and Assessment Guide and the CEBoK stress that an estimate is only as good as the data underlying it: strong methodology cannot compensate for bad, irrelevant, or misunderstood data.
+Every estimating method — analogy, parametric/CER, and engineering build-up — ultimately rests on **historical data**. CEBoK states that an estimate is only as good as the data used to produce it, so data collection and normalization must be a top priority for all cost estimators.
 
-Estimators must spend significant time and rigor on data collection because it directly drives the **credibility** and **defensibility** of the resulting estimate.
+Data provides information on cost trends over a variety of related programs, insight into cost structures, and the foundation used to develop all costing techniques and models. It gives **credibility** and **defensibility** to estimates (without it the estimate would be looked upon as merely a guess or the opinion of the cost estimator), and properly analyzed data provides assessments of the statistical accuracy and fidelity of an estimate.
 
 {{primer}}
 
@@ -34,7 +34,7 @@ CEBoK lists five key principles:
 
 1. **Comply with how the organization collects data and/or costs.** When estimating for budgets, collect historical budget data to see how it breaks into components; if the organization has an existing data or cost management system, assess that data.
 2. **It is not just cost data.** Technical and programmatic data give contextual completeness: they support the cost data, identify cost drivers, support normalization, and build and adjust cost models. Initial vs final costs yield a **Cost Growth Factor (CGF)**; initial vs final schedules yield a **Schedule Growth Factor (SGF)**; initial concept design vs final specifications help set standard margins for space, weight, and power.
-3. **Normalization does not assume away or normalize away costs.** This is why reversible operations matter. Normalization adjusts costs, so it must be defensible and well documented.
+3. **Normalization does not assume away or normalize away costs.** This is why reversible operations matter. Example: reducing unusually high inexperienced labor hours to be more reflective of an experienced labor force requires adjusting the labor mix in the normalized data set to reflect future project conditions. To develop a CER, escalate the historical costs to a common Base Year (BY). Normalization, because it adjusts costs, needs to be defensible and well documented.
 4. **Collection, normalization, and analysis are not distinct and not linearly sequential.** Creative exploration, non-linearity, and feedback loops help.
 5. **The goal is homogeneous data.** Reporting standards such as a common WBS support this, which matters most for the parametric and build-up techniques that lean on historical data.
 
@@ -49,13 +49,13 @@ Common data-quality checklists also ask about relevance, accuracy, timeliness, s
 - **Iterative collection**: data collection continues throughout the estimate's life as more information becomes available, and it should be documented so someone else can trace how the number was derived.
 :::
 
-**Statistical noise** (unexplained variability) always exists in data; some is irreducible (random fluctuation, measurement error), but rigorous normalization removes reducible noise. CEBoK frames data collection and normalization as a **functional transformation** of raw data into normalized data, and stresses that this transformation must be **reversible**: predicting future cost with normalized historical data requires reversing the normalization steps used on that data. Fig. 4.1 shows this Past → Present → Future flow: raw, un-normalized data is normalized into a defensible, traceable form (Present), then the normalization is reversed to project the Future under new conditions.
+**Statistical noise** (unexplained variability) always exists in data; some is irreducible (random fluctuation, measurement error), but rigorous normalization removes reducible noise. CEBoK frames data collection and normalization as a **functional transformation** of raw data into normalized data, and stresses that this transformation must be **reversible**: predicting future cost with normalized historical data requires reversing the normalization steps used on that data. Fig. 4.1 uses raw historical labor hours and cost data and normalizes it for content, splitting total hours into labor components such as change orders, embedded change orders, and workforce composition. In future estimates the normalization steps are reversed for new production units under expected future conditions (adding back projected change orders and adjusting for projected workforce composition and program schedules).
 
 +++
 
 ### The Aircraft Example
 
-CEBoK commonly illustrates with an aircraft development/production example: cost, technical, and programmatic data (e.g., dry weight, speed, engine type, quantities produced, contract type, production rate) are collected across historical aircraft programs. A single "cost" number (e.g., total program cost) is not useful in isolation — it must be paired with the technical and programmatic facts (how many built, what capability, what year, what contract structure) that explain why the cost was what it was. Without that context, the estimator cannot judge whether the data point is analogous to the new system or how to normalize it.
+CEBoK's case study is a commercial aircraft. Data sources may be government agencies like the Federal Aviation Administration (FAA), trade organizations, or manufacturers, and most likely carry proprietary data issues (Manufacturer A would not have access to Manufacturer B's data), but a cost estimator with the FAA would have access to both sets of data. Driving factors may include the number of seats and dry weight (the size scale of the vehicle); required composite materials and automation are on the more complex side but could be just as important when estimating cost. Using a well-established standard WBS supports a comprehensive data collection process, and a common WBS ensures that the data provider and the cost estimator are in sync.
 
 :::check
 Q: Which step of an estimate typically consumes the most time?
@@ -86,11 +86,11 @@ Q: Which family does each piece of data belong to?
 buckets: Cost | Technical | Programmatic
 - Labor hours = Cost
 - Material costs = Cost
-- Lines of code = Technical
-- Power = Technical
-- Production rate = Programmatic
+- Component size and weight = Technical
+- Flying hours = Technical
+- Schedules = Programmatic
 - Contract type = Programmatic
-> Cost data is dollars, hours, materials and rates; technical data is weight, power, speed, lines of code and the like; programmatic data is schedule, quantities, production rate and contract type.
+> Cost data is captured in dollars and hours tied to an activity (labor) or product (material); technical data derives from requirements or physical characteristics of systems (e.g., component size and weight, activity rates such as flying hours); programmatic data includes the program parameters that explain and drive cost (e.g., schedules, contract types).
 :::
 
 +++
@@ -99,15 +99,21 @@ buckets: Cost | Technical | Programmatic
 
 Three broad categories of data are collected for every estimate:
 
-| Type | Examples |
+| Type | Definition and examples |
 |---|---|
-| **Cost** | Dollars, labor hours, material costs, rates, by WBS element and time period |
-| **Technical** | Weight, power, speed, lines of code, materials, performance, complexity, TRL |
-| **Programmatic** | Schedule, quantities, production rate, contract type, acquisition strategy, number of test articles |
+| **Cost** | Resource data captured in a specified type of dollars and hours, associated with a particular activity (labor) or product (material) |
+| **Technical** | Derives from requirements or physical characteristics of systems and may drive cost. Component size and weight, reliability and maintainability parameters, satellite payload requirements, crew size and composition, activity rates (e.g., flying hours), deployment plans |
+| **Programmatic** | The program parameters that explain and drive cost. Schedules, structure of the value chain (contractor and tiers of subcontractors), contract types, acquisition environment (e.g., sole source vs. competitive) |
 
 {{primer}}
 
-**Why all three?** Technical and programmatic data provide the **context** that makes cost data usable and normalizable. You cannot normalize for quantity without programmatic data on lot size, or normalize for content without technical data on what was actually built.
+**Why all three?** Technical and programmatic data provide the basis for cost and also drive cost; they supply the context that makes cost data usable. Cost numbers alone are meaningless without context; they merely represent a number. For example, 6.8 is a meaningless number without a descriptor. Adding descriptors such as \$6.8K in BY1989 dollars for the procurement of one radio for an F-15C fighter provides valuable and usable contextual information. Ensure that data includes what is in the numbers (i.e., burdens: OH, G&A, fee, or year and units). Schedule data supports schedule estimating and time phasing.
+
+When collecting data, identify sources and include documented information that provides traceability, so the cost estimator can match specific technical and programmatic data with the associated cost data. Cost estimators must provide a clear trace back to their source data for audit purposes.
+
+:::tip Beyond CEBoK
+Other technical examples often used in practice: speed, lines of code, materials, technology readiness level (TRL). (CEBoK's aircraft example also names power requirements and fuel consumption as technical data, and schedule duration, time to build components, and subcontract types as programmatic data.) Other programmatic examples: quantities, production rate, acquisition strategy, number of test articles.
+:::
 
 Cost (resource) data is captured in a specified type of dollars and hours, tied to an activity (labor) or product (material). Resources tied to some activities are captured in **cost pools** such as **Overhead (OH)** and **General and Administrative (G&A)**.
 
@@ -123,19 +129,19 @@ Cost (resource) data is captured in a specified type of dollars and hours, tied 
 2. there is a lack of definition associated with the data; or
 3. the basis for a factor is old, incomplete, or questionable in some way.
 
-Even so, secondary data is a valuable tool for **cross-checking** other data.
+Secondary data works as a valuable tool when used in combination with other data for **cross-checking** purposes.
 
 ### Quantitative versus Qualitative
 
 **Quantitative** (numeric) data is preferred and is usually objective and measurable, physically or in cost-accounting terms. It has three scales:
 
 - **Ordinal**: rank order only (1st, 2nd, 3rd) — the only valid comparison is greater/less than.
-- **Interval**: relative scaling, e.g. the calendar year (1995→2005 is twice as long as 1995→2000), but absolute ratios don't hold. Celsius illustrates this: 30°C to 60°C is a 30-degree interval, and 30 × 2 = 60, but 60°C is *not* twice as hot as 30°C (86°F vs. 140°F; 2 × 86 ≠ 140).
+- **Interval**: relative scaling, e.g. the calendar year (1995→2005 is twice as long as 1995→2000), but may cause issues in absolute comparisons. Celsius illustrates this: 30°C to 60°C is a 30-degree interval, and 30 × 2 = 60, but 60°C is *not* twice as hot as 30°C (86°F vs. 140°F; 2 × 86 ≠ 140).
 - **Ratio**: supports absolute comparisons, e.g. \$2M is twice \$1M — provided both are normalized to the same year and currency.
 
-**Qualitative** data describes a quality in categorical (**nominal**) terms (e.g., "high risk," "low complexity"); such labels may be disguised as ordinal data. Transform qualitative data into quantitative data, or replace it, when possible. Qualitative data is typically subjective, but can be objective: if all experts asked would agree on the determination, the data is objective; if experts would disagree, it's subjective. A subjective *quantitative* example is a numeric risk score assigned by an engineer.
+**Qualitative** data describes a quality of the program or system, usually in categorical terms referred to as **nominal** (e.g., "high risk," "low complexity"); such designations may be disguised as quantitative ordinal data. Transform qualitative data into quantitative data or replace it when possible. Qualitative data is typically subjective, but can be objective: if all experts asked would agree on the determination, the data is objective; if experts would disagree, it's subjective. A subjective *quantitative* example is a numeric risk score assigned by an engineer.
 
-Labels that look ordinal can actually be interval: soccer jersey numbers index back-to-front on the field (a "2" is a fullback, a "10" a midfielder, a "15" a forward) and are loosely interval, since higher numbers sit further forward. Baseball uniform numbers, by contrast, are neither ordinal nor interval — they are just unique labels.
+Labels that look ordinal can actually be interval: soccer jersey numbers index back-to-front on the field (a "2" is usually a fullback, a "10" a midfielder, a "15" a forward) and are loosely interval, since higher numbers sit further forward. The only true test of interval or ordinal is to determine if the labels act as if they are interval or ordinal. Baseball uniform numbers, by contrast, are neither ordinal nor interval — they are just unique labels.
 
 :::widget scale-sorter:::
 
@@ -145,17 +151,16 @@ Labels that look ordinal can actually be interval: soccer jersey numbers index b
 
 **Subjective data** is based on individual or group feelings/understanding about a condition or characteristic. It tends to be qualitative and typically helps **interpret or validate** objective data; it is valuable for extrapolating from one generation of equipment to the next. Examples: complexity, requirements stability, level of difficulty, degree of new technology involved.
 
-Objective data is generally stronger evidence, but subjective/expert opinion data is often necessary, especially early in a program.
-
 +++
 
 ### Quality of Data Types
 
 As programs move from initial budgets to actual costs, data quality improves. From best to worst:
 
-1. **Actuals for completed programs/contracts**, or **Estimates at Complete (EACs)** for contracts greater than 90% complete — though caution is warranted, since some problematic programs wait well beyond schedule to re-baseline, so "90% complete" is not always a clear benchmark.
-2. **Schedule B contract line item prices** — not as good as later EACs, because these prices don't reflect what was actually spent; they generally represent the EAC at 0% complete.
-3. **Historical/original budget data** — the lowest quality, because budget data is not the actual spent cost, and most budget data exists at a level too high to be useful.
+1. **Actuals for completed programs/contracts** — better than EACs.
+2. **Estimates at Complete (EACs)** for contracts greater than 90% complete — EACs improve as the contract nears completion, but exercise caution before accepting the data: some problematic programs wait until well beyond the original schedule to re-baseline, so the 90% complete metric is not always a clear benchmark.
+3. **Schedule B contract line item prices** — actuals and EACs are better, because these prices do not reflect what was actually spent; they generally represent the EAC at 0% complete.
+4. **Historical/original budget data** — the lowest quality, because budget data is not the actual spent cost, and most budget data exists at a level too high to prove useful for data collection.
 
 :::tip Beyond CEBoK
 A commonly-used shorthand credibility ranking (not from CEBoK) cross-cuts primary/secondary with objective/subjective: (1) primary objective quantitative, (2) secondary objective quantitative, (3) primary subjective/qualitative, (4) secondary subjective/qualitative. It's a useful mental model, but CEBoK's own ranking above is based on how far along the program is (actuals → EACs → contract line items → budgets), not on this 2x2.
@@ -198,20 +203,20 @@ Q: Which step of an estimate typically consumes the most time?
 :::
 
 :::check
-Q: A contractor's own accounting records for a completed program are…
+Q: Bills of Materials (BOMs), documented test results, and documented resource hours are examples of…
 * Primary data
 - Secondary data
 - Subjective data
 - Programmatic data only
-> They come directly from the original source.
+> Primary data is obtained from the original source, unaltered and representing actual, historical data.
 :::
 
 :::check
-Q: Production rate and contract type are examples of which data category?
+Q: Schedules and contract types are examples of which data category?
 - Cost
 - Technical
 * Programmatic
-> They describe how the program is run, not what the system is or what it cost.
+> Programmatic data includes the program parameters that explain and drive cost, such as schedules and contract types.
 :::
 
 +++
@@ -290,40 +295,40 @@ Good data can still fail you for very different reasons.
 :::sort
 Q: Which of the four data considerations does each problem raise?
 buckets: Availability | Accessibility | Validity | Constraints
-- Nobody ever recorded costs at the WBS level you need = Availability
+- The original organization never collected the data with sufficient granularity = Availability
 - The data exists but is proprietary or classified = Accessibility
 - The data comes from a system that is not comparable = Validity
 - You only have time for a quick ROM = Constraints
-> Availability asks whether the data exists at the needed WBS level; accessibility whether you can get it (proprietary data, classification); validity whether it is current and from comparable systems; constraints cover time and the estimate's requirements, such as a ROM.
+> Availability asks whether the data exists in sufficient quantity or granularity; accessibility whether the estimator can access it (security classification, proprietary classifications); validity whether the data is relatively current and applicable (comparable systems); constraints cover time and the underlying estimate requirements, such as a ROM.
 :::
 
 +++
 
 | Consideration | Question to Ask |
 |---|---|
-| **Availability** | Does the data exist at all, at the WBS level I need? |
-| **Accessibility** | Can I get it? (proprietary data, classification, organizational barriers) |
-| **Validity** | Is it relatively current and applicable (from comparable systems)? |
+| **Availability** | Does the data exist in sufficient quantity (and granularity and format) to defend the estimate? A single data point does not provide enough information to defend against questions. |
+| **Accessibility** | Can the estimator access it? (security classification, acquisition sensitivity, proprietary classifications, other regulatory issues; surmountable with NDAs or other data safeguards; if primary data is not accessible, reconsider the methodology and use more secondary data) |
+| **Validity** | Are the collected data points relatively current and applicable to the effort being estimated? Relevancy and currency establish if the data is recent; applicability establishes whether the program or systems are comparable. |
 | **Constraints** | Time and the underlying estimate requirements (e.g., a ROM vs. a cross-check) |
 
 {{primer}}
 
-These four considerations determine whether data can realistically be obtained and used in an estimate.
+Cost estimators face challenges with data availability, accessibility, validity, and constraints.
+
+**Validity checks**: cross-checks provide one method to check data validity. Examine multiple sources of primary and secondary data to see if they all point to a relatively similar number. Sanity checks and cross-checks ensure that the costs are of the right order of magnitude. To further help validate data, examine it from different perspectives (e.g., both dollars and hours).
+
+**Constraints**: if the allotted time to gather data is minimal, the cost estimator may use secondary data. If the estimate is being developed only as a Rough Order of Magnitude (ROM), a collection of just secondary data may be acceptable; if the specific category or piece of data is only for cross-check purposes, secondary data collection may be adequate. Cost estimators also need to determine if the data is currently in an immediately usable form; if not, it will require some form of normalization.
 
 +++
 
 ### Common Pitfalls
 
-- **Accepting data at face value** without understanding its scope or context.
-- **Inconsistent definitions**: "engineering" includes different things in different companies.
-- **Hidden content differences**: the data includes (or excludes) spares, support equipment, or fee.
-- **Mixed dollar types**: then-year and constant dollars combined without normalization.
-- **Using budgets as actuals**: budgets are plans, not what was actually spent.
-- **Too few points**, or **non-homogeneous** data (different technologies mixed together).
-- **Stale data** that no longer reflects current processes.
-- **Not recording the source and context** — making the estimate non-traceable and non-defensible.
-- **Relying on a single data point** or very small sample as if it were statistically robust.
-- **Mixing data** collected under different definitions without reconciling them.
+- **Inconsistent data definitions**: do not assume that data from different sources are based on the same content definitions. For example, one contractor's Mean Time To Repair (MTTR) for a component may include preparatory activities along with conducting the test, while another's may only include the actual test. Data definitions can also change over time even if the data is from the same source, so capture the definitions when collecting data.
+- **Unusual program characteristics**: pay attention to characteristics that create special needs, and collect related technical and programmatic data to account for new technology or new materials, an aggressive schedule, changes in the contractor's manufacturing processes, or new cost reduction initiatives.
+
+:::tip Beyond CEBoK
+Other pitfalls commonly cited in practice (not in CEBoK's pitfalls list): accepting data at face value, hidden content differences (spares, support equipment, fee), mixed then-year and constant dollars, using budgets as actuals, too few or non-homogeneous points, stale data, not recording the source and context, and relying on a single data point.
+:::
 
 +++
 
@@ -352,9 +357,9 @@ An estimator could start pulling data on day one. A sensible one doesn't.
 Q: Put the steps before collecting data in order.
 1. Understand the total picture of the system, program and purpose
 2. Define the estimate structure (the Cost Element Structure)
-3. Identify the data needs for each WBS element and method
+3. Understand the estimating technique to be employed and its data collection needs
 4. Develop a data collection plan
-> The workflow starts with understanding the total picture, then defines the CES, then identifies data needs per element and method, and ends with a documented data collection plan.
+> The workflow starts with understanding the total picture, then establishes the CES and boundaries around the estimate, then understands the estimating technique and its associated data collection needs, and ends with developing a data collection plan.
 :::
 
 +++
@@ -363,10 +368,10 @@ Q: Put the steps before collecting data in order.
 
 Before collecting data, follow these steps:
 
-1. **Understand the total picture**: the system, its technical characteristics, its program structure, acquisition strategy, and the purpose of the estimate. This understanding drives what data is actually needed.
+1. **Understand the total picture**: thoroughly understand what needs to be estimated, including the purpose and scope of the estimate. Ask about the intended use of the estimate (e.g., program budget, ICE or LCCE, AoA/EA, risk estimate, source selection, contract performance measure), its content (how many of what, where, when; the physical or technical picture; the time period covered; how much time there is to develop it), and its organizational scope (does it cross organizational boundaries, or concern one department?).
 2. **Define the estimate structure**: cost estimators establish a documented **Cost Element Structure (CES)**, a detailed, bounded structure that determines what needs to be estimated and how it will be shown. **The CES is not the same as a contract WBS** — the CES is all-inclusive, spanning the entire subject being estimated over the entire estimate timeframe, and it is tailored/bounded to the customer's needs (e.g., excluding O&M elements if only development is being estimated). Data collection should be organized around this structure.
-3. **Identify data needs**: for each WBS element and chosen method (analogy, parametric/CER, or engineering build-up), determine what data is needed. Different methods have different requirements.
-4. **Develop a data collection plan**: a formal documented plan specifying what data is needed, from which sources, using what methods (interviews, document review, database queries, surveys), the schedule for collection, and how data quality will be verified. Having a plan improves consistency, ensures traceability, and helps manage time/resources.
+3. **Understand the estimating technique and its data needs**: review the scope and bounds of the estimate defined in the CES and identify which estimating technique(s) will be used in a **cost estimating matrix**, which is simply the CES annotated with a primary and secondary estimating technique listed for each cost element along with potential data sources. Data collection and analysis are iterative: the technique to be employed drives the data requirement and the available data drives the estimating technique. Different estimating techniques may require different data. Identify any existing similar and precedent systems: similar systems share a multitude of common characteristics, and precedent systems are evolutionary ancestors. Almost all systems, no matter how revolutionary, have analogous systems that represent possible data sources.
+4. **Develop a data collection plan**: capture primary and secondary cost, technical and programmatic data so that every cost element in the CES is covered. Identify the owners or keepers of the data, how to obtain the data and how to safeguard it. Where possible, identify primary and backup data sources, plus data sources for cross-checks. Only gather data that is appropriate to the task versus attempting to collect everything. Include a projected data collection timeline with the plan to keep the estimating effort on schedule, and get approval of the plan in the beginning.
 
 {{primer}}
 
@@ -374,12 +379,11 @@ Before collecting data, follow these steps:
 
 ### Data Needs for CER Development
 
-To build a defensible Cost Estimating Relationship, you need:
+Cost estimators rely on CERs, so understanding the cost drivers for the system being estimated is critical. The challenge in the data collection process is not to collect numbers, but to gain an understanding of the factors that drive or influence cost, and to collect data on these drivers. Cost drivers represent important independent variables in CERs; variations in these numbers significantly influence the overall estimate.
 
-- A sufficient number of historical data points (more points generally improve statistical confidence).
-- Data on the dependent variable (cost) and candidate independent variable(s)/cost drivers (e.g., weight, power, lines of code) for each data point.
-- Data that is **normalized** to a common basis (same content, same units, same point in time/dollars) so the relationship reflects a true underlying driver relationship rather than noise from inconsistent definitions.
-- **Homogeneous** data — all points should represent genuinely comparable/analogous systems (mixing fundamentally different technologies undermines validity).
+:::tip Beyond CEBoK
+Practical requirements for a defensible CER dataset: a sufficient number of historical data points (more points generally improve statistical confidence); cost and candidate driver values for each point; data **normalized** to a common basis (content, units, time/dollars); and **homogeneous** data, where all points represent comparable systems.
+:::
 
 **Cost driver examples** (from the source): flying hours (aircraft) or steaming hours (ships) for operations cost; production quantity, average lot number, or unit number for production costs; linear feet and power for cabling cost; functional requirements and number of interfaces for software development cost. **Operating environment** is also a cost driver — manned space, unmanned space, critical life-sustainment (100% non-failure reliability), surface sea, or unclassified commercial internet environments each carry different cost characteristics.
 
@@ -391,7 +395,19 @@ To identify cost drivers: talk to engineers and SMEs, study the data at an appro
 
 ### Sources of Data
 
-Cost, technical, and programmatic data come from a range of sources, each with different strengths:
+CEBoK identifies some of the more common U.S. Department of Defense (DoD) sources for data. Sources for technical data include:
+- **Requirements documents**: Initial Capabilities Document (ICD), Capability Development Document (CDD), Capability Production Document (CPD).
+- **Baseline descriptions**: Cost Analysis Requirements Description (CARD) and Intelligence Capability Baseline Description (ICBD).
+- **Technical databases** (e.g., commercial satellite, satellite crosslinks, infrared sensor, RF communications, and DoD electronic system databases).
+- **Contractor-provided documentation**: technical proposals, data sheets, proprietary specifications.
+- **Contractor cost reports**: Cost/Schedule Control Systems Criteria (C/SCSC), Cost Performance Reports (CPR), Cost/Schedule Status Reports (C/SSR), Contract Funds Status Reports (CFSR), Contractor Cost Data Reporting (CCDR).
+- **Accounting data**.
+- **Cost Assessment Data Enterprise (CADE)**, managed by the Defense Cost Resource Center (DCARC): the DoD authoritative centralized repository for cost and software data, including CCDRs, SRDRs, and CSDRs, for major defense programs.
+- **Labor rate data**: Forward Pricing Rate Agreements (FPRAs), and results of surveillance by the Defense Contract Audit Agency (DCAA) and the Defense Contract Management Agency (DCMA).
+- **Additional data sources**: Federally Funded Research and Development Corporations (FFRDCs), external organizations, other information systems, historical contracts, cost proposals, competitive intelligence, market analysis, benchmarking, historical cost databases, cost/budget/accounting/earned value data from programs, contractors, depots, and other organizations, catalog prices, supplier cost information or vendor quotes, and market research.
+
+:::tip Beyond CEBoK
+A commonly-cited view of typical strengths and weaknesses by source (not from CEBoK):
 
 | Source | Typical Strength | Typical Weakness |
 | --- | --- | --- |
@@ -402,31 +418,20 @@ Cost, technical, and programmatic data come from a range of sources, each with d
 | **Published/industry literature** | Broad technical coverage | Variable reliability, commercial vs. defense mismatch |
 | **Prior estimates** | Consistency with past work | May be stale/outdated |
 
-In DoD contexts, key sources include:
-- **Requirements/baseline documents**: ICD, CDD, CPD (requirements documents), and the CARD (Cost Analysis Requirements Description).
-- **Technical databases** (e.g., satellite, sensor, and communications databases).
-- **CSDR** (Cost and Software Data Reporting): the main source of contractor actual costs by WBS (includes CCDR/"1921" forms, FlexFiles, SRDR).
-- **Cost Performance Reports (CPR)** and related cost/schedule status reports, on cost and schedule performance.
-- **Central repositories** (e.g., DoD's CADE, managed by the DCARC).
-- **Labor rate data**: Forward Pricing Rate Agreements (FPRAs), and DCAA/DCMA surveillance results.
-- **FFRDCs** and other external organizations.
-- **Budget documents** and Selected Acquisition Reports (SARs).
-- **Contracts, proposals, and accounting records**.
-- **Engineering and technical documents** (specs, drawings, test reports).
+Budget documents and Selected Acquisition Reports (SARs) are also common sources in practice.
+:::
 
 :::tip Beyond CEBoK
 The source uses **CPR (Cost Performance Report)** as its EVM reporting term. Since 2020, DoD has largely replaced the paper CPR/CFSR formats with the **Integrated Program Management Data and Analysis Report (IPMDAR)**, and CCDR reporting increasingly flows through **FlexFiles** rather than the older "1921" forms — neither IPMDAR nor FlexFiles is CEBoK terminology, but you'll see them in current practice.
 :::
 
-**Technology Readiness Level (TRL)**, listed among the module's technical data examples, is a standardized scale used to assess how mature a technology is. Per the source's own Testable Topics list, TRL is "testable, but less emphasized" relative to the module's main content.
-
 :::check
-Q: Which DoD reporting system is the main source of contractor actual costs by WBS for major programs?
+Q: Which is the DoD authoritative centralized repository for cost and software data (CCDRs, SRDRs, CSDRs) for major defense programs?
 - SAR
-* CSDR (CCDR / FlexFiles / SRDR)
+* CADE, managed by the DCARC
 - PPBE
-- EVM reports only
-> Cost and Software Data Reporting provides contractor costs by WBS element, hours, and software data.
+- FPRA
+> The Cost Assessment Data Enterprise (CADE), managed by the Defense Cost Resource Center (DCARC), is the DoD authoritative centralized repository for cost and software data for major defense programs.
 :::
 
 :::check
@@ -474,47 +479,55 @@ buckets: Cost (inflation) | Quantity | Content | Sizing
 - Cost per meter versus cost per foot = Sizing
 - One source includes spares, another does not = Content
 - Costs recorded at very different production quantities = Quantity
-> Inflation indices put dollars on a common base year; learning curves put quantities on a common point; sizing converts mixed units (kg, tons, meters, feet) to one standard; content mapping adds or removes scope such as spares or fee.
+> Inflation indices put dollars on a common base year; learning curves put quantities on a common point (a study-aid category, not one of CEBoK's listed types); sizing converts mixed units (kg, tons, meters, feet) to one standard; content mapping adds or removes scope such as spares or fee.
 :::
 
 +++
 
-**Normalization** is the process of adjusting collected data so that all data points are placed on a **consistent, comparable basis** before they are used for analysis. Without normalization, apparent differences between data points may simply reflect differences in scope, timing, quantity, or units rather than true cost differences.
+**Data normalization** is the process of making data consistent and comparable to other data being used in the estimate, so that it is usable for estimating. Data can be difficult to find in the form needed by the cost estimator.
 
-### The Key Normalization Groupings
+CEBoK lists the types of data normalization as: **cost units**; **sizing units**; **special groupings** such as mission application; **platform operating environment**; **recurring/non-recurring costs**; **development state**; and **end terms for homogeneity** (content).
+
+### Common Normalization Categories
+
+CEBoK's headings are Cost, Quantity, and Sizing; Content; State of Development; and Key Groupings.
 
 | Normalization | What It Fixes | How |
 |---|---|---|
-| **Cost (inflation)** | Different years' dollars | Convert to a common **base year** with inflation indices (Module 5) |
-| **Quantity** | Costs at different production quantities | Use learning curves to adjust to a common point (e.g., T1 or unit 100) (Module 7) |
+| **Cost (inflation)** | Different years' dollars; what is in the cost per labor hour | Adjust for price level changes (escalation) to a common base year with inflation indices (Module 5) |
+| **Quantity** (Beyond CEBoK) | Costs at different production quantities | Use learning curves to adjust to a common point (Module 7) |
 | **Sizing** | Mixed units (kg/oz/tons, metric vs. long tons, EUR vs. USD, meters vs. feet) | Convert all sizes/costs to a single consistent unit standard before comparing |
-| **Content** | Different scope in the "same" element | Map to a common WBS; add or remove content (e.g., strip out spares or fee) |
-| **State of development** | Prototype/EMD vs. production, new design vs. modification | Separate groups, dummy variables, or adjustment factors |
-| **Key groupings / units** | Non-homogeneous data / mixed units | Group by mission application, operating environment, contractor, era; ensure consistent units |
+| **Content** | Different content in the end item | Account for missing and excess sub-elements (LRU, SRU, sub-components, integration) to form a common base |
+| **State of development** | Concept/demonstrator, prototype/EMD vs. full-rate production | Account for stage in the development cycle and learning-curve impact; group or isolate by item or lot quantity |
+| **Key groupings** | Non-homogeneous data | Group by mission application, operating environment, recurring vs. non-recurring, and variable vs. fixed |
 
 {{primer}}
 
-**Why this matters**: To validly compare two data points, they must be normalized/checked across **all relevant dimensions simultaneously**: same time basis, same quantity basis, same content/scope, same units of measure, and same state of development/maturity. Missing any one of these dimensions can invalidate an otherwise careful comparison.
+:::tip Beyond CEBoK
+A common study shorthand: to validly compare two data points, check them across all relevant dimensions at once: same time basis, same quantity basis, same content/scope, same units of measure, and same state of development. Missing any one of these can invalidate an otherwise careful comparison.
+:::
 
 +++
 
 ### Cost Normalization (Inflation and Labor)
 
-Adjusting cost data for the time value of money/purchasing power so that costs from different years can be compared on a common (e.g., constant-year or base-year) dollar basis. Adjusting for these price-level changes is called **escalation**; this uses inflation indices and is covered in detail in Module 5.
+Cost data usually reflects material costs or measures of effort such as cost per labor hour, so the estimator must ask what is actually in these numbers. The data needs to be adjusted or normalized to a common base from which a comparison or analysis can occur. Adjusting for the price level changes associated with inflation is referred to as **escalation**; it uses inflation indices and is covered in detail in Module 5. (CEBoK's illustration: a Corvette costing \$6,000 is hard to judge from price and type alone; knowing it was purchased new in 1974 lets the estimator adjust for inflation to a base or constant year.)
 
-**Escalation example (from CEBoK)**: procurement cost for an AN/ARC-164 radio, from an official Bill of Materials, is \$50,000 in CY1994 dollars. Using the Air Force Procurement Appropriation index (Appropriation 3010, Aircraft Procurement Other), the FY2000 base-year index is 0.957. To escalate to BY2000: \$50,000 / 0.957 ≈ **\$52,247 (BY2000)**. Dividing by the index moves a cost *forward* to a later base year; multiplying by it would move a cost *backward* to an earlier one. All dollars being compared must share both the same scale (\$, \$K, \$M, \$B) and the same base year.
+**Escalation example (from CEBoK)**: procurement cost for an AN/ARC-164 radio, from an official Bill of Materials (May 1994), is \$50,000 in CY1994 dollars. Using the Air Force Procurement Appropriation index (Appropriation 3010, Aircraft Procurement Other), the FY2000 (BY) index is 0.957. Here, dividing the 1994 cost by the index gives the escalated BY2000 cost: \$50,000 / 0.957 ≈ **\$52,247 (BY2000)**. All dollars must be in the same terms (dollars, thousands, millions) and must also represent a common base year; you must normalize the inflationary effect into or out of the data (escalation or de-escalation). When working on a program, the BY is normally designated by the program manager and typically reflects the year the project started.
 
-**Cost per labor hour** raises a related issue: is the labor rate fully burdened/loaded (with overhead applied) or just touch labor, and does it include a fee? Confirm what is and isn't included before comparing rates across sources.
+**Cost per labor hour** raises a related issue: labor hours are straightforward, but the estimator needs to know what is included in the cost per labor hour. The labor dollars may be fully loaded or burdened, may be just touch labor, or may include a fee. Check the cost units to ensure that what the number represents is clear (\$, \$K, \$M, or \$B).
 
-### Quantity Normalization (Learning Curves)
+### Quantity Normalization (Beyond CEBoK)
 
-Adjusting cost data to account for differing production quantities, since unit cost typically changes with quantity due to learning/experience effects — normalizing to a common point (e.g., unit 1, or T1) makes otherwise-different production quantities comparable. The learning curve math itself is covered in Module 7.
+:::tip Beyond CEBoK
+CEBoK's "Cost, Quantity, and Sizing" heading does not explain quantity normalization in its body. A common practice is adjusting cost data for differing production quantities, since unit cost typically changes with quantity due to learning/experience effects; normalizing to a common point on the learning curve makes different quantities comparable. The learning curve math is covered in Module 7.
+:::
 
 ### Sizing and Unit Normalization
 
 Any time data is expressed as a rate (cost per foot, per ton, per pound), the underlying units must be consistent: convert kilograms, ounces, or tons to one weight standard (for ships, metric tons ≠ long tons), and convert all distances to one length standard.
 
-**Currency/unit conversion example**: converting €5/meter to USD/foot, at \$1.13 USD/EUR and 39.37 inches/meter, 12 inches/foot: €5/meter × \$1.13/€ ÷ 39.37 in/meter × 12 in/foot ≈ **\$1.72/foot**. The same method converts optical cable pricing, e.g. €10/meter converts to about **\$3.44/foot**.
+**Currency/unit conversion example**: use the exchange rate in effect when the data was captured (CEBoK's example rate is as of March 23, 2019). Converting €5/meter to USD/foot, at \$1.13 USD/EUR and 39.37 inches/meter, 12 inches/foot: €5/meter × \$1.13/€ ÷ 39.37 in/meter × 12 in/foot ≈ **\$1.72/foot**. The same method converts optical cable pricing, e.g. €10/meter converts to about **\$3.44/foot**.
 
 **The Mars orbiter anecdote**: in 1999, NASA lost a \$125M Mars orbiter because navigation data used English units on one side and Metric units on the other — the mismatch was never reconciled, and the spacecraft crashed. Even top scientists get unit conversion wrong.
 
@@ -522,7 +535,7 @@ Any time data is expressed as a rate (cost per foot, per ton, per pound), the un
 
 ### Content Normalization
 
-Adjusting data so each data point reflects the same defined scope, down to what makes up the sub-elements of an item. An end item's cost is the sum of Line Replaceable Unit (LRU), Shop Replaceable Unit (SRU), and sub-component costs and their integration — the estimator must account for both missing and excess sub-elements to form a common comparison base.
+Data can be normalized for end-item homogeneity or content differences in the end item; the estimator needs definitional content consistency and must ask what makes up the "Alpha" unit, which is especially important when using analogies. An end item's cost is based on the sum of Line Replaceable Unit (LRU), Shop Replaceable Unit (SRU), and sub-element or sub-component costs and their integration — the estimator must account for both missing and excess sub-elements to form a common base from which to make comparisons or perform an analysis.
 
 **Copier/fax example (from CEBoK)**: a company shopping for a copier gathers cost/technical data on plain copiers and copier-fax combo units. It would not directly compare a plain copier to a copier-fax machine — it must account for the missing fax capability (e.g., by assessing how much more the copier-fax units cost, on average, than the plain copiers) before the comparison is valid.
 
@@ -532,7 +545,7 @@ Data must be normalized for the **maturity/state of development** of the technol
 
 ### Key Groupings
 
-Aggregate data along comparable groupings to isolate related relationships: by **mission application** (e.g., emitters, submersibles, optical systems, or aircraft missions such as bombers, fighters, helicopters, trainers), and by **operating environment** (e.g., manned space, unmanned space, aerospace, shipboard, commercial systems) — a manned space system's costs and characteristics differ greatly from an unmanned one's.
+Aggregate data according to comparable groupings; identifying data by key groups helps the estimator isolate independent multiple relationships and systematically related multiple relationships. Typical groupings are by **mission application** (e.g., emitters, submersibles, optical systems, or aircraft missions such as bombers, fighters, helicopters, trainers), by **operating environment** (e.g., manned space, unmanned space, aerospace, shipboard, commercial systems) — a manned space system's costs and characteristics differ greatly from an unmanned one's — and by whether the data is **recurring versus non-recurring** or **variable versus fixed** in nature.
 
 :::note Related and Advanced Topics (CEBoK)
 Data sets can also be classified as **univariate** (a single variable, e.g. the average cost of a cup of coffee, Fig. 4.7), **bivariate** (one dependent and one independent variable — typically cost and a cost driver, e.g. weight vs. cost, Fig. 4.8), or **multivariate** (one dependent and two-or-more independent variables, e.g. factory operating cost driven by both material and labor cost, Fig. 4.9). CEBoK marks this topic as related/advanced rather than core content.
@@ -542,10 +555,10 @@ Data sets can also be classified as **univariate** (a single variable, e.g. the 
 
 :::check
 Q: A \$50,000 CY1994 cost is escalated to BY2000 using an index of 0.957. What is the BY2000 value, and which operation applies?
-* Divide by the index: ≈\$52,247 (moving to a later base year)
+* Divide by the index: ≈\$52,247 (BY2000)
 - Multiply by the index: ≈\$47,850
 - No adjustment needed
-> \$50,000 / 0.957 ≈ \$52,247. Moving to a later base year divides by the index; moving to an earlier one multiplies.
+> \$50,000 / 0.957 ≈ \$52,247. In this CEBoK example, dividing the 1994 cost by the index gives the escalated BY2000 cost; the inflationary effect must be normalized into or out of the data.
 :::
 
 :::check
@@ -600,7 +613,7 @@ show: units=1 infl=1 qty=1
 :::challenge normalize units=1 infl=1 lock=units,infl,qty
 Q: Point 1 was recorded as \$4,317.55K in 2014 dollars. Convert it to \$M and escalate it to BY2026 at 2.5% a year (12 years). What is it worth?
 predict: byValue +- 1%
-> $4.31755 \times 1.025^{12} = 4.31755 \times 1.3449 \approx 5.81$, so about \$5.81M. Moving to a later base year multiplies by the growth factor here (equivalently, divides by the old year's index on the new base, as in the \$52,247 example).
+> $4.31755 \times 1.025^{12} = 4.31755 \times 1.3449 \approx 5.81$, so about \$5.81M. Here the growth factor is applied by multiplying (this practice problem is not CEBoK's worked example).
 :::`
     },
     {
@@ -632,7 +645,7 @@ A related distinction is **fixed vs. variable cost**: fixed costs don't change a
 
 ### Why Separation Matters
 
-Proper normalization requires separating recurring from non-recurring cost **before performing any quantity-based analysis**, because this separation adds fidelity and accounts for anomalies like production quantity and time-phasing differences that would otherwise distort the analysis.
+Non-recurring and recurring costs must be broken out to add fidelity to the estimates. Grouping costs helps the cost estimator account for anomalies (e.g., production quantity differences and time-phased cost differences). Misleading information and conclusions are drawn when people roll all costs together and just discuss the total costs.
 
 +++
 
@@ -641,7 +654,7 @@ It's common to say **learning curves apply only to recurring costs**, and non-re
 :::
 
 :::key
-**Before fitting a learning curve or analyzing unit-cost trends, always separate recurring from non-recurring costs.** Combining them can distort the results.
+**Non-recurring and recurring costs must be broken out to add extra fidelity to the estimates.** Rolling all costs together leads to misleading conclusions.
 :::
 
 :::check
@@ -688,12 +701,15 @@ Q: Is that dataset ready for a CER fit?
 - Yes, once dollars and units match it is fully normalized
 * Not necessarily: any checklist dimension left unchecked can invalidate the conclusion
 - Yes, any other differences average out in the regression
-> The checklist covers time, quantity, content, units, state of development, recurring vs. non-recurring, and source. If any dimension is left unchecked, your conclusion may be invalid.
+> This study-aid checklist (not CEBoK's list) covers time, quantity, content, units, state of development, recurring vs. non-recurring, and source. If any dimension is left unchecked, your conclusion may be invalid.
 :::
 
 +++
 
-### Common Mistakes
+:::tip Beyond CEBoK
+These mistakes and the checklist are a study aid, not CEBoK content. CEBoK's own list is the types of data normalization given earlier in this module.
+
+**Common mistakes**
 
 1. **Comparing unnormalized cost data** — comparing then-year dollars, different quantities, or different scopes directly, producing invalid conclusions.
 2. **Ignoring content differences** — pooling data where one source includes spares/support and another does not.
@@ -705,9 +721,7 @@ Q: Is that dataset ready for a CER fit?
 8. **Mixing units of measure** (e.g., kilograms vs. pounds, then-year vs. constant dollars) without converting first.
 9. **Relying solely on subjective/expert data** when objective data is available and could corroborate or replace it.
 
-+++
-
-### Normalization Checklist
+**Normalization checklist**
 
 Before performing statistical analysis or CER development, review your dataset across all these dimensions:
 
@@ -720,6 +734,7 @@ Before performing statistical analysis or CER development, review your dataset a
 - ✓ **Source documented**: Every data point's source and context recorded?
 
 If any dimension is left unchecked, your conclusion may be invalid.
+:::
 
 {{primer}}
 
@@ -751,37 +766,37 @@ A: A Cost Growth Factor (CGF) and a Schedule Growth Factor (SGF).
 Q: Are data collection, normalization, and analysis a linear sequence?
 A: No. CEBoK says they are not distinct and not linearly sequential; exploration and feedback loops help.
 Q: May normalization remove costs judged "unusual"?
-A: No. Normalization does not assume away or normalize away costs; it must be reversible, defensible, and documented.
+A: Not by assuming them away. Reducing unusually high inexperienced labor hours is allowed only if the labor mix is adjusted in the normalized set to reflect future project conditions; normalization needs to be defensible and well documented, and the concept of reversible operations applies.
 Q: Why is data collection so critical to cost estimating?
-A: Every estimating technique (analogy, parametric, engineering build-up) depends on historical data. Poor data gives confident wrong answers; it directly drives estimate credibility and defensibility.
+A: Because an estimate is only as good as the data used to produce it. Data provides credibility and defensibility to estimates; without it the estimate would be merely a guess or the opinion of the cost estimator.
 Q: Key principles of data collection
 A: (1) Comply with how the organization collects data/costs; (2) not just cost data: technical and programmatic too (enables CGF/SGF); (3) normalization does not assume or normalize away costs (reversible, documented); (4) collection, normalization, and analysis are not linearly sequential; (5) goal is homogeneous data (e.g., common WBS).
 Q: What does the aircraft example illustrate about cost data?
-A: A single cost number (e.g., \$30M airframe) is meaningless without technical/programmatic context (how many built, in what year, what included, under what contract). Context makes data interpretable and normalizable.
+A: Cost numbers alone are meaningless without context. 6.8 means nothing without a descriptor; \$6.8K in BY1989 dollars for the procurement of one radio for an F-15C fighter is usable. Technical and programmatic data supply the context.
 Q: Why does context matter in data collection?
 A: Raw numbers are meaningless without understanding what is/is not included (scope), the conditions under which they were generated, and anomalies. Technical and programmatic data provide this context.
 
 ## Types of Data
 Q: Three broad categories of data collected for every estimate
-A: Cost data (dollars, labor, material), technical data (weight, power, speed, performance), programmatic data (schedule, quantities, production rate, contract type).
+A: Cost (resource) data in dollars and hours tied to an activity or product; technical data derived from requirements or physical characteristics of systems; programmatic data, the program parameters that explain and drive cost.
 Q: Why are all three types needed together?
-A: Technical and programmatic data provide the context that makes cost data usable and normalizable. They explain the conditions and scope of the cost data.
+A: Technical and programmatic data provide the basis for cost and also drive cost. They provide the context that cost numbers need; cost numbers alone are meaningless without context.
 Q: Cost data examples
 A: Dollars, labor hours, material costs, rates, by WBS element and time period.
 Q: Technical data examples
-A: Weight, power, speed, lines of code, performance, materials, complexity, TRL.
+A: Component size and weight, reliability and maintainability parameters, satellite payload requirements, crew size and composition, activity rates (e.g., flying hours), deployment plans.
 Q: Programmatic data examples
-A: Schedule, quantities, production rate, contract type, acquisition strategy, number of test articles.
+A: Schedules, value-chain structure (contractor and tiers of subcontractors), contract types, acquisition environment (e.g., sole source vs. competitive).
 Q: Primary vs. secondary data
-A: Primary: from the original source (e.g., contractor accounting records), most accurate. Secondary: derived or reported by others (e.g., published summaries), less reliable but more convenient.
+A: Primary: obtained from the original source, unaltered actual historical data (e.g., BOMs, documented test results, documented resource hours); most defensible, highest quality, most useful. Secondary: based on primary data but derived, sanitized for classification/proprietary purposes, or changed from the original (e.g., cost estimates, factor books, studies/white papers, contractor cost report summaries, subcontractor cost data); lesser quality, but valuable for cross-checking.
 Q: Quantitative vs. qualitative data
-A: Numeric measurements vs. descriptive/categorical info. Qualitative can be converted into dummy variables or complexity factors.
+A: Numeric (quantitative, preferred) vs. descriptive/categorical (nominal) describing a quality. Transform qualitative data into quantitative data or replace it when possible.
 Q: Objective vs. subjective data
 A: Measured/recorded facts vs. judgments (e.g., SME ratings, expert opinions).
 Q: Strongest data combination
-A: Primary, quantitative, objective.
+A: CEBoK says primary, quantitative, and objective data are each preferred.
 Q: CEBoK's Quality of Data Types ranking (best to worst)
-A: 1) Actuals for completed programs, or EACs for contracts >90% complete (caution: some programs re-baseline late) · 2) Schedule B contract line item prices (≈ EAC at 0% complete) · 3) Historical/original budget data (lowest; not actual spend, usually too high a level).
+A: Actuals for completed programs/contracts > EACs for contracts >90% complete (caution: some problematic programs re-baseline well beyond schedule) > Schedule B contract line item prices (generally the EAC at 0% complete) > Historical/original budget data (lowest; not actual spent cost; most exists at a level too high to be useful).
 Q: Why is secondary data lower quality than primary data?
 A: Its normalization process is unknown, it lacks definition, and its factor basis may be old, incomplete, or questionable. Still useful for cross-checking.
 Q: Quantitative data scales: ordinal, interval, ratio
@@ -809,64 +824,62 @@ A: A standard WBS that keeps data providers and estimators in sync; its elements
 
 ## Considerations and Pitfalls
 Q: Four data quality considerations
-A: Availability (does it exist?), accessibility (can I get it?), validity (is it relatively current and applicable?), constraints (time and the underlying estimate requirements).
+A: Availability (does the data exist in sufficient quantity?), accessibility (can the estimator access it?), validity (is it relatively current and applicable?), constraints (time and the underlying estimate requirements).
 Q: Common data pitfalls
-A: Accepting data at face value, inconsistent definitions, hidden content differences, mixed dollar types, budgets used as actuals, too few/non-homogeneous points, stale data, no source record.
+A: Inconsistent data definitions (e.g., MTTR; definitions can change over time, so capture them) and unusual program characteristics (new technology/materials, aggressive schedule, contractor manufacturing process changes, new cost reduction initiatives). Other pitfalls (budgets as actuals, stale data, etc.) are not CEBoK's list.
 Q: Why not use budgets as actuals?
 A: Budgets are plans, not what was actually spent. Mixing them with actuals misrepresents true costs and distorts trends.
 
 ## Data Collection Process
 Q: Data collection process steps (in order)
-A: 1) Understand the total picture · 2) Define estimate structure (CES) · 3) Identify data needs (by technique) · 4) Develop a data collection plan.
+A: 1) Understand the total picture of the estimating task · 2) Establish a Cost Element Structure (CES) and boundaries around the estimate · 3) Understand the estimating technique to be employed and its associated data collection needs · 4) Develop a data collection plan.
 Q: What is a data collection plan?
-A: A documented plan specifying what data is needed, from which sources, using what methods, the schedule, and how data quality will be verified.
+A: A plan to capture primary and secondary cost, technical and programmatic data so every CES cost element is covered; identifies data owners/keepers, how to obtain and safeguard the data, primary and backup sources, cross-check sources, a projected timeline, and gets approval at the beginning.
 R: yes
 Q: Why develop a data collection plan?
-A: A documented plan improves consistency, ensures traceability, and helps manage limited time/resources available for the estimate.
+A: It ensures every CES cost element is covered, identifies backup and cross-check sources, keeps the estimate on schedule via a timeline, and secures customer buy-in through approval.
 Q: Data needed for CER development
-A: Cost for many analogous systems + candidate driver values + context to normalize. Data must be homogeneous and consistently defined.
+A: Understanding the cost drivers of the system being estimated is critical. The challenge is not to collect numbers but to understand the factors that drive or influence cost and to collect data on those drivers. Cost drivers are important independent variables in CERs.
 Q: What is the WBS and why does it matter for data collection?
-A: Work Breakdown Structure defines the framework the estimate is built around. Data should map to the estimate's cost element structure (CES), which is related to but not the same as a contract WBS.
+A: The Cost Element Structure (CES) defines what is estimated and how it is shown, and adds structure to data collection and helps track data deficiencies. A common standard WBS (e.g., MIL-HDBK-881A) keeps the data provider and cost estimator in sync. The CES is not the same as a contract WBS.
 Q: CES vs. contract WBS
 A: The CES (Cost Element Structure) is not the same as a contract WBS. The CES is all-inclusive, spans the entire subject and timeframe being estimated, and is bounded/tailored to the customer's needs.
 Q: Cost driver examples
 A: Flying/steaming hours (operations); production quantity, lot number, or unit number (production); linear feet and power (cabling); functional requirements and interfaces (software); operating environment (manned/unmanned space, surface sea, commercial).
 Q: SME caution
 A: Reputable cost estimators scrupulously avoid portraying expert opinion as data. SME expertise is best used to interpret or re-create historical data, not replace it.
-Q: TRL (Technology Readiness Level)
-A: A standardized scale for assessing technology maturity; per CEBoK's Testable Topics list, it's testable but less emphasized.
-R: yes
-
 ## Data Sources
 Q: What is CSDR?
-A: Cost and Software Data Reporting: the DoD system for contractor actual cost data (CCDR/"1921" forms, FlexFiles) and software data (SRDR).
+A: Cost and Software Data Reporting; CCDRs, SRDRs and CSDRs for major defense programs are held in CADE (managed by DCARC), the DoD authoritative centralized repository for cost and software data. ("1921" forms and FlexFiles are Beyond CEBoK.)
 R: yes
 Q: Major data sources (non-DoD and DoD)
-A: Contractor records, government databases (e.g., CADE), program office records, SME interviews, published literature, prior estimates. In DoD: requirements docs (ICD/CDD/CPD), CARD, technical databases, CSDR, CPR, FPRAs, DCAA/DCMA, FFRDCs, budgets, SARs, contracts, technical docs.
+A: CEBoK categories: requirements documents, baseline descriptions (CARD, ICBD), technical databases, contractor-provided documentation, contractor cost reports (C/SCSC, CPR, C/SSR, CFSR, CCDR), accounting data, CADE/DCARC, labor rate data (FPRAs, DCAA/DCMA), FFRDCs/external organizations, other information systems.
 Q: IPMDAR / FlexFiles (Beyond CEBoK)
 A: Not CEBoK terms. IPMDAR is DoD's current EVM report, largely replacing the paper CPR/CFSR; FlexFiles increasingly replace the older "1921" CCDR forms. CEBoK uses CPR as its term.
 Q: Strength of contractor cost records
-A: Primary, objective, detailed data; weakness is access/proprietary restrictions.
+A: (Beyond CEBoK) Primary, objective, detailed data; weakness is access/proprietary restrictions.
 Q: Strength of government cost databases
-A: Convenient, often pre-normalized; weakness is they may obscure original definitions/context.
+A: (Beyond CEBoK) Convenient, often pre-normalized; weakness is they may obscure original definitions/context.
 Q: Strength of SME interviews
-A: Fills gaps, adds context; weakness is subjectivity and potential bias.
+A: (Beyond CEBoK) Fills gaps, adds context; weakness is subjectivity and potential bias.
 Q: Strength of published/industry literature
-A: Broad technical coverage; weakness is variable reliability and commercial vs. defense mismatch.
+A: (Beyond CEBoK) Broad technical coverage; weakness is variable reliability and commercial vs. defense mismatch.
 
 ## Normalization
 Q: Purpose of normalization
-A: Adjust data so all points are on a consistent, comparable basis before analysis. Differences should reflect true cost behavior, not artifacts of inconsistent definitions.
+A: Make data consistent and comparable to other data being used in the estimate, so it is usable for estimating.
+Q: Types of data normalization (CEBoK list)
+A: Cost units; sizing units; special groupings such as mission application; platform operating environment; recurring/non-recurring costs; development state; and end terms for homogeneity (content).
 Q: Cost (inflation) normalization
 A: Convert all dollars to a common base year using inflation indices so purchasing power is consistent. This price-level adjustment is called escalation.
 R: yes
 Q: Escalation worked example (from CEBoK)
-A: \$50,000 (CY1994, AN/ARC-164 radio) escalated to BY2000 using AF index 0.957: \$50,000 / 0.957 ≈ \$52,247 (BY2000). Dividing moves cost to a later base year.
+A: \$50,000 (CY1994, AN/ARC-164 radio) escalated to BY2000 using AF index 0.957: \$50,000 / 0.957 ≈ \$52,247 (BY2000). Dividing the 1994 cost by the index gives the escalated BY2000 cost.
 Q: Quantity normalization
-A: Adjust costs to a common point on the learning curve (e.g., T1 or unit 100) so unit costs at different production quantities are comparable. Mechanics covered in Module 7.
+A: (Beyond CEBoK) Adjust costs to a common point on the learning curve so unit costs at different production quantities are comparable. Mechanics covered in Module 7.
 R: yes
 Q: Cost per labor hour normalization
-A: Confirm whether a labor rate is fully burdened/loaded or just touch labor, and whether it includes a fee, before comparing rates across sources.
+A: Know what is included in the cost per labor hour: it may be fully loaded or burdened, just touch labor, or include a fee. Check the cost units (\$, \$K, \$M, \$B).
 Q: Sizing normalization
 A: Convert all weights to one standard (kg/oz/tons; metric ≠ long tons for ships) and all lengths to one standard before computing rates like cost per foot/ton/pound.
 R: yes
@@ -876,7 +889,7 @@ Q: The Mars orbiter unit-mismatch anecdote
 A: In 1999 NASA lost a \$125M Mars orbiter because navigation data mixed English and Metric units, causing a crash.
 R: yes
 Q: Content normalization
-A: Map data to a common WBS/LRU-SRU-sub-component decomposition and add/remove scope so the "same" element contains the same work across all data points.
+A: Account for both missing and excess sub-elements (LRU, SRU, sub-components, integration) to form a common base for comparison; ask what makes up the unit.
 R: yes
 Q: Content normalization example (copier/fax)
 A: Don't directly compare a plain copier to a copier-fax combo; account for the missing/extra fax capability (e.g., the average cost premium of copier-fax units) before comparing.
@@ -886,7 +899,7 @@ R: yes
 Q: Units of measure normalization
 A: Ensure consistent units (all weights in pounds, all costs in millions, all labor in hours) before combining or comparing values.
 Q: Key groupings (normalization)
-A: Group data by mission application (e.g., emitters, submersibles, bombers, fighters) and by operating environment (manned/unmanned space, aerospace, shipboard, commercial) so unlike items aren't mixed.
+A: Group by mission application (e.g., emitters, submersibles, bombers, fighters), operating environment (manned/unmanned space, aerospace, shipboard, commercial), recurring vs. non-recurring, and variable vs. fixed.
 
 ## Non-recurring vs. Recurring
 Q: Non-recurring cost definition
@@ -906,22 +919,22 @@ A: Fixed costs don't change with production rate (e.g., rent for facilities). Va
 
 ## Normalization Checklist
 Q: Normalization checklist items (all must be verified before statistical analysis)
-A: Time basis (same year) · Quantity basis (learning curve applied) · Content/scope (same elements) · Units of measure (consistent) · State of development (comparable phase) · Recurring vs. non-recurring (separated) · Source documented (traceable).
+A: (Beyond CEBoK) Time basis (same year) · Quantity basis (learning curve applied) · Content/scope (same elements) · Units of measure (consistent) · State of development (comparable phase) · Recurring vs. non-recurring (separated) · Source documented (traceable).
 Q: What happens if you skip normalization on one dimension?
-A: The comparison or CER may be invalid. Mixing unnormalized data can produce spurious trends or incorrect conclusions.
+A: (Beyond CEBoK) The comparison or CER may be invalid. Mixing unnormalized data can produce spurious trends or incorrect conclusions.
 Q: A strong correlation found in pooled cost data from different programs
-A: Still requires checking that all data is normalized (same year/currency basis, same state of development, etc.). Strong statistical fit can be misleading if underlying data is unnormalized.
+A: (Beyond CEBoK) Still requires checking that all data is normalized (same year/currency basis, same state of development, etc.). Strong statistical fit can be misleading if underlying data is unnormalized.
 
 ## Common Mistakes
 Q: Most common data collection mistake
-A: Comparing unnormalized cost data (different years, quantities, or scopes) and drawing incorrect conclusions without normalization.
+A: (Beyond CEBoK) Comparing unnormalized cost data (different years, quantities, or scopes) and drawing incorrect conclusions without normalization.
 Q: Pitfall: pooling data with mixed definitions
-A: Distorts trends and produces invalid CER. All data must reflect the same defined scope and definitions before pooling.
+A: (Beyond CEBoK) Distorts trends and produces invalid CER. All data must reflect the same defined scope and definitions before pooling.
 Q: Pitfall: state-of-development differences
-A: Comparing prototype costs to mature production costs without normalization falsely suggests one program is cheaper, when actually they are at different phases.
+A: (Beyond CEBoK) Comparing prototype costs to mature production costs without normalization falsely suggests one program is cheaper, when actually they are at different phases.
 Q: Pitfall: no source documentation
-A: Estimate becomes non-traceable and hard to defend in review. Every data point's source and context must be documented.
+A: (Beyond CEBoK) Estimate becomes non-traceable and hard to defend in review. Every data point's source and context must be documented.
 Q: Pitfall: treating secondary as primary
-A: Secondary data requires more scrutiny. Estimator must understand how it was compiled and what definitions it retains before relying on it.
+A: (Beyond CEBoK) Secondary data requires more scrutiny. Estimator must understand how it was compiled and what definitions it retains before relying on it.
 `
 });

@@ -1,11 +1,11 @@
 PCEA.addModule({
   id: 'm12', num: 12, title: 'Software Cost Estimating', short: 'Software', source: 'guide',
   blurb: 'Labor-driven cost model. Size (SLOC, function points), equivalent SLOC (ESLOC), complexity and capability drivers, lifecycle models, diseconomies of scale.',
-  intro: String.raw`Software cost is nearly 100\% **labor**, driven primarily by **size** (source lines of code or function points), adjusted for complexity, team capability, and schedule.
+  intro: String.raw`Software cost is driven primarily by **size** (source lines of code or function points), adjusted for complexity, team capability, and schedule.
 
-The estimator must characterize size, select/calibrate a parametric model, apply cost drivers, and cross-check with analogy. Expect **cost and size growth** during development—it is the norm, not the exception.
+The estimator must characterize size, select/calibrate a parametric model, and apply cost drivers. Expect **cost and size growth** during development: delivered size is often much larger than the original estimate.
 
-**Key difference from hardware:** copies are almost free; nearly all cost is development (non-recurring) and maintenance. No production learning curve. This module uses the **COCOMO II** CER (Boehm) throughout because it is publicly available; many commercial models use similar but proprietary relationships.`,
+**Key difference from hardware:** software is developed once and further produced by making copies; learning curves do not exist in software. Maintenance costs can be significantly higher than the cost of developing the software. This module uses the **COCOMO II** CER (Boehm) throughout because it is publicly available; many commercial models use similar but proprietary relationships.`,
 
   sections: [
     {
@@ -29,17 +29,17 @@ Q: Put these software engineering steps in the order they happen.
 
 ### Similarities
 - Both follow a lifecycle: requirements → design → build → test → deployment, and both require ongoing maintenance support once operational (included in the program's Life Cycle Cost Estimate)
-- Both use analogy, parametric, and build-up estimating techniques
+- Hardware estimates can use any of the Module 2 costing techniques; the factors that influence software development costs are similar to those for hardware
 - The three main cost driver categories are the same for both: **size, complexity, capability**
 
 ### Differences
 | | Software | Hardware |
 |---|---|---|
-| **Cost composition** | Nearly 100\% labor; copies are almost free | Materials + labor + recurring production |
-| **Production phase** | Developed once; software maintenance costs **can significantly exceed** the cost of developing the software | Recurring unit production with learning curves |
-| **Measurability** | Intangible: progress is hard to measure objectively | Physical, observable, measurable (weight) |
+| **Cost composition** | Developed once; further produced by making copies; learning curves do not exist | Materials + labor + recurring production |
+| **Production phase** | Developed once; software maintenance costs **can be significantly higher** than the cost of developing the software | Recurring unit production with learning curves |
+| **Measurability** | Size measured by software metrics (FP, SLOC, etc.) | Size captured by physical measures (length, height, weight, performance requirements, number of units) |
 | **Data/history** | Development moves fast (new languages, methodologies); historical data is limited or restricted | Longer, more mature history; slower, more predictable change |
-| **Wear** | Software does not wear out; it fails from latent defects and evolving requirements | Hardware wear/failure patterns are traceable, and hardware may need replacement due to obsolescence |
+| **Wear** | Does not degrade or wear out; does not break in a traditional sense, but continued use may uncover bugs that slipped through testing | Will often require replacement due to obsolescence or failure |
 
 +++
 
@@ -58,7 +58,7 @@ CEBoK lists seven system engineering steps for software (based on MIL-STD-498):
 
 ### Work Breakdown Structure for software programs
 
-Most organizations mandate a defined WBS (MIL-HDBK-881A gives guidance but allows tailoring; there is no single industry standard). A software WBS is commonly organized by **build/release** and by CSCI/CSC rather than purely by lifecycle phase, so that integration, test, and program management — which do not scale linearly with size alone — can be captured as their own elements.
+Most organizations mandate a defined WBS (MIL-HDBK-881A gives guidance but allows tailoring; there are no industry standards for a WBS, although IEEE 12207 recommends the use of one). WBSs are based on either the activity or the product. Regardless of structure, the WBS should be at a sufficient level of detail to allow the project team to understand and estimate each element; it defines the content of the estimate and drives the cost estimate model structure and the content of CERs. Different projects may use terms such as modules, releases, sprints, or builds for what are essentially CSCIs.
 
 Table 12.1 (partial WBS sample, CEBoK):
 
@@ -74,7 +74,11 @@ Table 12.1 (partial WBS sample, CEBoK):
 | &nbsp;&nbsp;1.4.1.4 CSCI II → CSC I, CSC II | step 4 |
 | 1.4.2 Build II, 1.4.3 Build III | |
 
-SIT&E = Systems Integration Test and Engineering. Each software WBS element should carry its own size, language, reuse, and complexity rating; when using actuals from one program's WBS to estimate another, confirm that both programs define WBS terms (CSCI, build, module) the same way.
+SIT&E = Systems Integration Test and Engineering.
+
+:::tip Beyond CEBoK
+When using actuals from one program's WBS to estimate another, confirm that both programs define WBS terms (CSCI, build, module) the same way.
+:::
 
 :::tip Beyond CEBoK
 Coding is commonly cited (outside CEBoK's core text) as only about 15–25\% of total software development effort, with design, integration, and test consuming the majority. Software maintenance is also frequently cited as exceeding 50\% of total lifecycle cost. CEBoK does state maintenance "can be significantly higher" than development cost, without giving a specific percentage.
@@ -82,7 +86,7 @@ Coding is commonly cited (outside CEBoK's core text) as only about 15–25\% of 
 
 :::check
 Q: Why don't learning curves apply to producing copies of software?
-* Replicating software costs almost nothing; the cost is in development, not repeated production
+* Software is developed once and further produced by making copies; learning curves do not exist in software
 - Software teams never learn
 - Software has no labor cost
 > There is no repeated manufacturing of each unit, so there is no production learning to model.
@@ -98,12 +102,12 @@ Q: Which system engineering step is considered part of software *development*, n
 :::
 
 :::check
-Q: In a software WBS, why are integration, test, and program management often broken out as separate elements rather than folded into each CSCI?
-* They do not scale linearly with size alone
-- They are the only elements that require a CSCI
-- They have no cost impact
-- MIL-HDBK-881A forbids combining them
-> These functions have their own cost drivers (interfaces, coordination) independent of any one CSCI's size.
+Q: What does the WBS define for a software estimate?
+* The content of the estimate; it drives the cost estimate model structure and influences the content of CERs
+- Only the final schedule, not the cost model
+- The labor rates used for every element
+- A single industry-standard element list that must be used unchanged
+> The WBS defines the content of the estimate and drives the cost estimate model structure and the content of CERs. There are no industry standards for a WBS.
 :::
 `
     },
@@ -121,14 +125,14 @@ Q: A system has 10,000 new, 5,000 modified, and 20,000 reused SLOC (35,000 total
 * About 11,300
 - About 10,000
 - About 20,000
-> Modified and reused code each count only partly, via an adaptation adjustment factor. The text's example gives 11,300 ESLOC, far below 35,000 but still above the 10,000 new lines because reuse is not free.
+> Modified and reused code each count only partly, via a factor between zero and one. The worked example below gives 11,300 ESLOC, far below 35,000 but still above the 10,000 new lines because reuse is not free.
 :::
 
 +++
 
 ### Source Lines of Code (SLOC)
 
-**Definition:** SLOC (also called delivered source instructions) typically includes executable instructions and data declarations but **excludes comments, blanks, and continuation lines**. There are no standardized rules for *estimating* SLOC before code exists — the most common technique is analogy. Once code is written, automated tools can count it accurately and consistently.
+**Definition:** SLOC (also called delivered source instructions) typically includes executable instructions and data declarations but **excludes comments, blanks, and continuation lines**. There are no standardized rules for *estimating* SLOC before code exists — the most common technique is analogy. Once code is written, automated tools can count it accurately and consistently. This is one definition of SLOC, not the definition of SLOC.
 
 **SLOC advantages:**
 - Widely used; most software cost models take SLOC as their size input
@@ -136,8 +140,8 @@ Q: A system has 10,000 new, 5,000 modified, and 20,000 reused SLOC (35,000 total
 - Easily counted by automated code counters once a project is complete
 
 **SLOC disadvantages:**
-- No standard counting rules, so discrepancies occur even between organizations that both claim a "standard" definition — code counts thought to be logical but actually physical can badly distort productivity
-- Highly language- and platform-dependent: the same function may take very different line counts in different languages, making cross-language comparison unreliable
+- Due to a lack of defined rules, discrepancies can occur in SLOC counts, even with standard definitions
+- Different languages require different numbers of lines of code to execute the same function, making comparisons impossible
 - Dependent on developer skill and coding style
 
 ### Counting reused and adapted code
@@ -149,13 +153,17 @@ Software size is rarely all new. Common terms (definitions vary by organization,
 
 ### Equivalent SLOC (ESLOC): reuse and modification
 
-Modified or reused code is cheaper than new code, but **not free** — even claims of "no testing required" are suspect; some retest is always needed before integration. Boehm's equation converts a mix of new/modified/reused code to **equivalent new-code size** using an adaptation adjustment factor (AAF):
+Modified or reused code is cheaper than new code, but **not free**. In calculating ESLOC, include only the amount of design modification, code modification, integration, and testing that would be required in a new development effort. New code requires 100\% design, code, and test. Theoretically, reused code does not require any new design or code and minimal test; the estimator should determine whether the code is retested as standalone code or with the overall system. All code requires some degree of retest prior to software/hardware integration even if no redesign or recode is necessary.
 
-$$AAF = 0.4(\text{\% Design modified}) + 0.3(\text{\% Code modified}) + 0.3(\text{\% Integration/Test effort})$$
+Barry Boehm provides a simple equation to calculate ESLOC:
 
-$$ESLOC = New\,SLOC + Modified\,SLOC \times AAF + Reused\,SLOC \times AAF$$
+$$ESLOC = SLOC \times [0.40(\text{\% design modified}) + 0.30(\text{\% code modified}) + 0.30(\text{\% integration and test})]$$
 
-The 0.4/0.3/0.3 split assumes 40\% of a new-development effort is design, 30\% code, 30\% integration and test; other ratios (e.g., 40/25/35) are also used, but the three weights should sum to 100\%.
+where SLOC is the adapted code. This multiplies the total adapted source lines of code by a factor between zero and one, assuming some of the software needs to be redesigned, recoded, and retested.
+
+:::tip Beyond CEBoK
+This app calls the bracketed factor the adaptation adjustment factor (AAF) and applies it to each adapted category of a mixed code base: $ESLOC = New\,SLOC + Modified\,SLOC \times AAF + Reused\,SLOC \times AAF$. The worked examples and practice questions below use this extension. The 0.4/0.3/0.3 split assumes 40\% of a new-development effort is design, 30\% code, 30\% integration and test; other ratios (e.g., 40/25/35) are also used, but the weights should sum to 100\%.
+:::
 
 +++
 
@@ -193,14 +201,7 @@ Q: 15 KSLOC new, 8 KSLOC modified (15\% design, 20\% code, 25\% test), 12 KSLOC 
 
 ### Function Points (FP)
 
-**Definition:** IFPUG function points measure functionality **as seen by the user** (based on Functional User Requirements — inputs, outputs, files), independent of programming language, and can be counted from requirements documentation before code exists.
-
-**Five function types**, each counted at low/average/high complexity:
-1. **External Inputs (EI):** data entry, commands → weights 3/4/6
-2. **External Outputs (EO):** reports, displays → weights 4/5/7
-3. **External Inquiries (EQ):** interactive queries → weights 3/4/6
-4. **Internal Logical Files (ILF):** databases → weights 7/10/15
-5. **External Interface Files (EIF):** data from other systems → weights 5/7/10
+**Definition:** International Function Point Users Group (IFPUG) function points are a size measure based on the Functional User Requirements (FUR), developed by IBM in the 1970s. The rules for IFPUG FPs are defined in the Counting Practices Manual (CPM). FPs are based on the requirements documentation, data schema, architectural diagrams, user manuals, and other sources used to identify the FUR for the project.
 
 **Five-step counting process (CEBoK):**
 1. Determine the type of FP count
@@ -209,16 +210,25 @@ Q: 15 KSLOC new, 8 KSLOC modified (15\% design, 20\% code, 25\% test), 12 KSLOC 
 4. Calculate the UFP and the VAF
 5. Calculate the AFP
 
+:::tip Beyond CEBoK
+IFPUG detail not spelled out in CEBoK's text, which names only data/transaction function types, UFP, VAF, and AFP. Five function types, each counted at low/average/high complexity:
+1. **External Inputs (EI):** data entry, commands → weights 3/4/6
+2. **External Outputs (EO):** reports, displays → weights 4/5/7
+3. **External Inquiries (EQ):** interactive queries → weights 3/4/6
+4. **Internal Logical Files (ILF):** databases → weights 7/10/15
+5. **External Interface Files (EIF):** data from other systems → weights 5/7/10
+
 $$VAF = 0.65 + 0.01 \sum_{i=1}^{14} GSC_i$$
 
 $$AFP = UFP \times VAF$$
 
 where VAF is the Value Adjustment Factor based on 14 General System Characteristics (GSCs), each rated 0–5.
+:::
 
 +++
 
 :::example
-10 EI (avg, weight 4) = 40; 5 EO (avg, weight 5) = 25; 8 EQ (avg, weight 4) = 32; 3 ILF (avg, weight 10) = 30; 2 EIF (avg, weight 7) = 14.
+Beyond CEBoK (IFPUG detail): 10 EI (avg, weight 4) = 40; 5 EO (avg, weight 5) = 25; 8 EQ (avg, weight 4) = 32; 3 ILF (avg, weight 10) = 30; 2 EIF (avg, weight 7) = 14.
 
 $UFP = 40 + 25 + 32 + 30 + 14 = 141$
 
@@ -236,7 +246,7 @@ FP-to-SLOC "backfiring" ratios (roughly 50–130 SLOC per FP depending on langua
 :::
 
 :::check
-Q: 8 EI (avg, weight 4), 6 EO (avg, weight 5), 4 EQ (avg, weight 4), 2 ILF (avg, weight 10), 3 EIF (avg, weight 7). Sum of 14 GSC ratings = 40. What is AFP?
+Q: (IFPUG detail, Beyond CEBoK) 8 EI (avg, weight 4), 6 EO (avg, weight 5), 4 EQ (avg, weight 4), 2 ILF (avg, weight 10), 3 EIF (avg, weight 7). Sum of 14 GSC ratings = 40. What is AFP?
 = 125 ±1
 > $UFP = (8 \times 4) + (6 \times 5) + (4 \times 4) + (2 \times 10) + (3 \times 7) = 32 + 30 + 16 + 20 + 21 = 119$. $VAF = 0.65 + 0.01(40) = 1.05$. $AFP = 119 \times 1.05 = 124.95 \approx 125$
 :::
@@ -247,7 +257,7 @@ Q: Why can requirements growth alone significantly increase software cost even i
 - Requirements growth only affects schedule, never cost
 - Function points are immune to requirements growth
 - Growth only matters after delivery
-> Capers Jones data cited by CEBoK shows requirements can grow anywhere from under 1\% (small end-user systems) to 64\% (very large military systems) from initial estimate to delivery — and since size drives effort, that growth drives cost.
+> Capers Jones assessments cited by CEBoK indicate requirements increase on average from less than 1\% on small end-user systems to 64\% on very large military systems — and since size drives effort, that growth drives cost.
 :::
 `
     },
@@ -281,7 +291,7 @@ where $A = 2.94$ (a constant), $Size$ is KSLOC, $E$ is the sum of scale factors,
 
 ### Complexity
 
-Complexity relates to the difficulty of the software's logic/algorithms — reflected in language, function (intended use), hardware limitations, number of modules, amount of integration, percent of new code, and quality of development (for maintenance). CEBoK notes there is little published statistical proof of complexity's significance, a symptom of scarce software cost data.
+Complexity is the second broad area of cost drivers, related to the complexity of the software itself. It relates to the functionality the software must perform and can also be reflected in the language(s) and platform used. CEBoK's list: language, function (intended use), hardware limitations, number of modules, amount of integration, percent of new code, and quality of development (used for maintenance). CEBoK notes there is little published statistical proof of complexity's significance, a symptom of scarce software cost data.
 
 **Table 12.3 (Complexity as a cost driver, 100 KSLOC example, nominal capability):**
 
@@ -295,13 +305,13 @@ These EAF values are the *product* of several individual complexity multipliers,
 
 **Language** ranges from machine language (1GL) through assembly (2GL) to High-Order Languages such as FORTRAN, C, Ada, COBOL (3GL), toward future 4GLs. Object-oriented languages (Ada 95, C++) shift effort toward design and reduce code/test effort.
 
-**Function** (intended use) drives required reliability and testing. PRICE S's application types range from simple to demanding: Statistical/Mathematical, String Manipulation, GUI, Data Storage and Retrieval, Graphical Functions, Online Communications, Control Functions, Multi-Media, Real Time, Interactive, Operating System, Logical Functions — roughly increasing in required reliability, timing criticality, and hardware interaction toward the end of the list.
+**Function** (intended use) reflects the degree of reliability and testing required; e.g., operating systems (reliability, strict timing) need more careful design and significantly more testing than simple math operations. PRICE S application types: Statistical/Mathematical, String Manipulation, GUI, Data Storage and Retrieval, Graphical Functions, Online Communications, Control Functions, Multi-Media, Real Time, Interactive, Operating System, Logical Functions.
 
-**Hardware limitations** (constrained memory/storage on weapon or space systems, or schedule risk from concurrent hardware/software development) and **number of modules** (more modules → more integration, standardization, communication, coordination) both add complexity.
+**Hardware limitations** (constrained memory/storage on weapon or space systems, or schedule delays or requirements uncertainty caused by concurrent development of hardware with software) and **number of modules** (more modules → more integration, standardization, communication, coordination) both add complexity.
 
 ### Capability
 
-Capability covers the skill, experience, and working conditions of the development team: application experience, general skill, schedule constraints, tools experience, and development location. Better, more experienced developers — and better development tools (CASE) — reduce effort; a compressed schedule, a difficult work environment, or inexperienced staff raise it.
+Capability covers the skill, experience, and working conditions of the development team: application experience, general skill, schedule constraints, tools experience, and development location. More experienced developers should work faster, better, and cheaper; the effort is likely cheaper if the higher cost of skilled developers is offset by their productivity. Compressing a schedule to less than a normal length of time can require more programmers.
 
 **Table 12.4 (Capability as a cost driver, 100 KSLOC, nominal complexity):**
 
@@ -311,7 +321,7 @@ Capability covers the skill, experience, and working conditions of the developme
 | Nominal | 1.00 | 465 | \$16,000/PM | \$7,445,045 |
 | Worst (junior) | 5.22 | 2,429 | \$14,000/PM | \$34,005,242 |
 
-Note the reversal from complexity: high complexity multiplies *up* (harder software costs more), while high capability multiplies *down* (better people cost less effort even though their labor rate is higher). CEBoK also notes the effect is asymmetric — the drop from nominal to low capability hurts more than the gain from nominal to high capability.
+Note the reversal from complexity: high complexity multiplies *up* (harder software costs more), while high capability multiplies *down* (less effort, even though the labor rate is higher). CEBoK also notes the effect is asymmetric — the drop from nominal to low capability hurts more than the gain from nominal to high capability.
 
 {{primer}}
 
@@ -337,7 +347,7 @@ Q: Between capability and complexity, which statement is correct about their eff
 :::
 
 :::tip Beyond CEBoK
-"Adding people to a late software project often makes it later" (Brooks' Law) is a widely cited software-management principle, not a line from this CEBoK module's core text — but it is consistent with CEBoK's schedule-compression discussion (see the Schedule section): compressing schedule below nominal generally raises effort rather than lowering it.
+"Adding people to a late software project often makes it later" (Brooks' Law) is a widely cited software-management principle, not a line from this CEBoK module's core text — but it is consistent with CEBoK's schedule-compression discussion (see the Schedule section): compressing a schedule can often increase cost.
 :::
 `
     },
@@ -405,17 +415,17 @@ Q: Using Table 12.4's stated rates (not the printed \$16,000 formula column), wh
       title: 'Parametric Estimating: The Effort Equation',
       summary: 'Size, scale exponent, cost drivers; diseconomies of scale',
       body: String.raw`:::primer:::
-Software effort grows with size raised to a scale exponent b. Where do different values of b belong?
+Software effort grows with size raised to a scale exponent b. What does the value of b tell you?
 
 :::sort
-Q: Match each exponent to the situation it describes.
-buckets: Linear | Typical software | Very large, complex systems
-- b = 1.0 = Linear
-- b = 1.05 = Typical software
-- b = 1.15 = Typical software
-- b = 1.25 = Very large, complex systems
-- b = 1.3 = Very large, complex systems
-> A b of 1.0 means effort grows in step with size and is rare. Typical software falls between 1.05 and 1.15. Very large systems with high complexity have b above 1.2.
+Q: Match each exponent to the scale effect it produces.
+buckets: Economies of scale | Diseconomies of scale
+- b = 0.90 = Economies of scale
+- b = 0.95 = Economies of scale
+- b = 1.0997 = Diseconomies of scale
+- b = 1.15 = Diseconomies of scale
+- b = 1.30 = Diseconomies of scale
+> An exponent greater than one produces diseconomies of scale (the curve bends upward); an exponent less than one produces economies of scale (the curve bends downward). The sum of scale factors is nominally slightly higher than one.
 :::
 
 +++
@@ -432,15 +442,17 @@ $$Effort = a \times Size^{b} \times EAF$$
 
 ### The scale exponent: diseconomies of scale
 
-**For software, $b$ typically exceeds 1.0.** Doubling size multiplies effort by more than double.
+$E$ is the sum of the scale factors (economies or diseconomies of scale), nominally slightly higher than one (COCOMO II's nominal early-design $E = 1.0997$). The diseconomies-of-scale curve (Figure 12.1) bends upward because of an exponent greater than one; the economies-of-scale curve bends downward because of an exponent less than one. Doubling size multiplies effort by more than double when the exponent exceeds one.
 
 $$\text{Effort multiplier when size doubles} = 2^b$$
 
-**Why?** Coordination overhead, interface management, and integration complexity grow **disproportionately** as systems grow larger — the opposite of hardware, where bigger production runs reduce unit cost via learning curves/economies of scale.
+- $b > 1.0$: diseconomies of scale
+- $b = 1.0$: effort doubles when size doubles
+- $b < 1.0$: economies of scale
 
-- $b = 1.0$: Linear (effort doubles when size doubles) — rare
-- $b = 1.05$ to $1.15$: Typical software diseconomy (COCOMO II's nominal early-design $E = 1.0997$ falls in this band)
-- $b > 1.2$: Very large systems with high complexity
+:::tip Beyond CEBoK
+Commonly cited rules of thumb: $b$ of about 1.05 to 1.15 for typical software and above 1.2 for very large, highly complex systems. Coordination overhead, interface management, and integration complexity are often blamed for growing disproportionately with system size. CEBoK states none of these bands or reasons.
+:::
 
 {{primer}}
 
@@ -534,7 +546,7 @@ $$T_{dev} = 3.67 \times 465^{(0.28 + 0.2[1.1433 - 0.91])} \times 1.0 = 27.28\ \t
 
 $$SCED\% = \frac{18}{3.67 \times 465^{(0.28 + 0.2[1.1433-0.91])}} = 0.66$$
 
-Compressing to 18 months requires **34\% compression** ($1 - 0.66$). This compression should feed back into the cost estimate, not just the schedule estimate, since compressed schedules typically raise effort.
+Compressing to 18 months requires **34\% compression** ($1 - 0.66$). This compression should feed back into the cost estimate, not just the schedule estimate, since compressing a schedule can often increase cost.
 
 :::widget sw-schedule:::
 
@@ -547,15 +559,15 @@ Q: With PM = 465, E = 1.1433, and no compression (SCED\% = 1.0), the COCOMO II n
 :::
 
 :::check
-Q: What happens to effort when the schedule is compressed well below nominal?
-* It rises
+Q: What can happen to cost when the schedule is compressed well below nominal?
+* It can often increase
 - It falls proportionally
-- No change
-> Compression requires more staff working in parallel, which adds communication and integration overhead, increasing total effort.
+- It never changes
+> Compression can require more programmers, leading to more opportunity for failed communication and coordination, and may cause developers to cut corners, so it can often increase cost.
 :::
 
 :::warn
-**Do not assume schedule = effort ÷ staff.** COCOMO II's schedule equation is driven by effort raised to a fractional exponent, not simple division — software has inherent sequential dependencies and communication overhead.
+**Do not assume schedule = effort ÷ staff.** COCOMO II's schedule equation is driven by effort raised to a fractional exponent, not simple division.
 :::
 
 :::check
@@ -572,7 +584,7 @@ PDSS covers the costs incurred once software is fielded — the operations and s
 
 ### Software maintenance types
 
-Software does not wear out like hardware, but continued use uncovers latent bugs and new environments expose new problems:
+Software does not wear out like hardware, but continued use may uncover bugs that slipped through testing, and software may encounter new problems in an environment different from the one it was designed for:
 - **Corrective maintenance:** fixes bugs — errors in the code that must change for the software to perform as designed
 - **Adaptive maintenance:** accommodates new requirements — hardware changes, COTS upgrades that force changes, new customer requirements
 - **Perfective maintenance:** improves the software — speed, reliability, or added functionality
@@ -580,11 +592,11 @@ Software does not wear out like hardware, but continued use uncovers latent bugs
 One approach treats maintenance as a **mini-development effort**: isolate the problem code, redesign/recode/retest it, and run the cost model in development mode (not a dedicated maintenance mode), using the same cost drivers but paying particular attention to the quality/condition of the existing code.
 
 :::check
-Q: A user requests a new report feature not in the original requirements. Which maintenance type is this?
+Q: A COTS upgrade forces changes to the developed software. Which maintenance type is this?
 - Corrective
 * Adaptive
 - Perfective
-> Adaptive maintenance accommodates new requirements, including new customer-requested capability.
+> Adaptive maintenance accommodates new requirements such as hardware changes, COTS upgrades that force changes, and new customer requirements.
 :::
 
 :::check
@@ -618,7 +630,7 @@ Q: Put the four spiral quadrants in the order they happen.
 
 ### Programming paradigms: linear vs. object-oriented
 
-A **programming paradigm** is a fundamental style of writing solutions; a **methodology** is a style of solving specific software-engineering problems. Traditional (**linear**) programming builds a system largely custom, one instruction at a time — CEBoK likens this to gunsmithing before 1798, when every gun's parts were hand-fitted to that gun alone, with no interchangeability between guns built by different craftsmen.
+A **programming paradigm** is a fundamental style of writing solutions; a **methodology** is a style of solving specific software-engineering problems. Traditional (**linear**) programming builds a system largely custom, one instruction at a time — CEBoK likens this to gunsmithing before 1798, when every gun was custom-made, with parts created specifically for that gun and usable only on that gun; there were no standards, so one person could not build the barrel and another the stock with confidence that the two would fit together.
 
 In **1798, Eli Whitney** won a government contract to manufacture guns and realized the old one-at-a-time approach could not meet it. He standardized parts so they were **interchangeable** across guns, letting each part be produced in the best, cheapest way and then assembled — and repairs became a matter of swapping a part. **Object-oriented (OO) programming** applies the same idea to code: identify the reusable "interchangeable parts" (objects), build them well, and assemble systems from them. A library of proven objects means each new system needs less from-scratch development.
 
@@ -637,11 +649,11 @@ The mail-order business owner gets four consultant proposals, one per lifecycle 
 
 ### Waterfall
 
-Sequential phase-gate: requirements → design → code → test → deploy, each phase finished before the next begins.
+The traditional lifecycle development methodology that models a conventional software engineering cycle; the basis for most software acquisition in government and industry up until the 1990s.
 
-**Benefits:** appropriate when requirements are known and stable; provides clear structure and milestones. **Pitfalls:** long cycle before any usable product; no prototyping; not attuned to evolving needs.
+**Benefits:** appropriate when requirements are known and stable; provides a structure for the effort. **Pitfalls:** long development cycle before a useable product is delivered; no product until the entire system is completed; does not accommodate prototyping; not attuned to modern methods and evolving needs.
 
-**Modeling waterfall:** since it's the basic methodology most commercial models are built around, no special technique is needed — run the whole CSCI/CSC breakdown through the model at once. In the example, the first consultant uses COTS packages for HR, accounting, and inventory, and custom-develops only the Customer Management System (CMS), since its requirements are small and stable:
+**Modeling waterfall:** it is the basic methodology on which most models and estimating methods are built, so no special techniques are required — run the whole CSCI/CSC breakdown through the model at once. In the example, the first consultant uses COTS packages for HR, accounting, and inventory, and custom-develops only the Customer Management System (CMS), since its requirements are small and stable:
 
 - CSCI 1 (Customer Management System): CSC 1 (develop/submit orders) = 5,000 SLOC + CSC 2 (verify order) = 7,500 SLOC
 - CSCI 2 (verify order): CSC 1 = 3,000 SLOC
@@ -661,7 +673,7 @@ A refinement of waterfall: software is built in increments of functionality, eac
 
 **Benefits:** delivers capability sooner in smaller pieces, spreading risk and enabling feedback into later increments; often better final quality. **Pitfalls:** requirements must be defined early; needs a sound architecture up front; users don't get full capability until the end.
 
-**Modeling incremental:** split the estimate into (a) whole-system effort (system requirements/design, software requirements analysis, system test) and (b) each increment modeled as a stand-alone waterfall effort (CSCI design through CSCI test only). If sequential and the same team continues, adjust productivity upward for later increments from team learning; add system testing at each delivered increment if the increments are interdependent.
+**Modeling incremental:** most parametric models take methodology as an input. Lacking that capability, split the estimate into (a) effort that applies to the whole system (system requirements and design, software requirements analysis, software system test, and system test) and (b) effort that applies to each individual increment modeled as a stand-alone waterfall effort (CSCI design through CSCI test only). If sequential and the same team continues, adjust productivity upward for later increments from team learning. Depending on how interrelated or interdependent the increments are, the estimate may require some level of system testing each time an increment is delivered.
 
 CEBoK's Figure 12.9 example: Run 1 (Increment 1) = COTS packages 1–3 + 500 SLOC of "glue" code; Run 2 (Increment 2) = COTS module 1 + 500 SLOC of Customer Management code; Run 3 (Increment 3) = COTS module 3 + 500 SLOC of Customer Management code; Run 4 = total-system requirements analysis, design, and test across Increments 1–3. Total effort is the sum of all four runs.
 
@@ -671,7 +683,7 @@ Used when the customer has general objectives but not specific requirements: a c
 
 **Benefits:** rapid delivery of an initial product; strong customer involvement. **Pitfalls:** hard to model with no defined ending; may take longer than waterfall; the system must be architected to evolve.
 
-**Modeling evolutionary:** treat each phase as its own waterfall effort, but adjust design/code/test levels because earlier-phase software isn't expected to be fully analyzed/designed/coded/tested — later phases build on (reuse/modify) prior code plus new functionality; requirements for later phases aren't fully known at estimate time, so assessments must be made and estimates refined each cycle.
+**Modeling evolutionary:** treat each phase as its own waterfall effort, but adjust design/code/test levels because earlier-phase software isn't expected to be fully analyzed/designed/coded/tested — later phases build on (reuse/modify) prior code plus new functionality; not all requirements are known at estimate time, but an assessment has to be made as to what will be done in later phases.
 
 In the mail-order example, the third consultant develops the CMS and integrates COTS in Phase 1 (prototype only, static screens, no database link); Phase 2 revises the interface and links it to the customer order database; testing it prompts a request for automated email status updates. Phase 3 adds those automatic email notifications and search-by-field. Each phase mixes new code, adapted prior-phase code (treated similarly to COTS/reuse), and integration/test effort.
 
@@ -679,7 +691,7 @@ In the mail-order example, the third consultant develops the CMS and integrates 
 
 Combines an underlying methodology (waterfall/incremental/evolutionary) with explicit **risk analysis** each cycle. Each spiral runs four quadrants: (1) define objectives, alternatives, constraints; (2) evaluate alternatives, assess risk; (3) development tasks (e.g., an evolutionary phase or waterfall's requirements analysis), ending with IOC/FOC/FCA/PCA; (4) plan the next spiral.
 
-**Benefits:** risk-driven, cost estimate refreshed every spiral. **Pitfalls:** hard to put on a fixed-price contract; may take longer than other methods.
+**Benefit:** emphasizes risk mitigation and analysis. **Pitfalls:** hard to put on contract; may take longer than other methods.
 
 **Modeling spiral:** similar to evolutionary — model each phase separately, account for reuse from the previous spiral, and include only the phases actually addressed in an early spiral (e.g., only requirements/specification work, no coding yet). Add extra effort for risk assessment, planning, and objectives analysis if the estimating model/CER doesn't already address it.
 
@@ -699,7 +711,7 @@ Q: Which lifecycle model is explicitly risk-driven with objectives/risk analysis
 :::
 
 :::key
-**Waterfall** allows a confident single-point estimate at program start (scope is fully known). **Evolutionary** and **Spiral** expect estimates to be refined at each iteration because requirements or risks aren't fully known upfront. **Incremental** sits in between: requirements are known early, but delivery — and productivity — should be modeled per increment.
+**Waterfall** is the basic methodology most models are built on; no special modeling techniques are needed. **Evolutionary:** not all requirements are known at estimate time, so an assessment must be made of what will be done in later phases. **Incremental:** model the whole-system effort plus each increment. **Spiral:** model each phase separately.
 :::
 
 :::check
@@ -718,8 +730,8 @@ Q: Eli Whitney's 1798 interchangeable-parts innovation is used by CEBoK as an an
 :::
 
 :::check
-Q: Why is the incremental model's estimate typically built from a whole-system estimate plus per-increment estimates, rather than one single model run?
-* Whole-system activities (like final system test) don't belong to any one increment, and per-increment productivity may improve with team experience
+Q: Why might an incremental model's estimate be built from a whole-system estimate plus per-increment estimates, rather than one single model run?
+* The model lacks a methodology input, and whole-system activities (like final system test) don't belong to any one increment
 - Incremental development has no whole-system activities
 - Parametric models cannot handle CSCIs
 - Increments are always identical in size
@@ -738,20 +750,19 @@ Software has two primary estimating techniques, each with its own signature trai
 :::sort
 Q: Which technique does each trait describe?
 buckets: Analogy | Parametric
-- Compares the new system to a similar historical system with known cost = Analogy
-- Adjustments for differences can be subjective = Analogy
-- Depends on finding a truly analogous project = Analogy
-- Relates size and cost drivers to effort using a CER = Parametric
+- Comparative analysis of similar systems = Analogy
+- Adjusts for differences between the new and comparable systems = Analogy
+- Mathematical relationship between software size and key parameters = Parametric
+- The most common method of estimating software development costs = Parametric
 - COCOMO II and SEER-SEM are examples = Parametric
-- Diseconomies of scale are built in = Parametric
-> Analogy adjusts a similar historical system's known cost, so it depends on a truly similar project and on subjective adjustments. Parametric uses a CER calibrated to historical data, as in COCOMO II and SEER-SEM, and builds in diseconomies of scale.
+> Analogy is a comparative analysis of similar systems with adjustments to account for differences between the new and comparable systems. Parametric is a mathematical relationship between software size and various key parameters known to affect project costs, and is the most common method of estimating software development costs.
 :::
 
 +++
 
 ### Analogy
 
-Compare the new software system to a **similar, historical system** with known actual cost, adjusting for differences in size, complexity, and capability. Most credible when the analogous system is truly similar in application domain, language, and environment; often used as a **cross-check** rather than a primary technique.
+A comparative analysis of similar systems with adjustments to account for differences between the new and comparable systems. Analogy and parametric are the two most common techniques used in software cost estimation.
 
 **Worked example (mail-order, COTS setup):** the first consultant recommends the waterfall approach and estimates COTS package setup by analogy to a similar recent job that used **four** COTS packages: 280 hours setup/config/test, 80 hours data load, 100 hours implementation, 20 hours training (480 hours total, over 3 months). For the mail-order client (a single consolidated package instead of four, smaller company, less-automated data):
 
@@ -769,13 +780,15 @@ $$\frac{\$100{,}000}{1{,}920\ hrs} \times 406\ hrs = \$21{,}145$$
 
 :::widget sw-analogy:::
 
-**Advantages:** requires only a comparable project; often available early (pre-Milestone A); can be highly credible if the comparison is close. **Disadvantages:** depends on finding a truly analogous project; adjustments can be subjective.
+:::tip Beyond CEBoK
+Common framing, not stated in CEBoK's text: analogy is most credible when the analogous system is truly similar in domain, language, and environment, and its adjustments can be subjective.
+:::
 
 +++
 
 ### Parametric
 
-Uses a **CER** (cost estimating relationship) calibrated to historical data, relating size and cost drivers to effort. The most common software estimating method; COCOMO II, SEER-SEM, PRICE TruePlanning, SLIM, and Construx are all parametric.
+A mathematical relationship between software size and various key parameters known to affect project costs. Parametric estimating is the most common method of estimating software development costs; COCOMO II, SEER-SEM, PRICE TruePlanning, SLIM, and Construx are all parametric.
 
 **Worked example (mail-order, custom Customer Management code):** the same first consultant uses COCOMO II for the 19,000 SLOC of custom code (from the waterfall breakdown), with $A = 2.94$, an adjusted scale exponent $E = 1.0405$ (lower than the nominal 1.0997 because the developer has done many similar efforts), and an effort multiplier $EM = 0.38$ (a highly skilled, specialized team):
 
@@ -791,15 +804,13 @@ $$T_{dev} = 3.67 \times 23.92^{0.262} \times 1.0 = 8.43\ \text{months}$$
 CEBoK uses 0.262 here, but its own schedule equation with $E = 1$ gives $0.28 + 0.2(1 - 0.91) = 0.298$, which yields about 9.4 months. Learn CEBoK's printed 8.43 for the exam, and know the equation.
 :::
 
-**Advantages:** systematic, repeatable, auditable; diseconomies of scale built in; can be calibrated to your own organization's data. **Disadvantages:** requires historical data to calibrate; coefficients ($a$, $b$/$E$, EM ratings) must be tailored to your domain; uncalibrated generic industry averages can be far off.
+:::tip Beyond CEBoK
+Common framing, not stated in CEBoK's text: parametric models are systematic and repeatable, can be calibrated to your own organization's data, and need historical data to calibrate. Using analogy and parametric as cross-checks on each other is good practice, but CEBoK presents them as the two most common techniques, not as cross-checks.
+:::
 
 {{primer}}
 
 +++
-
-:::key
-**Use both analogy and parametric as cross-checks.** If they disagree, the difference signals uncertainty; investigate why before committing to an estimate.
-:::
 
 :::check
 Q: In the analogy example, why does the total drop from 480 to 406 hours even though data-load effort stays the same?
@@ -864,9 +875,9 @@ buckets: System Definition | Calibration | Growth & Demand
 - Define a notional system with technical experts = System Definition
 - Default model values rarely fit = Calibration
 - Collect actuals from completed efforts and calibrate the model = Calibration
-- Requirements creep is the documented norm = Growth & Demand
+- Delivered size is often much larger than estimated = Growth & Demand
 - Pre-Y2K demand for COBOL programmers pushed rates up = Growth & Demand
-> Immature requirements mean unknown scope, so the mitigation is a notional system defined with technical experts. Default model values rarely fit, so calibrate to actuals. Growth is the norm, and labor market swings such as the pre-Y2K COBOL scramble shift rates.
+> Immature requirements mean unknown scope, so the mitigation is a notional system defined with technical experts. Default model values rarely fit, so calibrate to actuals. Delivered size is often much larger than estimated, and labor market swings such as the pre-Y2K COBOL scramble shift rates.
 :::
 
 +++
@@ -874,17 +885,17 @@ buckets: System Definition | Calibration | Growth & Demand
 | Challenge | Why it matters | Mitigation |
 |---|---|---|
 | **System Definition** | Immature requirements mean unknown scope at estimate time | Define a notional system with technical experts; identify COTS candidates and independently verify vendor claims; document assumptions and risk for unknowns |
-| **Sizing & Technology** | Early size estimates are very uncertain; rapid technology change forces re-integration and tool learning curves | Use multiple sizing methods (Size Estimating Relationships, analogy, parametric); plan for technology refresh and COTS version updates during design, not after |
+| **Sizing & Technology** | Early size estimates are very uncertain; rapid technology change forces re-integration and tool learning curves | Apply any or all Module 2 methods to size the system (analogy, parametric, extrapolation from actuals, expert opinion); the resulting equations are Size Estimating Relationships (SERs) rather than CERs; plan for technology refresh and COTS version updates during design, not after |
 | **Quality** | Poor requirements/interfaces/coding lead to defects found late, when rework is most expensive | Break work into manageable components; define coding standards, taxonomy, interfaces up front; verify/validate and trace requirements each phase; track quality metrics |
-| **COTS Integration** | COTS is not free: no code visibility, customization limits, integration complexity, beta-version risk, licensing/upgrades | Treat COTS integration like reused code: estimate design, code, and test effort separately; apply the ~80\% rule (below) to the build-vs-buy decision |
+| **COTS Integration** | COTS is not free: no code visibility, customization limits, integration complexity, beta-version risk, licensing/upgrades | The development team must still perform requirements definition, design, and test when using COTS, even though overall effort and schedule may be reduced; if COTS is part of a larger system, some code and more test effort will also be required; apply the ~80\% rule (below) to the build-vs-buy decision |
 | **Calibration** | Productivity rates vary enormously by domain, language, environment; default model values rarely fit | Collect actual cost/schedule/size data from completed efforts; calibrate the model to it; re-calibrate as practices/technology evolve |
-| **Growth & Demand** | Size and effort grow during development (requirements creep is the documented norm); labor market conditions shift rates and availability | Apply growth factors to early size estimates; add risk reserve; watch for tight-labor-market effects (e.g., pre-Y2K demand for COBOL programmers pushed rates up and average skill down) |
+| **Growth & Demand** | Delivered size is often much larger than the original estimate, and effort grows with it; labor market conditions shift rates and availability | Understand when code growth occurs and use proper change management procedures; watch for tight-labor-market effects (e.g., pre-Y2K demand for COBOL programmers pushed rates up and average skill down) |
 
 {{primer}}
 
 ### Quality metrics
 
-Typical software quality measures: total defects identified, defects open/closed, failed fixes, defect severity and injection phase, and **defect density** (defects per 100 function points or per 1,000 SLOC). Many models estimate expected defects so a project manager can compare against discovered defects to judge whether QA/testing is adequate. Other indicators: degree of **cohesion and coupling** between modules, percentage of requirements satisfied, test coverage, documentation adequacy, **Mean Time to Defect (MTTD)**, and **McCabe's cyclomatic complexity** (the number of linearly independent paths through a module).
+Typical software quality measures: total defects identified, defects open/closed, failed fixes, defect severity, location of the defect, defect injection phase, and **defect density** (defects per 100 function points or per 1,000 SLOC). Many models estimate expected defects so a project manager can compare against discovered defects to judge whether QA/testing is adequate. Other indicators: degree of **cohesion and coupling** between modules, percentage of requirements satisfied, test coverage, documentation adequacy, **Mean Time to Defect (MTTD)**, and **McCabe's cyclomatic complexity** (the number of linearly independent paths through a module).
 
 ### COTS: the ~80\% rule
 
@@ -892,7 +903,7 @@ A common build-vs-buy rule of thumb: if roughly **80\%** of required functionali
 
 ### Growth and the labor market
 
-Requirements/size growth is the documented norm, driven by poor initial understanding, added stakeholder capabilities, new legal/market requirements, and (per Capers Jones data) ranging from under 1\% growth on small end-user systems to 64\% on very large military systems — worse the later in the lifecycle requirements change, since late changes can force redesign and rework of completed code. Labor market swings (e.g., the pre-2000 scramble for COBOL programmers due to the **Y2K bug**) can push rates up or force acceptance of less-qualified staff, and can make historical calibration data stale relative to current market conditions.
+Delivered size is often much larger than the original estimate; the primary cause of code growth is requirements growth (scope creep). Causes include poor understanding of the user's needs, not engaging the correct or any of the affected stakeholders, poor requirements elucidation, new legal or market requirements, and new capabilities identified by stakeholders. Per Capers Jones, requirements increase on average from less than 1\% on small end-user systems to 64\% on very large military systems. Code growth can also result from a poor initial size estimate: subjective estimates such as SLOC and expert judgment are prone to optimistic bias. The key to addressing code growth is to understand when it occurs and to use proper change management procedures. Labor market swings (e.g., the pre-2000 scramble for COBOL programmers due to the **Y2K bug**) can push rates up or force acceptance of less-qualified staff, and can make historical calibration data stale relative to current market conditions.
 
 :::key Testable Topics
 CEBoK marks **all of this module's main content as testable**. Nothing in the main text is flagged "testable but less emphasized." The **Related and Advanced Topics** section (general guidelines, OO/object points, IT/AIS/ERP estimating) is explicitly marked **not testable**.
@@ -924,19 +935,19 @@ Q: McCabe's cyclomatic complexity measures...
 :::
 
 :::check
-Q: Per Capers Jones data cited by CEBoK, requirements growth on very large military systems can reach approximately...
+Q: Per Capers Jones data cited by CEBoK, requirements growth on very large military systems averages approximately (%)...
 = 64 ±2
-> CEBoK cites a range from under 1\% (small end-user systems) to about 64\% (very large military systems).
+> Capers Jones: requirements increase on average from less than 1\% on small end-user systems to 64\% on very large military systems.
 :::
 
 :::check
 Q: Early estimate for a new system is 40 KSLOC. Historical data on similar programs shows average size growth of 35\% from initial estimate to delivery. What total size should the estimate account for?
 = 54 ±1
-> $40 \times (1 + 0.35) = 40 \times 1.35 = 54$ KSLOC. Growth is the norm, not the exception; build it in upfront.
+> $40 \times (1 + 0.35) = 40 \times 1.35 = 54$ KSLOC. (Applying a growth factor is the app's own technique, not a CEBoK formula.)
 :::
 
-:::warn
-**Apply growth factors and risk reserves.** Requirements/size creep is not a risk to flag and forget — it is the documented baseline expectation for software programs.
+:::tip Beyond CEBoK
+Applying growth factors to early size estimates and adding a risk reserve are common practice, not CEBoK prescriptions. CEBoK's key to addressing code growth is to understand when it occurs and to use proper change management procedures.
 :::`
     },
 
@@ -950,12 +961,12 @@ Two IT-flavored acquisition terms show up in software estimating. Which traits g
 :::sort
 Q: Match each trait to AIS or ERP.
 buckets: AIS | ERP
-- An acquisition category for IT-heavy systems, not hardware-intensive = AIS
+- An acquisition program categorization that acquires IT, not typically hardware intensive = AIS
 - Estimates are largely software-development estimates = AIS
 - Often involves cutting-edge, rapidly changing technology = AIS
 - A business support system with modular software design = ERP
 - Employee resistance may drive up implementation cost = ERP
-> AIS is an acquisition category for IT-heavy systems whose estimates are largely software development, often on rapidly changing technology. ERP is a business support system with modular design, where human factors such as employee resistance may drive implementation cost.
+> AIS is a categorization of an acquisition program that acquires IT; its estimates are largely software development, often on cutting-edge technology with rapidly changing technical baselines. ERP is a business support system with modular design, where human factors such as employee resistance may drive implementation cost.
 :::
 
 +++
@@ -990,9 +1001,9 @@ Developed by **Banker, Kauffman, and Kumar** for sizing **banking system** devel
 
 ### IT estimating: AIS and ERP
 
-**Automated Information Systems (AIS):** an acquisition category for IT-heavy systems (not hardware-intensive); estimates are largely software-development estimates. AIS often involves cutting-edge, rapidly changing technology, making estimation difficult.
+**Automated Information Systems (AIS):** a categorization of an acquisition program that acquires IT and involves equipment that is an integral part of a weapon system or is a tactical communication system. The estimates of AIS systems are largely estimates of software development. AIS systems are not typically hardware intensive, and are commonly cutting-edge technology that is difficult to estimate given the rapid changes in technical baselines.
 
-**Enterprise Resource Planning (ERP):** a business support system built on a **single common database** and modular software design. Estimating ERP implementation adds **gap analysis**, **business process re-engineering (BPR)**, and COTS integration/model development on top of traditional custom-code estimation. ERP cost drivers are less mature than traditional software drivers and are debated — commonly cited candidates include the dollars spent on the ERP package and the number of requirements, though some experts argue human factors (user comfort with and acceptance of the new system) matter more than any empirical driver, since employee resistance can drive up implementation cost.
+**Enterprise Resource Planning (ERP):** a business support system built on a **single common database** and modular software design. Estimating ERP implementation adds **gap analysis**, **business process re-engineering (BPR)**, and COTS integration and model development, in addition to the traditional estimation of custom code development. ERP cost drivers are less mature than traditional software drivers and are debated — commonly cited candidates include the dollars spent on the ERP package and the number of requirements, though some experts argue human factors (user comfort with and acceptance of the new system) matter more than any empirical driver, since employee resistance can drive up implementation cost.
 
 **Fig. 12.16** compares AIS vs. ERP program costs; CEBoK states the difference is quantifiable but the source figure's numbers are not legible here — treat this as a described comparison, not a source of specific figures to cite.
 
@@ -1018,7 +1029,7 @@ Q: Object points were originally developed to size which kind of system?
 
 :::check
 Q: What distinguishes ERP estimating from a typical custom software estimate?
-* It must also account for gap analysis, business process re-engineering, and COTS integration/configuration around a single common database
+* It must also account for gap analysis, business process re-engineering, and COTS integration and model development, in addition to traditional custom code estimation
 - ERP systems never require custom code
 - ERP has no cost drivers at all
 - ERP is always cheaper than custom development
@@ -1031,7 +1042,7 @@ Q: What distinguishes ERP estimating from a typical custom software estimate?
   cards: String.raw`
 ## Overview
 Q: Key differences: software cost vs. hardware cost
-A: Software is nearly 100% labor, copies are free, no production learning curve. Maintenance can significantly exceed development cost. Nearly infinitely malleable (requirements creep).
+A: Software is developed once and further produced by making copies; learning curves do not exist in software. Maintenance costs can be significantly higher than the cost of developing the software.
 Q: What is CSCI?
 A: Computer Software Configuration Item: a software element in the WBS managed as a unit; may be broken into CSCs, and further into CSUs.
 R: yes
@@ -1042,10 +1053,10 @@ Q: The seven system engineering steps for software (CEBoK)
 A: (1) System requirements & design, (2) Software requirements analysis, (3) Preliminary & detailed design, (4) Code and unit test, (5) Unit integration and test, (6) Software system test, (7) System test.
 Q: Why is unit testing considered a development step, not a test-phase step?
 A: It occurs inside "Code and Unit Test" (step 4) and verifies the unit before integration, per CEBoK's step list.
-Q: Why is software progress ("90% done") hard to measure objectively?
-A: Software is intangible; progress cannot be measured like physical progress.
+Q: How is software size measured, versus hardware size?
+A: Software size is measured with metrics such as FP and SLOC; hardware size is captured by physical measures (length, height, weight, performance requirements, number of units).
 Q: Similarities: software and hardware estimating
-A: Both follow a lifecycle; both use analogy, parametric, and build-up techniques; drivers fall into the same three categories: size, complexity, capability.
+A: Both follow a lifecycle; hardware estimates can use any Module 2 costing technique; software cost factors are similar to hardware cost factors: size, complexity, capability.
 Q: SIT&E (WBS term)
 A: Systems Integration Test and Engineering.
 R: yes
@@ -1054,44 +1065,44 @@ R: yes
 Q: Primary driver of software effort
 A: Size (SLOC or function points).
 Q: SLOC: definition and counting pitfall
-A: Executable instructions and data declarations, excluding comments/blanks/continuation lines. No standardized estimating rules; counting conventions must match between historical data and new estimate.
+A: Executable instructions and data declarations, excluding comments/blanks/continuation lines. This is one definition of SLOC, not the definition; variations occur between estimators and organizations, so understand what is counted and how.
 R: yes
 Q: Why SLOC varies by language
-A: The same logic can take very different line counts in different languages; raw SLOC comparison across languages is misleading.
+A: Different languages require different numbers of lines of code to execute the same function, making comparisons impossible.
 Q: SLOC advantage
 A: Widely used, available in existing historical data, easily counted by automated tools once code exists.
 Q: SLOC disadvantage
-A: No standard counting rules (logical vs. physical confusion), language/platform dependence, dependent on developer style.
+A: Lack of defined rules, so discrepancies can occur in counts even with standard definitions; different languages need different line counts for the same function; dependent on developer style.
 Q: Reused vs. adapted/customized vs. verbatim code
 A: Verbatim/reused = copied with no modification. Adapted/customized/modified = needs some redesign, recode, retest. New = requires full design, code, test.
 Q: Equivalent SLOC (ESLOC)
-A: New + Modified × AAF + Reused × AAF. Converts a mix of new/modified/reused code to equivalent new-code effort.
+A: ESLOC = SLOC × [0.40 (% design modified) + 0.30 (% code modified) + 0.30 (% integration and test)], with SLOC the adapted code; a factor between zero and one (Boehm).
 R: yes
 Q: Why isn't reused code counted as zero cost?
-A: Reused code still requires understanding, integration, regression testing, and verification; it always carries a small but nonzero AAF.
-Q: COCOMO adaptation adjustment factor (AAF)
-A: 0.4 × (% design modified) + 0.3 × (% code modified) + 0.3 × (% integration/test effort); weights should sum to 100%.
+A: All code requires some degree of retest prior to software/hardware integration, even if no redesign or recode is necessary. Theoretically, reused code needs no new design or code and minimal test.
+Q: ESLOC weighting factor (CEBoK)
+A: 0.40 × (% design modified) + 0.30 × (% code modified) + 0.30 × (% integration and test), multiplied by the adapted SLOC. (The app calls this factor AAF: Beyond CEBoK.)
 R: yes
 Q: How to read: DM=15%, CM=25%, IM=20%
 A: Design 15% modified, code 25% modified, integration/test 20% effort needed.
 Q: Function Points: definition
-A: A language-independent size measure based on delivered functionality (inputs, outputs, files) as seen by the user, per IFPUG's Functional User Requirements.
+A: IFPUG function points are a size measure based on Functional User Requirements (FUR), with counting rules defined in the Counting Practices Manual (CPM); counted from requirements documentation, data schema, architectural diagrams, user manuals, and other sources.
 R: yes
 Q: Five-step FP counting process (CEBoK)
 A: (1) Determine type of FP count, (2) identify scope/boundaries, (3) count data and transaction function types, (4) calculate UFP and VAF, (5) calculate AFP.
 Q: Five IFPUG function point components
-A: External Inputs (EI), External Outputs (EO), External Inquiries (EQ), Internal Logical Files (ILF), External Interface Files (EIF).
+A: (IFPUG detail, Beyond CEBoK) External Inputs (EI), External Outputs (EO), External Inquiries (EQ), Internal Logical Files (ILF), External Interface Files (EIF). CEBoK itself names data function types and transaction function types.
 R: yes
 Q: How are function point types weighted?
-A: Each type at each complexity level (Low/Avg/High) has a weight: EI 3/4/6, EO 4/5/7, EQ 3/4/6, ILF 7/10/15, EIF 5/7/10.
+A: (IFPUG detail, Beyond CEBoK) Each type at each complexity level (Low/Avg/High) has a weight: EI 3/4/6, EO 4/5/7, EQ 3/4/6, ILF 7/10/15, EIF 5/7/10.
 Q: UFP
 A: Unadjusted Function Points: sum of all weighted function type counts.
 R: yes
 Q: Value Adjustment Factor (VAF)
-A: VAF = 0.65 + 0.01 × (sum of 14 GSC ratings). Adjusts UFP for system complexity.
+A: (IFPUG detail, Beyond CEBoK) VAF = 0.65 + 0.01 × (sum of 14 GSC ratings). Adjusts UFP for system complexity.
 R: yes
 Q: General System Characteristics (GSCs)
-A: 14 characteristics (communication, performance, reusability, etc.) each rated 0–5 to set VAF.
+A: (IFPUG detail, Beyond CEBoK) 14 characteristics (communication, performance, reusability, etc.) each rated 0–5 to set VAF.
 R: yes
 Q: FP advantages
 A: Available early (from requirements), usable throughout the lifecycle, language/technology-agnostic, unaffected by programmer skill or style.
@@ -1101,25 +1112,25 @@ Q: SNAP
 A: Software Non-functional Assessment Process (IFPUG): measures non-functional requirements that plain function points miss.
 R: yes
 Q: Capers Jones requirements growth range
-A: From under 1% (small end-user systems) to 64% (very large military systems), from initial estimate to delivery.
+A: Requirements increase on average from less than 1% on small end-user systems to 64% on very large military systems (Capers Jones).
 
 ## Complexity and Capability
 Q: What is complexity in software estimating?
-A: Difficulty of logic/algorithms, reflected in language, function, hardware limitations, number of modules, integration amount, % new code, and quality of development.
+A: The second broad area of cost drivers; relates to the functionality the software must perform and can be reflected in the language(s) and platform used. List: language, function (intended use), hardware limitations, number of modules, amount of integration, percent of new code, quality of development (used for maintenance).
 Q: CEBoK Table 12.3 complexity EAF values (100 KSLOC example)
 A: Very Low = 0.60 (279 PM), Nominal = 1.0 (465 PM), Very High = 3.5 (1,628 PM).
 Q: CEBoK Table 12.4 capability EM values (100 KSLOC example)
 A: Best = 0.33 (154 PM, \$20,000/PM), Nominal = 1.0 (465 PM, \$16,000/PM), Worst/junior = 5.22 (2,429 PM, \$14,000/PM).
 Q: Why does high complexity raise the multiplier but high capability lower it?
-A: Complex software takes more effort (EAF > 1); capable teams need less effort per line despite a higher pay rate (EM < 1).
+A: Complex software takes more effort (EAF > 1); high-capability teams reduce effort (EM < 1), and the effort is likely cheaper when their higher cost is offset by productivity.
 Q: Capability: definition
 A: Application experience, general skill, schedule constraints, tools experience, development location.
 Q: PRICE S application types (examples)
 A: Statistical/Mathematical, String Manipulation, GUI, Data Storage/Retrieval, Graphical Functions, Online Communications, Control Functions, Multi-Media, Real Time, Interactive, Operating System, Logical Functions.
 Q: Why is schedule compression difficult in software?
-A: Adding people increases communication overhead; inherent sequential constraints (design→code→test) cannot be paralleled away.
+A: Compressing can require more programmers (failed communication and coordination) and may cause developers to cut corners.
 Q: What is the nominal schedule?
-A: The COCOMO II schedule equation's output reflecting inherent sequential/critical-path constraints, independent of staffing level.
+A: Calendar months from the COCOMO II schedule equation based on base (unscaled) person-months, raised to an exponent driven by the scale factors, with SCED% = 1.0 (no compression or stretch-out).
 
 ## Cost Drivers Example
 Q: Mail-order example: total SLOC and CSCI split
@@ -1138,21 +1149,21 @@ R: yes
 Q: Meaning of a in the effort equation
 A: Productivity/calibration constant; COCOMO II uses a = 2.94 for early-design estimates.
 Q: Meaning of b (E) in the effort equation
-A: Scale exponent: how fast effort grows relative to size. For software, b > 1.0 (diseconomies of scale); COCOMO II nominal early-design E = 1.0997.
+A: Scale exponent (sum of scale factors): how fast effort grows relative to size. E > 1 is diseconomies of scale, E < 1 economies of scale; COCOMO II nominal early-design E = 1.0997, slightly higher than one.
 Q: Meaning of EAF
 A: Effort Adjustment Factor: product of multipliers for complexity, capability, schedule, reliability, etc.
 R: yes
 Q: What does b = 1.0 mean?
-A: Linear: effort doubles when size doubles (rare for software).
+A: Linear: effort doubles when size doubles.
 Q: Typical range of b for software
-A: 1.05 to 1.15 (diseconomy of scale).
+A: Beyond CEBoK rule of thumb: about 1.05 to 1.15. CEBoK says only that E is nominally slightly higher than one (1.0997).
 Q: Diseconomies of scale: definition
 A: Effort grows faster than size (b > 1.0). Doubling size multiplies effort by more than double.
 R: yes
 Q: Why software exhibits diseconomies of scale
-A: Coordination overhead, interface management, and integration complexity grow disproportionately as systems grow.
-Q: Hardware vs. software scale effects
-A: Hardware: bigger production runs reduce unit cost (economies of scale). Software: bigger systems are proportionally more expensive per line (diseconomies).
+A: Beyond CEBoK: commonly attributed to coordination overhead, interface management, and integration complexity growing disproportionately. CEBoK: the curve bends upward because the exponent is greater than one.
+Q: Economies vs. diseconomies of scale curves (Fig 12.1)
+A: Diseconomies curve bends upward (exponent greater than one); economies curve bends downward (exponent less than one).
 Q: Effect of doubling size when b = 1.1
 A: Effort multiplied by 2^1.1 ≈ 2.14, more than double.
 
@@ -1167,7 +1178,7 @@ A: To hit 18 months instead of 27.28, SCED% = 0.66, i.e., 34% compression.
 Q: COCOMO II hours-per-person-month convention
 A: 152 hours/PM. If a proposal assumes 160 hrs/PM, multiply COCOMO II's PM estimate by 152/160 = 0.95 to convert.
 Q: Can you compress software schedule below the nominal level?
-A: Yes, but with costs: more staff (communication overhead), higher defect rates, rework, and often little actual calendar reduction — and it should be reflected in the cost estimate too.
+A: Yes, but compressing a schedule can often increase the cost: it can require more programmers (failed communication and coordination) and may cause developers to cut corners. Consider compression in the cost estimate too. Models differ on whether stretching out a schedule increases or decreases cost.
 Q: Post-Deployment Software Support (PDSS)
 A: Support during Operations & Support (O&S) phase; includes but is not limited to maintenance (e.g., also help desk/trouble tickets, often not captured by cost models).
 R: yes
@@ -1183,7 +1194,7 @@ A: Standardized interchangeable gun parts (vs. custom-fit parts per gun) is CEBo
 Q: Linear vs. OO programming paradigm
 A: Linear builds systems largely custom, instruction by instruction. OO builds from reusable, interchangeable objects, reducing from-scratch development over time.
 Q: Waterfall model
-A: Sequential phases, each finished before the next. Predictable, easy to estimate/plan, but inflexible and defects found late are costly.
+A: Benefits: appropriate when requirements are known and stable; provides a structure for the effort. Pitfalls: long development cycle before a useable product is delivered; no product until the entire system is completed; does not accommodate prototyping; not attuned to modern methods and evolving needs.
 R: yes
 Q: Waterfall mail-order example: total custom SLOC
 A: 19,000 SLOC (CSCI 1: 5,000+7,500; CSCI 2: 3,000; CSCI 3: 1,000; CSCI 4: 2,500) plus 2 COTS packages.
@@ -1193,39 +1204,37 @@ R: yes
 Q: Incremental mail-order example (Fig 12.9)
 A: Run 1 = COTS 1-3 + 500 SLOC glue code; Run 2 = COTS module 1 + 500 SLOC CM code; Run 3 = COTS module 3 + 500 SLOC CM code; Run 4 = total-system requirements/design/test across increments.
 Q: Evolutionary model
-A: Requirements refined as builds are fielded via prototype cycles. Later scope uncertain; estimates must be wide and refined each cycle.
+A: Used when general objectives but not specific requirements are known; prototype cycles. Estimating challenge: not all requirements are known at estimate time, but an assessment must be made of what will be done in later phases.
 R: yes
 Q: Spiral model (Boehm)
 A: Iterative, risk-driven cycles: define objectives/alternatives/constraints → evaluate alternatives/assess risk → develop (ending in IOC/FOC/FCA/PCA) → plan next cycle.
 R: yes
 Q: Estimating advantage of Waterfall
-A: Single confident fixed estimate at program start (scope fully known upfront).
+A: It is the basic methodology on which most models and estimating methods are built, so no special techniques are required.
 Q: Estimating challenge of Spiral
-A: Estimates must be revisited and refined at each iteration; no single fixed-price commitment early; hard to put on contract.
-Q: Which lifecycle allows the most confident early estimate?
-A: Waterfall (requirements and scope fully known before coding).
+A: Hard to put on contract and may take longer than other methods; model each phase separately.
+Q: How is a waterfall effort modeled?
+A: Run all the code through the model at once; no special techniques are required.
 Q: Fig 12.8 source gap
 A: CEBoK's incremental lifecycle chart (Fig 12.8) appears in the source only as a broken file placeholder, not a viewable figure.
 
 ## Techniques
 Q: Analogy: definition
-A: Compare new software to similar historical project with known cost; adjust for size, complexity, capability differences.
+A: Comparative analysis of similar systems with adjustments to account for differences between the new and comparable systems.
 R: yes
 Q: Analogy mail-order example result
 A: 406 total hours (224 setup + 80 data load + 85 implementation + 17 training) × \$100,000/yr ÷ 1,920 hrs/yr = \$21,145.
 Q: Analogy: when most credible
-A: When the analogous system is truly similar in domain, language, and environment.
+A: Beyond CEBoK: when the analogous system is truly similar in domain, language, and environment.
 Q: Parametric mail-order example (custom code)
 A: 19,000 SLOC, A=2.94, E=1.0405 (adjusted for precedent), EM=0.38 (skilled team) → PM = 23.92 → \$382,643 at \$16,000/PM.
 Q: Parametric mail-order schedule example
 A: Tdev = 3.67 × 23.92^0.262 × 1.0 = 8.43 months (E=1 for this single small CSCI).
 Q: Parametric: definition
-A: Uses a CER calibrated to historical data, relating size and cost drivers to effort.
+A: A mathematical relationship between software size and various key parameters known to affect project costs; the most common method of estimating software development costs.
 R: yes
 Q: Primary estimation techniques for software
-A: Analogy and parametric. Use both as cross-checks.
-Q: What does disagreement between analogy and parametric suggest?
-A: Uncertainty in the estimate; investigate the difference before committing.
+A: Analogy and parametric are the two most common techniques.
 Q: CER "relevant range" caution
 A: A CER built from data in one size range (e.g., 500-2000 FP) may not be valid outside that range (e.g., a 5000 FP estimate).
 Q: Steps to develop a custom software CER
@@ -1235,9 +1244,9 @@ A: Careful variable selection, respect the relevant range, normalize the data se
 Q: System Definition challenge
 A: Immature requirements at estimate time mean unknown scope; define a notional system with technical experts and independently verify COTS vendor claims.
 Q: Sizing and Technology challenge
-A: Early size estimates are uncertain; rapid tech change forces COTS re-integration and new-tool learning curves.
+A: Early size estimates are uncertain; rapid tech change forces COTS re-integration and new-tool learning curves. Size can be estimated with any or all Module 2 methods (analogy, parametric, extrapolation from actuals, expert opinion); the resulting equations are Size Estimating Relationships (SERs) rather than CERs.
 Q: Quality challenge: common metrics
-A: Defect counts/density (per 100 FP or 1,000 SLOC), cohesion/coupling, requirements satisfaction %, test coverage, documentation adequacy, MTTD, McCabe cyclomatic complexity.
+A: Defects identified/open/closed, failed fixes, defect severity/location/injection phase, defect density (per 100 FP or 1,000 SLOC), cohesion/coupling, requirements satisfaction %, test coverage, documentation adequacy, MTTD, McCabe cyclomatic complexity.
 Q: McCabe's cyclomatic complexity
 A: The number of linearly independent paths through a program module; a recognized software quality measure.
 R: yes
@@ -1245,11 +1254,11 @@ Q: COTS ~80% rule
 A: If COTS can deliver about 80% of required functionality with little/no customization, buying is usually the better option than custom development.
 R: yes
 Q: COTS challenge
-A: No code visibility, hard to customize, integration complexity varies by architecture, beta-version risk, licensing/upgrade costs; still requires requirements, design, and test effort.
+A: No code visibility, hard to customize, integration complexity varies by architecture, beta-version risk, licensing/upgrade costs; the team must still perform requirements definition, design, and test, though overall effort and schedule may be reduced.
 Q: Calibration challenge
 A: Default parametric model values rarely fit; collect actual project data and calibrate; re-calibrate as practices/technology evolve.
 Q: Growth and Demand challenge
-A: Requirements growth is the documented norm (Capers Jones: <1% to 64%); labor-market swings (e.g., pre-Y2K COBOL demand) affect rates and available skill.
+A: Delivered size is oftentimes much larger than estimated; primary cause is requirements growth (scope creep). Capers Jones: requirements increase on average from less than 1% (small end-user systems) to 64% (very large military systems). Key to addressing growth: understand when it occurs and use proper change management. Labor-market swings (e.g., pre-Y2K COBOL demand) affect rates and available skill.
 Q: Y2K bug and labor market
 A: Tight demand for COBOL programmers before 2000 (Y2K remediation) pushed rates up and could force acceptance of less-qualified staff.
 Q: Testable Topics for Module 12
@@ -1266,10 +1275,10 @@ R: yes
 Q: Object points: pros and cons
 A: Pro: user-interface-oriented, less subjective than SLOC. Con: not widely used, can't be counted until end of design, limited historical data.
 Q: AIS (Automated Information Systems)
-A: IT-heavy acquisition category, not hardware-intensive; estimates are largely software estimates; often cutting-edge/rapidly changing technology.
+A: A categorization of an acquisition program that acquires IT (equipment integral to a weapon system or a tactical communication system); estimates are largely software development; not typically hardware intensive; commonly cutting-edge technology, difficult to estimate given rapid changes in technical baselines.
 R: yes
 Q: ERP (Enterprise Resource Planning)
-A: Business system on a single common database with modular design; estimating adds gap analysis, business process re-engineering, and COTS integration beyond custom-code estimation.
+A: Business system on a single common database with modular design; estimating adds gap analysis, business process re-engineering, and COTS integration and model development, in addition to traditional custom code estimation.
 R: yes
 Q: Debated ERP cost drivers
 A: Dollars spent on the ERP package and number of requirements are common candidates, but some experts argue human factors (user acceptance/resistance) matter more.
@@ -1281,21 +1290,21 @@ R: yes
 Q: COCOMO II effort equation
 A: $PM = A \times Size^E \times \prod EM_i$, A = 2.94, Size in KSLOC.
 R: yes
-Q: AAF
-A: $0.4(\text{\% Design}) + 0.3(\text{\% Code}) + 0.3(\text{\% Test})$
+Q: ESLOC weighting factor
+A: $ESLOC = SLOC \times [0.40(\%\,design\ modified) + 0.30(\%\,code\ modified) + 0.30(\%\,integration\ and\ test)]$
 R: yes
-Q: ESLOC
-A: $New + Modified \times AAF + Reused \times AAF$
+Q: ESLOC for a mixed code base (Beyond CEBoK)
+A: $New + Modified \times AAF + Reused \times AAF$ (app's extension; AAF is the app's name for the bracketed factor)
 R: yes
-Q: VAF
+Q: VAF (IFPUG detail, Beyond CEBoK)
 A: $0.65 + 0.01 \times \sum (14\ GSC\ ratings)$
 R: yes
-Q: AFP
+Q: AFP (IFPUG detail, Beyond CEBoK)
 A: $UFP \times VAF$
 R: yes
 Q: Effort multiplier when size doubles
 A: $2^b$ (when b > 1, multiplier > 2)
-Q: Growth-adjusted size
+Q: Growth-adjusted size (app-derived, Beyond CEBoK)
 A: $Initial\ Size \times (1 + Growth\ Factor)$
 R: yes
 `

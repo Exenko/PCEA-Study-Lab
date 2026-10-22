@@ -4,7 +4,7 @@ PCEA.addModule({
   intro: String.raw`Cost estimates must account for **changing purchasing power** over time. Two competing needs drive this module:
 
 1. **Comparability**: Historical cost data from different years must be normalized to one base year so real cost drivers (not inflation artifacts) are visible.
-2. **Budget realism**: Program estimates must be escalated to then-year dollars — the actual inflated dollars Congress will appropriate.
+2. **Budget realism**: Program estimates must be escalated to then-year dollars — the dollars used to formulate government budgets and prepare budget submissions.
 
 **Core principle:** Estimate in **constant base-year dollars** (inflation-free), then convert to **then-year dollars** for budgets using appropriate indices and time-phasing.`,
   sections: [
@@ -34,10 +34,10 @@ CEBoK draws a strict distinction: **inflation** refers to historical (and projec
 | Term | Meaning |
 |---|---|
 | **Current Year (CY) dollars** | Money or prices expressed in terms of values actually observed in the economy at the time. Current Year dollars refer to **expenditures**, not obligations. |
-| **Constant Year / Base Year (BY) dollars** | Dollars reflected against one specific year, adjusted for inflation. Constant Year and Base Year mean the same thing; "Base Year" is often used for the Base Year of an inflation table or of the program. |
+| **Constant Year / Base Year (BY) dollars** | Dollars reflected against one specific year, adjusted for inflation. Constant Year and Base Year mean the same thing; "Base Year" is often used when expressing costs in the Base Year of an inflation table or the year a program started. |
 | **Then Year (TY) dollars** | Dollars adjusted to account for outlay profiles, covering escalation of expenditures over a multi-year period. Then Year dollars are used for budget submissions and refer to **obligations**, not expenditures. |
-| **Fiscal Year (FY) dollars** | Just a 12-month period label — could be CY, BY, or TY depending on context. Never assume; check what "FY08\$" means from context. |
-| **Table's Year** | The Base Year of a specific *index table* — not necessarily the same as the Base Year of the CER or of the estimate. |
+| **Fiscal Year (FY) dollars** | Just a 12-month period label — could be CY, BY, or TY depending on context. Be careful labeling dollars as just FY without further reference. FY08\$ to the government implies Constant/Base Year 2008 dollars (budget year 2008 = Oct 1, 2007 to Sep 30, 2008). |
+| **Table's Year** | The Base Year of an index table. The CER's Base Year may or may not be the same as the estimate's Base Year or the table's year. |
 
 :::check
 Q: At 2.5% inflation, what is the purchasing power of a dollar next year compared to this year? (4 decimals)
@@ -69,7 +69,7 @@ Q: You build an estimate in FY2025 constant dollars. Before going into a budget 
 * Time-phase it and escalate to then-year dollars for each year
 - Discount it to present value
 - Nothing; budgets use constant dollars
-> Budgets are then-year dollars: the dollars actually appropriated and spent.
+> Budgets are then-year dollars: they include escalation over the multi-year expenditure period, and then-year dollars refer to obligations, not expenditures.
 :::
 
 :::check
@@ -84,10 +84,13 @@ Q: Which type of dollars refers to obligations rather than expenditures?
 
 ### Inflation defined, and why it matters
 
-- **General economy-wide inflation** (monetary policy, supply/demand) is tracked by broad indices like CPI.
-- **Sector-specific inflation** in defense (materials, aerospace labor, shipbuilding steel) can differ from the economy. DoD maintains **appropriation-specific indices** (RDT&E, Procurement, O&M, MILCON) because each inflates differently.
-- Inflation rates for future years are always estimates; a constant assumed rate near the current rate is common. In the early 1980s escalation factors were 12-15%; when inflation later fell, programs estimated at those rates faced budget cuts. More commonly, assumed rates are later found **too low**, leaving out-year budgets insufficient.
-- A program spanning 10 years will pay different prices in Year 10 than Year 1 for identical goods, purely due to inflation. Failing to escalate is one of the most common sources of **underestimated** program cost.
+- **Specific indices** exist for different appropriations (e.g., aircraft procurement, PDW, BRAC, fuel, military pay, RDT&EN); some, like fuel and military pay, are OSD cost elements rather than appropriations.
+- Inflation rates for future years are estimates. Normally, constant values are assumed for future rates equal to or near the current year's rate. In times of decreasing inflation this causes projected future costs to be too high; in times of increasing inflation, too low. In the early 1980s escalation factors were 12-15%; when inflation later fell, programs estimated at those rates faced budget cuts. More commonly, assumed rates are later found **too low**, leaving out-year budgets insufficient.
+- A program spanning 10 years will pay different prices in Year 10 than Year 1 for identical goods, purely due to inflation. Incorrect treatment of inflation can cause errors of tens or hundreds of millions of dollars in a major program (e.g., VDOT understated the Springfield Interchange estimate by \$236.5M, including \$44M for inflation).
+
+:::tip Beyond CEBoK: general vs sector inflation
+General economy-wide inflation (driven by monetary policy and supply/demand) is tracked by broad indices like CPI, while defense sectors (materials, aerospace labor, shipbuilding steel) can inflate differently from the economy.
+:::
 
 :::tip Fig 5.2: sensitivity to the assumed rate
 Figure 5.2 compares a lower rate (3%) and a higher rate (5%) against an assumed constant rate of 4%, over twenty years. Even a one-percentage-point difference compounds into significant then-year dollar differences in the out years. Because of compounding, even symmetric percentage-point risks around the assumed rate produce **asymmetric** dollar risk: the overrun risk from underestimating inflation outweighs the underrun opportunity from overestimating it.
@@ -293,7 +296,7 @@ Q: The Navy's RDT&EN composite index combines which two components, and in what 
 
 ### Weighted Index
 
-**From appropriation to expenditure:** an **appropriation** provides budget authority; once committed, it becomes an **obligation** (a legal duty to pay, incurred when an order is placed or a contract awarded); once paid, it becomes an **expenditure**. Once obligated, DoD funds must generally be expended within five years. An **outlay profile** is the historical rate, in percentage terms, at which an appropriation's dollars are expected to be expended, with year one being the year of appropriation.
+**From appropriation to expenditure:** an **appropriation** is a type of budget authority; after appropriation, funds can be **committed** (an administrative reservation of funds authorizing the creation of an obligation). An **obligation** is a responsibility to pay for future goods or services, incurred as soon as an order is placed or a contract is awarded. An **expenditure** is a charge against available funds or the actual payment of funds. Once obligated, funds are available to be expended for a certain number of years (e.g., DoD funds must be expended within five years). An **outlay profile** is the historical rate, in percentage terms, at which an appropriation's dollars are expected to be expended, with year one being the year of appropriation.
 
 Some money (military/civilian pay, fuel) must be appropriated and spent the same year; other money (RDT&E, MILCON, procurement) is obligated and expended over "out years." Procurement dollars are **fully funded** at the start of production; RDT&E dollars are **incrementally funded** each year.
 
@@ -425,7 +428,11 @@ Q: What does the Army call the raw index and the weighted index, respectively?
 
 ### Consumer Price Index — use with caution for DoD
 
-CPI is **generally not appropriate** for DoD cost estimating because it reflects consumer purchases, not defense-unique materials and labor. Use DoD/appropriation-specific indices instead.
+The CPI covers a variety of commodities, from apparel to wages, by different geographic regions. DoD uses appropriation-specific indices.
+
+:::tip Beyond CEBoK: CPI for DoD
+CPI is generally not appropriate for DoD cost estimating because it reflects consumer purchases, not defense-unique materials and labor. Use DoD/appropriation-specific indices instead.
+:::
 
 :::check
 Q: Your estimate covers aerospace labor and titanium procurement. Should you use the Consumer Price Index (CPI) for escalation?
@@ -596,7 +603,7 @@ Q: At 7% annual inflation, prices double in closest to:
 
 ### Time Phasing Methodologies
 
-Time phasing relates percent spent (cost) to percent elapsed (duration) for past programs, using an analogy or average to spread estimates for future programs. Common methods: Level-Loaded, Throughput, Schedule-Based, Trapezoid, Learning Curve, and Probability Distribution-Based (e.g., a **Rayleigh** curve for development: rise, peak, tail off). Time-phasing is often done at the program level; if major elements are phased separately, pay attention to below-the-line elements such as Systems Engineering and Program Management.
+Time phasing relates percent spent (cost) to percent elapsed (duration) for past programs, using an analogy or average to spread estimates for future programs. Common methods: Level-Loaded, Throughput, Schedule-Based, Trapezoid, Learning Curve, and Probability Distribution-Based (fitted distributions such as **Rayleigh** or beta can scale a profile to the schedule duration). Time-phasing is often done at the program level; if major elements are phased separately, pay attention to below-the-line elements such as Systems Engineering and Program Management.
 
 +++
 
@@ -606,11 +613,11 @@ At a per-period inflation rate $x$ (as a percent), the number of periods $n$ to 
 
 $$(1 + \frac{x}{100})^n = 2 \quad\Rightarrow\quad n = \frac{\ln 2}{\ln(1 + x/100)}$$
 
-Approximating the denominator by the first Taylor term rounds $\ln 2 = 0.693$ up to 0.7, giving:
+Approximating the denominator with the first Taylor term increases it slightly, lowering the quotient slightly. To compensate, $\ln 2$ is rounded up from 0.693 to 0.7, giving:
 
 $$n \approx \frac{70}{x}$$
 
-This is the **"Rule of 70,"** sometimes quoted as the **Rule of 72**. At 5% inflation, doubling takes about 70/5 = **14 years**; at 7%, about 70/7 = **10 years**. 70 and 72 are both convenient because together they're even multiples of every single-digit percent plus 10, 12, and 14 — but both are only approximations.
+This is the **"Rule of 70,"** sometimes quoted as the **Rule of 72**. At 5% inflation, doubling takes about 70/5 = **14 years**; at 7%, about 70/7 = **10 years**. 70 and 72 are both convenient numbers because between them they are even multiples of every single-digit percentage as well as 10, 12, and 14 — but both are only approximations.
 
 {{primer}}
 
@@ -632,13 +639,13 @@ Q: Using the Rule of 72 (the secondary/alternate form), at 2% annual inflation, 
 
 1. **FY** column.
 2. **Rate** column, pulled directly from OSD inflation guidance.
-3. **Raw index** column = rate + 1 (compounded from the prior year).
+3. **Raw index** column = inflation rate plus one.
 4. **Weighted index** column, built from the commodity's outlay profile and the raw indices (Weighted Indices method above).
 5. **Budget year multiplier** column = that year's weighted index ÷ the table's Base Year weighted index.
 
 ### Adjusting (Rebasing) the Base Year of an Inflation Table (Fig 5.24)
 
-Rebasing to a new table year is itself a CY(old table year) → CY(new table year) computation applied to **every** value in the table, for both raw and weighted indices. **Rule:** divide each index value by the new base year's index value (in the *original* table). The new base year becomes 1.000; relative escalation factors between any two other years are unchanged, since both numerator and denominator are divided by the same factor.
+Rebasing to a new table year is itself a CY(old table year) → CY(new table year) computation applied to **every** value in the table, for both raw and weighted indices. **Rule:** divide each index (raw and weighted) by the new base year's *raw* index in the *original* table; the same calculation applies to both, so only one factor is needed for both raw and weighted tables. The new base year becomes 1.000; relative escalation factors between any two other years are unchanged, since both numerator and denominator are divided by the same factor.
 
 :::check
 Q: Base year FY2020 (index 1.000): FY2018 index = 0.950, FY2022 = 1.100. Rebase to FY2022. New FY2018 index? (4 decimals)
@@ -763,7 +770,7 @@ A: Constant-dollar estimates don't account for inflation that will occur over th
 Q: Current Year (CY) dollars refer to which type of spending: expenditures or obligations?
 A: Expenditures. Then Year (TY) dollars refer to obligations.
 Q: The "table's year"
-A: The Base Year of a specific index table — not necessarily the same as the Base Year of the CER, the estimate, or another index table.
+A: The Base Year of an index table. The CER's Base Year may or may not be the same as the estimate's Base Year or the table's year.
 R: yes
 
 ## Escalation vs. Discounting
@@ -779,7 +786,7 @@ Q: Why must you not confuse escalation with discounting?
 A: Escalation reflects inflation (price-level change); discounting reflects opportunity cost. Using the wrong concept produces wrong decisions.
 Q: Constant-dollar analysis uses which discount rate?
 A: Real discount rate (excludes inflation).
-Q: Then-year-dollar analysis uses which discount rate?
+Q: Current-year-dollar analysis uses which discount rate?
 A: Nominal discount rate (includes inflation; applied to Current Year dollar amounts).
 Q: Real rate of return: nominal 5%, inflation 3%
 A: 1.05 / 1.03 = 1.0194, a 1.94% real return — approximately, but not exactly, the simple 2% difference.
@@ -791,7 +798,7 @@ R: yes
 Q: When to use raw index
 A: Converting Constant/Current Year dollars to another Constant/Current Year (CY►CY); actual historical expenditures.
 Q: Escalation factor formula
-A: (Index of target year) / (Index of base year). Multiply a BY cost by this to get TY; divide to go TY to BY.
+A: Beyond CEBoK (valid when the table's year = base year): (Index of target year) / (Index of base year). Multiply a BY cost by this to get TY; divide to go TY to BY. In general: divide by the FROM-row index (raw if CY, weighted if TY), then multiply by the TO-row index.
 R: yes
 Q: Weighted index definition (Navy/Air Force method)
 A: The reciprocal of the sum of each outlay-year's portion divided by its raw index — equivalent to a weighted harmonic mean of the raw indices by outlay profile.
@@ -820,7 +827,7 @@ A: With no money spent in out-years, there is no out-year inflation to account f
 Q: RDT&EN funding type vs. procurement funding type
 A: RDT&EN is incrementally funded (funded each year); procurement is fully funded (the whole multi-year buy funded in the year production starts).
 Q: RDT&EN as "two-year money"
-A: RDT&EN funds may be obligated over two years, followed by a five-year expiration window during which any remaining funds must still be expended.
+A: RDT&EN is "two-year money" with a five-year expiration period after that; outlay proportions in years 6-7 may be very small positive values.
 Q: Budget Year Multiplier
 A: The quotient of two weighted indices (a year's weighted index ÷ the table's Base Year weighted index); converts Then Year directly to Then Year. Only the Navy publishes it; handled like a raw index but relative to the table's Then Year.
 R: yes
@@ -844,7 +851,7 @@ A: Civilian Pay 7.18% + Military Construction Purchases 92.82%.
 Q: Which mean is correct for a composite index of custom items?
 A: A weighted arithmetic mean of the component indices by cost share.
 Q: CPI appropriateness for DoD cost estimating
-A: Generally NOT appropriate; CPI is a consumer basket, not defense-specific. Use DoD/appropriation-specific indices (RDT&E, Procurement, O&M, MILCON).
+A: CPI covers a variety of commodities (apparel to wages) by region; DoD uses appropriation-specific indices. Beyond CEBoK: CPI is generally not appropriate for defense-unique materials and labor.
 Q: Gasoline example: \$1.15 (Jan 1998) to \$1.44 (Sep 2001)
 A: Inflation rate 25.2%; index 1.252; annualized (44-month span) ≈ 6.3%. Projecting that rate to 2008 would predict only ~\$2.21/gal, far below the actual peak above \$4 — a caution against constant-rate projection.
 Q: What does "197T" mean on a DoD inflation chart?
@@ -857,10 +864,10 @@ A: Raw index 1982/1981 = 1.1371; raw index 1985/1982 = 1.1140; chained raw index
 
 ## Conversion Procedures
 Q: BY to TY conversion formula (general)
-A: Cost(TY) = Cost(BY) × [Index(TY) / Index(BY)]
+A: Beyond CEBoK (valid when the table's year = base year): Cost(TY) = Cost(BY) × [Index(TY) / Index(BY)]
 R: yes
 Q: TY to BY conversion formula (deflating)
-A: Cost(BY) = Cost(TY) × [Index(BY) / Index(TY)] = Cost(TY) / Escalation Factor
+A: Beyond CEBoK (valid when the table's year = base year): Cost(BY) = Cost(TY) × [Index(BY) / Index(TY)] = Cost(TY) / Escalation Factor
 R: yes
 Q: The table's-year waystation rule
 A: Convert starting dollars TO the table's year by dividing (raw index if starting CY, weighted if starting TY); then convert FROM the table's year to the ending year by multiplying (raw index if ending CY, weighted if ending TY).
@@ -892,10 +899,10 @@ A: \$84M × (1.000/1.120) = \$75M (in FY2020 constant dollars)
 
 ## Rebasing
 Q: Rebasing an inflation table
-A: Divide every index value by the index value of the new base year (in the original table). The new base year becomes 1.000.
+A: Divide every index value (raw and weighted) by the raw index of the new base year in the original table. The new base year's raw index becomes 1.000.
 R: yes
 Q: Rebasing formula
-A: Index'(t) = Index(t) / Index(new base year)
+A: Index'(t) = Index(t) / RawIndex(new base year), same factor for raw and weighted columns.
 R: yes
 Q: After rebasing, do escalation factors between other years change?
 A: No. Relative escalation between any two years is unchanged because both numerator and denominator are divided by the same factor.
@@ -905,10 +912,10 @@ Q: Doubling time formula (exact)
 A: n = ln(2) / ln(1 + x/100), where x is the per-period inflation rate as a percent.
 R: yes
 Q: Rule of 70 (CEBoK's primary doubling-time approximation)
-A: n ≈ 70 / x. Derived by rounding ln(2) = 0.693 up to 0.7. Example: 5% → 70/5 = 14 years.
+A: n ≈ 70 / x. ln(2) is rounded from 0.693 to 0.7 to compensate for the Taylor first-term approximation of the denominator. Example: 5% → 70/5 = 14 years.
 R: yes
 Q: Rule of 72 (secondary/alternate form of the doubling-time rule)
-A: n ≈ 72 / x. 72 is a convenient alternate to 70 because it's evenly divisible by more single-digit percentages.
+A: n ≈ 72 / x. Rule of 70 is sometimes quoted as the Rule of 72; between them, 70 and 72 are even multiples of every single-digit percentage and 10, 12, 14. Both are only approximations.
 R: yes
 Q: Doubling time at 5% annual inflation (Rule of 70)
 A: 70/5 = 14 years
@@ -924,16 +931,16 @@ A: Inflation compounds year over year like interest. Simple arithmetic (r × n) 
 
 ## Special Topics and Pitfalls
 Q: Mid-point method
-A: For costs incurred over a period whose exact profile is unknown (e.g., Jan 2019–Dec 2021), use the index at the midpoint of the period (about July 2020) for escalation, not start or end year. Only for historical data — a forward estimate should be time-phased year by year instead.
+A: For costs incurred over a period whose exact profile is unknown (e.g., \$15M over 2006-2008, spread evenly: midpoint 2007; if most spent in 2006, midpoint likely 2006), use the index at the midpoint for the whole amount, not start or end year. Only for historical data — a forward estimate should be time-phased year by year instead.
 R: yes
 Q: Time-phasing definition
 A: Relating percent spent (cost) to percent elapsed (duration) for past programs, then using an analogy or average to spread a future estimate before escalating each year's portion separately.
 R: yes
 Q: Rayleigh curve for time-phasing
-A: A development-program spending profile: spending rises, peaks mid-program, then tails off. One of several fitted distributions (with beta, trapezoid, etc.) used to model time-phasing.
+A: A fitted distribution (such as Rayleigh or beta) used to scale a time-phasing profile to the duration of the estimated schedule.
 R: yes
 Q: Custom inflation index when needed
-A: When official indices don't match a program's unique cost mix (specialized commodity or labor, non-standard outlay profile, or a known contractor's own escalation rate).
+A: Non-standard inflation trends (e.g., technology deflation such as hard disk storage), higher-than-average inflation (e.g., fuel, steel), or a known contractor's own escalation/deflation rate.
 Q: Creating a custom composite index
 A: Weight multiple raw indices by their cost shares: Composite = Σ(w(i) × Index(i)) where w(i) = cost share of category i.
 Q: AM, GM, HM — definitions
@@ -955,7 +962,7 @@ A: Always specify "in FY[year] dollars" or "in [year] constant/then-year dollars
 Q: Pitfall: simple vs. compound escalation
 A: Inflation compounds. (1.03)^5 = 1.159 (15.9%), not 1.15 (15%). Simple arithmetic = significant underestimate.
 Q: Pitfall: CPI for DoD
-A: CPI tracks consumer goods, not defense-unique costs. Use DoD appropriation-specific indices instead.
+A: Beyond CEBoK: CPI tracks consumer goods, not defense-unique costs. DoD uses appropriation-specific indices.
 Q: CY-to-CY special case: table's Base Year equals the starting CY
 A: Use the raw index for the target CY and multiply.
 Q: CY-to-CY special case: table's Base Year equals the target CY
@@ -972,12 +979,12 @@ R: yes
 Q: Appropriation-category inflation table
 A: A published (OSD/DoD) table with raw and weighted indices for a specific "color of money" (e.g., Procurement, RDT&E) and fiscal year.
 Q: DoD inflation tables organized by
-A: Appropriation category (RDT&E, Procurement by department/commodity, MILCON, O&M, MILPERS) and fiscal year.
+A: Service-specific: Navy and Army have separate tables for each appropriation (Navy per Base Year; Army multiple Base Years per table); Air Force has separate tables for each index type (raw, weighted) with multiple appropriations per table.
 Q: Outlay profile row in an inflation table
 A: The percentage of an appropriated dollar outlaid in each year after appropriation (e.g., 50% Yr1, 30% Yr2, 20% Yr3).
 Q: Navy index-table column order
 A: Fiscal year, inflation rate, raw index, weighted index, budget year multiplier.
 Q: Creating an inflation table (Fig 5.23) — column order
-A: FY, rate (from OSD guidance), raw index (rate+1, compounded), weighted index (via outlay profile and raw indices), budget year multiplier (weighted index ÷ Base Year weighted index).
+A: FY, rate (from OSD guidance), raw index (inflation rate plus one), weighted index (via outlay profile and raw indices), budget year multiplier (weighted index ÷ Base Year weighted index).
 `
 });

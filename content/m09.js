@@ -15,20 +15,24 @@ Q: Uncertainty, risk, or opportunity?
 buckets: Uncertainty | Risk | Opportunity
 - Variation in labor rates = Uncertainty
 - Residual error around a CER estimate = Uncertainty
-- A specific, identifiable event that could raise cost = Risk
+- Inherent bias in an estimate, addressed by calibrating the point estimate within the cost distribution = Risk
 - Finishing the program earlier than planned = Opportunity
 - Reducing cost exposure = Opportunity
-> Uncertainty reflects the precision of estimating techniques and exists even with no bad event. Risk is a specific, identifiable event with a negative effect. Opportunities are factors that could give a positive outcome.
+> Uncertainty is added to address the precision of estimating techniques. Risk addresses the inherent bias of estimates by calibrating to yield more accurate estimates. Opportunities are factors that could give a positive outcome.
 :::
 
 +++
 
 ### Risk vs. Uncertainty vs. Opportunity
 
-- **Uncertainty**: An uncertainty range is added to address the precision of estimating techniques — it exists even with no specific "bad thing" happening (e.g., variation in labor rates, quantities, or CER residual error).
-- **Risk**: The possibility of a *specific, identifiable event* that, if it occurs, has a negative effect on cost, schedule, or performance. Risk addresses the *inherent bias* of estimates by calibrating them toward a more accurate result, and properly positioning the point estimate in the probability distribution.
+- **Uncertainty**: An uncertainty range is added to address the precision of various estimating techniques (e.g., variation in labor rates, quantities, or CER residual error).
+- **Risk**: By contrast, risk addresses the *inherent bias* of estimates by performing a calibration to yield more accurate estimates. Risk addresses the probability distribution of cost and properly positions the point estimate in the distribution.
 - **Opportunities**: Factors that could result in a *positive* outcome, such as finishing a program earlier or reducing cost exposure.
 - Risk analysis differs from **sensitivity analysis**: sensitivity analysis is deterministic (impact of specific cost drivers on the estimate); risk analysis portrays the most accurate probability distribution for overall cost.
+
+:::tip Beyond CEBoK: risk as an event
+A common working definition treats a risk as the possibility of a *specific, identifiable event* that, if it occurs, has a negative effect on cost, schedule, or performance, characterized by probability and consequence. Uncertainty, by comparison, is variability that exists even when no specific bad event happens.
+:::
 
 {{primer}}
 
@@ -60,7 +64,7 @@ The point estimate is often characterized as the mean or median of total cost, b
 
 One such study (Fig. 9.3) found that only **16%** of programs ended up at or below their cost estimate — point estimates represent a much lower percentile than is often assumed.
 
-**Cost Growth Factor**: $\text{CGF} = \dfrac{\text{Actual Cost}}{\text{Estimated Cost}}$
+**Cost Growth Factor**: using the revised estimate (adjusted for quantity) and the baseline cost estimate, the analyst calculates the CGF. As the standard ratio: $\text{CGF} = \dfrac{\text{Actual (revised) Cost}}{\text{Baseline Estimated Cost}}$
 
 +++
 
@@ -75,11 +79,13 @@ The two core issues in cost risk are **understatement of cost** and **understate
 | Linear CER or analogy | **Mean** |
 | Non-linear CER | **Median** |
 | Build-up (historical rates + engineering parameters) | **Mean** |
-| SME judgment | **Mode** (limited information to verify this assumption) |
+| SME judgment | **Mode** (often interpreted as; limited information to verify the validity of this assumption) |
 
 **Understatement of variability** — from omitting risks or bias elements; failing to include functional correlation and/or risk correlation; insufficient data (wider CER prediction intervals); or systematic understatement in non-linear CERs. Underestimating variability understates the median or higher-confidence-level costs.
 
-Independent entities (milestone decision authorities, acquisition review boards) are often less prone to optimistic assumptions than the program office, and typically assume higher most-likely cost scenarios.
+Whatever methodology is chosen, analysts should allow for potential understatement of driving parameters.
+
+Often, independent entities will assume higher most likely cost scenarios than the program office. Milestone decision authorities and acquisition review boards are examples of such oversight groups; they are often less prone to optimistic assumptions than the program office.
 
 :::check
 Q: Point estimate \$200M. Comparable programs grew by median factor 1.25. What is the risk-adjusted estimate, in \$M?
@@ -127,7 +133,7 @@ The risk process breaks into inputs, structure and execution, and outputs. Risk 
 | **Input Methods** | Assess uncertainty around cost drivers (and the CER error that uses them) to determine cost risk. Vulnerable to correlation issues, and may not capture all potential cost growth. |
 | **Output Methods** | Assess uncertainty around the cost estimate by adding schedule, technical, or other risks — a mean shift predicting likely growth. Risk registers are a common example. An output model built on historical data may not offer recommendations for *reducing* risk. |
 
-It is **not safe to combine** input and output methods on the same cost risk driver — the cost risk the output method predicts has already been baked into the cost growth in the data the input method used.
+It is **not safe to combine** input and output risk methods, because the cost risk being predicted by the output method has already been considered as cost growth in the data used for the input method.
 
 **Historical vs. Expert-Opinion basis** (either can use input or output methods):
 
@@ -151,7 +157,7 @@ There are three components to any risk model (Fig. 9.4): **inputs**, **structure
 
 *Dollar basis* (in order of preference): **Historical** (actual growth from analogous programs), **Domain Expert** (SME assessment from experience), **Conceptual** (arbitrarily assigned — least preferred).
 
-**Structure** — organization (coverage/partition of risk types, whether below-the-line elements are covered) plus the probability model:
+**Structure** — organization (coverage: which risk areas are included; partition: whether each distinct risk area is quantified separately; more risk categories are preferable to fewer) plus the probability model. Below-the-line costs are indirect costs driven by hardware and software costs, often level-of-effort activities such as program management, system engineering, and system test and evaluation; strong risk models consider the cost impact on these areas as well as hardware and software development.
 
 *Assigning cost to risk* (four methods): **Risk Estimating Relationships (RERs)** — equations mapping risk score to cost impact, $\text{Cost Impact} = f(\text{Risk Score})$, the preferred method; **Direct Assessment of Distribution Parameters** — adjust a cost element's distribution directly (e.g. shift a triangular distribution's endpoints) instead of using risk scores; **Factors** — a subset of RERs that scale cost by a percentage per risk-score point (linear only, no nonzero intercept); **Rates** — a flat dollar value per risk point, independent of item cost (can suffer from unintuitive units, e.g. \$/flying hour).
 
@@ -207,7 +213,7 @@ Underestimation of both the mean and standard deviation is an issue across every
 |---|---|
 | **Normal** (Fig. 9.5) | Most likely value = the mean; equally likely to fall above or below the mean; more likely closer to the mean (68% within one std. dev.). Allows negative values (can be problematic); symmetric, so it must be *shifted* to move the mean. |
 | **Lognormal** (Fig. 9.6) | A natural result of non-linear CERs. Unbounded above but a finite lower bound (useful since cost has a floor of zero); positively skewed; $\ln(\text{variable})$ is normal. Virtually indistinguishable from Normal when $\text{CV} < 25\%$. |
-| **Triangular** (Fig. 9.7) | Min and max pre-determined; most likely value is between them; values near the min/max are as likely as values near the most likely; can be skewed or symmetric. The most commonly used risk distribution (simplicity), but modes of multiple triangular variables are **not additive**. Questionable whether SMEs can truly pin the min/max — sometimes widened by an extra factor. |
+| **Triangular** (Fig. 9.7) | Min and max pre-determined; most likely value is between them; values near the min/max are as likely as values near the most likely; can be skewed or symmetric. The most commonly used risk distribution (simplicity), but modes of multiple triangular variables are **not additive**. Questionable whether SMEs can truly pin the min/max — one remedy is to increase or reduce the SME's min and max by an additional factor. |
 | **Beta** (Fig. 9.8) | Min and max pre-determined; shape set by two positive shaping parameters. Solves negative-value issues normal can have; can be symmetric or skewed; less commonly used today (more parameters to manage). |
 | **Bernoulli** (Fig. 9.9) | Discrete; assigns probability $p$ to the value 1 and $(1-p)$ to 0 — a simplified Binomial. Used in likelihood/consequence (risk cube) models, where a nonzero result ("success" mathematically) is a risk *occurring*. |
 
@@ -236,7 +242,7 @@ Q: A cost element's minimum is zero, it is positively skewed, and its natural lo
 Q: You are summing 20 lower-level triangular cost elements to characterize *total* program cost. Should the total be modeled as triangular?
 - Yes, sums of triangular variables are triangular
 * No — the sum of triangular elements is not itself triangular; use normal, lognormal, or a simulated (convolved) distribution
-> Triangular should never characterize a summed total, only individual elements.
+> Triangular should not be used to characterize total cost; the sum of triangular lower-level elements is not a triangular distribution.
 :::`
     },
     {
@@ -258,7 +264,7 @@ buckets: Supplied as an input | Computed by formula
 
 +++
 
-The **triangular distribution** is the standard choice in cost risk because it is easy to parameterize from expert three-point estimates (Low, Most Likely, High).
+The **triangular distribution** is the most commonly used distribution in risk modeling due to its simplicity, and it is easy to parameterize from expert three-point estimates (Low, Most Likely, High).
 
 **Parameters**: $a$ = low (minimum), $c$ = most likely (mode), $b$ = high (maximum)
 
@@ -287,7 +293,7 @@ $$\text{Mode} < \text{Median} < \text{Mean}$$
 **Why**: A right-skewed distribution has a longer high tail. The far-out high values pull the mean above the mode.
 
 :::key
-**This is the single most important concept in the module**: If you sum the "most likely" (modal) values of 20 WBS elements, you do NOT get the most-likely or mean program total. You get a number that **systematically understates** the statistically expected cost because only means are additive.
+**Key concept**: If you sum the "most likely" (modal) values of 20 WBS elements, you do NOT get the most-likely or mean program total. You get a number that **systematically understates** the statistically expected cost because only means are additive.
 :::
 
 :::check
@@ -345,7 +351,7 @@ Q: Two independent elements each have Low 80, Most Likely 100, High 160. The mod
 
 ### Means Are Additive; Modes Are Not
 
-This is the **single most testable concept** in the entire module.
+This is a key concept in the module.
 
 **Means always add**, regardless of distribution shape or correlation:
 $$E\left[\sum X_i\right] = \sum E[X_i]$$
@@ -469,7 +475,7 @@ $$\text{Var}(X+Y) = 17.0^2 + 17.0^2 = 289 + 289 = 578 \quad \Rightarrow \quad \s
 Perfectly correlated ($\rho=1$):
 $$\sigma_{total} = 17.0 + 17.0 = 34.0$$
 
-**The difference**: perfectly correlated total is 40% larger (34.0 vs 24.04 std dev) — same means, very different spreads.
+**The difference**: perfectly correlated total is about 41% larger (34.0 vs 24.04 std dev) — same means, very different spreads.
 
 **Critical pitfall**: Ignoring correlation (assuming $\rho=0$ when elements actually share drivers) produces an S-curve that is too narrow — overstating confidence in the estimate and understating true risk.
 
@@ -492,7 +498,7 @@ Q: Raising correlation from 0 to 0.8 changes the total standard deviation from 2
 - It increases
 - It decreases
 * It stays the same
-> Correlation affects variance (and std dev) of the sum, not its mean. Only means are additive.
+> CEBoK says correlation increases dispersion and shifts the mean of a risk estimate; for a simple sum of element means, the mean is unchanged (means always add) while the variance and std dev change.
 :::
 
 :::check
@@ -521,7 +527,12 @@ Q: Put the Monte Carlo steps in order.
 
 ### Monte Carlo Simulation Mechanics
 
-**Monte Carlo** is the standard quantitative method for propagating element-level uncertainty and correlation to a total-program distribution.
+There are three ways to compute the overall risk:
+- **Monte Carlo**: usually requires a specialized software package. Advances in computer technology let simulations run faster, which has made Monte Carlo a preferred methodology.
+- **Method of Moments**: requires that each lower-level cost element has a known mean and variance. The lower-level distributions are rolled up to a higher-level distribution, which provides a distribution at the top level, making it easy to calculate.
+- **Deterministic**: only uses point values. It does not consider other probabilistic effects beyond expected value, ignores correlation, and does not provide intervals at the top level. Generally this method should be avoided, though it might be useful for quick, rough order of magnitude exercises.
+
+The Monte Carlo process is as follows.
 
 **Steps**:
 1. Assign a probability distribution (triangular, normal, lognormal, etc.) to each uncertain element, including any applicable correlation
@@ -577,7 +588,11 @@ Notice:
 $$E[\text{Total}] = \sum E[X_i] \text{ (always)}$$
 $$\text{50th percentile of total} \ne \sum (\text{50th percentile of each element})$$
 
-When elements are uncorrelated, summing percentiles gives a number that is **too high** (ignoring diversification). When correlation is unknown, assume a modest positive value (around 0.2–0.3) rather than zero.
+Summing percentiles does not give the percentile of the total (percentiles do not add). When correlation is unknown, it is not uncommon to assign a weak correlation of 0.2–0.3 rather than zero.
+
+:::tip Beyond CEBoK: summed percentiles
+For upper percentiles (above the mean), summing element percentiles overstates the total percentile unless the elements are perfectly correlated, because uncorrelated elements diversify.
+:::
 
 :::check
 Q: A triangular element has Low 80, ML 100, High 150. Mean?
@@ -590,7 +605,7 @@ Q: Can you get the 80th percentile of total cost by adding each element's 80th p
 - Yes, percentiles always add
 * No; only means add; use the simulated total distribution
 - Only if the elements are independent
-> Summing percentiles gives a number that is too high when correlation < 1. The S-curve is your true measure.
+> Percentiles do not add, so the sum of element percentiles is not the total's percentile. The simulated S-curve is your true measure.
 :::`
     },
     {
@@ -602,12 +617,12 @@ Analysts have three common ways to put numbers on risk, each with its own flavor
 Q: Which method does each description fit?
 buckets: Historical | Expert opinion | Risk cube
 - Applies growth observed on comparable completed programs = Historical
-- Grounded in actual outcomes, so it captures unknown unknowns = Historical
+- Not biased, but offers little lower-level insight or actionable recommendations = Historical
 - SMEs are interviewed with structured questionnaires = Expert opinion
-- Anchoring and optimism bias are the main danger = Expert opinion
+- Experts are prone to underestimate variance even when they do not underestimate the mean = Expert opinion
 - Each risk is rated on likelihood and consequence = Risk cube
 - Each risk is modeled as a Bernoulli distribution = Risk cube
-> Historical methods use empirically observed growth. Expert opinion relies on SME elicitation, with anchoring and optimism bias to guard against. The risk cube rates each risk on likelihood and consequence and models it as a Bernoulli distribution.
+> Historical methods use empirically observed growth. Expert opinion relies on SME elicitation, where experts are prone to underestimate variance. The risk cube rates each risk on likelihood and consequence and models it as a Bernoulli distribution.
 :::
 
 +++
@@ -616,28 +631,27 @@ buckets: Historical | Expert opinion | Risk cube
 
 Apply empirically observed cost growth from comparable, completed programs to the current estimate.
 
-**Example** (used at MDA and DNI CAIG): scoring is interval with objective criteria, historical dollar basis, RERs map risk score to cost distribution. All four risk types are covered, below-the-line risk flows in via functional correlation, and Monte Carlo is the computation engine. For **cost estimating (CE) risk**, the CER's standard errors/SEE drive the risk; for **S/T risk**, SMEs score hardware on six categories (Technology Advancement, Engineering Development, Reliability, Producibility, Alternative Item, Schedule) and software on seven (Technology Approach, Design Engineering, Coding, Integrated Software/SLOC, Testing, Alternatives, Schedule), 0 (no risk) to 10 (high risk). Scores are combined into a weighted average and mapped, via regression against SAR-derived cost growth factors, to a triangular distribution for cost growth (Fig. 9.14).
+**Example** (used at MDA and DNI CAIG): scoring is interval with objective criteria, historical dollar basis, RERs map risk score to cost distribution. All four risk types are explicitly or implicitly covered, and risk on below-the-line elements is included via functional correlation. Normal distributions are primarily used, but also triangular distributions for schedule and technical risk, with Monte Carlo simulation as the computation engine. Means, CVs, and inputs are used in cross-checks. For **cost estimating (CE) risk**, the CER's standard errors/SEE drive the risk; for **S/T risk**, SMEs score hardware on six categories (Technology Advancement, Engineering Development, Reliability, Producibility, Alternative Item, Schedule) and software on seven (Technology Approach, Design Engineering, Coding, Integrated Software/SLOC, Testing, Alternatives, Schedule), 0 (no risk) to 10 (high risk). Scores are combined into a weighted average and mapped, via regression against SAR-derived cost growth factors, to a triangular distribution for cost growth (Fig. 9.14).
 
 **Worked example**: three SMEs score a program's software requirements maturity — Expert A = 3 (low), Expert B = 5 (medium), Expert C = 7 (high) — producing three triangular distributions whose overlay resembles a right-skewed composite. For the Research & Development cost, starting from the Initial Point Estimate (IPE), cost estimating risk adds **8.7%**, then schedule/technical risk adds **25%**, for a total risk of **33.7%** — growth invisible to a bare point estimate.
 
-**Pros**: grounded in actual outcomes, captures "unknown unknowns." **Cons**: needs a large, homogeneous reference class; historical data must be adjusted for things outside risk analysis (quantity, requirements growth); past programs may not represent future risk drivers.
+**Pros**: not biased (grounded in actual cost growth on similar completed programs). **Cons**: historical data must be adjusted for factors outside the realm of risk analysis (e.g. quantity, requirements growth), the dataset must be appropriate to the specific program, and historical methods do not always provide a lot of lower-level insight or actionable recommendations that program managers desire. Historically, cost growth risk could only be estimated from a large data set of heterogeneous programs.
 
 +++
 
 ### Expert Opinion Methods
 
-Used by, e.g., the National Geospatial-Intelligence Agency (NGA). SMEs directly assess cost distributions rather than using risk scores; the model covers all four risk types, uses functional correlation for below-the-line elements, triangular distributions, and Monte Carlo.
+Used by, e.g., the National Geospatial-Intelligence Agency (NGA). SMEs directly assess cost distributions rather than using risk scores; the model covers all four risk types either explicitly or implicitly, uses functional correlation for below-the-line elements, triangular distributions, and Monte Carlo.
 
-**A specific method** adapted the Software Engineering Institute's (SEI) Software Risk Evaluation, using an SEI taxonomy with three classes: **Product Engineering** (technical aspects of the work), **Development Environment** (methods, procedures, tools used), and **Program Constraints** (contractual/organizational/operational factors outside the org's control). SMEs are interviewed via structured questionnaires rather than scored; results are **conflated** (see Conflation of Expert Judgments) and applied to the point estimate, then below-the-line items are burdened and rolled up.
+**A specific method** adapted the Software Engineering Institute's (SEI) Software Risk Evaluation, using an SEI taxonomy with three classes: **Product Engineering** (technical aspects of the work), **Development Environment** (methods, procedures, tools used), and **Program Constraints** (the contractual, organizational, and operational factors within which the system must be developed, generally not under the direct control of the organization). SMEs are interviewed via structured questionnaires rather than scored; results are **conflated** (see Conflation of Expert Judgments) and applied to the point estimate, then below-the-line items are burdened and rolled up.
 
 **Timeline**: roughly **1 week** to develop the risk questionnaire, then the risk assessment itself (interviews + model setup + simulation) takes about **80 days**, and delivering the final product with documentation takes roughly **10 days**.
 
-**Biases to guard against**:
-- **Anchoring**: Experts anchor on the current point estimate and give artificially narrow ranges
-- **Optimism Bias**: Experts underestimate the high side
-- Experts are prone to underestimate variance even when they don't underestimate the mean
+**Pitfall**: it is uncertain whether SMEs can conceptualize the true worst and best cases that the endpoints of a triangular distribution represent. New endpoints are often extrapolated on the assumption that the SME has really provided, say, the 15th and 85th percentiles. Experts are prone to underestimate variance even when they do not underestimate the mean.
 
-**Mitigation**: structured elicitation, cross-check against any available historical data, and treat stated low/high as roughly the 10th/90th (or 15th/85th) percentiles rather than absolute limits.
+:::tip Beyond CEBoK: anchoring, optimism bias, and mitigation
+Two named biases commonly cited in expert elicitation: **anchoring** (the expert anchors on the current point estimate and gives an artificially narrow range) and **optimism bias** (the expert underestimates the high side). Common mitigations are structured elicitation, cross-checking against any available historical data, and treating stated low/high values as percentiles rather than absolute limits.
+:::
 
 :::tip Beyond CEBoK: motivational bias and the Delphi method
 Program advocates sometimes intentionally narrow ranges to make a program appear less risky — a **motivational bias** distinct from anchoring or optimism bias. A common mitigation is the **Delphi method**: anonymized, iterative expert elicitation that reduces social pressure to converge toward a program-favorable answer, often paired with asking "what would have to happen to reach the extreme value?" to widen an expert's thinking.
@@ -658,11 +672,18 @@ CEBoK's own text prints $\text{Var}(X) = P_x(1-P_x)C_x = E_x(1-P_x)$ — missing
 
 Mean, min, and max are straightforward; **percentiles and medians require a Monte Carlo simulation**. The risk cube generally addresses schedule and technical risk; below-the-line elements and correlation are **not** typically addressed, so while useful for management, it paints an incomplete cost-risk picture.
 
-**Pros**: intuitive, easy to integrate into a PM's risk management process, individual risks are identifiable and manageable. **Cons — it almost always understates risk**: SMEs are biased low on both probability and cost impact; some risk is inevitably unforeseen; the sum of many "too trivial to catch" risks can exceed the largest single risk; and categories like requirements or threat risk (generally unforeseeable) may be omitted entirely.
+The method relies on three things to be accurate:
+- a complete list of what risks can occur on the program
+- an accurate assessment of the probabilities of occurrence and cost impact
+- a mapping of the risk items to the WBS (to produce accurate lower-level estimates and ensure the correct assessment of the below-the-line costs)
+
+SMEs can score the risks on an interval or ordinal scale from which costs are determined by factors or rates, or they can assess them directly. Monte Carlo simulation is generally used as the computation engine, though a Deterministic approach can be used to roll up the mean risk. Cross-checks are possible, but cross checks are not part of the standard risk cube approach. Risk cube results should be compared to historical results; if they are significantly lower, the comprehensiveness of the risk register should be questioned.
+
+**Pros**: intuitive, easy to integrate into a PM's risk management process, individual risks are identifiable and manageable. **Cons — it almost always understates risk**: SMEs are biased low on both probability and cost impact; some risk is inevitably unforeseen; the sum of all the small risks viewed as too trivial to catch will often be larger than the largest risk itself; and categories like requirements or threat risk (generally unforeseeable) may be omitted entirely.
 
 **Management Reserve vs. Risk**: Management reserve (Fig. 9.27, a percentage of contract value that varies by contract type) is money held back to challenge account managers — it is **not** the same as risk or contingency funds, which are extra funds beyond the point estimate to cover risk possibilities.
 
-**Critical distinction**: The risk cube is fundamentally a **qualitative ranking tool** for prioritization and management attention. It is NOT a statistically rigorous method for deriving a total cost probability distribution (the way Monte Carlo or method-of-moments are). It **complements** quantitative analysis but does NOT replace it. Ideally, the risk cube and a historical analysis run in parallel.
+**Critical distinction**: The risk cube is a useful risk management approach, and once risks are mapped to the cube the program manager can get a good sense of how to prioritize their management (usually from top right to lower left). But on its own it paints an incomplete picture of overall cost risk, so it does not replace a full cost risk analysis. Ideally, the risk cube and a historical analysis run in parallel.
 
 {{primer}}
 
@@ -701,7 +722,7 @@ Q: The Risk Cube is best used for:
 * Prioritizing risks for management attention
 - Deriving a rigorous total cost probability distribution
 - Replacing Monte Carlo simulation
-> The risk cube is a qualitative prioritization tool. Simulation is needed for quantitative estimates.
+> Once risks are mapped to the cube, the program manager can prioritize their management. On its own the cube paints an incomplete picture of overall cost risk, and percentiles and medians require Monte Carlo simulation.
 :::
 
 +++
@@ -722,11 +743,11 @@ After computing a model, **cross-check** its calculated statistics (mean, CV) an
 The S-curve gives you a whole menu of possible budgets, each with its own confidence level.
 
 :::check
-Q: Once the S-curve is built, who chooses the funding confidence level?
-* Management, as a risk-management or policy decision
-- The estimator, by a statistical calculation
-- No one: the S-curve has one correct confidence level
-> Selecting the funding confidence level is a policy decision, not a purely statistical one. The estimator produces an accurate, defensible S-curve and management chooses where on it to fund.
+Q: Once organizations such as the FAA, NASA, and DoD have risk estimates, how do they further leverage them?
+* They establish budgets based on a certain percentile point on the cost distribution
+- They replace the point estimate with the cost element's mode
+- They drop the S-curve and fund at the point estimate
+> These organizations require risk-adjusted cost estimates and establish budgets based on a certain percentile point on the cost distribution.
 :::
 
 +++
@@ -735,11 +756,11 @@ Q: Once the S-curve is built, who chooses the funding confidence level?
 
 A **least-squares CER** produces a regression equation and associated statistics that directly feed into a risk model:
 
-**Linear (unit-space) CER**: Residuals are approximately normal around the predicted value. Use the **standard error of the estimate (SEE)** to define a normal distribution, or use the **prediction interval** for more conservative bounds. Analysts often use SEE as a proxy for uncertainty, but the SEE is the standard error of the points *around the regression line*, not the standard error of the estimate itself — using SEE alone introduces a systemic bias, understating variability both above and below the median (see CER Prediction Intervals for the correct approach and worked numbers).
+**Linear (unit-space) CER**: Residuals are approximately normal around the predicted value. Many estimates use the **standard error of the estimate (SEE)** as a proxy for uncertainty, but the SEE is the standard error of the points *around the regression line*, not the standard error of the estimate itself — using SEE alone introduces a systemic bias, understating variability both above and below the median. To derive the error around an estimate made using a regression line, analysts should employ **prediction intervals** (see CER Prediction Intervals for the correct approach and worked numbers).
 
 **Log-space CER** (power or exponential form): Errors are normal in log space, which means the distribution in dollar space is **lognormal** — right-skewed. The log-space SEE becomes $\sigma$ of $\ln(\text{cost})$.
 
-**Inclusion of input uncertainty**: Also model uncertainty in the input values themselves (e.g., weight on a weight-based CER), which propagates through and adds to the total uncertainty.
+**Input uncertainty**: In input methods, the uncertainty around cost drivers is assessed, and the error in the CER that uses the cost driver should also be considered.
 
 :::check
 Q: A power-form CER fit in log-log space has SEE = 0.25 in log space. Best distribution for cost uncertainty?
@@ -755,18 +776,14 @@ Q: A power-form CER fit in log-log space has SEE = 0.25 in log space. Best distr
 
 A **risk-adjusted estimate** pairs a point estimate with a **confidence level** (percentile) from the S-curve.
 
-**Common reference points**:
-- **Point estimate** (sum of most-likely values): typically sits **below 50%** confidence for right-skewed totals
-- **70th or 80th percentile**: Common management choices for program funding (higher percentile = more conservative)
+**Reference point**: the **point estimate** (sum of most-likely values) typically sits **below 50%** confidence for right-skewed totals.
 
-**Contingency / Reserve** = (Cost at chosen confidence level) − (Point estimate or baseline)
-
-**Critical principle**: Selecting the funding confidence level is a **risk-management / policy decision**, not a purely statistical calculation. The estimator's job is to produce an accurate, defensible S-curve; management chooses where on that curve to fund.
+Legislation such as the Clinger-Cohen Act and the Weapon System Acquisition Reform Act of 2009 requires risk-adjusted cost estimates on DoD automated information systems and weapons systems. The FAA and NASA require risk-adjusted cost estimates as a mandatory part of their own acquisition review protocols. These organizations further leverage the risk estimates by establishing budgets based on a certain percentile point on the cost distribution.
 
 {{primer}}
 
-:::tip Beyond CEBoK: typical numeric ranges
-CEBoK doesn't give a fixed number for where the *mean* sits, but practitioners commonly see it land around **50–60%** confidence for right-skewed totals (above the point estimate, since means exceed modes for skewed distributions). 70th/80th percentile targets, as above, are common — but always a policy choice, not a statistical constant.
+:::tip Beyond CEBoK: choosing a funding level
+CEBoK does not specify a funding percentile. In practice, **70th or 80th percentile** targets are common management choices (higher percentile = more conservative), and the contingency/reserve is often computed as (cost at the chosen confidence level) − (point estimate or baseline). Selecting the funding confidence level is generally a risk-management / policy decision rather than a purely statistical one, and there is no universally mandated level. Practitioners also commonly see the *mean* land around **50–60%** confidence for right-skewed totals. When quoting a point estimate, it helps to state the percentile it represents (e.g. "\$100M is the [X]th percentile").
 :::
 
 :::check
@@ -782,7 +799,7 @@ Q: "The point estimate is \$100M." What is missing from this statement?
 * A confidence level / S-curve position
 - A list of which CERs were used
 - The project schedule
-> Always state: "\$100M represents the [X]th percentile" to show what risk/reserve that represents.
+> A point estimate sits at some position on the S-curve; stating that percentile (e.g. "\$100M is the [X]th percentile") shows how much risk it carries.
 :::`
     },
     {
@@ -943,11 +960,11 @@ Use Extreme Value alone to model the *actual* SGF; use the hybrid if modeling th
 
 ### Cost/Schedule Growth and Program Size
 
-Looking at CGF vs. SGF directly shows **no discernible pattern** — but once program size is added back in, both CGF and SGF separately relate to size, so size differences were confounding the comparison. After normalizing for size (see Program Size, in Historical Cost Growth), the conclusion holds: no clear CGF-SGF relationship even with size controlled for.
+Looking at CGF vs. SGF directly shows **no discernible pattern** — but adding size back in shows some relationship between SGF levels and program size, so a size bias might be affecting the ability to see a true SGF-CGF relationship. After normalizing for size (see Program Size, in Historical Cost Growth), the conclusions do not change: no discernable pattern between CGF and SGF, and there does not seem to be a size bias in the dataset.
 
 Correction factors for schedule risk (Fig. 9.49), applied depending on the analyst's starting point:
-- If the program was expected to finish on time but is found to be stretching (schedule changes): multiply cost by **1.11** (useful if schedule risk isn't already captured elsewhere — watch for double-counting).
-- If the risk method is schedule-blind and there's credible indication the program will finish **on time**: decrement risk-adjusted cost by a factor of **0.9**.
+- If the program was believed it was to finish on time but is then ascertained to stretch (schedule changes), the analyst might multiply costs by **1.11**. This could be useful if schedule risk is not captured in another manner; if schedule risk is addressed elsewhere, take care to avoid double counting.
+- If the risk method is blind to schedule and there is a credible indication the program is likely to finish **on time**, the analyst could decrement risk-adjusted costs by a factor of **0.9**, providing there is confidence that the risk model had adjusted the costs correctly, less knowledge of the schedule.
 
 :::widget schedule-network:::
 
@@ -1000,7 +1017,7 @@ Q: Which programs tend to show the highest relative cost growth?
 
 ### Data Sources: SARs vs. Contract Data
 
-**Selected Acquisition Reports (SARs)** are DoD's primary source for cost risk data — vendors submit one per acquisition year, and Section 13 (Cost Variance Analysis) shows year-over-year cost changes plus the latest revised estimate. Using the revised (quantity-adjusted) estimate against the baseline estimate lets the analyst calculate the **Cost Growth Factor (CGF)**.
+**Selected Acquisition Reports (SARs)** are a good source of cost risk data — in DoD, vendors submit one per acquisition year, and Section 13 (Cost Variance Analysis) shows year-over-year cost changes plus the latest revised estimate. Using the revised (quantity-adjusted) estimate against the baseline estimate lets the analyst calculate the **Cost Growth Factor (CGF)**.
 
 **Contract data** (EVM or Contractor Cost Data Reporting/CCDR) is another source, but harder to use — changing baselines, missing variance explanations, and limited access across a wide range of programs. A **Kolmogorov-Smirnov (K-S) test** found **no statistically significant difference** between contract data and SAR data for programs under **\$1B RDT&E** (failed to reject the null of identical distributions) — though contract data shows *more extreme* growth and dispersion than prior SAR studies found. Given that, **SAR-type data is preferred when available**.
 
@@ -1013,7 +1030,7 @@ Working with SAR-type data, analysts must adjust for:
 - **Beginning points**: prefer data starting at the earliest development stage
 - **Cohorting**: group programs covering the same lifecycle phases to avoid distortion
 - **Applicability**: are the database's programs fair comparables to the one being assessed?
-- **Currency**: data from 1986 or later is generally usable if the dataset is large enough; more recent data is preferred when sufficient applicable points exist
+- **Currency**: if the dataset is large enough and from 1986 or later, it can be useful; if there are enough applicable data points, more recent data is preferred
 
 **EVM re-baselining caveat**: a program is often re-baselined during a contract, and the impact of re-baselining is hard to identify from EVM data without deep program knowledge.
 
@@ -1149,13 +1166,13 @@ Q: If the SMEs are believed to share a similar assessment of the risk, which con
   cards: String.raw`
 ## Definitions
 Q: Risk (in cost analysis)
-A: An uncertain future event that, if it occurs, has negative effect on cost/schedule/performance; characterized by probability and consequence.
+A: Addresses the inherent bias of estimates by calibrating to yield more accurate estimates, and properly positions the point estimate in the probability distribution of cost.
 R: yes
 Q: Uncertainty
-A: Inherent, irreducible variability in a future outcome; exists even with no specific bad event happening (e.g., labor rate variation).
+A: An uncertainty range is added to address the precision of estimating techniques (e.g., labor rate variation).
 R: yes
 Q: Cost Risk Analysis
-A: Combining uncertainty (in inputs/CERs) with discrete risk events to produce a probability distribution of total program cost.
+A: Captures uncertainty about the point estimate (confidence and prediction intervals) and the anticipated growth used to adjust cost estimates, producing a range or distribution of costs.
 R: yes
 Q: Cost growth vs. cost risk
 A: Cost growth is the past increase in cost from initial estimate to final actual; cost risk is future, predicted cost growth.
@@ -1184,15 +1201,15 @@ A: The mean of the cost probability distribution.
 Q: Point estimate from a non-linear CER is interpreted as...
 A: The median of the cost probability distribution.
 Q: Point estimate from SME judgment is interpreted as...
-A: The mode — though there is limited information to verify this assumption.
+A: Often interpreted as the mode; there is limited information to verify the validity of this assumption.
 Q: Four causes of understated variability
 A: Omitted risks/bias, missing functional or risk correlation, insufficient data (wide CER PIs), and systematic understatement in non-linear CERs.
 
 ## Models and Architecture
 Q: Input vs. Output risk models
-A: Input methods assess uncertainty in cost drivers/CER error; Output methods add schedule/technical/other risk as a mean shift (e.g. risk registers). Not safe to combine both on the same driver.
+A: Input methods assess uncertainty in cost drivers/CER error; Output methods add schedule/technical/other risk as a mean shift (e.g. risk registers). Not safe to combine input and output methods.
 Q: Historical vs. Expert-opinion basis for a risk model
-A: Historical applies growth/CV from similar completed programs; Expert-opinion elicits SME judgment (scored matrix mapped to CGF, or direct three-point/triangular assessment).
+A: Historical applies either the mean growth or the distribution of growth from similar programs in the dataset to the estimate; Expert-opinion elicits SME judgment (scored matrix mapped to CGF, or direct three-point/triangular assessment).
 Q: Three components of a cost risk model
 A: Inputs (scoring + dollar basis), Structure (organization + probability model), Execution (computation + cross-checks).
 R: yes
@@ -1206,7 +1223,7 @@ Q: What is a functional relationship in a risk model?
 A: One element computed from another (e.g., SEPM = 15\% of hardware). It passes uncertainty through and creates perfect (functional) correlation.
 R: yes
 Q: Why is it unsafe to combine input and output risk methods on the same driver?
-A: The output method's predicted cost risk has already been reflected as cost growth in the historical data the input method uses — double counting results.
+A: The cost risk being predicted by the output method has already been considered as cost growth in the data used for the input method.
 
 ## Distributions
 Q: Normal distribution: three conditions
@@ -1248,7 +1265,7 @@ A: When the high tail is longer than the low tail (right-skewed): $b - c > c - a
 Q: For right-skewed triangular distribution, what is the order?
 A: Mode < Median < Mean. The mean is pulled up by the far-out high tail.
 Q: Why is the triangular distribution preferred in cost risk?
-A: Easy to parameterize from expert three-point estimates (Low, ML, High); requires no assumption about bell-curve shape.
+A: Most commonly used distribution in risk modeling due to its simplicity (modes of multiple triangular variables are not additive).
 Q: Triangular(L=80, ML=100, H=160): mean and mode?
 A: Mean = 113.33; Mode = 100. Mean is 13\% higher due to right skew.
 Q: Same triangular: standard deviation?
@@ -1278,11 +1295,11 @@ A: Variances simply add; std dev of total grows slower than linearly (diversific
 Q: Perfectly correlated elements ($\rho=1$): how do standard deviations combine?
 A: $\sigma_{total} = \sum \sigma_i$ — standard deviations add directly (no diversification).
 Q: What is the effect of correlation on the mean total cost?
-A: None. Correlation affects variance (spread), not mean. Means always add, regardless of correlation.
+A: CEBoK says correlation increases dispersion and shifts the mean of a risk estimate; for a simple sum of element means the mean total is unchanged (means always add), so the spread and upper percentiles move.
 Q: What is the effect of ignoring correlation?
 A: S-curve becomes too narrow (overconfident). Total risk is understated; true percentiles are higher than estimated.
 Q: Default correlation assumption when unknown?
-A: Modest positive value, around 0.2–0.3 (not zero). Real programs always have some shared drivers.
+A: Not uncommon to assign weak correlations of 0.2 to 0.3 to acknowledge correlation, but they face the same cross-check problems as injected correlation; correlations derived from historical data are preferred.
 Q: Two elements, each $\sigma=10$, uncorrelated: total $\sigma$?
 A: $\sqrt{10^2+10^2} = \sqrt{200} = 14.14$
 Q: Same two elements, perfectly correlated: total $\sigma$?
@@ -1300,6 +1317,8 @@ Q: "No correlation" assumption: consequence
 A: Assumes all elements independent, which likely produces an inaccurate (too-narrow) estimate.
 
 ## Monte Carlo and S-Curves
+Q: Three ways to compute overall risk
+A: Monte Carlo (specialized software; a preferred methodology), Method of Moments (each lower-level element needs a known mean and variance; rolled up to the top level), Deterministic (point values only; ignores correlation; no top-level intervals; generally avoided, though might be useful for quick, rough order of magnitude exercises).
 Q: Monte Carlo simulation: what is one iteration?
 A: Draw one value from each element's distribution (respecting correlation), sum to get one total-cost sample.
 R: yes
@@ -1319,9 +1338,9 @@ A: $(80+100+150)/3 = 110$
 
 ## Risk Methods
 Q: Historical risk method: advantage
-A: Grounded in actual outcomes, not subjective judgment; captures "unknown unknowns."
+A: Not biased (grounded in actual outcomes of similar completed programs).
 Q: Historical risk method: limitation
-A: Requires large, homogeneous reference class; past programs may not represent future risk drivers.
+A: Data must be adjusted for factors outside risk analysis (e.g. quantity, requirements growth), the dataset must be appropriate to the specific program, and the method does not always give lower-level insight or actionable recommendations for program managers.
 Q: Historical model example (BMDO/MDA/DNI CAIG): CE risk, S/T risk, and total
 A: CE risk 8.7% + S/T risk 25% = total risk of 33.7% added to the Initial Point Estimate.
 Q: Hardware risk scoring categories (6)
@@ -1331,21 +1350,18 @@ Q: Software risk scoring categories (7)
 A: Technology Approach, Design Engineering, Coding, Integrated Software (SLOC), Testing, Alternatives, Schedule.
 R: yes
 Q: SEI taxonomy: three major risk classes
-A: Product Engineering (technical work), Development Environment (methods/procedures/tools), Program Constraints (contractual/organizational factors).
+A: Product Engineering (technical work), Development Environment (methods/procedures/tools), Program Constraints (contractual, organizational, and operational factors; generally not under the organization's direct control).
 R: yes
 Q: Expert-based risk assessment timeline (SEI method)
 A: ~1 week for the questionnaire, ~80 days for the risk assessment, ~10 days for delivery of results.
 Q: Three-point estimate in expert elicitation
 A: Low (optimistic), Most Likely (mode), High (pessimistic) — parameterizes triangular or beta distribution.
 R: yes
-Q: Expert anchoring bias
-A: Experts anchor on current point estimate and give artificially narrow ranges.
-R: yes
-Q: Expert optimism bias
-A: Experts underestimate the high side.
+Q: Expert variance bias
+A: Experts are prone to underestimate variance even when they do not underestimate the mean.
 R: yes
 Q: Treat stated low/high as which percentiles?
-A: Roughly the 10th/90th (or 15th/85th) percentiles, not absolute limits.
+A: Endpoints are often extrapolated on the assumption the SME really provided, say, the 15th and 85th percentiles, since it is uncertain SMEs can conceptualize true worst and best cases.
 Q: Risk Cube: expected value and total cost risk formulas
 A: $E_x = P_x C_x$ per risk; Total = $\sum E_x$.
 Q: Risk Cube: correct variance formula (vs. CEBoK's printed typo)
@@ -1353,9 +1369,9 @@ A: Correct: $\text{Var}(X)=P_x(1-P_x)C_x^2=E_x(1-P_x)C_x$. CEBoK's text omits th
 Q: Risk Cube: what requires Monte Carlo simulation, beyond mean/min/max?
 A: Percentiles and medians.
 Q: Risk Cube: is it a full quantitative risk model?
-A: No. It is a qualitative prioritization tool; below-the-line elements and correlation are generally not addressed.
+A: Not on its own: it paints an incomplete picture of overall cost risk (below-the-line elements and correlation are generally not addressed) and almost always understates risk. It is a useful risk management approach that helps prioritize risks; Bernoulli distributions model the risks, with Monte Carlo generally the computation engine.
 Q: Why does the risk cube tend to understate risk?
-A: SMEs are biased low on probability and cost impact, some risks go unforeseen, small "trivial" risks can sum larger than the biggest single risk, and categories like requirements/threat risk may be omitted.
+A: SMEs are biased low on probability and cost impact, some risks go unforeseen, the sum of small "trivial" risks will often be larger than the largest risk itself, and categories like requirements/threat risk may be omitted.
 Q: Management Reserve vs. Risk/Contingency funds
 A: Management reserve is money held back to challenge account managers (% of contract value); risk/contingency funds are extra funds beyond the point estimate for risk. Not interchangeable.
 Q: Expected value of a risk
@@ -1366,7 +1382,7 @@ A: It gives the mean but not the spread. With few risks, actual outcome is often
 
 ## CER Uncertainty, Confidence, and Prediction Intervals
 Q: Linear CER uncertainty distribution
-A: Approximately normal around predicted value, with spread from standard error of estimate (SEE) or prediction interval.
+A: Error around the regression line is assumed normal (symmetric) for linear CERs; the spread should come from the prediction interval, not SEE alone (SEE understates variability above and below the median).
 Q: Log-space CER uncertainty distribution
 A: Lognormal in dollars (right-skewed); the log-space SEE is $\sigma$ of ln(cost).
 Q: Risk-adjusted estimate
@@ -1374,15 +1390,10 @@ A: Point estimate plus a risk/contingency reserve, selected from S-curve at a sp
 R: yes
 Q: Typical confidence level of the point estimate
 A: Below 50\% for right-skewed total distributions (sum of most-likely values is lower than the mean).
-Q: Common management funding confidence levels
-A: 70th or 80th percentile, reflecting organizational risk tolerance.
-Q: Is there a universally mandated confidence level?
-A: No. Selecting confidence level is a management/policy decision, not purely statistical.
-Q: Contingency / Reserve formula
-A: (Cost at chosen confidence level) − (Point estimate or baseline)
-R: yes
+Q: How do FAA, NASA, and DoD leverage risk estimates?
+A: They require risk-adjusted cost estimates (DoD: Clinger-Cohen Act, WSARA 2009) and establish budgets based on a certain percentile point on the cost distribution.
 Q: What should accompany every point estimate?
-A: Confidence level / S-curve position. Never present a single cost number without stating what percentile it represents.
+A: Its confidence level / S-curve position, i.e. the percentile it represents on the cost distribution.
 Q: Why is a prediction interval wider than a confidence interval?
 A: The PI includes both the error in the regression coefficients and the error of the individual prediction; the CI only bounds the true mean.
 Q: CER Prediction Interval formula
@@ -1417,11 +1428,11 @@ Q: Hybrid schedule distribution
 A: Extreme Value fit to non-1.00 data points, plus a separate 20.3% probability mass at SGF = 1.00.
 R: yes
 Q: Schedule correction factors (cost growth model)
-A: 1.11 if a program expected on time is found to be stretching (multiply cost); 0.9 if the risk method is schedule-blind and on-time finish is credible (decrement cost).
+A: Analyst might multiply costs by 1.11 if a program believed on time is found to be stretching (could be useful if schedule risk is not captured another way); analyst could decrement risk-adjusted costs by 0.9 if the risk method is schedule-blind and on-time finish is credible, providing there is confidence the risk model adjusted the costs correctly, less knowledge of the schedule.
 
 ## Historical Growth, EVM, and Program Size
 Q: SAR data adjustments needed
-A: Quantity, beginning points (earliest stage preferred), cohorting (same lifecycle phases), applicability, and currency (1986+ preferred if data sufficient).
+A: Quantity, beginning points (earliest stage preferred), cohorting (same lifecycle phases), applicability, and currency (a dataset from 1986 or later can be useful if large enough; more recent data is preferred when there are enough applicable points).
 Q: K-S test: contract data vs. SAR data
 A: No statistically significant difference for programs under \$1B RDT&E; SAR preferred when available since contract data shows more extreme dispersion.
 Q: Correlation between risk-reduction and development phase growth (DoD study)
